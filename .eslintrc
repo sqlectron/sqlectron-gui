@@ -1,0 +1,16 @@
+{
+  "extends": "eslint-config-airbnb",
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/react-in-jsx-scope": 2,
+    "space-before-function-paren": 0,
+    "func-names": 0
+  },
+  "plugins": [
+    "react"
+  ]
+}
