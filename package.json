@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "main": "main.js",
   "scripts": {
-    "start-webpack": "webpack --config ./webpack.dev.config.js -w",
-    "start-electron": "./node_modules/.bin/electron ."
+    "start-webpack": "webpack-dev-server --config ./webpack.dev.config.js",
+    "start-electron": "electron ."
   },
   "dependencies": {
     "babel": "^5.8.23",
@@ -26,7 +26,7 @@
     "eslint-config-airbnb": "0.0.8",
     "eslint-plugin-react": "^3.3.1",
     "react-hot-loader": "1.2.4",
-    "webpack": "1.9.10",
-    "webpack-dev-server": "1.9.0"
+    "webpack": "^1.12.1",
+    "webpack-dev-server": "^1.10.1"
   }
 }
