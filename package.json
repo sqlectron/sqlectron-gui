@@ -17,9 +17,9 @@
     "moment": "^2.10.3",
     "radium": "^0.12.2",
     "react": "0.13.3",
-    "react-redux": "^1.0.1",
+    "react-redux": "^2.1.0",
     "react-tap-event-plugin": "^0.1.7",
-    "redux": "^1.0.1"
+    "redux": "^2.0.0"
   },
   "devDependencies": {
     "electron-prebuilt": "^0.31.2",
