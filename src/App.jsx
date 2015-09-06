@@ -9,7 +9,7 @@ var ThemeManager = new mui.Styles.ThemeManager();
 var Colors = mui.Styles.Colors;
 
 // own widgets
-import DatabaseList from './controllers/DatabaseList.jsx';
+import DatabaseListContainer from './containers/DatabaseList.jsx';
 
 export default class App extends ValidatedComponent {
 
@@ -38,7 +38,7 @@ export default class App extends ValidatedComponent {
       <AppBar title='sqlectron' style={{position: 'fixed', top: 0}} />
 
       <main style={{background: '#ececec', paddingTop: 64}}>
-        <DatabaseList />
+        <DatabaseListContainer />
       </main>
 
     </div>
