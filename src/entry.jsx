@@ -1,6 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import App from './controllers/AppController.jsx';
+import App from './controllers/App.jsx';
 import configureStore from './store/configureStore';
 
 const store = configureStore();
