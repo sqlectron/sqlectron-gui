@@ -1,4 +1,13 @@
-import Dispatcher from './Dispatcher.jsx';
 import React from 'react';
+import { Provider } from 'react-redux';
+import App from './containers/App.jsx';
+import configureStore from './store/configureStore';
 
-React.render(<Dispatcher />, document.getElementById('content'));
+const store = configureStore();
+
+React.render(
+  <Provider store={store}>
+    {() => <App />}
+  </Provider>,
+  document.getElementById('content')
+);

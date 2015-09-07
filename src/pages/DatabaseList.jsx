@@ -1,42 +1,47 @@
-import React, {Component, PropTypes} from 'react';
+import {Dialog} from 'material-ui';
+import React, { Component, PropTypes } from 'react';
 import ValidatedComponent from 'utils/ValidatedComponent.jsx';
-
-// widgets
-import List from '../widgets/List.jsx';
 import DatabaseListItem from './DatabaseListItem.jsx';
 import LoadingPage from './LoadingPage.jsx';
-
-import {Dialog} from 'material-ui';
+import List from '../widgets/List.jsx';
 
 
 export default class DatabaseList extends ValidatedComponent {
-
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
-      dropDB: {}
+      databaseToDrop: {}
     }
   }
 
   static propTypes = {
     databases: PropTypes.array.isRequired,
-    loadDatabases: PropTypes.func.isRequired,
-    dropDatabase: PropTypes.func.isRequired,
-
+    actions: PropTypes.object.isRequired
   }
 
   componentDidMount() {
-    this.props.loadDatabases();
+    const { actions } = this.props;
+    actions.loadDatabases();
+  }
+
+  onItemClick(database) {
+    this.setState({ databaseToDrop: database });
+    this.refs.dialog.show();
+  }
+
+  onItemCancel() {
+    this.setState({ databaseToDrop: {} });
+    this.refs.dialog.dismiss();
   }
 
   render() {
-    const {databases, dropDatabase} = this.props;
+    const { databases, actions } = this.props;
     console.info('[DatabaseList.jsx databases] ', this.props);
     const standardActions = [
-      { text: 'Cancel' },
+      { text: 'Cancel', onClick: ::this.onItemCancel },
       { text: 'Drop Database', onClick: this.onDialogSubmit, ref: 'submit' }
     ];
-    const {dropDB} = this.state;
+    const { databaseToDrop } = this.state;
 
     return databases.length > 0 ?
       <List>
@@ -47,23 +52,17 @@ export default class DatabaseList extends ValidatedComponent {
           actions={standardActions}
           actionFocus="submit"
           modal={true}>
-          {`Do you want to drop database ${dropDB.Name}?`}
+          {`Do you want to drop database ${databaseToDrop.Name}?`}
         </Dialog>
 
         {databases.map((database,i) =>
           <DatabaseListItem
             onClick={::this.onItemClick}
             key={i}
-            {...{dropDatabase, database}} />
+            dropDatabase={actions.dropDatabase}
+            database={database} />
         )}
       </List>
     : <LoadingPage />;
   }
-
-  onItemClick(database) {
-    this.setState({dropDB: database});
-    this.refs.dialog.show();
-  }
-
-
 };
