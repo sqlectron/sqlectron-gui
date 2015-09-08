@@ -1,4 +1,4 @@
-import { LODAD_DABATASES } from '../constants/ActionTypes';
+import { LODAD_DABATASES } from '../constants/action-types';
 
 
 export function loadDatabases() {

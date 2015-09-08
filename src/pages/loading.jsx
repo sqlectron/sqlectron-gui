@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import ValidatedComponent from 'utils/ValidatedComponent.jsx'
+import ValidatedComponent from 'utils/validated-component.jsx'
 
-import Centered from '../layouts/Centered.jsx';
+import Centered from '../layouts/centered.jsx';
 import {CircularProgress} from 'material-ui';
 import {Color} from '../styles/vars.js';
 

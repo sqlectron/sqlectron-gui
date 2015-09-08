@@ -3,8 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as DatabaseActions from '../actions/databases.js';
-import ValidatedComponent from 'utils/ValidatedComponent.jsx'
-import DatabaseList from '../pages/DatabaseList.jsx';
+import ValidatedComponent from 'utils/validated-component.jsx'
+import DatabaseList from '../pages/database-list.jsx';
 
 
 export default class DatabaseListController extends ValidatedComponent {

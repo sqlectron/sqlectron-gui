@@ -1,7 +1,7 @@
 // TODO: Check if we gonna keep it.
 // Because is not really using it right now.
 
-import { SHOW_DIALOG } from '../constants/ActionTypes';
+import { SHOW_DIALOG } from '../constants/action-types';
 
 const initialState = {
   visible: false

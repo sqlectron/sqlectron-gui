@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import ValidatedComponent from 'utils/ValidatedComponent.jsx'
+import ValidatedComponent from 'utils/validated-component.jsx'
 
 import {Color} from '../styles/vars.js';
 
