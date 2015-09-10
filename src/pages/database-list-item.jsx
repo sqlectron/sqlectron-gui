@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import moment from 'moment';
-import ValidatedComponent from 'utils/ValidatedComponent.jsx';
+import ValidatedComponent from 'utils/validated-component.jsx';
 
 import {Checkbox, Dialog} from 'material-ui';
 

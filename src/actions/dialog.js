@@ -1,4 +1,4 @@
-import { SHOW_DIALOG } from '../constants/ActionTypes';
+import { SHOW_DIALOG } from '../constants/action-types';
 
 export function showDialog() {
   return {

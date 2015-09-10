@@ -1,9 +1,9 @@
 import {Dialog} from 'material-ui';
 import React, { Component, PropTypes } from 'react';
-import ValidatedComponent from 'utils/ValidatedComponent.jsx';
-import DatabaseListItem from './DatabaseListItem.jsx';
-import LoadingPage from './LoadingPage.jsx';
-import List from '../widgets/List.jsx';
+import ValidatedComponent from 'utils/validated-component.jsx'
+import DatabaseListItem from './database-list-item.jsx';
+import LoadingPage from './loading.jsx';
+import List from '../widgets/list.jsx';
 
 
 export default class DatabaseList extends ValidatedComponent {
