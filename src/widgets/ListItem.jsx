@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import ValidatedComponent from 'utils/ValidatedComponent.jsx'
 
 
 const style = {

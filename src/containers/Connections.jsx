@@ -1,15 +1,15 @@
+import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as DialogActions from '../actions/dialog';
+// import * as DatabaseActions from '../actions/databases.js';
 import ValidatedComponent from 'utils/ValidatedComponent.jsx'
+// import ConnectionList from '../pages/ConnectionList.jsx';
 
 
-class AppContainer extends ValidatedComponent {
+export default class ConnectionListContainer extends ValidatedComponent {
   static propTypes = {
-    dialog: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
+    databases: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -29,26 +29,22 @@ class AppContainer extends ValidatedComponent {
   }
 
   render() {
-    const { dialog, dispatch, children } = this.props;
-    const actions = bindActionCreators(DialogActions, dispatch);
+    const { databases, dispatch } = this.props;
+    // const actions = bindActionCreators(DatabaseActions, dispatch);
 
     return (
       <div>
-        <ul>
-          <li><Link to="/">Connections</Link></li>
-          <li><Link to="/databases">Databases</Link></li>
-        </ul>
-        {/*<App dialog={dialog} actions={actions} />*/}
-        {children}
+        List of Connections
       </div>
     );
   }
-}
+};
+
 
 function mapStateToProps(state) {
   return {
-    dialog: state.dialog
+    databases: state.databases
   };
 }
 
-export default connect(mapStateToProps)(AppContainer);
+export default connect(mapStateToProps)(ConnectionListContainer);

@@ -7,10 +7,25 @@ import ValidatedComponent from 'utils/ValidatedComponent.jsx'
 import DatabaseList from '../pages/DatabaseList.jsx';
 
 
-export default class DatabaseListController extends ValidatedComponent {
+export default class DatabaseListContainer extends ValidatedComponent {
   static propTypes = {
     databases: PropTypes.array.isRequired,
-    dispatch: PropTypes.func.isRequired
+    dispatch: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    route: PropTypes.object.isRequired,
+    routeParams: PropTypes.object.isRequired,
+    location: PropTypes.shape({
+      pathname: PropTypes.string.isRequired
+    }),
+    params: PropTypes.shape({
+      userLogin: PropTypes.string,
+      repoName: PropTypes.string
+    }).isRequired,
+    children: PropTypes.node
+  }
+
+  static contextTypes = {
+    history: PropTypes.object.isRequired
   }
 
   render() {
@@ -28,4 +43,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(DatabaseListController);
+export default connect(mapStateToProps)(DatabaseListContainer);
