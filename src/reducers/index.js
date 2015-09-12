@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
-// import todos from './todos';
 import dialog from './dialog';
 import databases from './databases';
+import connections from './connections';
 
 const rootReducer = combineReducers({
-  // todos
   dialog,
-  databases
+  databases,
+  connections
 });
 
 export default rootReducer;

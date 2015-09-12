@@ -16,7 +16,7 @@ React.render(
       <Router history={history}>
         <Route component={App}>
           <Route path="/" component={ConnectionsContainer} />
-          <Route path="/databases" component={DatabaseListContainer} />
+          <Route path="/:id" component={DatabaseListContainer} />
         </Route>
       </Router>
     }

@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as DialogActions from '../actions/dialog';
-// import App from '../app.jsx';
 import ValidatedComponent from 'utils/validated-component.jsx'
 
 
@@ -35,10 +33,6 @@ class AppContainer extends ValidatedComponent {
 
     return (
       <div>
-        <ul>
-          <li><Link to="/">Connections</Link></li>
-          <li><Link to="/databases">Databases</Link></li>
-        </ul>
         {/*<App dialog={dialog} actions={actions} />*/}
         {children}
       </div>

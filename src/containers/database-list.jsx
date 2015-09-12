@@ -2,6 +2,7 @@ import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 import * as DatabaseActions from '../actions/databases.js';
 import ValidatedComponent from 'utils/validated-component.jsx'
 import DatabaseList from '../pages/database-list.jsx';
@@ -32,7 +33,12 @@ export default class DatabaseListContainer extends ValidatedComponent {
     const { databases, dispatch } = this.props;
     const actions = bindActionCreators(DatabaseActions, dispatch);
 
-    return <DatabaseList databases={databases} actions={actions} />;
+    return (
+      <div>
+        <Link to="/">Close Connection</Link>
+        <DatabaseList databases={databases} actions={actions} />;
+      </div>
+    );
   }
 };
 
