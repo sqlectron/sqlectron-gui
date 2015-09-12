@@ -19,7 +19,7 @@
     "radium": "^0.12.2",
     "react": "0.13.3",
     "react-redux": "^2.1.0",
-    "react-router": "^1.0.0-beta4",
+    "react-router": "^1.0.0-rc1",
     "react-tap-event-plugin": "^0.1.7",
     "redux": "^2.0.0"
   },
