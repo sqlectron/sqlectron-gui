@@ -1,9 +1,10 @@
-import {Dialog} from 'material-ui';
+// import {Dialog} from 'material-ui';
 import React, { Component, PropTypes } from 'react';
 import ValidatedComponent from 'utils/validated-component.jsx'
 import DatabaseListItem from './database-list-item.jsx';
 import LoadingPage from './loading.jsx';
 import List from '../widgets/list.jsx';
+import { Link } from 'react-router';
 
 
 export default class DatabaseList extends ValidatedComponent {
@@ -45,15 +46,14 @@ export default class DatabaseList extends ValidatedComponent {
 
     return databases.length > 0 ?
       <List>
-
-        <Dialog
+        {/*<Dialog
           title={`Drop Database`}
           ref='dialog'
           actions={standardActions}
           actionFocus="submit"
           modal={true}>
           {`Do you want to drop database ${databaseToDrop.Name}?`}
-        </Dialog>
+        </Dialog>*/}
 
         {databases.map((database,i) =>
           <DatabaseListItem

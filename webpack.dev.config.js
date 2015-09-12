@@ -46,5 +46,6 @@ module.exports = {
         "_": 'lodash',
     })
   ],
-  devtool: 'eval-source-map'
+  devtool: 'eval-source-map',
+  target: 'atom'
 };
