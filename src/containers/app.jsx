@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as DialogActions from '../actions/dialog';
 // import App from '../app.jsx';
-import ValidatedComponent from 'utils/ValidatedComponent.jsx'
+import ValidatedComponent from 'utils/validated-component.jsx'
 
 
 class AppContainer extends ValidatedComponent {

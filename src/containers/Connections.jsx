@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 // import * as DatabaseActions from '../actions/databases.js';
-import ValidatedComponent from 'utils/ValidatedComponent.jsx'
+import ValidatedComponent from 'utils/validated-component.jsx'
 // import ConnectionList from '../pages/ConnectionList.jsx';
 
 
