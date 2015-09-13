@@ -5,7 +5,7 @@ import { Router, Route } from 'react-router';
 import App from './containers/app.jsx';
 import configureStore from './store/configure';
 import ConnectionListContainer from './containers/connection-list.jsx';
-import DatabaseListContainer from './containers/database-list.jsx';
+import ConnectionContainer from './containers/connection.jsx';
 
 const history = createHashHistory();
 const store = configureStore();
@@ -16,7 +16,7 @@ React.render(
       <Router history={history}>
         <Route component={App}>
           <Route path="/" component={ConnectionListContainer} />
-          <Route path="/:id" component={DatabaseListContainer} />
+          <Route path="/:name" component={ConnectionContainer} />
         </Route>
       </Router>
     }

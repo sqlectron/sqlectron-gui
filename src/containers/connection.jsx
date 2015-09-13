@@ -6,6 +6,25 @@ import { Link } from 'react-router';
 import * as DatabaseActions from '../actions/databases.js';
 import ValidatedComponent from 'utils/validated-component.jsx'
 import DatabaseList from '../pages/database-list.jsx';
+import Database from '../pages/database.jsx';
+
+
+const STYLES = {
+  wrapper: {
+  },
+  header: {
+
+  },
+  container: {
+    display: 'flex'
+  },
+  sidebar: {
+    width: '200px'
+  },
+  content: {
+    flex: 1
+  }
+};
 
 
 export default class DatabaseListContainer extends ValidatedComponent {
@@ -34,9 +53,18 @@ export default class DatabaseListContainer extends ValidatedComponent {
     const actions = bindActionCreators(DatabaseActions, dispatch);
 
     return (
-      <div>
-        <Link to="/">Close Connection</Link>
-        <DatabaseList databases={databases} actions={actions} />;
+      <div style={STYLES.wrapper}>
+        <div style={STYLES.header}>
+          <Link to="/">Close Connection</Link>
+        </div>
+        <div style={STYLES.container}>
+          <div style={STYLES.sidebar}>
+            <DatabaseList databases={databases} actions={actions} />
+          </div>
+          <div style={STYLES.content}>
+            <Database actions={actions} />
+          </div>
+        </div>
       </div>
     );
   }

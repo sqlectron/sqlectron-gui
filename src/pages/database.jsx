@@ -6,6 +6,17 @@ import LoadingPage from './loading.jsx';
 import List from '../widgets/list.jsx';
 import { Link } from 'react-router';
 
+const STYLES = {
+  queryBox: {
+  },
+  queryBoxTextarea: {
+    width: '100%',
+    minHeight: '200px'
+  },
+  resultBox: {
+    background: '#ececec'
+  }
+}
 
 export default class DatabaseList extends ValidatedComponent {
   constructor(props, context) {
@@ -44,16 +55,18 @@ export default class DatabaseList extends ValidatedComponent {
     ];
     const { databaseToDrop } = this.state;
 
-    return databases.length > 0 ?
-      <List>
-        {databases.map((database,i) =>
-          <DatabaseListItem
-            onClick={::this.onItemClick}
-            key={i}
-            dropDatabase={actions.dropDatabase}
-            database={database} />
-        )}
-      </List>
-    : <LoadingPage />;
+    return (
+      <div>
+        <div>
+          <div style={STYLES.queryBox}>
+            <textarea  style={STYLES.queryBoxTextarea} />
+            <input type="button" value="Execute Query" />
+          </div>
+        </div>
+        <div style={STYLES.resultBox}>
+          -- result --
+        </div>
+      </div>
+    );
   }
 };

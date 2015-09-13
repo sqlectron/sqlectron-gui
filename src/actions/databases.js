@@ -3,8 +3,20 @@ import { LODAD_DABATASES } from '../constants/action-types';
 
 export function loadDatabases() {
   const databases = [
-    { Name: 'Database1', Description: 'First Database', 'Install Date': '01/03/2014' },
-    { Name: 'Database1', Description: 'Second Databse', 'Install Date': '05/05/2015' }
+    {
+      name: 'Database1',
+      tables: [
+        'db1-first-table',
+        'db1-second-table'
+      ]
+    },
+    {
+      name: 'Database1',
+      tables: [
+        'db2-first-table',
+        'db2-second-table'
+      ]
+    }
   ];
   return { type: LODAD_DABATASES, databases };
 }

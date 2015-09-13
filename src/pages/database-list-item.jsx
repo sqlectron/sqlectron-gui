@@ -1,28 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import moment from 'moment';
 import ValidatedComponent from 'utils/validated-component.jsx';
-
-// import {Checkbox, Dialog} from 'material-ui';
-
 import {ListItem, Body, Subhead} from '../widgets/index.js';
 
-const style = {
 
-  date: {
-    color: '#777',
-    fontSize: '80%'
-  },
-
-  description: {
-    color: '#444',
-    fontSize: '80%'
-  }
-
-};
-
-@Radium.Enhancer
 export default class DatabaseListItem extends ValidatedComponent {
-
   static propTypes = {
     database: PropTypes.object.isRequired,
     dropDatabase: PropTypes.func.isRequired,
@@ -31,24 +13,15 @@ export default class DatabaseListItem extends ValidatedComponent {
 
   render() {
     const {database, onClick} = this.props;
-    const dateInstalledRelative = database['Install Date'].fromNow();
 
-
-    return <ListItem
-      onClick={() => onClick(database)}>
-
-
+    return (
       <div>
-        <Subhead>{database['Name']}</Subhead>
-        <Body secondary>
-          {' '}({dateInstalledRelative})
-        </Body>
+        <h1>{database.name}</h1>
+        <ul>
+          {database.tables.map(table => <li>{table}</li>)}
+        </ul>
       </div>
-
-      <Body secondary>
-       {' '} {database['Description']}
-      </Body>
-    </ListItem>;
+    );
   }
 
 };
