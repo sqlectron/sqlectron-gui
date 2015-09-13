@@ -21,49 +21,42 @@ const STYLES = {
 export default class DatabaseList extends ValidatedComponent {
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      databaseToDrop: {}
-    }
   }
 
   static propTypes = {
-    databases: PropTypes.array.isRequired,
+    queryResult: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired
   }
 
-  componentDidMount() {
+  onExecQueryClick(database) {
     const { actions } = this.props;
-    actions.loadDatabases();
-  }
-
-  onItemClick(database) {
-    this.setState({ databaseToDrop: database });
-    this.refs.dialog.show();
-  }
-
-  onItemCancel() {
-    this.setState({ databaseToDrop: {} });
-    this.refs.dialog.dismiss();
+    const sql = React.findDOMNode(this.refs.queryBoxTextarea).value;
+    actions.query(sql);
   }
 
   render() {
-    const { databases, actions } = this.props;
-    const standardActions = [
-      { text: 'Cancel', onClick: ::this.onItemCancel },
-      { text: 'Drop Database', onClick: this.onDialogSubmit, ref: 'submit' }
-    ];
-    const { databaseToDrop } = this.state;
-
+    const { queryResult, actions } = this.props;
     return (
       <div>
         <div>
           <div style={STYLES.queryBox}>
-            <textarea  style={STYLES.queryBoxTextarea} />
-            <input type="button" value="Execute Query" />
+            <textarea ref="queryBoxTextarea" style={STYLES.queryBoxTextarea} />
+            <input type="button" value="Execute Query" onClick={::this.onExecQueryClick} />
           </div>
         </div>
         <div style={STYLES.resultBox}>
-          -- result --
+          {queryResult && queryResult.rows && queryResult.rows.length ? (
+            <table>
+              {queryResult.rows.map(row => {
+                return (<tr>
+                  {Object.keys(row).map(name => {
+                    return (<td>{row[name]}</td>)
+                  })}
+                </tr>);
+              })}
+            </table>
+          ) : '-- result --' }
+
         </div>
       </div>
     );

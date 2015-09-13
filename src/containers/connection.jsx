@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import * as DatabaseActions from '../actions/databases.js';
+import * as QueryActions from '../actions/query.js';
 import ValidatedComponent from 'utils/validated-component.jsx'
 import DatabaseList from '../pages/database-list.jsx';
 import Database from '../pages/database.jsx';
@@ -30,6 +31,7 @@ const STYLES = {
 export default class DatabaseListContainer extends ValidatedComponent {
   static propTypes = {
     databases: PropTypes.array.isRequired,
+    queryResult: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -49,8 +51,9 @@ export default class DatabaseListContainer extends ValidatedComponent {
   }
 
   render() {
-    const { databases, dispatch } = this.props;
-    const actions = bindActionCreators(DatabaseActions, dispatch);
+    const { databases, queryResult, dispatch } = this.props;
+    const dbActions = bindActionCreators(DatabaseActions, dispatch);
+    const queryActions = bindActionCreators(QueryActions, dispatch);
 
     return (
       <div style={STYLES.wrapper}>
@@ -59,10 +62,10 @@ export default class DatabaseListContainer extends ValidatedComponent {
         </div>
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>
-            <DatabaseList databases={databases} actions={actions} />
+            <DatabaseList databases={databases} actions={dbActions} />
           </div>
           <div style={STYLES.content}>
-            <Database actions={actions} />
+            <Database queryResult={queryResult} actions={queryActions} />
           </div>
         </div>
       </div>
@@ -73,7 +76,8 @@ export default class DatabaseListContainer extends ValidatedComponent {
 
 function mapStateToProps(state) {
   return {
-    databases: state.databases
+    databases: state.databases,
+    queryResult: state.queryResult
   };
 }
 
