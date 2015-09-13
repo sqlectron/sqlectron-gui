@@ -16,8 +16,8 @@ export default class DatabaseListItem extends ValidatedComponent {
 
     return (
       <div>
-        <h1>{database.name}</h1>
-        <ul>
+        <h1 style={{fontSize: '1em'}}>{database.name}</h1>
+        <ul style={{fontSize: '0.7em', marginLeft: '10px'}}>
           {database.tables.map(table => <li>{table}</li>)}
         </ul>
       </div>
