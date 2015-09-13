@@ -2,14 +2,14 @@ import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-// import * as DatabaseActions from '../actions/databases.js';
+import * as ConnectionActions from '../actions/connections.js';
 import ValidatedComponent from 'utils/validated-component.jsx'
-// import ConnectionList from '../pages/ConnectionList.jsx';
+import ConnectionList from '../pages/connection-list.jsx';
 
 
 export default class ConnectionListContainer extends ValidatedComponent {
   static propTypes = {
-    databases: PropTypes.array.isRequired,
+    connections: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -29,12 +29,13 @@ export default class ConnectionListContainer extends ValidatedComponent {
   }
 
   render() {
-    const { databases, dispatch } = this.props;
-    // const actions = bindActionCreators(DatabaseActions, dispatch);
+    const { connections, dispatch } = this.props;
+    const actions = bindActionCreators(ConnectionActions, dispatch);
 
     return (
       <div>
         List of Connections
+        <ConnectionList connections={connections} actions={actions} />
       </div>
     );
   }
@@ -43,7 +44,7 @@ export default class ConnectionListContainer extends ValidatedComponent {
 
 function mapStateToProps(state) {
   return {
-    databases: state.databases
+    connections: state.connections
   };
 }
 
