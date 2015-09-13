@@ -4,8 +4,6 @@ import { LODAD_DABATASES } from '../constants/action-types';
 
 const initialState = [];
 
-const format = 'DD/MM/YYYY'
-
 export default function databases(state = initialState, action) {
   switch (action.type) {
   case LODAD_DABATASES:

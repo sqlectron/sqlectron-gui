@@ -2,7 +2,6 @@ import React, {Component, PropTypes} from 'react';
 import ValidatedComponent from 'utils/validated-component.jsx'
 
 import Centered from '../layouts/centered.jsx';
-// import {CircularProgress} from 'material-ui';
 import {Color} from '../styles/vars.js';
 
 const style = {
@@ -17,10 +16,7 @@ export default class LoadingPage extends ValidatedComponent {
   }
 
   render() {
-    console.info('[LoadingPage.jsx] ', 'load');
-
     return <Centered>
-      {/*<CircularProgress mode="indeterminate" size={.6}/>*/}
       <span style={[style]}>Crunching stdout...</span>
     </Centered>;
   }

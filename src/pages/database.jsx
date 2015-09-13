@@ -48,7 +48,6 @@ export default class DatabaseList extends ValidatedComponent {
 
   render() {
     const { databases, actions } = this.props;
-    console.info('[DatabaseList.jsx databases] ', this.props);
     const standardActions = [
       { text: 'Cancel', onClick: ::this.onItemCancel },
       { text: 'Drop Database', onClick: this.onDialogSubmit, ref: 'submit' }
