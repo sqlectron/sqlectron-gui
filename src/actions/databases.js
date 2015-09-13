@@ -1,24 +1,21 @@
 import { LODAD_DABATASES } from '../constants/action-types';
+const getDB = require('remote').require('./src/db').getDB;
 
 
 export function loadDatabases() {
-  const databases = [
-    {
-      name: 'Database1',
-      tables: [
-        'db1-first-table',
-        'db1-second-table'
-      ]
-    },
-    {
-      name: 'Database1',
-      tables: [
-        'db2-first-table',
-        'db2-second-table'
-      ]
-    }
-  ];
-  return { type: LODAD_DABATASES, databases };
+  return dispatch => {
+    return getDB().then(async function (db) {
+      const databases = (await db.databaseList()).map(name => {
+        return { name, tables: [] };
+      });
+
+      // TODO: get default db from connection configuration
+      // for while considers the first db the defualt db
+      databases[0].tables = await db.tableList();
+      
+      dispatch({ type: LODAD_DABATASES, databases });
+    });
+  };
 }
 
 export function dropDatabase(database) {
