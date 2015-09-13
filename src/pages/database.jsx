@@ -34,6 +34,33 @@ export default class DatabaseList extends ValidatedComponent {
     actions.query(sql);
   }
 
+  buildQueryResult(queryResult) {
+    if (queryResult.error) {
+      return <pre>{JSON.stringify(queryResult.error, null, 2)}</pre>;
+    }
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            {Object.keys((queryResult.rows[0] || {})).map(name => {
+              return (<th>{name}</th>)
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {queryResult.rows.map(row => {
+            return (<tr>
+              {Object.keys(row).map(name => {
+                return (<td>{row[name]}</td>)
+              })}
+            </tr>);
+          })}
+        </tbody>
+      </table>
+    );
+  }
+
   render() {
     const { queryResult, actions } = this.props;
     return (
@@ -45,18 +72,7 @@ export default class DatabaseList extends ValidatedComponent {
           </div>
         </div>
         <div style={STYLES.resultBox}>
-          {queryResult && queryResult.rows && queryResult.rows.length ? (
-            <table>
-              {queryResult.rows.map(row => {
-                return (<tr>
-                  {Object.keys(row).map(name => {
-                    return (<td>{row[name]}</td>)
-                  })}
-                </tr>);
-              })}
-            </table>
-          ) : '-- result --' }
-
+          {::this.buildQueryResult(queryResult)}
         </div>
       </div>
     );
