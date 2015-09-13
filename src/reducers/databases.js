@@ -6,7 +6,7 @@ const initialState = [];
 
 const format = 'DD/MM/YYYY'
 
-export default function todos(state = initialState, action) {
+export default function databases(state = initialState, action) {
   switch (action.type) {
   case LODAD_DABATASES:
     return action.databases;
