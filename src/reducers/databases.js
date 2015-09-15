@@ -4,16 +4,10 @@ import { LODAD_DABATASES } from '../constants/action-types';
 
 const initialState = [];
 
-const format = 'DD/MM/YYYY'
-
-export default function todos(state = initialState, action) {
+export default function databases(state = initialState, action) {
   switch (action.type) {
   case LODAD_DABATASES:
-    return _.sortBy(action.databases, p => {
-       const date = moment(p['Install Date'], format);
-       p['Install Date'] = date;
-       return date.unix();
-    }).reverse();
+    return action.databases;
 
   default:
     return state;

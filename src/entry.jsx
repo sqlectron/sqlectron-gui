@@ -4,8 +4,8 @@ import createHashHistory from 'history/lib/createHashHistory'
 import { Router, Route } from 'react-router';
 import App from './containers/app.jsx';
 import configureStore from './store/configure';
-import ConnectionsContainer from './containers/connections.jsx';
-import DatabaseListContainer from './containers/database-list.jsx';
+import ConnectionListContainer from './containers/connection-list.jsx';
+import ConnectionContainer from './containers/connection.jsx';
 
 const history = createHashHistory();
 const store = configureStore();
@@ -15,8 +15,8 @@ React.render(
     {() =>
       <Router history={history}>
         <Route component={App}>
-          <Route path="/" component={ConnectionsContainer} />
-          <Route path="/:id" component={DatabaseListContainer} />
+          <Route path="/" component={ConnectionListContainer} />
+          <Route path="/:name" component={ConnectionContainer} />
         </Route>
       </Router>
     }

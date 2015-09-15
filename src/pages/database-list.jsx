@@ -37,7 +37,6 @@ export default class DatabaseList extends ValidatedComponent {
 
   render() {
     const { databases, actions } = this.props;
-    console.info('[DatabaseList.jsx databases] ', this.props);
     const standardActions = [
       { text: 'Cancel', onClick: ::this.onItemCancel },
       { text: 'Drop Database', onClick: this.onDialogSubmit, ref: 'submit' }
@@ -46,15 +45,6 @@ export default class DatabaseList extends ValidatedComponent {
 
     return databases.length > 0 ?
       <List>
-        {/*<Dialog
-          title={`Drop Database`}
-          ref='dialog'
-          actions={standardActions}
-          actionFocus="submit"
-          modal={true}>
-          {`Do you want to drop database ${databaseToDrop.Name}?`}
-        </Dialog>*/}
-
         {databases.map((database,i) =>
           <DatabaseListItem
             onClick={::this.onItemClick}

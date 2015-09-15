@@ -30,7 +30,6 @@ export default class ConnectionList extends ValidatedComponent {
 
   render() {
     const { connections, actions } = this.props;
-    console.info('[ConnectionList.jsx connections] ', this.props);
     const { connectionToDrop } = this.state;
 
     return connections.length > 0 ?

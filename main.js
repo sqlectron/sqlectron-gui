@@ -1,4 +1,4 @@
-// require('babel/register')({stage: 0});
+require('babel/register')({stage: 0});
 const app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
 
