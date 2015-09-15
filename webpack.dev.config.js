@@ -26,15 +26,19 @@ module.exports = {
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['babel-loader?stage=0&optional=runtime']
+        loaders: ['babel?stage=0&optional=runtime']
       },
       {
-        test: /\.less$/,
-        loader: 'style-loader!css-loader!autoprefixer-loader?{browsers:["last 2 version"]}!less-loader'
+        test: /\.css$/,
+        loader: 'style!css!autoprefixer?{browsers:["last 2 version"]}'
       },
       {
-        test: /\.(?:eot|ttf|woff2?)$/,
-        loader: 'file-loader?name=[path][name]-[hash:6].[ext]&context=assets'
+        test: /\.png$/,
+        loader: "url?mimetype=image/png"
+      },
+      {
+        test: /\.(?:eot|ttf|woff2?|svg)$/,
+        loader: 'file?name=[path][name]-[hash:6].[ext]&context=assets'
       }
     ]
   },
@@ -43,6 +47,8 @@ module.exports = {
     new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$")),
     new webpack.ProvidePlugin({
         Radium: 'radium',
+        "jQuery":'jquery',
+        "$":'jquery',
         "_": 'lodash',
     })
   ],
