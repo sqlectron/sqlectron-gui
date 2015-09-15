@@ -20,7 +20,7 @@ const STYLES = {
     display: 'flex'
   },
   sidebar: {
-    width: '200px'
+    width: '220px'
   },
   content: {
     flex: 1
@@ -58,11 +58,26 @@ export default class DatabaseListContainer extends ValidatedComponent {
     return (
       <div style={STYLES.wrapper}>
         <div style={STYLES.header}>
-          <Link to="/">Close Connection</Link>
         </div>
+
+        <div className="ui secondary menu">
+          <div className="right menu">
+            <div className="item">
+              <Link to="/" className="ui icon button" title="Close connection">
+                <i className="ban icon"></i>
+              </Link>
+            </div>
+          </div>
+        </div>
+
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>
-            <DatabaseList databases={databases} actions={dbActions} />
+            <div className="ui vertical menu">
+              <div className="item">
+                <div className="ui input"><input type="text" placeholder="Search..." /></div>
+              </div>
+              <DatabaseList databases={databases} actions={dbActions} />
+            </div>
           </div>
           <div style={STYLES.content}>
             <Database queryResult={queryResult} actions={queryActions} />

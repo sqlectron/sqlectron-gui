@@ -1,7 +1,5 @@
-// import {Dialog} from 'material-ui';
 import React, { Component, PropTypes } from 'react';
 import ValidatedComponent from 'utils/validated-component.jsx'
-import DatabaseListItem from './database-list-item.jsx';
 import LoadingPage from './loading.jsx';
 import List from '../widgets/list.jsx';
 import { Link } from 'react-router';
