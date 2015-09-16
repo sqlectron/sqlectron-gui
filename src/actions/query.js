@@ -1,5 +1,10 @@
-import { EXECUTE_QUERY, FAIL_QUERY } from '../constants/action-types';
+import { UPDATE_SQL, EXECUTE_QUERY, FAIL_QUERY } from '../constants/action-types';
 const getDB = require('remote').require('./src/db').getDB;
+
+
+export function updateSQL(sql) {
+  return { type: UPDATE_SQL, sql };
+}
 
 
 export function query(sql) {

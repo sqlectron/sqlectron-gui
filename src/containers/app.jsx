@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as DialogActions from '../actions/dialog';
+import * as QueryActions from '../actions/query.js';
 import ValidatedComponent from 'utils/validated-component.jsx'
+import Menu from '../menu.jsx';
 
 require('semantic-ui-css/semantic.css');
 require('semantic-ui-css/semantic');
@@ -29,13 +30,23 @@ class AppContainer extends ValidatedComponent {
     history: PropTypes.object.isRequired
   }
 
+  componentDidMount() {
+    const { dispatch } = this.props;
+    this.menu = new Menu({
+      queryActions: bindActionCreators(QueryActions, dispatch)
+    });
+  }
+
+  componentDidUpdate() {
+    const { queryResult } = this.props;
+    this.menu.build({ store: { queryResult } });
+  }
+
   render() {
-    const { dialog, dispatch, children } = this.props;
-    const actions = bindActionCreators(DialogActions, dispatch);
+    const { children } = this.props;
 
     return (
       <div className="ui">
-        {/*<App dialog={dialog} actions={actions} />*/}
         {children}
       </div>
     );
@@ -44,7 +55,7 @@ class AppContainer extends ValidatedComponent {
 
 function mapStateToProps(state) {
   return {
-    dialog: state.dialog
+    queryResult: state.queryResult
   };
 }
 
