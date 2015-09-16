@@ -1,5 +1,3 @@
-import moment from 'moment';
-import _ from 'lodash';
 import { LODAD_DABATASES } from '../constants/action-types';
 
 const initialState = [];

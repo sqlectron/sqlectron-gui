@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import moment from 'moment';
 import ValidatedComponent from 'utils/validated-component.jsx';
 import {ListItem, Body, Subhead} from '../widgets/index.js';
 
