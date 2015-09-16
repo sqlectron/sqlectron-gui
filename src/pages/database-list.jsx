@@ -1,9 +1,6 @@
-// import {Dialog} from 'material-ui';
 import React, { Component, PropTypes } from 'react';
 import ValidatedComponent from 'utils/validated-component.jsx'
-import DatabaseListItem from './database-list-item.jsx';
 import LoadingPage from './loading.jsx';
-import List from '../widgets/list.jsx';
 import { Link } from 'react-router';
 
 
@@ -25,34 +22,19 @@ export default class DatabaseList extends ValidatedComponent {
     actions.loadDatabases();
   }
 
-  onItemClick(database) {
-    this.setState({ databaseToDrop: database });
-    this.refs.dialog.show();
-  }
-
-  onItemCancel() {
-    this.setState({ databaseToDrop: {} });
-    this.refs.dialog.dismiss();
-  }
-
   render() {
     const { databases, actions } = this.props;
-    const standardActions = [
-      { text: 'Cancel', onClick: ::this.onItemCancel },
-      { text: 'Drop Database', onClick: this.onDialogSubmit, ref: 'submit' }
-    ];
-    const { databaseToDrop } = this.state;
+    if (!databases.length) { return <LoadingPage />; }
 
-    return databases.length > 0 ?
-      <List>
-        {databases.map((database,i) =>
-          <DatabaseListItem
-            onClick={::this.onItemClick}
-            key={i}
-            dropDatabase={actions.dropDatabase}
-            database={database} />
-        )}
-      </List>
-    : <LoadingPage />;
+    return (<div>
+      {databases.map((database,i) =>
+        <div className="item">
+          <i className="grid database icon"></i> {database.name}
+          <div className="menu">
+            {database.tables.map(table => <a className="item">{table}</a>)}
+          </div>
+        </div>
+      )}
+    </div>);
   }
 };

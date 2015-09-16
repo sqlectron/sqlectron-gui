@@ -1,7 +1,5 @@
-// import {Dialog} from 'material-ui';
 import React, { Component, PropTypes } from 'react';
 import ValidatedComponent from 'utils/validated-component.jsx'
-import DatabaseListItem from './database-list-item.jsx';
 import LoadingPage from './loading.jsx';
 import List from '../widgets/list.jsx';
 import { Link } from 'react-router';
@@ -10,8 +8,6 @@ const STYLES = {
   queryBox: {
   },
   queryBoxTextarea: {
-    width: '100%',
-    minHeight: '200px'
   },
   resultBox: {
     background: '#ececec'
@@ -34,17 +30,21 @@ export default class DatabaseList extends ValidatedComponent {
     actions.query(sql);
   }
 
+  onDiscQueryClick() {
+    React.findDOMNode(this.refs.queryBoxTextarea).value = '';
+  }
+
   buildQueryResult(queryResult) {
     if (queryResult.error) {
       return <pre>{JSON.stringify(queryResult.error, null, 2)}</pre>;
     }
 
     return (
-      <table>
+      <table className="ui celled table">
         <thead>
           <tr>
             {Object.keys((queryResult.rows[0] || {})).map(name => {
-              return (<th>{name}</th>)
+              return <th>{name}</th>
             })}
           </tr>
         </thead>
@@ -67,10 +67,25 @@ export default class DatabaseList extends ValidatedComponent {
       <div>
         <div>
           <div style={STYLES.queryBox}>
-            <textarea ref="queryBoxTextarea" style={STYLES.queryBoxTextarea} />
-            <input type="button" value="Execute Query" onClick={::this.onExecQueryClick} />
+            <div className="ui form">
+              <div className="field">
+                <textarea ref="queryBoxTextarea" style={STYLES.queryBoxTextarea}></textarea>
+              </div>
+            </div>
+            <div className="ui secondary menu" style={{marginTop:0}}>
+              <div className="right menu">
+                <div className="item">
+                  <div className="ui buttons">
+                    <button className="ui positive button" onClick={::this.onExecQueryClick}>Execute</button>
+                    <div className="or"></div>
+                    <button className="ui button" onClick={::this.onDiscQueryClick}>Discard</button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
         <div style={STYLES.resultBox}>
           {::this.buildQueryResult(queryResult)}
         </div>

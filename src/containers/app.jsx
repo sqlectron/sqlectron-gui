@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import * as DialogActions from '../actions/dialog';
 import ValidatedComponent from 'utils/validated-component.jsx'
 
+require('semantic-ui-css/semantic.css');
+require('semantic-ui-css/semantic');
 
 class AppContainer extends ValidatedComponent {
   static propTypes = {
@@ -32,7 +34,7 @@ class AppContainer extends ValidatedComponent {
     const actions = bindActionCreators(DialogActions, dispatch);
 
     return (
-      <div>
+      <div className="ui">
         {/*<App dialog={dialog} actions={actions} />*/}
         {children}
       </div>
