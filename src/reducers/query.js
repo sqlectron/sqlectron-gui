@@ -1,4 +1,4 @@
-import { EXECUTE_QUERY, FAIL_QUERY } from '../constants/action-types';
+import { EXECUTE_QUERY_SUCCESS, EXECUTE_QUERY_FAILURE } from '../constants/action-types';
 
 const initialState = {
   rows: []
@@ -6,9 +6,9 @@ const initialState = {
 
 export default function query(state = initialState, action) {
   switch (action.type) {
-  case EXECUTE_QUERY:
-    return { rows: action.queryResult.rows };
-  case FAIL_QUERY:
+  case EXECUTE_QUERY_SUCCESS:
+    return { rows: action.query.rows };
+  case EXECUTE_QUERY_FAILURE:
     return { rows: [], error: action.error };
 
   default:

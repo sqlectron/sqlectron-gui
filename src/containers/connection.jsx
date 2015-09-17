@@ -31,7 +31,7 @@ const STYLES = {
 export default class DatabaseListContainer extends ValidatedComponent {
   static propTypes = {
     databases: PropTypes.array.isRequired,
-    queryResult: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -51,7 +51,7 @@ export default class DatabaseListContainer extends ValidatedComponent {
   }
 
   render() {
-    const { databases, queryResult, dispatch } = this.props;
+    const { databases, query, dispatch } = this.props;
     const dbActions = bindActionCreators(DatabaseActions, dispatch);
     const queryActions = bindActionCreators(QueryActions, dispatch);
 
@@ -80,7 +80,7 @@ export default class DatabaseListContainer extends ValidatedComponent {
             </div>
           </div>
           <div style={STYLES.content}>
-            <Database queryResult={queryResult} actions={queryActions} />
+            <Database query={query} actions={queryActions} />
           </div>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default class DatabaseListContainer extends ValidatedComponent {
 function mapStateToProps(state) {
   return {
     databases: state.databases,
-    queryResult: state.queryResult
+    query: state.query
   };
 }
 

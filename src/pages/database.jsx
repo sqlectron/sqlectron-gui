@@ -20,36 +20,36 @@ export default class DatabaseList extends ValidatedComponent {
   }
 
   static propTypes = {
-    queryResult: PropTypes.object.isRequired,
+    query: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired
   }
 
   onExecQueryClick(database) {
     const { actions } = this.props;
     const sql = React.findDOMNode(this.refs.queryBoxTextarea).value;
-    actions.query(sql);
+    actions.executeQuery(sql);
   }
 
   onDiscQueryClick() {
     React.findDOMNode(this.refs.queryBoxTextarea).value = '';
   }
 
-  buildQueryResult(queryResult) {
-    if (queryResult.error) {
-      return <pre>{JSON.stringify(queryResult.error, null, 2)}</pre>;
+  buildQueryResult(query) {
+    if (query.error) {
+      return <pre>{JSON.stringify(query.error, null, 2)}</pre>;
     }
 
     return (
       <table className="ui celled table">
         <thead>
           <tr>
-            {Object.keys((queryResult.rows[0] || {})).map(name => {
+            {Object.keys((query.rows[0] || {})).map(name => {
               return <th>{name}</th>
             })}
           </tr>
         </thead>
         <tbody>
-          {queryResult.rows.map(row => {
+          {query.rows.map(row => {
             return (<tr>
               {Object.keys(row).map(name => {
                 return (<td>{row[name]}</td>)
@@ -62,7 +62,7 @@ export default class DatabaseList extends ValidatedComponent {
   }
 
   render() {
-    const { queryResult, actions } = this.props;
+    const { query, actions } = this.props;
     return (
       <div>
         <div>
@@ -87,7 +87,7 @@ export default class DatabaseList extends ValidatedComponent {
         </div>
 
         <div style={STYLES.resultBox}>
-          {::this.buildQueryResult(queryResult)}
+          {::this.buildQueryResult(query)}
         </div>
       </div>
     );
