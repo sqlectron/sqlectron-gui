@@ -3,11 +3,12 @@ import ValidatedComponent from 'utils/validated-component.jsx'
 import LoadingPage from './loading.jsx';
 import List from '../widgets/list.jsx';
 import { Link } from 'react-router';
+import AceEditor from 'react-ace';
+import 'brace/mode/sql';
+import 'brace/theme/github';
 
 const STYLES = {
   queryBox: {
-  },
-  queryBoxTextarea: {
   },
   resultBox: {
     background: '#ececec'
@@ -67,10 +68,16 @@ export default class DatabaseList extends ValidatedComponent {
       <div>
         <div>
           <div style={STYLES.queryBox}>
-            <div className="ui form">
-              <div className="field">
-                <textarea ref="queryBoxTextarea" style={STYLES.queryBoxTextarea}></textarea>
-              </div>
+            <div className="ui segment">
+              <AceEditor
+                mode="sql"
+                theme="github"
+                name="querybox"
+                showGutter={false}
+                height="10em"
+                width="100%"
+                ref="queryBoxTextarea"
+                />
             </div>
             <div className="ui secondary menu" style={{marginTop:0}}>
               <div className="right menu">
