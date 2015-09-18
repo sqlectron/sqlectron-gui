@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as ConnectionActions from '../actions/connections.js';
-import ConnectionList from '../pages/connection-list.jsx';
+import ConnectionList from '../components/connection-list.jsx';
 
 
 export default class ConnectionListContainer extends Component {
