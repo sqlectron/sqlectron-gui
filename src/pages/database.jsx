@@ -31,6 +31,11 @@ export default class DatabaseList extends ValidatedComponent {
     actions.executeQuery(sql);
   }
 
+  onSQLChange(newValue) {
+    const { actions } = this.props;
+    actions.updateSQL(newValue);
+  }
+
   onDiscQueryClick() {
     React.findDOMNode(this.refs.queryBoxTextarea).value = '';
   }
@@ -77,6 +82,8 @@ export default class DatabaseList extends ValidatedComponent {
                 height="10em"
                 width="100%"
                 ref="queryBoxTextarea"
+                value={query && query.sql}
+                onChange={::this.onSQLChange}
                 />
             </div>
             <div className="ui secondary menu" style={{marginTop:0}}>

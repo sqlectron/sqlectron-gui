@@ -44,7 +44,7 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.IgnorePlugin(new RegExp("^(fs|ipc)$")),
+    new webpack.IgnorePlugin(new RegExp("^(fs)$")),
     new webpack.ProvidePlugin({
         Radium: 'radium',
         "jQuery":'jquery',

@@ -1,4 +1,5 @@
 require('babel/register')({stage: 0});
+var ipc = require('ipc');
 const app = require('app');  // Module to control application life.
 var BrowserWindow = require('browser-window');  // Module to create native browser window.
 
@@ -26,6 +27,11 @@ app.on('ready', function() {
 
   // Open the devtools.
   mainWindow.openDevTools();
+
+  // Allow close the app by shortcut
+  ipc.on('quit-app', function() {
+    app.quit();
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function() {
