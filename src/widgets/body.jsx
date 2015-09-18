@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import ValidatedComponent from 'utils/validated-component.jsx'
 
 import {Color} from '../styles/vars.js';
 
@@ -15,7 +14,7 @@ const style = {
 }
 
 @Radium
-export default class Body extends ValidatedComponent {
+export default class Body extends Component {
 
   static propTypes = {
     children: PropTypes.node.isRequired,

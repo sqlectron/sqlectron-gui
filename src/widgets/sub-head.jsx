@@ -1,5 +1,4 @@
-import React, {Component, PropTypes} from 'react';
-import ValidatedComponent from 'utils/validated-component.jsx'
+import React, { Component, PropTypes } from 'react';
 
 const style = {
   fontSize: 16,
@@ -7,7 +6,7 @@ const style = {
 }
 
 @Radium
-export default class Subhead extends ValidatedComponent {
+export default class Subhead extends Component {
 
   static propTypes = {
     children: PropTypes.node.isRequired

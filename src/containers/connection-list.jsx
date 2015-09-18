@@ -2,11 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as ConnectionActions from '../actions/connections.js';
-import ValidatedComponent from 'utils/validated-component.jsx'
 import ConnectionList from '../pages/connection-list.jsx';
 
 
-export default class ConnectionListContainer extends ValidatedComponent {
+export default class ConnectionListContainer extends Component {
   static propTypes = {
     connections: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,

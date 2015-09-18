@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import ValidatedComponent from 'utils/validated-component.jsx'
 
 import {Color} from '../styles/vars.js';
 
@@ -8,7 +7,7 @@ const style = {
 }
 
 @Radium
-export default class LoadingPage extends ValidatedComponent {
+export default class LoadingPage extends Component {
 
   static propTypes = {
     text: PropTypes.string

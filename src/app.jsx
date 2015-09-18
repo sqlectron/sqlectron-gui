@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import ValidatedComponent from 'utils/validated-component.jsx'
 
 // material ui
 import {AppBar, Dialog} from 'material-ui';
@@ -11,7 +10,7 @@ var Colors = mui.Styles.Colors;
 // own widgets
 import DatabaseListContainer from './containers/database-list.jsx';
 
-export default class App extends ValidatedComponent {
+export default class App extends Component {
 
   static childContextTypes = {muiTheme: React.PropTypes.object}
 

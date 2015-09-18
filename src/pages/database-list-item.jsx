@@ -1,9 +1,8 @@
 import React, {Component, PropTypes} from 'react';
-import ValidatedComponent from 'utils/validated-component.jsx';
 import {ListItem, Body, Subhead} from '../widgets/index.js';
 
 
-export default class DatabaseListItem extends ValidatedComponent {
+export default class DatabaseListItem extends Component {
   static propTypes = {
     database: PropTypes.object.isRequired,
     dropDatabase: PropTypes.func.isRequired,

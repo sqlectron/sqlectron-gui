@@ -1,6 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import ValidatedComponent from 'utils/validated-component.jsx';
 
 import {ListItem, Body, Subhead} from '../widgets/index.js';
 
@@ -19,7 +18,7 @@ const style = {
 };
 
 @Radium
-export default class ConnectionListItem extends ValidatedComponent {
+export default class ConnectionListItem extends Component {
 
   static propTypes = {
     connection: PropTypes.object.isRequired,

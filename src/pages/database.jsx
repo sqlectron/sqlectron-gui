@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import ValidatedComponent from 'utils/validated-component.jsx'
 import LoadingPage from './loading.jsx';
 import List from '../widgets/list.jsx';
 import { Link } from 'react-router';
@@ -15,7 +14,7 @@ const STYLES = {
   }
 }
 
-export default class DatabaseList extends ValidatedComponent {
+export default class DatabaseList extends Component {
   constructor(props, context) {
     super(props, context);
   }
