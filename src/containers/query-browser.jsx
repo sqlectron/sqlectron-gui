@@ -4,9 +4,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import * as DatabaseActions from '../actions/databases.js';
 import * as QueryActions from '../actions/query.js';
-import ValidatedComponent from 'utils/validated-component.jsx'
-import DatabaseList from '../pages/database-list.jsx';
-import Database from '../pages/database.jsx';
+import DatabaseList from '../components/database-list.jsx';
+import Query from '../components/query.jsx';
 
 
 const STYLES = {
@@ -27,7 +26,7 @@ const STYLES = {
 };
 
 
-export default class DatabaseListContainer extends ValidatedComponent {
+export default class DatabaseListContainer extends Component {
   static propTypes = {
     databases: PropTypes.array.isRequired,
     query: PropTypes.object.isRequired,
@@ -79,7 +78,7 @@ export default class DatabaseListContainer extends ValidatedComponent {
             </div>
           </div>
           <div style={STYLES.content}>
-            <Database query={query} actions={queryActions} />
+            <Query query={query} actions={queryActions} />
           </div>
         </div>
       </div>

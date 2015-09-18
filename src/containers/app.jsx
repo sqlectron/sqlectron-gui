@@ -2,13 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as QueryActions from '../actions/query.js';
-import ValidatedComponent from 'utils/validated-component.jsx'
 import Menu from '../menu.jsx';
 
 require('semantic-ui-css/semantic.css');
 require('semantic-ui-css/semantic');
 
-class AppContainer extends ValidatedComponent {
+class AppContainer extends Component {
   static propTypes = {
     dialog: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,

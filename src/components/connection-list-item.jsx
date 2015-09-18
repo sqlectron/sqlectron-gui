@@ -1,8 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
-import ValidatedComponent from 'utils/validated-component.jsx';
-
-import {ListItem, Body, Subhead} from '../widgets/index.js';
 
 const style = {
 
@@ -19,7 +16,7 @@ const style = {
 };
 
 @Radium
-export default class ConnectionListItem extends ValidatedComponent {
+export default class ConnectionListItem extends Component {
 
   static propTypes = {
     connection: PropTypes.object.isRequired,
@@ -28,13 +25,13 @@ export default class ConnectionListItem extends ValidatedComponent {
 
   render() {
     const {connection, onClick} = this.props;
-    return <ListItem
+    return <li
       onClick={() => onClick(connection)}>
       <div>
-        <Subhead>{connection.name}</Subhead>
+        <h3>{connection.name}</h3>
         <Link to={`/${connection.name}`}>Connect</Link>
       </div>
-    </ListItem>;
+    </li>;
   }
 
 };

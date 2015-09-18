@@ -1,5 +1,5 @@
 
-import { LOAD_DATABASES_SUCCESS } from '../constants/action-types';
+import { LOAD_DATABASES_SUCCESS } from '../actions/types';
 
 const initialState = [];
 
