@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import LoadingPage from './loading.jsx';
-import List from '../widgets/list.jsx';
 import { Link } from 'react-router';
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';

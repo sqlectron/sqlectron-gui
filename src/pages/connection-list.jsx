@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import ConnectionListItem from './connection-list-item.jsx';
 import LoadingPage from './loading.jsx';
-import List from '../widgets/list.jsx';
 import { Link } from 'react-router';
 
 
@@ -32,14 +31,14 @@ export default class ConnectionList extends Component {
     const { connectionToDrop } = this.state;
 
     return connections.length > 0 ?
-      <List>
+      <ul>
         {connections.map((connection,i) =>
           <ConnectionListItem
             onClick={::this.onItemClick}
             key={i}
             connection={connection} />
         )}
-      </List>
+      </ul>
     : <LoadingPage />;
   }
 };

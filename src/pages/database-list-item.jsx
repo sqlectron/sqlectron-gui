@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import {ListItem, Body, Subhead} from '../widgets/index.js';
 
 
 export default class DatabaseListItem extends Component {

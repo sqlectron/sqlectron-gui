@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import {ListItem, Body, Subhead} from '../widgets/index.js';
-
 const style = {
 
   date: {
@@ -27,13 +25,13 @@ export default class ConnectionListItem extends Component {
 
   render() {
     const {connection, onClick} = this.props;
-    return <ListItem
+    return <li
       onClick={() => onClick(connection)}>
       <div>
-        <Subhead>{connection.name}</Subhead>
+        <h3>{connection.name}</h3>
         <Link to={`/${connection.name}`}>Connect</Link>
       </div>
-    </ListItem>;
+    </li>;
   }
 
 };
