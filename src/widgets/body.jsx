@@ -14,7 +14,7 @@ const style = {
   }
 }
 
-@Radium.Enhancer
+@Radium
 export default class Body extends ValidatedComponent {
 
   static propTypes = {

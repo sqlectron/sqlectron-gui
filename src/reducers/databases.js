@@ -1,5 +1,4 @@
-import moment from 'moment';
-import _ from 'lodash';
+
 import { LOAD_DATABASES_SUCCESS } from '../constants/action-types';
 
 const initialState = [];

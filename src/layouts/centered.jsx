@@ -12,7 +12,7 @@ const style = {
 /**
  * centers it's children horizontally and vertically
  */
-@Radium.Enhancer
+@Radium
 export default class Centered extends Component {
 
   static propTypes = {

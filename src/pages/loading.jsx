@@ -8,7 +8,7 @@ const style = {
   color: Color.gray
 }
 
-@Radium.Enhancer
+@Radium
 export default class LoadingPage extends ValidatedComponent {
 
   static propTypes = {

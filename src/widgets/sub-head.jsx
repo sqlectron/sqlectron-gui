@@ -6,7 +6,7 @@ const style = {
   lineHeight: 24
 }
 
-@Radium.Enhancer
+@Radium
 export default class Subhead extends ValidatedComponent {
 
   static propTypes = {

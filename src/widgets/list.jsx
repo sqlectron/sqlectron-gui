@@ -5,7 +5,7 @@ const style = {
   borderTop: '1px solid rgba(0,0,0,0.08)',
 };
 
-@Radium.Enhancer
+@Radium
 export default class List extends Component {
 
   static propTypes = {

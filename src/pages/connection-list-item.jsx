@@ -18,7 +18,7 @@ const style = {
 
 };
 
-@Radium.Enhancer
+@Radium
 export default class ConnectionListItem extends ValidatedComponent {
 
   static propTypes = {

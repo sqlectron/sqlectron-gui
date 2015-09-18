@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import createHashHistory from 'history/lib/createHashHistory'
 import { Router, Route } from 'react-router';
@@ -10,16 +11,14 @@ import ConnectionContainer from './containers/connection.jsx';
 const history = createHashHistory();
 const store = configureStore();
 
-React.render(
+ReactDOM.render(
   <Provider store={store}>
-    {() =>
-      <Router history={history}>
-        <Route component={App}>
-          <Route path="/" component={ConnectionListContainer} />
-          <Route path="/:name" component={ConnectionContainer} />
-        </Route>
-      </Router>
-    }
+    <Router history={history}>
+      <Route component={App}>
+        <Route path="/" component={ConnectionListContainer} />
+        <Route path="/:name" component={ConnectionContainer} />
+      </Route>
+    </Router>
   </Provider>,
   document.getElementById('content')
 );
