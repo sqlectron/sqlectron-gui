@@ -1,4 +1,4 @@
-import { LODAD_CONNECTIONS } from '../constants/action-types';
+import { LOAD_CONNECTIONS_SUCCESS } from '../constants/action-types';
 
 
 export function loadConnections() {
@@ -25,5 +25,5 @@ export function loadConnections() {
       database: 'mydb'
     }
   ];
-  return { type: LODAD_CONNECTIONS, connections };
+  return { type: LOAD_CONNECTIONS_SUCCESS, connections };
 }

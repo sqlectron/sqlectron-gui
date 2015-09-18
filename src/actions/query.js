@@ -1,16 +1,20 @@
-import { EXECUTE_QUERY, FAIL_QUERY } from '../constants/action-types';
 const getDB = require('remote').require('./src/db').getDB;
 
 
-export function query(sql) {
+import {
+  EXECUTE_QUERY_REQUEST,
+  EXECUTE_QUERY_SUCCESS,
+  EXECUTE_QUERY_FAILURE
+} from '../constants/action-types';
+
+
+export function executeQuery(sql) {
   return dispatch => {
+    dispatch({ type: EXECUTE_QUERY_REQUEST });
+
     return getDB().then(async function (db) {
-      try {
-        const queryResult = await db.query(sql);
-        dispatch({ type: EXECUTE_QUERY, queryResult });
-      } catch (error) {
-        dispatch({ type: FAIL_QUERY, error });
-      }
-    });
+      const queryResult = await db.query(sql);
+      dispatch({ type: EXECUTE_QUERY_SUCCESS, queryResult });
+    }).catch(error => dispatch({ type: EXECUTE_QUERY_FAILURE, error }));
   };
 }
