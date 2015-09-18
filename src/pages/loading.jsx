@@ -1,7 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import ValidatedComponent from 'utils/validated-component.jsx'
 
-import Centered from '../layouts/centered.jsx';
 import {Color} from '../styles/vars.js';
 
 const style = {
@@ -16,9 +15,7 @@ export default class LoadingPage extends ValidatedComponent {
   }
 
   render() {
-    return <Centered>
-      <span style={[style]}>Crunching stdout...</span>
-    </Centered>;
+    return <span style={[style]}>Crunching stdout...</span>;
   }
 
 };
