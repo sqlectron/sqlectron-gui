@@ -5,7 +5,7 @@ import {
   LOAD_DATABASES_REQUEST,
   LOAD_DATABASES_SUCCESS,
   LOAD_DATABASES_FAILURE
-} from '../constants/action-types';
+} from './types';
 
 
 export function loadDatabases() {

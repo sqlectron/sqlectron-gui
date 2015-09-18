@@ -2,7 +2,7 @@ import {
   EXECUTE_QUERY_SUCCESS,
   EXECUTE_QUERY_FAILURE,
   UPDATE_SQL_SUCCESS
-} from '../constants/action-types';
+} from '../actions/types';
 
 
 const initialState = {

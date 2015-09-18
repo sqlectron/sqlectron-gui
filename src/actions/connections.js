@@ -1,4 +1,4 @@
-import { LOAD_CONNECTIONS_SUCCESS } from '../constants/action-types';
+import { LOAD_CONNECTIONS_SUCCESS } from './types';
 
 
 export function loadConnections() {
