@@ -9,7 +9,6 @@ require('semantic-ui-css/semantic');
 
 class AppContainer extends Component {
   static propTypes = {
-    dialog: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
