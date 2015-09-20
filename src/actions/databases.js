@@ -1,4 +1,4 @@
-const getDB = require('remote').require('./src/db').getDB;
+import { getDBSession } from '../db';
 
 
 import {
@@ -12,14 +12,14 @@ export function loadDatabases() {
   return dispatch => {
     dispatch({ type: LOAD_DATABASES_REQUEST });
 
-    return getDB().then(async function (db) {
-      const databases = (await db.databaseList()).map(name => {
+    return getDBSession().then(async function (dbSession) {
+      const databases = (await dbSession.databaseList()).map(name => {
         return { name, tables: [] };
       });
 
       // TODO: get default db from connection configuration
       // for while considers the first db the defualt db
-      databases[0].tables = await db.tableList();
+      databases[0].tables = await dbSession.tableList();
 
       dispatch({ type: LOAD_DATABASES_SUCCESS, databases });
     }).catch(error => dispatch({ type: LOAD_DATABASES_FAILURE, error }));
