@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import * as DatabaseActions from '../actions/databases.js';
 import * as QueryActions from '../actions/query.js';
+import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import Query from '../components/query.jsx';
 
@@ -72,7 +73,7 @@ export default class DatabaseListContainer extends Component {
           <div style={STYLES.sidebar}>
             <div className="ui vertical menu">
               <div className="item">
-                <div className="ui input"><input type="text" placeholder="Search..." /></div>
+                <DatabaseFilter actions={dbActions} />
               </div>
               <DatabaseList databases={databases} actions={dbActions} />
             </div>

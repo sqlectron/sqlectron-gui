@@ -27,10 +27,12 @@ export default class DatabaseList extends Component {
 
     return (<div>
       {databases.map((database,i) =>
-        <div className="item">
+        <div className="item" key={i} style={{display: database.visible ? 'block' : 'none'}}>
           <i className="grid database icon"></i> {database.name}
           <div className="menu">
-            {database.tables.map(table => <a className="item">{table}</a>)}
+            {database.tables.map((table,k) => {
+              return <a key={k} className="item" style={{textDecoration: table.visible ? 'none' : 'line-through'}}>{table.name}</a>
+            })}
           </div>
         </div>
       )}
