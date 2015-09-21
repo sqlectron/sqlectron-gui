@@ -1,0 +1,18 @@
+mysql:
+  image: mysql:5.7
+  ports:
+    - 3306:3306
+  environment:
+    MYSQL_ROOT_PASSWORD: password
+  volumes:
+    - databases/mysql:/docker-entrypoint-initdb.d
+
+postgres:
+  image: postgres:9.4.1
+  ports:
+    - '5432:5432'
+  environment:
+    POSTGRES_USER: user
+    POSTGRES_PASSWORD: password
+  volumes:
+    - databases/postgres:/docker-entrypoint-initdb.d
