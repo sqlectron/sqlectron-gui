@@ -1,15 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import * as DatabaseActions from '../actions/databases.js';
 import * as QueryActions from '../actions/query.js';
 import DatabaseList from '../components/database-list.jsx';
 import Query from '../components/query.jsx';
+import Header from '../components/header.jsx';
 
 
 const STYLES = {
   wrapper: {
+    paddingTop: '50px'
   },
   header: {
 
@@ -56,18 +57,8 @@ export default class DatabaseListContainer extends Component {
     return (
       <div style={STYLES.wrapper}>
         <div style={STYLES.header}>
+          <Header />
         </div>
-
-        <div className="ui secondary menu">
-          <div className="right menu">
-            <div className="item">
-              <Link to="/" className="ui icon button" title="Close connection">
-                <i className="ban icon"></i>
-              </Link>
-            </div>
-          </div>
-        </div>
-
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>
             <div className="ui vertical menu">
