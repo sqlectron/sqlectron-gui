@@ -1,4 +1,4 @@
-const getDB = require('remote').require('./src/db').getDB;
+import { getDBSession } from '../db';
 
 
 import {
@@ -13,8 +13,8 @@ export function loadDatabases() {
   return dispatch => {
     dispatch({ type: LOAD_DATABASES_REQUEST });
 
-    return getDB().then(async function (db) {
-      const databases = (await db.databaseList()).map(name => {
+    return getDBSession().then(async function (dbSession) {
+      const databases = (await dbSession.databaseList()).map(name => {
         return { name, tables: [] };
       });
 
