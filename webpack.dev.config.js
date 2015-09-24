@@ -39,12 +39,15 @@ module.exports = {
       {
         test: /\.(?:eot|ttf|woff2?|svg)$/,
         loader: 'file?name=[path][name]-[hash:6].[ext]&context=assets'
+      },
+      {
+        test: /\.json?$/,
+        loader: 'json'
       }
     ]
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.IgnorePlugin(new RegExp("^(fs)$")),
     new webpack.ProvidePlugin({
         Radium: 'radium',
         "jQuery":'jquery',
