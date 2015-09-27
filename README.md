@@ -43,8 +43,4 @@ npm run start-electron
 
 ### Setup databases
 
-Bring up some development databases through docker-compose.
-
-```shell
-docker-compose up
-```
+You can test it using your own database or a [docker-compose](https://github.com/sqlectron/sqlectron-databases) built for us to bring up several different databases.
