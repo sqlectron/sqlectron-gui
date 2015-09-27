@@ -1,6 +1,34 @@
 # sqlectron
 
 
+## Configuration
+
+Example configuration file `~/.sqlectron.json`
+```json
+{
+  "servers": [
+    {
+      "name": "postgres",
+      "client": "postgresql",
+      "host": "10.10.10.10",
+      "port": 5432,
+      "database": "postgres",
+      "user": "user",
+      "password": "password"
+    },
+    {
+      "name": "mysql",
+      "client": "mysql",
+      "host": "10.10.10.10",
+      "port": 3306,
+      "database": "authentication",
+      "user": "root",
+      "password": "password"
+    }
+  ]
+}
+```
+
 ## Development
 
 Running the application:

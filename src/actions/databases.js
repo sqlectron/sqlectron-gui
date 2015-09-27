@@ -20,7 +20,7 @@ export function loadDatabases() {
 
       // TODO: get default db from connection configuration
       // for while considers the first db the defualt db
-      databases[0].tables = (await db.tableList()).map(name => {
+      databases[0].tables = (await dbSession.tableList()).map(name => {
         return { name };
       });
 

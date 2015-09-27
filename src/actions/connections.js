@@ -1,29 +1,24 @@
-import { LOAD_CONNECTIONS_SUCCESS } from './types';
+import { loadServerListFromFile } from '../services/servers';
+
+
+import {
+  LOAD_CONNECTIONS_REQUEST,
+  LOAD_CONNECTIONS_SUCCESS,
+  LOAD_CONNECTIONS_FAILURE
+} from './types';
 
 
 export function loadConnections() {
-  const connections = [
-    {
-      name: 'My Postgres Connection',
-      host: 'localhost',
-      port: '5432',
-      password: '123456',
-      database: 'mydb',
-      ssh: {
-        host: 'myhost.com',
-        port: '22',
-        user: 'myuser',
-        password: '123456',
-        privateKey: '~/.ssh/id_rsa'
-      }
-    },
-    {
-      name: 'My MySQL Connection',
-      host: 'localhost',
-      port: '3306',
-      password: '123456',
-      database: 'mydb'
+  return async dispatch => {
+    dispatch({ type: LOAD_CONNECTIONS_REQUEST });
+    try {
+      const data = await loadServerListFromFile();
+      dispatch({
+        type: LOAD_CONNECTIONS_SUCCESS,
+        connections: data.servers
+      });
+    } catch (error) {
+      dispatch({ type: LOAD_CONNECTIONS_FAILURE, error });
     }
-  ];
-  return { type: LOAD_CONNECTIONS_SUCCESS, connections };
+  };
 }
