@@ -1,4 +1,4 @@
-import { getDBSession } from '../db';
+import { getDBSession } from '../../browser/db';
 
 
 import {

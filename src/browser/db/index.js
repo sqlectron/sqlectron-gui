@@ -1,4 +1,4 @@
-const getDBSession = require('remote').require('./src/db/sqlectron-db').getDBSession;
+const getDBSession = require('remote').require('./db/sqlectron-db').getDBSession;
 
 
 /**

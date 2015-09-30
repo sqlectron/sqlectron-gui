@@ -8,35 +8,24 @@ module.exports = {
   target: 'atom',
   resolve: {
     extensions: ['', '.js'],
-    modulesDirectories: ['node_modules', 'src'],
+    modulesDirectories: ['node_modules', 'src/renderer'],
   },
   entry: {
     app: [
-      // 'eventsource-polyfill',
-      // 'webpack-hot-middleware/client',
       'webpack/hot/dev-server',
-      //
-      // 'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
-      // 'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
-
-      './src/entry.jsx'
+      './src/renderer/entry.jsx'
     ]
   },
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
     publicPath: '/static/'
-    // path: path.join(__dirname, '/dist'),
-    // publicPath: '/dist/',
-    // filename: 'bundle.js',
   },
   module: {
-    // noParse: /socket\.io-client/,
     loaders: [
       {
         test: /\.jsx?$/,
-        include: path.join(__dirname, 'src'),
-        // exclude: /node_modules/,
+        exclude: /node_modules/,
         loaders: ['babel']
       },
       {
@@ -59,33 +48,9 @@ module.exports = {
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
-    // new webpack.IgnorePlugin(new RegExp("^(webpack|fs|sqlectron-db|app|auto-updater|browser-window|content-tracing|dialog|global-shortcut|ipc|menu|menu-item|power-monitor|protocol|tray|remote|web-view|clipboard|crash-reporter|screen|shell)$")),
-    // new webpack.ExternalsPlugin('commonjs', [
-    //   'webpack',
-    //   'sqlectron-db',
-    //   'fs',
-    //   'app',
-    //   'auto-updater',
-    //   'browser-window',
-    //   'content-tracing',
-    //   'dialog',
-    //   'global-shortcut',
-    //   'ipc',
-    //   'menu',
-    //   'menu-item',
-    //   'power-monitor',
-    //   'protocol',
-    //   'tray',
-    //   'remote',
-    //   'web-view',
-    //   'clipboard',
-    //   'crash-reporter',
-    //   'screen',
-    //   'shell'
-    // ]),
     new HtmlWebpackPlugin({
       hot: true,
-      template: 'src/index.html',
+      template: 'src/renderer/index.html',
       inject: 'body'
     }),
     new webpack.ProvidePlugin({

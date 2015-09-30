@@ -1,7 +1,7 @@
 {
   "name": "sqlectron",
   "version": "0.0.0",
-  "main": "main.js",
+  "main": "src/browser/main.js",
   "scripts": {
     "start-webpack": "webpack-dev-server --config ./webpack.dev.config.js",
     "start-electron": "WEBPACK_DEV_SERVER=true electron ."
