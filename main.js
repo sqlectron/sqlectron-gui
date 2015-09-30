@@ -1,4 +1,3 @@
-// require('babel/register')({stage: 0});
 require('babel/register')();
 var ipc = require('ipc');
 const app = require('app');  // Module to control application life.
@@ -24,7 +23,8 @@ app.on('ready', function() {
   mainWindow = new BrowserWindow({width: 800, height: 600});
 
   // and load the index.html of the app.
-  mainWindow.loadUrl('file://' + __dirname + '/public/index.html');
+  var entryBasePath = process.env.WEBPACK_DEV_SERVER ? 'http://localhost:8080' : ('file://' + __dirname);
+  mainWindow.loadUrl(entryBasePath + '/static/index.html');
 
   // Open the devtools.
   mainWindow.openDevTools();
