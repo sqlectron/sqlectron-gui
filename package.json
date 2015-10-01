@@ -1,10 +1,16 @@
 {
   "name": "sqlectron",
+  "productName": "SQLECTRON",
   "version": "0.0.0",
-  "main": "src/browser/main.js",
+  "appBundleId": "sqlectron.app",
+  "helperBundleId": "sqlectron.app.helper",
+  "description": "A simple and lightweight SQL client with cross database and platform support",
+  "author": "The SQLECTRON Team",
+  "main": "build/main.js",
   "scripts": {
     "start-webpack": "webpack-dev-server --config ./webpack.dev.config.js",
-    "start-electron": "WEBPACK_DEV_SERVER=true electron ."
+    "start-electron": "WEBPACK_DEV_SERVER=true electron ./bin/electron-app.js",
+    "build": "NODE_ENV=production babel-node scripts/build.js"
   },
   "dependencies": {
     "autoprefixer-loader": "^3.1.0",
@@ -37,6 +43,8 @@
   },
   "devDependencies": {
     "babel-plugin-react-transform": "^1.1.1",
+    "del": "^2.0.2",
+    "denodeify": "^1.2.1",
     "electron-packager": "^5.1.0",
     "electron-prebuilt": "^0.33.3",
     "eslint": "^1.4.3",
@@ -44,6 +52,7 @@
     "eslint-plugin-react": "^3.3.2",
     "html-webpack-plugin": "^1.6.1",
     "json-loader": "^0.5.3",
+    "minimist": "^1.2.0",
     "object-assign": "^4.0.1",
     "react-transform-hmr": "^1.0.1",
     "webpack": "^1.12.2",

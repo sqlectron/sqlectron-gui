@@ -1,4 +1,4 @@
 node_modules
-release
-public/bundle.js
+releases
+build
 npm-debug.log
