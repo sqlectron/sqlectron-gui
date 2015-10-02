@@ -5,7 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   debug: true,
   devtool: 'eval-source-map',
-  target: 'atom',
+  target: 'electron',
   resolve: {
     extensions: ['', '.js'],
     modulesDirectories: ['node_modules', 'src/renderer'],
