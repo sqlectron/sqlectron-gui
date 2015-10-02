@@ -2,3 +2,4 @@ node_modules
 releases
 build
 npm-debug.log
+.DS_Store
