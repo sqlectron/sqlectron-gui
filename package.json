@@ -50,7 +50,7 @@
     "electron-packager": "^5.1.0",
     "electron-prebuilt": "^0.33.3",
     "eslint": "^1.4.3",
-    "eslint-config-airbnb": "0.0.8",
+    "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.3.2",
     "html-webpack-plugin": "^1.6.1",
     "json-loader": "^0.5.3",
