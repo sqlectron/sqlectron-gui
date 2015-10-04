@@ -33,6 +33,9 @@ class AppContainer extends Component {
     this.menu = new Menu({
       queryActions: bindActionCreators(QueryActions, dispatch)
     });
+
+    // wait a bit more until remove the splash screen
+    setTimeout(() => document.getElementById('loading').remove(), 2000);
   }
 
   componentDidUpdate() {
