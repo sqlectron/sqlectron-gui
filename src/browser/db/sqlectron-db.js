@@ -1,10 +1,3 @@
-/**
- * Important:
- * ----------
- * Since this current module uses APIs not available in the render process.
- * To use it you must require it through the remote module.
- * https://github.com/atom/electron/blob/master/docs/api/remote.md
- */
 import conn from 'sqlectron-db';
 
 
@@ -27,6 +20,7 @@ export async function getDBSession () {
     });
     return connection;
   } catch (e) {
-    console.error(e.message || e);
+    console.error('error', e.stack || e.message || e);
+    throw e;
   }
 }

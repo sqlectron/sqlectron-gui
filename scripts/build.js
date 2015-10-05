@@ -1,4 +1,4 @@
-import os from 'os';
+import { tmpdir, platform } from 'os';
 import { escapeRegExp } from 'lodash';
 import { readdirSync } from 'fs';
 import { exec } from 'child_process';
@@ -20,7 +20,14 @@ const argv = require('minimist')(process.argv.slice(2), { boolean: ['all', 'v'] 
 const ROOT_PATH = join(__dirname, '..');
 const BUILD_PATH = join(ROOT_PATH, 'build');
 const RELEASE_PATH = join(ROOT_PATH, 'releases');
+const TMP_PATH = join(ROOT_PATH, '.tmp');
+const CACHE_PATH = join(TMP_PATH, 'cache');
 const RESOURCES_PATH = join(ROOT_PATH, 'resources');
+
+
+// when running it from Docker there is something changing the TMPDIR to the
+// app's root path, so we prevent it setting the path again
+process.env.TMPDIR = TMP_PATH;
 
 
 /**
@@ -33,9 +40,16 @@ function ignoreFilesInRelease() {
     'package.json'
   ];
 
-  return readdirSync(ROOT_PATH)
+  const exclude = [
+    'node_modules/.bin($|/)',
+    'electron-prebuild($|/)'
+  ];
+
+  const autoExcluded = readdirSync(ROOT_PATH)
     .filter(filename => !~include.indexOf(filename))
     .map(filename => `/${escapeRegExp(filename)}($|/)`);
+
+  return exclude.concat(autoExcluded);
 }
 
 
@@ -48,11 +62,12 @@ const ELECTRON_PACKAGER_OPTS = {
   'app-bundle-id': pkg.appBundleId,
   'helper-bundle-id': pkg.helperBundleId,
   version: pkg.devDependencies['electron-prebuilt'].replace('^', ''),
-  asar: false,
+  asar: false, // does not use asar right now because it is breaking the app
   prune: true,
   overwrite: true,
   dir: '.',
   out: RELEASE_PATH,
+  cache: CACHE_PATH,
   ignore: ignoreFilesInRelease()
 };
 
@@ -61,21 +76,31 @@ const ELECTRON_PACKAGER_OPTS = {
  * Supported platforms and platfrom specific options
  */
 const TASKS = [
-  { platform: 'darwin', arch: 'x64', icon: 'app.icns' }
+  { platform: 'darwin', arch: 'x64', icon: 'app.icns' },
+  { platform: 'linux', arch: 'x64', icon: 'app.png' },
+  { platform: 'win32', arch: 'x64', icon: 'app.ico' }
 ].map(item => {
   return {
     ...item,
     ...ELECTRON_PACKAGER_OPTS,
     icon: join(RESOURCES_PATH, item.icon)
   };
-});
+}).filter(task => argv.all || task.platform === platform());
 
 
 /**
  * Build browser code with babel
  */
 async function buildBrowserCode() {
-  return denodeify(exec).call(exec, `babel ../src/browser -d ${BUILD_PATH}`, { cwd: __dirname });
+  return denodeify(exec).call(exec, `babel ./src/browser -d build`, { cwd: ROOT_PATH });
+}
+
+
+/**
+ * Copy schema json validations
+ */
+async function copySchemaJSONValidations() {
+  return denodeify(exec).call(exec, `cp -R ./src/browser/schemas build`, { cwd: ROOT_PATH });
 }
 
 
@@ -109,6 +134,9 @@ async function packElectronApp(opts) {
     console.log('> building browser code with babel');
     await buildBrowserCode();
 
+    console.log('> copying schema validations');
+    await copySchemaJSONValidations();
+
     console.log('> building renderer code with webpack');
     await buildRendererCode();
 
@@ -119,6 +147,6 @@ async function packElectronApp(opts) {
 
     console.log('>> success');
   } catch (err) {
-    console.log('>> error', err.stack);
+    console.log('>> error', err.stack || err);
   }
 })();

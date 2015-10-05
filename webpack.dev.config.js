@@ -53,6 +53,9 @@ module.exports = {
       template: 'src/renderer/index.html',
       inject: 'body'
     }),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('development')
+    }),
     new webpack.ProvidePlugin({
         Radium: 'radium',
         "jQuery":'jquery',

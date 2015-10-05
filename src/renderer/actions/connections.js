@@ -1,4 +1,4 @@
-import { loadServerListFromFile } from '../services/servers';
+import { services } from '../../browser/remote';
 
 
 import {
@@ -12,7 +12,7 @@ export function loadConnections() {
   return async dispatch => {
     dispatch({ type: LOAD_CONNECTIONS_REQUEST });
     try {
-      const data = await loadServerListFromFile();
+      const data = await services.servers.loadServerListFromFile();
       dispatch({
         type: LOAD_CONNECTIONS_SUCCESS,
         connections: data.servers
