@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import validator from 'is-my-json-valid';
 
-const serversValidate = validator(require('./servers.schema.json'));
+const SERVER_SCHEMA_PATH = path.join(__dirname, '../schemas/servers.json')
+const serversValidate = validator(require(SERVER_SCHEMA_PATH));
 
 
 export async function loadServerListFromFile () {

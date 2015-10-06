@@ -3,23 +3,18 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  debug: true,
   devtool: 'eval-source-map',
   target: 'electron',
   resolve: {
     extensions: ['', '.js'],
-    modulesDirectories: ['node_modules', 'src/renderer'],
+    modulesDirectories: ['node_modules', 'src/renderer']
   },
   entry: {
-    app: [
-      'webpack/hot/dev-server',
-      './src/renderer/entry.jsx'
-    ]
+    app: './src/renderer/entry.jsx'
   },
   output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/'
+    path: path.join(__dirname, 'build/static'),
+    filename: 'bundle.js'
   },
   module: {
     loaders: [
@@ -47,20 +42,25 @@ module.exports = {
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      hot: true,
       template: 'src/renderer/index.html',
       inject: 'body'
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development')
     }),
     new webpack.ProvidePlugin({
         Radium: 'radium',
         "jQuery":'jquery',
         "$":'jquery',
         "_": 'lodash',
-    })
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
+      }
+    }),
+    new webpack.optimize.DedupePlugin(),
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production')
+    }),
+    new webpack.NoErrorsPlugin()
   ]
 };

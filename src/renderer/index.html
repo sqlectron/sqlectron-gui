@@ -2,9 +2,9 @@
 <html>
     <head>
       <title>sqlectron</title>
+      <meta charset="utf-8"/>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1 user-scalable=no">
-      <link rel="stylesheet" href="style.css">
     </head>
     <body>
       <div id="content"></div>
@@ -14,7 +14,8 @@
           <h3 id="software-version">v0.0.0</h3>
         </div>
       </div>
+      {% if (o.htmlWebpackPlugin.options.hot) { %}
+      <script src="/webpack-dev-server.js"></script>
+      {% } %}
     </body>
-    <script src="http://localhost:8080/webpack-dev-server.js"></script>
-    <script src="http://localhost:8080/built/bundle.js"></script>
 </html>

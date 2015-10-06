@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 import * as QueryActions from '../actions/query.js';
 import Menu from '../menu.jsx';
 
-require('semantic-ui-css/semantic.css');
-require('semantic-ui-css/semantic');
+import 'semantic-ui-css/semantic.css';
+import 'semantic-ui-css/semantic';
+import './app.css';
 
 class AppContainer extends Component {
   static propTypes = {
