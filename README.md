@@ -1,5 +1,6 @@
-# sqlectron
+![SQLECTRON Logo](https://www.dropbox.com/s/w5tst4x2c34umxm/SQLECTRON-200px.png?raw=1)
 
+A simple and lightweight SQL client with cross database and platform support.
 
 ## Configuration
 
