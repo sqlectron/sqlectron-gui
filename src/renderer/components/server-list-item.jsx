@@ -16,20 +16,20 @@ const style = {
 };
 
 @Radium
-export default class ConnectionListItem extends Component {
+export default class ServerListItem extends Component {
 
   static propTypes = {
-    connection: PropTypes.object.isRequired,
+    server: PropTypes.object.isRequired,
     onClick: PropTypes.func.isRequired, // for parent
   }
 
   render() {
-    const {connection, onClick} = this.props;
+    const {server, onClick} = this.props;
     return <li
-      onClick={() => onClick(connection)}>
+      onClick={() => onClick(server)}>
       <div>
-        <h3>{connection.name}</h3>
-        <Link to={`/${connection.name}`}>Connect</Link>
+        <h3>{server.name}</h3>
+        <Link to={`/${server.name}`}>Connect</Link>
       </div>
     </li>;
   }

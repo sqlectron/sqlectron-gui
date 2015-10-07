@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as ConnectionActions from '../actions/connections.js';
-import ConnectionList from '../components/connection-list.jsx';
+import * as ConnectionActions from '../actions/servers.js';
+import ServerList from '../components/server-list.jsx';
 
 
-export default class ConnectionListContainer extends Component {
+export default class ServerListContainer extends Component {
   static propTypes = {
-    connections: PropTypes.array.isRequired,
+    servers: PropTypes.array.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -20,20 +20,20 @@ export default class ConnectionListContainer extends Component {
       repoName: PropTypes.string
     }).isRequired,
     children: PropTypes.node
-  }
+  };
 
   static contextTypes = {
     history: PropTypes.object.isRequired
   }
 
   render() {
-    const { connections, dispatch } = this.props;
+    const { servers, dispatch } = this.props;
     const actions = bindActionCreators(ConnectionActions, dispatch);
 
     return (
       <div>
         List of Connections
-        <ConnectionList connections={connections} actions={actions} />
+        <ServerList servers={servers} actions={actions} />
       </div>
     );
   }
@@ -42,8 +42,8 @@ export default class ConnectionListContainer extends Component {
 
 function mapStateToProps(state) {
   return {
-    connections: state.connections
+    servers: state.servers
   };
 }
 
-export default connect(mapStateToProps)(ConnectionListContainer);
+export default connect(mapStateToProps)(ServerListContainer);
