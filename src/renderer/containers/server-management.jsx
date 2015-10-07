@@ -3,11 +3,12 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as ConnectionActions from '../actions/servers.js';
 import ServerList from '../components/server-list.jsx';
+import ServerAdd from '../components/server-add.jsx';
 
 
 export default class ServerListContainer extends Component {
   static propTypes = {
-    servers: PropTypes.array.isRequired,
+    servers: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -33,7 +34,8 @@ export default class ServerListContainer extends Component {
     return (
       <div>
         List of Connections
-        <ServerList servers={servers} actions={actions} />
+        <ServerList servers={servers.servers} actions={actions} />
+        <ServerAdd visible={servers.creatingOrEditing} actions={actions} />
       </div>
     );
   }

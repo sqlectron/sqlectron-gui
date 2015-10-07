@@ -26,19 +26,29 @@ export default class ServerList extends Component {
     this.setState({ serverToDrop: server });
   }
 
+  onAddClick(server) {
+    const { actions } = this.props;
+    actions.openAddServers();
+  }
+
   render() {
     const { servers, actions } = this.props;
     const { serverToDrop } = this.state;
 
     return servers.length > 0 ?
-      <ul>
-        {servers.map((server,i) =>
-          <ServerListItem
-            onClick={::this.onItemClick}
-            key={i}
-            server={server} />
-        )}
-      </ul>
+      <div>
+        <button className="ui button" onClick={::this.onAddClick}>
+          Add
+        </button>
+        <ul>
+          {servers.map((server,i) =>
+            <ServerListItem
+              onClick={::this.onItemClick}
+              key={i}
+              server={server} />
+          )}
+        </ul>
+      </div>
     : <LoadingPage />;
   }
 };

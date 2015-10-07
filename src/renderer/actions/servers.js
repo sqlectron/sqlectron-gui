@@ -4,7 +4,8 @@ import { services } from '../../browser/remote';
 import {
   LOAD_SERVERS_REQUEST,
   LOAD_SERVERS_SUCCESS,
-  LOAD_SERVERS_FAILURE
+  LOAD_SERVERS_FAILURE,
+  OPEN_ADD_SERVERS,
 } from './types';
 
 
@@ -21,4 +22,8 @@ export function loadServers() {
       dispatch({ type: LOAD_SERVERS_FAILURE, error });
     }
   };
+}
+
+export function openAddServers() {
+  return { type: OPEN_ADD_SERVERS };
 }
