@@ -27,14 +27,19 @@ export default class ServerListContainer extends Component {
     history: PropTypes.object.isRequired
   }
 
+  onConnectClick(server) {
+    this.props.history.pushState(null, `/${server.name}`);
+  }
+
   render() {
     const { servers, dispatch } = this.props;
     const actions = bindActionCreators(ConnectionActions, dispatch);
 
     return (
-      <div>
-        List of Connections
-        <ServerList servers={servers.servers} actions={actions} />
+      <div className="ui" style={{padding: '1em'}}>
+        <h1 className="ui header">Servers</h1>
+        <div className="ui divider"></div>
+        <ServerList servers={servers.servers} actions={actions} onConnectClick={::this.onConnectClick} />
         <ServerAdd visible={servers.creatingOrEditing} actions={actions} />
       </div>
     );
