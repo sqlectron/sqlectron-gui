@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as ConnectionActions from '../actions/servers.js';
 import ServerList from '../components/server-list.jsx';
-import ServerAdd from '../components/server-add.jsx';
+import ServerModalForm from '../components/server-modal-form.jsx';
 
 
 export default class ServerListContainer extends Component {
@@ -40,7 +40,7 @@ export default class ServerListContainer extends Component {
         <h1 className="ui header">Servers</h1>
         <div className="ui divider"></div>
         <ServerList servers={servers.servers} actions={actions} onConnectClick={::this.onConnectClick} />
-        <ServerAdd visible={servers.creatingOrEditing} server={servers.selected} actions={actions} />
+        <ServerModalForm visible={servers.creatingOrEditing} server={servers.selected} actions={actions} />
       </div>
     );
   }
