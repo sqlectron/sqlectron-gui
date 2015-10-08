@@ -5,7 +5,8 @@ import {
   LOAD_SERVERS_REQUEST,
   LOAD_SERVERS_SUCCESS,
   LOAD_SERVERS_FAILURE,
-  OPEN_ADD_SERVERS,
+  OPEN_ADD_SERVER,
+  OPEN_EDIT_SERVER,
 } from './types';
 
 
@@ -24,6 +25,12 @@ export function loadServers() {
   };
 }
 
-export function openAddServers() {
-  return { type: OPEN_ADD_SERVERS };
+
+export function openAddServer() {
+  return { type: OPEN_ADD_SERVER };
+}
+
+
+export function openEditServer(server) {
+  return { type: OPEN_EDIT_SERVER, server };
 }

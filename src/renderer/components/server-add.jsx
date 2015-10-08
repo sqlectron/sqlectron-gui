@@ -13,14 +13,19 @@ export default class ServerAdd extends Component {
 
   static propTypes = {
     visible: PropTypes.bool.isRequired,
-    actions: PropTypes.object.isRequired
+    actions: PropTypes.object.isRequired,
+    server: PropTypes.object,
   }
 
   componentDidUpdate() {
     const { visible } = this.props;
-    if (visible) {
-      $(ReactDOM.findDOMNode(this.refs.serverModal)).modal('show');
-    }
+    if (!visible) { return; }
+    $(ReactDOM.findDOMNode(this.refs.serverModal)).modal('show');
+
+    const { server } = this.props;
+    if (!server) { return; }
+    $(ReactDOM.findDOMNode(this.refs.clientList))
+      .dropdown('set selected', server.client);
   }
 
   componentDidMount() {
@@ -35,7 +40,9 @@ export default class ServerAdd extends Component {
         // TODO: validation, save
       }
     });
+
     $(ReactDOM.findDOMNode(this.refs.clientList)).dropdown();
+
     $(ReactDOM.findDOMNode(this.refs.sshTunnel)).checkbox({
       onChecked: () => this.setState({ selectedSSH: true }),
       onUnchecked: () => this.setState({ selectedSSH: false })
@@ -44,6 +51,8 @@ export default class ServerAdd extends Component {
 
   render() {
     const { selectedSSH } = this.state;
+    let { server } = this.props;
+    if (!server) { server = {}; }
 
     return (
       <div className="ui modal" ref="serverModal">
@@ -56,7 +65,7 @@ export default class ServerAdd extends Component {
             <div className="fields">
               <div className="ten wide field">
                 <label>Name</label>
-                <input type="text" name="name" placeholder="Name" />
+                <input type="text" name="name" placeholder="Name" value={server.name} />
               </div>
               <div className="six wide field">
                 <label>Client</label>
@@ -65,8 +74,8 @@ export default class ServerAdd extends Component {
                   <i className="dropdown icon"></i>
                   <div className="default text">Select Client</div>
                   <div className="menu">
-                    <div className="item" data-value="af"><img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" style={{width: '16px'}} /> MySQL</div>
-                    <div className="item" data-value="ax"><img src="https://wiki.postgresql.org/images/3/30/PostgreSQL_logo.3colors.120x120.png" style={{width: '16px'}} /> PostgreSQL</div>
+                    <div className="item" data-value="mysql"><img src="https://www.mysql.com/common/logos/logo-mysql-170x115.png" style={{width: '16px'}} /> MySQL</div>
+                    <div className="item" data-value="postgresql"><img src="https://wiki.postgresql.org/images/3/30/PostgreSQL_logo.3colors.120x120.png" style={{width: '16px'}} /> PostgreSQL</div>
                   </div>
                 </div>
               </div>
@@ -75,28 +84,28 @@ export default class ServerAdd extends Component {
               <label>Server Address</label>
               <div className="fields">
                 <div className="seven wide field">
-                  <input type="text" name="host" placeholder="Host" />
+                  <input type="text" name="host" placeholder="Host" value={server.host} />
                 </div>
                 <div className="three wide field">
-                  <input type="text" name="port" placeholder="Port" />
+                  <input type="text" name="port" placeholder="Port" value={server.port} />
                 </div>
                 <div className="six wide field">
-                  <input type="text" name="socketPath" placeholder="Unix socket path" />
+                  <input type="text" name="socketPath" placeholder="Unix socket path" value={server.socketPath} />
                 </div>
               </div>
             </div>
             <div className="fields">
               <div className="five wide field">
                 <label>User</label>
-                <input type="text" name="user" maxLength="3" placeholder="User" />
+                <input type="text" name="user" maxLength="3" placeholder="User" value={server.user} />
               </div>
               <div className="five wide field">
                 <label>Password</label>
-                <input type="password" name="password" maxLength="3" placeholder="Password" />
+                <input type="password" name="password" maxLength="3" placeholder="Password" value={server.password} />
               </div>
               <div className="six wide field">
                 <label>Database</label>
-                <input type="text" name="database" maxLength="16" placeholder="Database" />
+                <input type="text" name="database" maxLength="16" placeholder="Database" value={server.database} />
               </div>
             </div>
              <div className="ui segment">
@@ -110,25 +119,25 @@ export default class ServerAdd extends Component {
                 <label>SSH Address</label>
                 <div className="fields">
                   <div className="seven wide field">
-                    <input type="text" name="ssh[host]" placeholder="Host" disabled={!selectedSSH} />
+                    <input type="text" name="ssh[host]" placeholder="Host" disabled={!selectedSSH} value={server.ssh && server.ssh.host} />
                   </div>
                   <div className="three wide field">
-                    <input type="text" name="ssh[port]" placeholder="Port" disabled={!selectedSSH} />
+                    <input type="text" name="ssh[port]" placeholder="Port" disabled={!selectedSSH} value={server.ssh && server.ssh.port} />
                   </div>
                 </div>
               </div>
               <div className="fields">
                 <div className="five wide field">
                   <label>User</label>
-                  <input type="text" name="ssh[user]" maxLength="3" placeholder="User" disabled={!selectedSSH} />
+                  <input type="text" name="ssh[user]" maxLength="3" placeholder="User" disabled={!selectedSSH} value={server.ssh && server.ssh.user} />
                 </div>
                 <div className="five wide field">
                   <label>Password</label>
-                  <input type="password" name="ssh[password]" maxLength="3" placeholder="Password" disabled={!selectedSSH} />
+                  <input type="password" name="ssh[password]" maxLength="3" placeholder="Password" disabled={!selectedSSH}  value={server.ssh && server.ssh.password} />
                 </div>
                 <div className="six wide field">
                   <label>Private Key</label>
-                  <input type="text" name="ssh[privateKey]" maxLength="16" placeholder="~/.ssh/id_rsa" disabled={!selectedSSH} />
+                  <input type="text" name="ssh[privateKey]" maxLength="16" placeholder="~/.ssh/id_rsa" disabled={!selectedSSH}  value={server.ssh && server.ssh.privateKey} />
                 </div>
               </div>
             </div>

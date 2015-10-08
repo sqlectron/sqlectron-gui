@@ -23,9 +23,14 @@ export default class ServerList extends Component {
     actions.loadServers();
   }
 
-  onAddClick(server) {
+  onAddClick() {
     const { actions } = this.props;
-    actions.openAddServers();
+    actions.openAddServer();
+  }
+
+  onEditClick(server) {
+    const { actions } = this.props;
+    actions.openEditServer(server);
   }
 
   render() {
@@ -47,6 +52,7 @@ export default class ServerList extends Component {
             {servers.map((server,i) =>
               <ServerListItem
                 onConnectClick={onConnectClick}
+                onEditClick={::this.onEditClick}
                 key={i}
                 server={server} />
             )}

@@ -28,11 +28,12 @@ export default class ServerListItem extends Component {
   static propTypes = {
     server: PropTypes.object.isRequired,
     onConnectClick: PropTypes.func.isRequired, // for parent
+    onEditClick: PropTypes.func.isRequired, // for parent
   }
 
   render() {
-    const {server, onConnectClick} = this.props;
-    return <div className="card" onClick={() => onConnectClick(server)}>
+    const {server, onConnectClick, onEditClick} = this.props;
+    return <div className="card">
       <div className="content">
         <img className="right floated mini ui image" src={ICONS[server.client]} style={{width: '16px'}} />
         <div className="header">
@@ -45,7 +46,7 @@ export default class ServerListItem extends Component {
       <div className="extra content">
         <div className="ui two buttons">
           <div className="ui green button" onClick={() => onConnectClick(server)}>Connect</div>
-          <div className="ui button">Edit</div>
+          <div className="ui button" onClick={() => onEditClick(server)}>Edit</div>
         </div>
       </div>
     </div>;

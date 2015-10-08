@@ -40,7 +40,7 @@ export default class ServerListContainer extends Component {
         <h1 className="ui header">Servers</h1>
         <div className="ui divider"></div>
         <ServerList servers={servers.servers} actions={actions} onConnectClick={::this.onConnectClick} />
-        <ServerAdd visible={servers.creatingOrEditing} actions={actions} />
+        <ServerAdd visible={servers.creatingOrEditing} server={servers.selected} actions={actions} />
       </div>
     );
   }
