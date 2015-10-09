@@ -1,13 +1,11 @@
 import {
   LOAD_SERVERS_SUCCESS,
-  OPEN_ADD_SERVER,
-  OPEN_EDIT_SERVER,
+  SAVE_SERVER_SUCCESS,
 } from '../actions/types';
 
 
 const INITIAL_STATE = {
-  creatingOrEditing: false,
-  servers: []
+  items: []
 };
 
 
@@ -16,19 +14,17 @@ export default function servers(state = INITIAL_STATE, action) {
   case LOAD_SERVERS_SUCCESS:
     return {
       ...state,
-      servers: action.servers
+      items: action.servers
     };
-  case OPEN_ADD_SERVER:
-    return {
-      ...state,
-      creatingOrEditing: true
-    };
-  case OPEN_EDIT_SERVER:
-    return {
-      ...state,
-      selected: action.server,
-      creatingOrEditing: true
-    };
+  case SAVE_SERVER_SUCCESS: {
+    const servers = state.items || [];
+    if (action.id) {
+      servers[action.id] = action.server;
+    } else {
+      servers.push(action.server)
+    }
+    return { ...state, items: servers };
+  }
   default:
     return state;
   }

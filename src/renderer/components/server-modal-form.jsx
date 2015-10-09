@@ -2,30 +2,47 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
 
-export default class ServerAdd extends Component {
+export default class ServerModalForm extends Component {
   constructor(props, context) {
     super(props, context);
-    this.state = {
-      visible: false,
-      selectedSSH: false
-    }
+    this.state = {};
   }
 
   static propTypes = {
     visible: PropTypes.bool.isRequired,
-    actions: PropTypes.object.isRequired,
+    onSaveClick: PropTypes.func.isRequired,
+    onCancelClick: PropTypes.func.isRequired,
     server: PropTypes.object,
   }
 
-  componentDidUpdate() {
-    const { visible } = this.props;
-    if (!visible) { return; }
-    $(ReactDOM.findDOMNode(this.refs.serverModal)).modal('show');
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
+  }
 
-    const { server } = this.props;
-    if (!server) { return; }
-    $(ReactDOM.findDOMNode(this.refs.clientList))
-      .dropdown('set selected', server.client);
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.visible) {
+      $(ReactDOM.findDOMNode(this.refs.serverModal)).modal('hide');
+      return;
+    }
+
+    const forceCleanPrevData = Object.keys(this.state).reduce((p, k) => {
+      p[k] = null;
+      return p;
+    }, {});
+
+    const server = nextProps.server || {};
+    const nextState = {
+      selectedSSH: false,
+      ...forceCleanPrevData,
+      ...server || {},
+      ssh: {
+        ...server.ssh || {},
+      },
+    };
+    this.setState(nextState);
+
+    $(ReactDOM.findDOMNode(this.refs.serverModal)).modal('show');
+    $(ReactDOM.findDOMNode(this.refs.clientList)).dropdown('set selected', nextState.client);
   }
 
   componentDidMount() {
@@ -34,10 +51,14 @@ export default class ServerAdd extends Component {
       detachable: false,
       onDeny: () => {
         // TODO: validation
+        this.props.onCancelClick();
         return true;
       },
       onApprove: () => {
-        // TODO: validation, save
+        // TODO: validation
+        const { server } = this.props;
+        this.props.onSaveClick(this.state);
+        return false;
       }
     });
 
@@ -50,13 +71,8 @@ export default class ServerAdd extends Component {
   }
 
   render() {
-    const { selectedSSH } = this.state;
-    let { server } = this.props;
-    if (!server) { server = {}; }
-
     return (
       <div className="ui modal" ref="serverModal">
-        <i className="close icon"></i>
         <div className="header">
           Server Information
         </div>
@@ -65,7 +81,7 @@ export default class ServerAdd extends Component {
             <div className="fields">
               <div className="ten wide field">
                 <label>Name</label>
-                <input type="text" name="name" placeholder="Name" value={server.name} />
+                <input type="text" name="name" placeholder="Name" value={this.state.name} onChange={::this.handleChange} />
               </div>
               <div className="six wide field">
                 <label>Client</label>
@@ -84,28 +100,28 @@ export default class ServerAdd extends Component {
               <label>Server Address</label>
               <div className="fields">
                 <div className="seven wide field">
-                  <input type="text" name="host" placeholder="Host" value={server.host} />
+                  <input type="text" name="host" placeholder="Host" value={this.state.host} onChange={::this.handleChange} />
                 </div>
                 <div className="three wide field">
-                  <input type="text" name="port" placeholder="Port" value={server.port} />
+                  <input type="text" name="port" placeholder="Port" value={this.state.port} onChange={::this.handleChange} />
                 </div>
                 <div className="six wide field">
-                  <input type="text" name="socketPath" placeholder="Unix socket path" value={server.socketPath} />
+                  <input type="text" name="socketPath" placeholder="Unix socket path" value={this.state.socketPath} onChange={::this.handleChange} />
                 </div>
               </div>
             </div>
             <div className="fields">
               <div className="five wide field">
                 <label>User</label>
-                <input type="text" name="user" maxLength="3" placeholder="User" value={server.user} />
+                <input type="text" name="user" maxLength="3" placeholder="User" value={this.state.user} onChange={::this.handleChange} />
               </div>
               <div className="five wide field">
                 <label>Password</label>
-                <input type="password" name="password" maxLength="3" placeholder="Password" value={server.password} />
+                <input type="password" name="password" maxLength="3" placeholder="Password" value={this.state.password} onChange={::this.handleChange} />
               </div>
               <div className="six wide field">
                 <label>Database</label>
-                <input type="text" name="database" maxLength="16" placeholder="Database" value={server.database} />
+                <input type="text" name="database" maxLength="16" placeholder="Database" value={this.state.database} onChange={::this.handleChange} />
               </div>
             </div>
              <div className="ui segment">
@@ -119,25 +135,25 @@ export default class ServerAdd extends Component {
                 <label>SSH Address</label>
                 <div className="fields">
                   <div className="seven wide field">
-                    <input type="text" name="ssh[host]" placeholder="Host" disabled={!selectedSSH} value={server.ssh && server.ssh.host} />
+                    <input type="text" name="ssh[host]" placeholder="Host" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.host} onChange={::this.handleChange} />
                   </div>
                   <div className="three wide field">
-                    <input type="text" name="ssh[port]" placeholder="Port" disabled={!selectedSSH} value={server.ssh && server.ssh.port} />
+                    <input type="text" name="ssh[port]" placeholder="Port" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.port} onChange={::this.handleChange} />
                   </div>
                 </div>
               </div>
               <div className="fields">
                 <div className="five wide field">
                   <label>User</label>
-                  <input type="text" name="ssh[user]" maxLength="3" placeholder="User" disabled={!selectedSSH} value={server.ssh && server.ssh.user} />
+                  <input type="text" name="ssh[user]" maxLength="3" placeholder="User" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.user} onChange={::this.handleChange} />
                 </div>
                 <div className="five wide field">
                   <label>Password</label>
-                  <input type="password" name="ssh[password]" maxLength="3" placeholder="Password" disabled={!selectedSSH}  value={server.ssh && server.ssh.password} />
+                  <input type="password" name="ssh[password]" maxLength="3" placeholder="Password" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.password} onChange={::this.handleChange} />
                 </div>
                 <div className="six wide field">
                   <label>Private Key</label>
-                  <input type="text" name="ssh[privateKey]" maxLength="16" placeholder="~/.ssh/id_rsa" disabled={!selectedSSH}  value={server.ssh && server.ssh.privateKey} />
+                  <input type="text" name="ssh[privateKey]" maxLength="16" placeholder="~/.ssh/id_rsa" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.privateKey} onChange={::this.handleChange} />
                 </div>
               </div>
             </div>

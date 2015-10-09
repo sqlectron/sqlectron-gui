@@ -5,8 +5,9 @@ import {
   LOAD_SERVERS_REQUEST,
   LOAD_SERVERS_SUCCESS,
   LOAD_SERVERS_FAILURE,
-  OPEN_ADD_SERVER,
-  OPEN_EDIT_SERVER,
+  SAVE_SERVER_REQUEST,
+  SAVE_SERVER_SUCCESS,
+  SAVE_SERVER_FAILURE,
 } from './types';
 
 
@@ -25,12 +26,20 @@ export function loadServers() {
   };
 }
 
+export function saveServer ({ id, server }) {
+  return async dispatch => {
+    dispatch({ type: SAVE_SERVER_REQUEST, server });
+    try {
+      const { addServer, updateServer } = services.servers;
+      const data = await (id ? updateServer(id, server) : addServer(server));
 
-export function openAddServer() {
-  return { type: OPEN_ADD_SERVER };
-}
-
-
-export function openEditServer(server) {
-  return { type: OPEN_EDIT_SERVER, server };
+      dispatch({
+        type: SAVE_SERVER_SUCCESS,
+        id: id,
+        server: data,
+      });
+    } catch (error) {
+      dispatch({ type: SAVE_SERVER_FAILURE, error });
+    }
+  };
 }
