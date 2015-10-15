@@ -43,7 +43,7 @@
     "del": "^2.0.2",
     "denodeify": "^1.2.1",
     "electron-packager": "^5.1.0",
-    "electron-prebuilt": "^0.33.3",
+    "electron-prebuilt": "^0.33.7",
     "eslint": "^1.4.3",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.3.2",
