@@ -9,3 +9,13 @@ if (devMode) {
 
 // starts the electron app
 require('./app');
+
+
+/**
+ * Terrible workaround for:
+ * https://github.com/atom/electron/issues/3089
+ */
+Object.defineProperty(Error.prototype, 'message', {
+  configurable: true,
+  enumerable: true
+});
