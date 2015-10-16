@@ -10,8 +10,8 @@
   "license": "MIT",
   "bugs": "https://github.com/sqlectron/sqlectron/issues",
   "repository": {
-   "type": "git",
-   "url": "https://github.com/sqlectron/sqlectron"
+    "type": "git",
+    "url": "https://github.com/sqlectron/sqlectron"
   },
   "scripts": {
     "start-webpack": "webpack-dev-server --config ./webpack.dev.config.js",
