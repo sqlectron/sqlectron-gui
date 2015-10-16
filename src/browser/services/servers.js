@@ -19,6 +19,25 @@ export async function loadServerListFromFile () {
 }
 
 
+export async function addServer (server) {
+  const filename = path.join(homedir(), '.sqlectron.json');
+  const data = await readFile(filename);
+
+  const obj = copyObject(server);
+  if (!obj) return null;
+
+  data.servers.push(obj);
+  if (!serversValidate(data)) {
+    console.log('Validation error', serversValidate.errors);
+    throw new Error('Invalid server definition ');
+  }
+
+  await createFile(filename, data);
+
+  return obj;
+}
+
+
 export async function updateServer (id, server) {
   const filename = path.join(homedir(), '.sqlectron.json');
   const data = await readFile(filename);

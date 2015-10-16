@@ -45,6 +45,32 @@ export default class ServerModalForm extends Component {
     $(ReactDOM.findDOMNode(this.refs.clientList)).dropdown('set selected', nextState.client);
   }
 
+  mapStateToServer(state) {
+    const server = {
+      name: state.name,
+      client: state.client,
+      host: state.host,
+      port: parseInt(state.port, 10),
+      user: state.user,
+      password: state.password,
+      database: state.database,
+    };
+
+    if (!state.selectedSSH) {
+      return server;
+    }
+
+    server.ssh = {
+      host: state['ssh[host]'],
+      port: state['ssh[port]'],
+      user: state['ssh[user]'],
+      password: state['ssh[password]'],
+      privateKey: state['ssh[privateKey]'],
+    };
+
+    return server;
+  }
+
   componentDidMount() {
     $(ReactDOM.findDOMNode(this.refs.serverModal)).modal({
       closable: false,
@@ -57,12 +83,14 @@ export default class ServerModalForm extends Component {
       onApprove: () => {
         // TODO: validation
         const { server } = this.props;
-        this.props.onSaveClick(this.state);
+        this.props.onSaveClick(this.mapStateToServer(this.state));
         return false;
       }
     });
 
-    $(ReactDOM.findDOMNode(this.refs.clientList)).dropdown();
+    $(ReactDOM.findDOMNode(this.refs.clientList)).dropdown({
+      onChange: (client) => this.setState({ client })
+    });
 
     $(ReactDOM.findDOMNode(this.refs.sshTunnel)).checkbox({
       onChecked: () => this.setState({ selectedSSH: true }),
@@ -81,7 +109,7 @@ export default class ServerModalForm extends Component {
             <div className="fields">
               <div className="ten wide field">
                 <label>Name</label>
-                <input type="text" name="name" placeholder="Name" value={this.state.name} onChange={::this.handleChange} />
+                <input type="text" name="name" maxLength="250" placeholder="Name" value={this.state.name} onChange={::this.handleChange} />
               </div>
               <div className="six wide field">
                 <label>Client</label>
@@ -100,28 +128,28 @@ export default class ServerModalForm extends Component {
               <label>Server Address</label>
               <div className="fields">
                 <div className="seven wide field">
-                  <input type="text" name="host" placeholder="Host" value={this.state.host} onChange={::this.handleChange} />
+                  <input type="text" name="host" maxLength="250" placeholder="Host" value={this.state.host} onChange={::this.handleChange} />
                 </div>
                 <div className="three wide field">
-                  <input type="text" name="port" placeholder="Port" value={this.state.port} onChange={::this.handleChange} />
+                  <input type="text" name="port" maxLength="5" placeholder="Port" value={this.state.port} onChange={::this.handleChange} />
                 </div>
                 <div className="six wide field">
-                  <input type="text" name="socketPath" placeholder="Unix socket path" value={this.state.socketPath} onChange={::this.handleChange} />
+                  <input type="text" name="socketPath" maxLength="250" placeholder="Unix socket path" value={this.state.socketPath} onChange={::this.handleChange} />
                 </div>
               </div>
             </div>
             <div className="fields">
               <div className="five wide field">
                 <label>User</label>
-                <input type="text" name="user" maxLength="3" placeholder="User" value={this.state.user} onChange={::this.handleChange} />
+                <input type="text" name="user" maxLength="35" placeholder="User" value={this.state.user} onChange={::this.handleChange} />
               </div>
               <div className="five wide field">
                 <label>Password</label>
-                <input type="password" name="password" maxLength="3" placeholder="Password" value={this.state.password} onChange={::this.handleChange} />
+                <input type="password" name="password" maxLength="35" placeholder="Password" value={this.state.password} onChange={::this.handleChange} />
               </div>
               <div className="six wide field">
                 <label>Database</label>
-                <input type="text" name="database" maxLength="16" placeholder="Database" value={this.state.database} onChange={::this.handleChange} />
+                <input type="text" name="database" maxLength="100" placeholder="Database" value={this.state.database} onChange={::this.handleChange} />
               </div>
             </div>
              <div className="ui segment">
@@ -135,25 +163,25 @@ export default class ServerModalForm extends Component {
                 <label>SSH Address</label>
                 <div className="fields">
                   <div className="seven wide field">
-                    <input type="text" name="ssh[host]" placeholder="Host" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.host} onChange={::this.handleChange} />
+                    <input type="text" name="ssh[host]" maxLength="250" placeholder="Host" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.host} onChange={::this.handleChange} />
                   </div>
                   <div className="three wide field">
-                    <input type="text" name="ssh[port]" placeholder="Port" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.port} onChange={::this.handleChange} />
+                    <input type="text" name="ssh[port]" maxLength="5" placeholder="Port" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.port} onChange={::this.handleChange} />
                   </div>
                 </div>
               </div>
               <div className="fields">
                 <div className="five wide field">
                   <label>User</label>
-                  <input type="text" name="ssh[user]" maxLength="3" placeholder="User" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.user} onChange={::this.handleChange} />
+                  <input type="text" name="ssh[user]" maxLength="35" placeholder="User" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.user} onChange={::this.handleChange} />
                 </div>
                 <div className="five wide field">
                   <label>Password</label>
-                  <input type="password" name="ssh[password]" maxLength="3" placeholder="Password" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.password} onChange={::this.handleChange} />
+                  <input type="password" name="ssh[password]" maxLength="35" placeholder="Password" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.password} onChange={::this.handleChange} />
                 </div>
                 <div className="six wide field">
                   <label>Private Key</label>
-                  <input type="text" name="ssh[privateKey]" maxLength="16" placeholder="~/.ssh/id_rsa" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.privateKey} onChange={::this.handleChange} />
+                  <input type="text" name="ssh[privateKey]" maxLength="250" placeholder="~/.ssh/id_rsa" disabled={!this.state.selectedSSH} value={this.state.ssh && this.state.ssh.privateKey} onChange={::this.handleChange} />
                 </div>
               </div>
             </div>
