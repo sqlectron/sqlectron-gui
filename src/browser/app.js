@@ -37,4 +37,6 @@ app.on('ready', function() {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => mainWindow = null);
+
+  mainWindow.maximize();
 });
