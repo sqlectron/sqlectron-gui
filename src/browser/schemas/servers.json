@@ -45,14 +45,7 @@
         "socketPath": { "type": "string" },
         "database": { "type": "string" },
         "user": { "type": "string" },
-        "password": { "type": "string" },
-        "ssh": {
-          "type": "object",
-          "oneOf": [
-            { "$ref": "#/definitions/sshPassword" },
-            { "$ref": "#/definitions/sshPrivateKey" }
-          ]
-        }
+        "password": { "type": "string" }
       },
       "required": [ "name", "client", "socketPath", "database", "user", "password" ],
       "additionalProperties": false

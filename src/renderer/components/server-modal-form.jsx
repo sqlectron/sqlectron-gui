@@ -62,7 +62,7 @@ export default class ServerModalForm extends Component {
 
     server.ssh = {
       host: state['ssh[host]'],
-      port: state['ssh[port]'],
+      port: parseInt(state['ssh[port]'], 10),
       user: state['ssh[user]'],
       password: state['ssh[password]'],
       privateKey: state['ssh[privateKey]'],

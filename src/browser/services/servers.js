@@ -29,7 +29,7 @@ export async function addServer (server) {
   data.servers.push(obj);
   if (!serversValidate(data)) {
     console.log('Validation error', serversValidate.errors);
-    throw new Error('Invalid server definition ');
+    throw new Error('Invalid server definition');
   }
 
   await createFile(filename, data);
