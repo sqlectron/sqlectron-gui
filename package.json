@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start-webpack": "webpack-dev-server --config ./webpack.dev.config.js",
-    "start-electron": "electron ./src/browser/main.js --dev",
+    "start-electron": "node scripts/dev-auto-restart.js",
     "build": "NODE_ENV=production babel-node scripts/build.js --all",
     "run-local-release": "babel-node scripts/run-local-release.js"
   },
@@ -67,6 +67,7 @@
     "redux-logger": "^1.0.7",
     "redux-thunk": "^0.1.0",
     "semantic-ui-css": "^2.1.4",
+    "spawn-auto-restart": "^1.0.1",
     "style-loader": "^0.12.3",
     "url-loader": "^0.5.6",
     "webpack": "^1.12.2",
