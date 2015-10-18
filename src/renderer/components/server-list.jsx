@@ -23,7 +23,7 @@ export default class ServerList extends Component {
         <div className="wide column">
           <div className="ui cards">
             {servers.map((server, idx) =>
-              <ServerListItem
+              server.visible && <ServerListItem
                 key={idx}
                 onConnectClick={onConnectClick}
                 onEditClick={() => onEditClick(idx) }

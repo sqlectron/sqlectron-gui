@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as ServersActions from '../actions/servers.js';
 import ServerList from '../components/server-list.jsx';
 import ServerModalForm from '../components/server-modal-form.jsx';
+import ServerFilter from '../components/server-filter.jsx';
 
 
 export default class ServerManagerment extends Component {
@@ -60,6 +61,10 @@ export default class ServerManagerment extends Component {
     this.setState({ modalVisible: false, selectedId: null });
   }
 
+  onFilterChange(event) {
+    this.props.dispatch(ServersActions.filterServers(event.target.value));
+  }
+
   render() {
     const { modalVisible, selectedId } = this.state;
     const { servers } = this.props;
@@ -70,7 +75,9 @@ export default class ServerManagerment extends Component {
         <h1 className="ui header">Servers</h1>
         <div className="ui divider"></div>
 
-        <button className="ui button" style={{marginBottom: '1em'}} onClick={::this.onAddClick}>Add</button>
+        <ServerFilter
+          onFilterChange={::this.onFilterChange}
+          onAddClick={::this.onAddClick} />
 
         <ServerList servers={servers.items}
                     onEditClick={::this.onEditClick}

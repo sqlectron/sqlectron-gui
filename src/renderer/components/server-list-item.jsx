@@ -30,7 +30,7 @@ export default class ServerListItem extends Component {
         </div>
         <div className="extra content">
           <div className="ui two buttons">
-            <div className="ui green button" onClick={() => onConnectClick(server)}>Connect</div>
+            <div className="ui teal button" onClick={() => onConnectClick(server)}>Connect</div>
             <div className="ui button" onClick={() => onEditClick(server)}>Edit</div>
           </div>
         </div>

@@ -8,6 +8,7 @@ import {
   SAVE_SERVER_REQUEST,
   SAVE_SERVER_SUCCESS,
   SAVE_SERVER_FAILURE,
+  FILTER_SERVERS,
 } from './types';
 
 
@@ -42,4 +43,9 @@ export function saveServer ({ id, server }) {
       dispatch({ type: SAVE_SERVER_FAILURE, error });
     }
   };
+}
+
+
+export function filterServers(name) {
+  return { type: FILTER_SERVERS, name };
 }
