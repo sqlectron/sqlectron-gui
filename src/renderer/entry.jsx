@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import createHashHistory from 'history/lib/createHashHistory'
+import createHashHistory from 'history/lib/createHashHistory';
 import { Router, Route } from 'react-router';
 import App from './containers/app.jsx';
 import configureStore from './store/configure';

@@ -6,7 +6,7 @@ import query from './query';
 const rootReducer = combineReducers({
   databases,
   servers,
-  query
+  query,
 });
 
 export default rootReducer;

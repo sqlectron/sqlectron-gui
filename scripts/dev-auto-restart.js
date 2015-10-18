@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+/* eslint no-var: 0 */
 var join = require('path').join;
 var electron = require('electron-prebuilt');
 
@@ -12,7 +12,7 @@ require('spawn-auto-restart')({
   debug: true,
   proc: {
     command: electron,
-    args: [main, '--dev']
+    args: [main, '--dev'],
   },
-  watch: watch
+  watch: watch,
 });

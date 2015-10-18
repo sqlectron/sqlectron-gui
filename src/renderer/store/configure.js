@@ -9,7 +9,7 @@ const middlewares = [ thunkMiddleware ];
 if (process.env.NODE_ENV !== 'production') {
   middlewares.push(require('redux-logger')({
     level: 'info',
-    collapsed: true
+    collapsed: true,
   }));
 }
 

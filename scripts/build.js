@@ -1,4 +1,4 @@
-import { tmpdir, platform } from 'os';
+import { platform } from 'os';
 import { escapeRegExp } from 'lodash';
 import { readdirSync } from 'fs';
 import { exec } from 'child_process';
@@ -37,12 +37,12 @@ function ignoreFilesInRelease() {
   const include = [
     'node_modules',
     'build',
-    'package.json'
+    'package.json',
   ];
 
   const exclude = [
     'node_modules/.bin($|/)',
-    'electron-prebuild($|/)'
+    'electron-prebuild($|/)',
   ];
 
   const autoExcluded = readdirSync(ROOT_PATH)
@@ -68,7 +68,7 @@ const ELECTRON_PACKAGER_OPTS = {
   dir: '.',
   out: RELEASE_PATH,
   cache: CACHE_PATH,
-  ignore: ignoreFilesInRelease()
+  ignore: ignoreFilesInRelease(),
 };
 
 
@@ -78,12 +78,12 @@ const ELECTRON_PACKAGER_OPTS = {
 const TASKS = [
   { platform: 'darwin', arch: 'x64', icon: 'app.icns' },
   { platform: 'linux', arch: 'x64', icon: 'app.png' },
-  { platform: 'win32', arch: 'x64', icon: 'app.ico' }
+  { platform: 'win32', arch: 'x64', icon: 'app.ico' },
 ].map(item => {
   return {
     ...item,
     ...ELECTRON_PACKAGER_OPTS,
-    icon: join(RESOURCES_PATH, item.icon)
+    icon: join(RESOURCES_PATH, item.icon),
   };
 }).filter(task => argv.all || task.platform === platform());
 
@@ -141,7 +141,7 @@ async function packElectronApp(opts) {
     await buildRendererCode();
 
     console.log('> packaging electron app');
-    for (let task of TASKS) {
+    for (const task of TASKS) {
       await packElectronApp(task);
     }
 

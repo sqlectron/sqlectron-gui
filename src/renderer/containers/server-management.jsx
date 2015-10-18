@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import * as ServersActions from '../actions/servers.js';
 import ServerList from '../components/server-list.jsx';
@@ -14,22 +13,28 @@ export default class ServerManagerment extends Component {
     route: PropTypes.object.isRequired,
     routeParams: PropTypes.object.isRequired,
     location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired
+      pathname: PropTypes.string.isRequired,
     }),
-    params: PropTypes.shape({
-      userLogin: PropTypes.string,
-      repoName: PropTypes.string
-    }).isRequired,
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   static contextTypes = {
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
   }
 
   constructor(props, context) {
     super(props, context);
     this.state = {};
+  }
+
+  componentDidMount() {
+    this.props.dispatch(ServersActions.loadServers());
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.state.saving && !nextProps.servers.error) {
+      this.setState({ saving: false, modalVisible: false });
+    }
   }
 
   onConnectClick(server) {
@@ -55,20 +60,9 @@ export default class ServerManagerment extends Component {
     this.setState({ modalVisible: false, selectedId: null });
   }
 
-  componentDidMount() {
-    this.props.dispatch(ServersActions.loadServers());
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.state.saving && !nextProps.servers.error) {
-      this.setState({ saving: false, modalVisible: false });
-    }
-  }
-
   render() {
     const { modalVisible, selectedId } = this.state;
-    const { servers, dispatch } = this.props;
-    const actions = bindActionCreators(ServersActions, dispatch);
+    const { servers } = this.props;
     const selected = selectedId !== null ? servers.items[selectedId] : {};
 
     return (
@@ -90,12 +84,12 @@ export default class ServerManagerment extends Component {
       </div>
     );
   }
-};
+}
 
 
 function mapStateToProps(state) {
   return {
-    servers: state.servers
+    servers: state.servers,
   };
 }
 

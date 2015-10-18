@@ -6,7 +6,7 @@ import {
 
 
 const INITIAL_STATE = {
-  items: []
+  items: [],
 };
 
 
@@ -15,16 +15,16 @@ export default function servers(state = INITIAL_STATE, action) {
   case LOAD_SERVERS_SUCCESS:
     return {
       ...state,
-      items: action.servers
+      items: action.servers,
     };
   case SAVE_SERVER_SUCCESS: {
-    const servers = state.items || [];
+    const items = state.items || [];
     if (action.id !== null) {
-      servers[action.id] = action.server;
+      items[action.id] = action.server;
     } else {
-      servers.push(action.server)
+      items.push(action.server);
     }
-    return { ...state, items: servers, error: null };
+    return { ...state, items, error: null };
   }
   case SAVE_SERVER_FAILURE: {
     return { ...state, error: action.error.validationErrors };

@@ -35,7 +35,7 @@ electron.stdout.pipe(process.stdout);
 electron.stderr.pipe(process.stderr);
 
 
-electron.on('close', function (code) {
+electron.on('close', function onClose(code) {
   console.log('child process exited with code ' + code);
   process.exit(code);
 });

@@ -36,5 +36,5 @@ function loadAll(dbs) {
       return tb;
     });
     return db;
-  })
+  });
 }

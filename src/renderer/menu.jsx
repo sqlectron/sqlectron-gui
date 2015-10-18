@@ -8,47 +8,47 @@ export default class AppMenu {
 
   build ({ store }) {
     const Menu = remote.require('menu');
-    var template = [
+    const template = [
       {
         label: 'Sqlectron',
         submenu: [
           {
             label: 'About Sqlectron',
-            selector: 'orderFrontStandardAboutPanel:'
+            selector: 'orderFrontStandardAboutPanel:',
           },
           {
-            type: 'separator'
+            type: 'separator',
           },
           {
             label: 'Services',
-            submenu: []
+            submenu: [],
           },
           {
-            type: 'separator'
+            type: 'separator',
           },
           {
             label: 'Hide Sqlectron',
             accelerator: 'CmdOrCtrl+H',
-            selector: 'hide:'
+            selector: 'hide:',
           },
           {
             label: 'Hide Others',
             accelerator: 'CmdOrCtrl+Shift+H',
-            selector: 'hideOtherApplications:'
+            selector: 'hideOtherApplications:',
           },
           {
             label: 'Show All',
-            selector: 'unhideAllApplications:'
+            selector: 'unhideAllApplications:',
           },
           {
-            type: 'separator'
+            type: 'separator',
           },
           {
             label: 'Quit',
             accelerator: 'CmdOrCtrl+Q',
-            click: function() { ipc.sendSync('quit-app'); }
-          }
-        ]
+            click: function() { ipc.sendSync('quit-app'); },
+          },
+        ],
       },
       {
         label: 'Query',
@@ -56,9 +56,9 @@ export default class AppMenu {
           {
             label: 'Execute',
             accelerator: 'CmdOrCtrl+E',
-            click: () => this._queryActions.query(store.queryResult.sql)
-          }
-        ]
+            click: () => this._queryActions.query(store.queryResult.sql),
+          },
+        ],
       },
       {
         label: 'Edit',
@@ -66,37 +66,37 @@ export default class AppMenu {
           {
             label: 'Undo',
             accelerator: 'CmdOrCtrl+Z',
-            selector: 'undo:'
+            selector: 'undo:',
           },
           {
             label: 'Redo',
             accelerator: 'Shift+CmdOrCtrl+Z',
-            selector: 'redo:'
+            selector: 'redo:',
           },
           {
-            type: 'separator'
+            type: 'separator',
           },
           {
             label: 'Cut',
             accelerator: 'CmdOrCtrl+X',
-            selector: 'cut:'
+            selector: 'cut:',
           },
           {
             label: 'Copy',
             accelerator: 'CmdOrCtrl+C',
-            selector: 'copy:'
+            selector: 'copy:',
           },
           {
             label: 'Paste',
             accelerator: 'CmdOrCtrl+V',
-            selector: 'paste:'
+            selector: 'paste:',
           },
           {
             label: 'Select All',
             accelerator: 'CmdOrCtrl+A',
-            selector: 'selectAll:'
-          }
-        ]
+            selector: 'selectAll:',
+          },
+        ],
       },
       {
         label: 'View',
@@ -104,14 +104,14 @@ export default class AppMenu {
           {
             label: 'Reload',
             accelerator: 'CmdOrCtrl+R',
-            click: function() { remote.getCurrentWindow().reloadIgnoringCache(); }
+            click: function() { remote.getCurrentWindow().reloadIgnoringCache(); },
           },
           {
             label: 'Toggle DevTools',
             accelerator: 'Alt+CmdOrCtrl+I',
-            click: function() { remote.getCurrentWindow().toggleDevTools(); }
-          }
-        ]
+            click: function() { remote.getCurrentWindow().toggleDevTools(); },
+          },
+        ],
       },
       {
         label: 'Window',
@@ -119,26 +119,26 @@ export default class AppMenu {
           {
             label: 'Minimize',
             accelerator: 'CmdOrCtrl+M',
-            selector: 'performMiniaturize:'
+            selector: 'performMiniaturize:',
           },
           {
             label: 'Close',
             accelerator: 'CmdOrCtrl+W',
-            selector: 'performClose:'
+            selector: 'performClose:',
           },
           {
-            type: 'separator'
+            type: 'separator',
           },
           {
             label: 'Bring All to Front',
-            selector: 'arrangeInFront:'
-          }
-        ]
+            selector: 'arrangeInFront:',
+          },
+        ],
       },
       {
         label: 'Help',
-        submenu: []
-      }
+        submenu: [],
+      },
     ];
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(template));
