@@ -31,7 +31,7 @@ export function saveServer ({ id, server }) {
     dispatch({ type: SAVE_SERVER_REQUEST, server });
     try {
       const { addServer, updateServer } = services.servers;
-      const data = await (id ? updateServer(id, server) : addServer(server));
+      const data = await (id !== null ? updateServer(id, server) : addServer(server));
 
       dispatch({
         type: SAVE_SERVER_SUCCESS,

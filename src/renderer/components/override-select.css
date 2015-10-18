@@ -1,0 +1,12 @@
+.Select-input input {
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.error .Select .Select-control {
+    background: #fff6f6;
+    border-color: #e0b4b4;
+    color: #9f3a38;
+    border-radius: '';
+    box-shadow: none;
+}

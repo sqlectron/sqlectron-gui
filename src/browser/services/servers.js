@@ -1,9 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import validator from 'is-my-json-valid';
-
-const SERVER_SCHEMA_PATH = path.join(__dirname, '../schemas/servers.json')
-const serversValidate = validator(require(SERVER_SCHEMA_PATH));
+import { validate } from '../validators/server';
 
 
 export async function loadServerListFromFile () {
@@ -12,64 +9,39 @@ export async function loadServerListFromFile () {
     await createFile(filename, { servers: [] });
   }
   const result = await readFile(filename);
-  if (!serversValidate(result)) {
-    throw new Error('Invalid ~/.sqlectron.json file format');
-  }
+  // TODO: Validate whole configuration file
+  // if (!serversValidate(result)) {
+  //   throw new Error('Invalid ~/.sqlectron.json file format');
+  // }
   return result;
 }
 
 
+
 export async function addServer (server) {
+  await validate(server);
   const filename = path.join(homedir(), '.sqlectron.json');
+
   const data = await readFile(filename);
-
-  const obj = copyObject(server);
-  if (!obj) return null;
-
-  data.servers.push(obj);
-  if (!serversValidate(data)) {
-    console.log('Validation error', serversValidate.errors);
-    throw new Error('Invalid server definition');
-  }
-
+  data.servers.push(server);
   await createFile(filename, data);
 
-  return obj;
+  return server;
 }
 
 
 export async function updateServer (id, server) {
+  await validate(server);
+
   const filename = path.join(homedir(), '.sqlectron.json');
   const data = await readFile(filename);
 
-  const obj = copyObject(server);
-  if (!obj) return null;
-
-  data.servers[id] = obj;
-  if (!serversValidate(data)) {
-    throw new Error('Invalid server definition');
-  }
-
+  data.servers[id] = server;
   await createFile(filename, data);
 
-  return obj;
+  return server;
 }
 
-
-function copyObject (obj) {
-  const result = {};
-  Object.keys(obj).forEach(k => {
-    const o = obj[k];
-    let r = o;
-    if (typeof o === 'object') {
-      r = copyObject(o);
-      if (!Object.keys(r).length) return null;
-    }
-    if (r) result[k] = r;
-  });
-
-  return result;
-}
 
 
 function fileExists (filename) {

@@ -47,8 +47,8 @@ export default class ServerManagerment extends Component {
   onSaveClick(server) {
     const { selectedId } = this.state;
     const { dispatch } = this.props;
-    dispatch(ServersActions.saveServer({ id: selectedId, server }))
-      .then(() => this.onCancelClick());
+    this.setState({ saving: true });
+    dispatch(ServersActions.saveServer({ id: selectedId, server }));
   }
 
   onCancelClick() {
@@ -59,12 +59,18 @@ export default class ServerManagerment extends Component {
     this.props.dispatch(ServersActions.loadServers());
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.state.saving && !nextProps.servers.error) {
+      this.setState({ saving: false, modalVisible: false });
+    }
+  }
+
   render() {
     const { modalVisible, selectedId } = this.state;
     const { servers, dispatch } = this.props;
     const actions = bindActionCreators(ServersActions, dispatch);
-    const selected = selectedId ? servers.items[selectedId] : {};
-    
+    const selected = selectedId !== null ? servers.items[selectedId] : {};
+
     return (
       <div className="ui" style={{padding: '1em'}}>
         <h1 className="ui header">Servers</h1>
@@ -76,10 +82,11 @@ export default class ServerManagerment extends Component {
                     onEditClick={::this.onEditClick}
                     onConnectClick={::this.onConnectClick} />
 
-        <ServerModalForm visible={!!modalVisible}
-                         server={selected}
-                         onSaveClick={::this.onSaveClick}
-                         onCancelClick={::this.onCancelClick} />
+        {modalVisible && <ServerModalForm
+               server={selected}
+               error={servers.error}
+               onSaveClick={::this.onSaveClick}
+               onCancelClick={::this.onCancelClick} />}
       </div>
     );
   }
