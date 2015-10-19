@@ -7,6 +7,7 @@ export default class ServerModalForm extends Component {
     onRemoveClick: PropTypes.func.isRequired,
     title: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
+    context: PropTypes.string.isRequired,
   }
 
   constructor(props, context) {
@@ -18,6 +19,7 @@ export default class ServerModalForm extends Component {
       closable: false,
       detachable: false,
       allowMultiple: true,
+      context: this.props.context,
       onDeny: () => {
         this.props.onCancelClick();
         return true;

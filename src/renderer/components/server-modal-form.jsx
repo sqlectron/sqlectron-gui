@@ -124,7 +124,7 @@ export default class ServerModalForm extends Component {
     const ssh = this.state.ssh || {};
 
     return (
-      <div className="ui modal" ref="serverModal">
+      <div id="server-modal" className="ui modal" ref="serverModal">
         <div className="header">
           Server Information
         </div>
@@ -212,26 +212,24 @@ export default class ServerModalForm extends Component {
         </div>
         <div className="actions">
           <div className="small ui black deny right labeled icon button"
-            tabIndex="0"
-            disabled={!!confirmingRemove}>
+            tabIndex="0">
             Cancel
             <i className="ban icon"></i>
           </div>
           <div className="small ui positive right labeled icon button"
-            tabIndex="0"
-            disabled={!!confirmingRemove}>
+            tabIndex="0">
             Save
             <i className="checkmark icon"></i>
           </div>
           <div className="small ui red right labeled icon button"
             tabIndex="0"
-            disabled={!!confirmingRemove}
             onClick={::this.onRemoveOpenClick}>
             Remove
             <i className="trash icon"></i>
           </div>
         </div>
         {confirmingRemove && <ConfirmModal
+          context="#server-modal"
           title={`Delete ${this.state.name}`}
           message="Are you sure you want to remove this server connection?"
           onCancelClick={::this.onRemoveCancelClick}
