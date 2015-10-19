@@ -133,7 +133,12 @@ export default class ServerModalForm extends Component {
             <div className="fields">
               <div className={`ten wide field ${this.highlightError('name')}`}>
                 <label>Name</label>
-                <input type="text" name="name" maxLength="250" placeholder="Name" value={this.state.name} onChange={::this.handleChange} />
+                <input type="text"
+                  name="name"
+                  maxLength="250"
+                  placeholder="Name"
+                  value={this.state.name}
+                  onChange={::this.handleChange} />
               </div>
               <div className={`six wide field ${this.highlightError('client')}`}>
                 <label>Client</label>
@@ -151,34 +156,71 @@ export default class ServerModalForm extends Component {
               <label>Server Address</label>
               <div className="fields">
                 <div className={`seven wide field ${this.highlightError('host')}`}>
-                  <input type="text" name="host" maxLength="250" placeholder="Host" value={this.state.host} onChange={::this.handleChange} disabled={this.state.socketPath} />
+                  <input type="text"
+                    name="host"
+                    maxLength="250"
+                    placeholder="Host"
+                    value={this.state.host}
+                    onChange={::this.handleChange}
+                    disabled={this.state.socketPath} />
                 </div>
                 <div className={`three wide field ${this.highlightError('port')}`}>
-                  <input type="number" name="port" maxLength="5" placeholder="Port" value={this.state.port} onChange={::this.handleChange} disabled={this.state.socketPath} />
+                  <input type="number"
+                    name="port"
+                    maxLength="5"
+                    placeholder="Port"
+                    value={this.state.port}
+                    onChange={::this.handleChange}
+                    disabled={this.state.socketPath} />
                 </div>
                 <div className={`six wide field ${this.highlightError('socketPath')}`}>
-                  <input type="text" name="socketPath" maxLength="250" placeholder="Unix socket path" value={this.state.socketPath} onChange={::this.handleChange} disabled={(this.state.host || this.state.port)} />
+                  <input type="text"
+                    name="socketPath"
+                    maxLength="250"
+                    placeholder="Unix socket path"
+                    value={this.state.socketPath}
+                    onChange={::this.handleChange}
+                    disabled={(this.state.host || this.state.port)} />
                 </div>
               </div>
             </div>
             <div className="fields">
               <div className={`five wide field ${this.highlightError('user')}`}>
                 <label>User</label>
-                <input type="text" name="user" maxLength="55" placeholder="User" value={this.state.user} onChange={::this.handleChange} />
+                <input type="text"
+                  name="user"
+                  maxLength="55"
+                  placeholder="User"
+                  value={this.state.user}
+                  onChange={::this.handleChange} />
               </div>
               <div className={`five wide field ${this.highlightError('password')}`}>
                 <label>Password</label>
-                <input type="password" name="password" maxLength="55" placeholder="Password" value={this.state.password} onChange={::this.handleChange} />
+                <input type="password"
+                  name="password"
+                  maxLength="55"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={::this.handleChange} />
               </div>
               <div className={`six wide field ${this.highlightError('database')}`}>
                 <label>Database</label>
-                <input type="text" name="database" maxLength="100" placeholder="Database" value={this.state.database} onChange={::this.handleChange} />
+                <input type="text"
+                  name="database"
+                  maxLength="100"
+                  placeholder="Database"
+                  value={this.state.database}
+                  onChange={::this.handleChange} />
               </div>
             </div>
              <div className="ui segment">
               <div className="one field">
                 <div className="ui toggle checkbox" ref="sshTunnel">
-                  <input type="checkbox" name="sshTunnel" tabIndex="0" className="hidden" defaultChecked={isSSHChecked} />
+                  <input type="checkbox"
+                    name="sshTunnel"
+                    tabIndex="0"
+                    className="hidden"
+                    defaultChecked={isSSHChecked} />
                   <label>SSH Tunnel</label>
                 </div>
               </div>
@@ -186,25 +228,55 @@ export default class ServerModalForm extends Component {
                 <label>SSH Address</label>
                 <div className="fields">
                   <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
-                    <input type="text" name="ssh.host" maxLength="250" placeholder="Host" disabled={!isSSHChecked} value={ssh.host} onChange={::this.handleChange} />
+                    <input type="text"
+                      name="ssh.host"
+                      maxLength="250"
+                      placeholder="Host"
+                      disabled={!isSSHChecked}
+                      value={ssh.host}
+                      onChange={::this.handleChange} />
                   </div>
                   <div className={`three wide field ${this.highlightError('ssh.port')}`}>
-                    <input type="number" name="ssh.port" maxLength="5" placeholder="Port" disabled={!isSSHChecked} value={ssh.port} onChange={::this.handleChange} />
+                    <input type="number"
+                      name="ssh.port"
+                      maxLength="5"
+                      placeholder="Port"
+                      disabled={!isSSHChecked}
+                      value={ssh.port}
+                      onChange={::this.handleChange} />
                   </div>
                 </div>
               </div>
               <div className="fields">
                 <div className={`five wide field ${this.highlightError('ssh.user')}`}>
                   <label>User</label>
-                  <input type="text" name="ssh.user" maxLength="55" placeholder="User" disabled={!isSSHChecked} value={ssh.user} onChange={::this.handleChange} />
+                  <input type="text"
+                    name="ssh.user"
+                    maxLength="55"
+                    placeholder="User"
+                    disabled={!isSSHChecked}
+                    value={ssh.user}
+                    onChange={::this.handleChange} />
                 </div>
                 <div className={`five wide field ${this.highlightError('ssh.password')}`}>
                   <label>Password</label>
-                  <input type="password" name="ssh.password" maxLength="55" placeholder="Password" disabled={(!isSSHChecked || ssh.privateKey)} value={ssh.password} onChange={::this.handleChange} />
+                  <input type="password"
+                    name="ssh.password"
+                    maxLength="55"
+                    placeholder="Password"
+                    disabled={(!isSSHChecked || ssh.privateKey)}
+                    value={ssh.password}
+                    onChange={::this.handleChange} />
                 </div>
                 <div className={`six wide field ${this.highlightError('ssh.privateKey')}`}>
                   <label>Private Key</label>
-                  <input type="text" name="ssh.privateKey" maxLength="250" placeholder="~/.ssh/id_rsa" disabled={(!isSSHChecked || ssh.password )} value={ssh.privateKey} onChange={::this.handleChange} />
+                  <input type="text"
+                    name="ssh.privateKey"
+                    maxLength="250"
+                    placeholder="~/.ssh/id_rsa"
+                    disabled={(!isSSHChecked || ssh.password )}
+                    value={ssh.privateKey}
+                    onChange={::this.handleChange} />
                 </div>
               </div>
             </div>
