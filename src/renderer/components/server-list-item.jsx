@@ -20,7 +20,7 @@ export default class ServerListItem extends Component {
     return (
       <div className="card">
         <div className="content">
-          <img className="right floated mini ui image" src={ICONS[server.client]} style={{width: '16px'}} />
+          <img className="right floated mini ui image" src={ICONS[server.client]} style={{width: '36px'}} />
           <div className="header">
             {server.name}
           </div>
