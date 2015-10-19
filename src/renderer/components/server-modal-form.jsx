@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
+import ConfirmModal from './confim-modal.jsx';
 
 
 require('react-select/dist/default.css');
@@ -21,6 +22,7 @@ export default class ServerModalForm extends Component {
   static propTypes = {
     onSaveClick: PropTypes.func.isRequired,
     onCancelClick: PropTypes.func.isRequired,
+    onRemoveClick: PropTypes.func.isRequired,
     server: PropTypes.object,
     error: PropTypes.object,
   }
@@ -34,9 +36,9 @@ export default class ServerModalForm extends Component {
     $(this.refs.serverModal).modal({
       closable: false,
       detachable: false,
+      allowMultiple: true,
       onDeny: () => {
-        // wait animation finish
-        setTimeout(() => this.props.onCancelClick(), 500);
+        this.props.onCancelClick();
         return true;
       },
       onApprove: () => {
@@ -57,6 +59,20 @@ export default class ServerModalForm extends Component {
 
   componentWillUnmount() {
     $(this.refs.serverModal).modal('hide');
+  }
+
+  onRemoveCancelClick() {
+    this.setState({ confirmingRemove: false });
+    // ugly workaround to not lose the current modal dimmer
+    $(this.refs.serverModal).modal('show dimmer');
+  }
+
+  onRemoveConfirmClick() {
+    this.props.onRemoveClick();
+  }
+
+  onRemoveOpenClick() {
+    this.setState({ confirmingRemove: true });
   }
 
   mapStateToServer(state) {
@@ -103,6 +119,7 @@ export default class ServerModalForm extends Component {
   }
 
   render() {
+    const { confirmingRemove } = this.state;
     const isSSHChecked = !!this.state.ssh;
     const ssh = this.state.ssh || {};
 
@@ -194,14 +211,31 @@ export default class ServerModalForm extends Component {
           </form>
         </div>
         <div className="actions">
-          <div className="ui black deny button">
+          <div className="small ui black deny right labeled icon button"
+            tabIndex="0"
+            disabled={!!confirmingRemove}>
             Cancel
+            <i className="ban icon"></i>
           </div>
-          <div className="ui positive right labeled icon button">
+          <div className="small ui positive right labeled icon button"
+            tabIndex="0"
+            disabled={!!confirmingRemove}>
             Save
             <i className="checkmark icon"></i>
           </div>
+          <div className="small ui red right labeled icon button"
+            tabIndex="0"
+            disabled={!!confirmingRemove}
+            onClick={::this.onRemoveOpenClick}>
+            Remove
+            <i className="trash icon"></i>
+          </div>
         </div>
+        {confirmingRemove && <ConfirmModal
+          title={`Delete ${this.state.name}`}
+          message="Are you sure you want to remove this server connection?"
+          onCancelClick={::this.onRemoveCancelClick}
+          onRemoveClick={::this.onRemoveConfirmClick} />}
       </div>
     );
   }

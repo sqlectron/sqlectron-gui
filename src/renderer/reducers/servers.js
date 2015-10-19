@@ -2,6 +2,8 @@ import {
   LOAD_SERVERS_SUCCESS,
   SAVE_SERVER_SUCCESS,
   SAVE_SERVER_FAILURE,
+  REMOVE_SERVER_SUCCESS,
+  REMOVE_SERVER_FAILURE,
   FILTER_SERVERS,
 } from '../actions/types';
 
@@ -29,7 +31,14 @@ export default function servers(state = INITIAL_STATE, action) {
       items: save(state.items, action.server, action.id),
       error: null,
     };
-  case SAVE_SERVER_FAILURE: {
+  case REMOVE_SERVER_SUCCESS:
+    return {
+      ...state,
+      items: remove(state.items, action.id),
+      error: null,
+    };
+  case SAVE_SERVER_FAILURE:
+  case REMOVE_SERVER_FAILURE: {
     return {
       ...state,
       error: action.error.validationErrors,
@@ -70,4 +79,12 @@ function save(items, server, id) {
     _items.push(_server);
   }
   return _items;
+}
+
+
+function remove(items, id) {
+  return [
+    ...items.slice(0, id),
+    ...items.slice(id + 1),
+  ];
 }

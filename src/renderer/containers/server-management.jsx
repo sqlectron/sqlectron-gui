@@ -32,12 +32,6 @@ export default class ServerManagerment extends Component {
     this.props.dispatch(ServersActions.loadServers());
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state.saving && !nextProps.servers.error) {
-      this.setState({ saving: false, modalVisible: false });
-    }
-  }
-
   onConnectClick(server) {
     this.props.history.pushState(null, `/${server.name}`);
   }
@@ -53,12 +47,19 @@ export default class ServerManagerment extends Component {
   onSaveClick(server) {
     const { selectedId } = this.state;
     const { dispatch } = this.props;
-    this.setState({ saving: true });
-    dispatch(ServersActions.saveServer({ id: selectedId, server }));
+    dispatch(ServersActions.saveServer({ id: selectedId, server }))
+      .then(this.setState({ modalVisible: false, selectedId: null }));
   }
 
   onCancelClick() {
     this.setState({ modalVisible: false, selectedId: null });
+  }
+
+  onRemoveClick() {
+    const { selectedId } = this.state;
+    const { dispatch } = this.props;
+    dispatch(ServersActions.removeServer({ id: selectedId }))
+      .then(this.setState({ modalVisible: false }));
   }
 
   onFilterChange(event) {
@@ -87,7 +88,8 @@ export default class ServerManagerment extends Component {
                server={selected}
                error={servers.error}
                onSaveClick={::this.onSaveClick}
-               onCancelClick={::this.onCancelClick} />}
+               onCancelClick={::this.onCancelClick}
+               onRemoveClick={::this.onRemoveClick} />}
       </div>
     );
   }

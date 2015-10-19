@@ -42,6 +42,19 @@ export async function updateServer(id, server) {
 }
 
 
+export async function removeServer(id) {
+  const filename = path.join(homedir(), '.sqlectron.json');
+  const data = await readFile(filename);
+
+  data.servers = [
+    ...data.servers.slice(0, id),
+    ...data.servers.slice(id + 1),
+  ];
+
+  await createFile(filename, data);
+}
+
+
 function fileExists(filename) {
   return new Promise(resolve => {
     fs.stat(filename, (err, stats) => {
