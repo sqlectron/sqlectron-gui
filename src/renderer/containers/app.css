@@ -31,8 +31,9 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  background: #1A78B6;
+  background: #fff;
   color: #333333;
+  z-index: 100000;
 }
 #loading>div {
   position: absolute;
