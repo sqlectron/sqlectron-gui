@@ -20,12 +20,11 @@ export default class ServerList extends Component {
       const data = { id: index, server: item };
 
       const position = Math.floor(index / itemsPerRow);
-      if (rows[position]) {
-        rows[position].push(data);
-      } else {
-        rows[position] = [data];
+      if (!rows[position]) {
+        rows[position] = [];
       }
 
+      rows[position].push(data);
       return rows;
     }, []);
   }
