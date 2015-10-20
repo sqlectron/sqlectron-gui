@@ -1,4 +1,4 @@
-![SQLECTRON Logo](https://www.dropbox.com/s/038vmsywakz2hug/SQLECTRON-400px.png?raw=1)
+![SQLECTRON Logo](https://www.dropbox.com/s/dt06tif4xo1khbf/SQLECTRON-400px.png?raw=1)
 
 A simple and lightweight SQL client with cross database and platform support.
 
