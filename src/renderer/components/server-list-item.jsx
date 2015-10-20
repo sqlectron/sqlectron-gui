@@ -18,9 +18,13 @@ export default class ServerListItem extends Component {
     const {server, onConnectClick, onEditClick} = this.props;
 
     return (
-      <div className="card">
+      <div className="ui card">
         <div className="content">
-          <img className="right floated mini ui image" src={ICONS[server.client]} style={{width: '36px'}} />
+          <img className="left floated mini ui image" src={ICONS[server.client]} />
+          <button className="right floated circular ui icon button mini"
+            onClick={() => onEditClick(server)}>
+            <i className="icon pencil"></i>
+          </button>
           <div className="header">
             {server.name}
           </div>
@@ -28,11 +32,11 @@ export default class ServerListItem extends Component {
             {server.host ? `${server.host}:${server.port}` : server.socketPath}
           </div>
         </div>
-        <div className="extra content">
-          <div className="ui two buttons">
-            <div className="ui teal button" onClick={() => onConnectClick(server)}>Connect</div>
-            <div className="ui button" onClick={() => onEditClick(server)}>Edit</div>
-          </div>
+        <div className="ui bottom attached button"
+          tabIndex="0"
+          onClick={() => onConnectClick(server)}>
+          <i className="plug icon"></i>
+          Connect
         </div>
       </div>
     );
