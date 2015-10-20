@@ -63,8 +63,6 @@ export default class ServerModalForm extends Component {
 
   onRemoveCancelClick() {
     this.setState({ confirmingRemove: false });
-    // ugly workaround to not lose the current modal dimmer
-    $(this.refs.serverModal).modal('show dimmer');
   }
 
   onRemoveConfirmClick() {
