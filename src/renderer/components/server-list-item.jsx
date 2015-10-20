@@ -18,7 +18,7 @@ export default class ServerListItem extends Component {
     const {server, onConnectClick, onEditClick} = this.props;
 
     return (
-      <div className="ui card">
+      <div className="ui fluid card">
         <div className="content">
           <img className="left floated mini ui image" src={ICONS[server.client]} />
           <button className="right floated circular ui icon button mini"

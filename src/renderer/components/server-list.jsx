@@ -14,25 +14,43 @@ export default class ServerList extends Component {
     super(props, context);
   }
 
+  groupItemsInRows(items) {
+    const itemsPerRow = 4;
+    return items.filter(item => item.visible).reduce((rows, item, index) => {
+      const position = Math.floor(index / itemsPerRow);
+      if (rows[position]) {
+        rows[position].push(item);
+      } else {
+        rows[position] = [item];
+      }
+      return rows;
+    }, []);
+  }
+
   render() {
     const { servers, onEditClick, onConnectClick } = this.props;
 
-    return servers.length > 0 ?
-    <div className="ui grid">
-      <div className="row">
-        <div className="wide column">
-          <div className="ui cards">
-            {servers.map((server, idx) =>
-              server.visible && <ServerListItem
-                key={idx}
-                onConnectClick={onConnectClick}
-                onEditClick={() => onEditClick(idx) }
-                server={server} />
+    if (!servers.length) {
+      return <LoadingPage />;
+    }
+
+    return (
+      <div className="ui grid">
+        {this.groupItemsInRows(servers).map((row, rowIdx) =>
+          <div key={rowIdx} className="doubling four column row">
+            {row.map((server, idx) =>
+              <div key={idx} className="wide column">
+                <div className="ui">
+                  <ServerListItem
+                    onConnectClick={onConnectClick}
+                    onEditClick={() => onEditClick(idx) }
+                    server={server} />
+                  </div>
+              </div>
             )}
           </div>
-        </div>
+        )}
       </div>
-    </div>
-    : <LoadingPage />;
+    );
   }
 }
