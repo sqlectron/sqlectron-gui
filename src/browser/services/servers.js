@@ -1,25 +1,61 @@
 import fs from 'fs';
 import path from 'path';
-import validator from 'is-my-json-valid';
-
-const SERVER_SCHEMA_PATH = path.join(__dirname, '../schemas/servers.json')
-const serversValidate = validator(require(SERVER_SCHEMA_PATH));
+import { validate } from '../validators/server';
 
 
-export async function loadServerListFromFile () {
+export async function loadServerListFromFile() {
   const filename = path.join(homedir(), '.sqlectron.json');
   if (!await fileExists(filename)) {
     await createFile(filename, { servers: [] });
   }
   const result = await readFile(filename);
-  if (!serversValidate(result)) {
-    throw new Error('Invalid ~/.sqlectron.json file format');
-  }
+  // TODO: Validate whole configuration file
+  // if (!serversValidate(result)) {
+  //   throw new Error('Invalid ~/.sqlectron.json file format');
+  // }
   return result;
 }
 
 
-function fileExists (filename) {
+export async function addServer(server) {
+  await validate(server);
+  const filename = path.join(homedir(), '.sqlectron.json');
+
+  const data = await readFile(filename);
+  data.servers.push(server);
+  await createFile(filename, data);
+
+  return server;
+}
+
+
+export async function updateServer(id, server) {
+  await validate(server);
+
+  const filename = path.join(homedir(), '.sqlectron.json');
+  const data = await readFile(filename);
+
+  data.servers[id] = server;
+  await createFile(filename, data);
+
+  return server;
+}
+
+
+export async function removeServer(id) {
+  const filename = path.join(homedir(), '.sqlectron.json');
+  const data = await readFile(filename);
+
+  data.servers = [
+    ...data.servers.slice(0, id),
+    ...data.servers.slice(id + 1),
+  ];
+
+  await createFile(filename, data);
+}
+
+
+function fileExists(filename) {
   return new Promise(resolve => {
     fs.stat(filename, (err, stats) => {
       if (err) return resolve(false);
@@ -29,7 +65,7 @@ function fileExists (filename) {
 }
 
 
-function createFile (filename, data) {
+function createFile(filename, data) {
   return new Promise((resolve, reject) => {
     fs.writeFile(filename, JSON.stringify(data, null, 2), err => {
       if (err) return reject(err);
@@ -39,7 +75,7 @@ function createFile (filename, data) {
 }
 
 
-function readFile (filename) {
+function readFile(filename) {
   return new Promise((resolve, reject) => {
     fs.readFile(filename, (err, data) => {
       if (err) return reject(err);

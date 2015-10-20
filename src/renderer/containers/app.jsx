@@ -11,28 +11,24 @@ import './app.css';
 class AppContainer extends Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
     routeParams: PropTypes.object.isRequired,
     location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired
+      pathname: PropTypes.string.isRequired,
     }),
-    params: PropTypes.shape({
-      userLogin: PropTypes.string,
-      repoName: PropTypes.string
-    }).isRequired,
-    children: PropTypes.node
-  }
+    children: PropTypes.node,
+    queryResult: PropTypes.object,
+  };
 
   static contextTypes = {
-    history: PropTypes.object.isRequired
-  }
+    history: PropTypes.object.isRequired,
+  };
 
   componentDidMount() {
     const { dispatch } = this.props;
     this.menu = new Menu({
-      queryActions: bindActionCreators(QueryActions, dispatch)
+      queryActions: bindActionCreators(QueryActions, dispatch),
     });
 
     // wait a bit more until remove the splash screen
@@ -57,7 +53,7 @@ class AppContainer extends Component {
 
 function mapStateToProps(state) {
   return {
-    queryResult: state.queryResult
+    queryResult: state.queryResult,
   };
 }
 

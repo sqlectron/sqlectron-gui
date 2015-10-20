@@ -9,6 +9,6 @@ const servers = remote.require('./services/servers');
 export default {
   getDBSession,
   services: {
-    servers
-  }
+    servers,
+  },
 };

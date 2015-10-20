@@ -1,0 +1,314 @@
+import React, { Component, PropTypes } from 'react';
+import Select from 'react-select';
+import ConfirmModal from './confim-modal.jsx';
+
+
+require('react-select/dist/default.css');
+require('./override-select.css');
+
+
+const CLIENTS = [{
+  value: 'mysql',
+  logo: 'https://www.mysql.com/common/logos/logo-mysql-170x115.png',
+  label: 'MySQL',
+}, {
+  value: 'postgresql',
+  logo: 'https://wiki.postgresql.org/images/3/30/PostgreSQL_logo.3colors.120x120.png',
+  label: 'PostgreSQL',
+}];
+
+
+export default class ServerModalForm extends Component {
+  static propTypes = {
+    onSaveClick: PropTypes.func.isRequired,
+    onCancelClick: PropTypes.func.isRequired,
+    onRemoveClick: PropTypes.func.isRequired,
+    server: PropTypes.object,
+    error: PropTypes.object,
+  }
+
+  constructor(props, context) {
+    super(props, context);
+    const server = props.server || {};
+    this.state = {
+      ...server,
+      isNew: !!Object.keys(server).length,
+    };
+  }
+
+  componentDidMount() {
+    $(this.refs.serverModal).modal({
+      closable: false,
+      detachable: false,
+      allowMultiple: true,
+      onDeny: () => {
+        this.props.onCancelClick();
+        return true;
+      },
+      onApprove: () => {
+        this.props.onSaveClick(this.mapStateToServer(this.state));
+        return false;
+      },
+    }).modal('show');
+
+    $(this.refs.sshTunnel).checkbox({
+      onChecked: () => this.setState({ ssh: {} }),
+      onUnchecked: () => this.setState({ ssh: null }),
+    });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({ error: nextProps.error });
+  }
+
+  componentWillUnmount() {
+    $(this.refs.serverModal).modal('hide');
+  }
+
+  onRemoveCancelClick() {
+    this.setState({ confirmingRemove: false });
+  }
+
+  onRemoveConfirmClick() {
+    this.props.onRemoveClick();
+  }
+
+  onRemoveOpenClick() {
+    this.setState({ confirmingRemove: true });
+  }
+
+  mapStateToServer(state) {
+    const server = {
+      name: state.name,
+      client: state.client,
+      host: state.host,
+      port: state.port,
+      user: state.user,
+      password: state.password,
+      database: state.database,
+    };
+    if (!this.state.ssh) { return server; }
+
+    server.ssh = state.ssh;
+    return server;
+  }
+
+  highlightError(name) {
+    const { error } = this.state;
+    return error && error[name] ? 'error' : '';
+  }
+
+  handleChange(event) {
+    const newState = {};
+    const value = event.target.value;
+    const [name1, name2] = event.target.name.split('.');
+
+    if (name1 === 'ssh') {
+      newState.ssh = { ...this.state.ssh, [name2]: value };
+    } else {
+      newState[name1] = value;
+    }
+
+    return this.setState(newState);
+  }
+
+  renderClientItem({ label, logo }) {
+    return (
+      <div>
+        <img src={logo} style={{width: '16px'}} /> {label}
+      </div>
+    );
+  }
+
+  render() {
+    const { confirmingRemove, isNew } = this.state;
+    const isSSHChecked = !!this.state.ssh;
+    const ssh = this.state.ssh || {};
+
+    return (
+      <div id="server-modal" className="ui modal" ref="serverModal">
+        <div className="header">
+          Server Information
+        </div>
+        <div className="content">
+          <form className="ui form">
+            <div className="fields">
+              <div className={`ten wide field ${this.highlightError('name')}`}>
+                <label>Name</label>
+                <input type="text"
+                  name="name"
+                  maxLength="250"
+                  placeholder="Name"
+                  value={this.state.name}
+                  onChange={::this.handleChange} />
+              </div>
+              <div className={`six wide field ${this.highlightError('client')}`}>
+                <label>Client</label>
+                <Select
+                  name="client"
+        					placeholder="Select"
+        					options={CLIENTS}
+                  onChange={client => this.setState({ client })}
+                  optionRenderer={this.renderClientItem}
+                  valueRenderer={this.renderClientItem}
+                  value={this.state.client} />
+              </div>
+            </div>
+            <div className="field">
+              <label>Server Address</label>
+              <div className="fields">
+                <div className={`seven wide field ${this.highlightError('host')}`}>
+                  <input type="text"
+                    name="host"
+                    maxLength="250"
+                    placeholder="Host"
+                    value={this.state.host}
+                    onChange={::this.handleChange}
+                    disabled={this.state.socketPath} />
+                </div>
+                <div className={`three wide field ${this.highlightError('port')}`}>
+                  <input type="number"
+                    name="port"
+                    maxLength="5"
+                    placeholder="Port"
+                    value={this.state.port}
+                    onChange={::this.handleChange}
+                    disabled={this.state.socketPath} />
+                </div>
+                <div className={`six wide field ${this.highlightError('socketPath')}`}>
+                  <input type="text"
+                    name="socketPath"
+                    maxLength="250"
+                    placeholder="Unix socket path"
+                    value={this.state.socketPath}
+                    onChange={::this.handleChange}
+                    disabled={(this.state.host || this.state.port)} />
+                </div>
+              </div>
+            </div>
+            <div className="fields">
+              <div className={`five wide field ${this.highlightError('user')}`}>
+                <label>User</label>
+                <input type="text"
+                  name="user"
+                  maxLength="55"
+                  placeholder="User"
+                  value={this.state.user}
+                  onChange={::this.handleChange} />
+              </div>
+              <div className={`five wide field ${this.highlightError('password')}`}>
+                <label>Password</label>
+                <input type="password"
+                  name="password"
+                  maxLength="55"
+                  placeholder="Password"
+                  value={this.state.password}
+                  onChange={::this.handleChange} />
+              </div>
+              <div className={`six wide field ${this.highlightError('database')}`}>
+                <label>Database</label>
+                <input type="text"
+                  name="database"
+                  maxLength="100"
+                  placeholder="Database"
+                  value={this.state.database}
+                  onChange={::this.handleChange} />
+              </div>
+            </div>
+             <div className="ui segment">
+              <div className="one field">
+                <div className="ui toggle checkbox" ref="sshTunnel">
+                  <input type="checkbox"
+                    name="sshTunnel"
+                    tabIndex="0"
+                    className="hidden"
+                    defaultChecked={isSSHChecked} />
+                  <label>SSH Tunnel</label>
+                </div>
+              </div>
+              <div className="field">
+                <label>SSH Address</label>
+                <div className="fields">
+                  <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
+                    <input type="text"
+                      name="ssh.host"
+                      maxLength="250"
+                      placeholder="Host"
+                      disabled={!isSSHChecked}
+                      value={ssh.host}
+                      onChange={::this.handleChange} />
+                  </div>
+                  <div className={`three wide field ${this.highlightError('ssh.port')}`}>
+                    <input type="number"
+                      name="ssh.port"
+                      maxLength="5"
+                      placeholder="Port"
+                      disabled={!isSSHChecked}
+                      value={ssh.port}
+                      onChange={::this.handleChange} />
+                  </div>
+                </div>
+              </div>
+              <div className="fields">
+                <div className={`five wide field ${this.highlightError('ssh.user')}`}>
+                  <label>User</label>
+                  <input type="text"
+                    name="ssh.user"
+                    maxLength="55"
+                    placeholder="User"
+                    disabled={!isSSHChecked}
+                    value={ssh.user}
+                    onChange={::this.handleChange} />
+                </div>
+                <div className={`five wide field ${this.highlightError('ssh.password')}`}>
+                  <label>Password</label>
+                  <input type="password"
+                    name="ssh.password"
+                    maxLength="55"
+                    placeholder="Password"
+                    disabled={(!isSSHChecked || ssh.privateKey)}
+                    value={ssh.password}
+                    onChange={::this.handleChange} />
+                </div>
+                <div className={`six wide field ${this.highlightError('ssh.privateKey')}`}>
+                  <label>Private Key</label>
+                  <input type="text"
+                    name="ssh.privateKey"
+                    maxLength="250"
+                    placeholder="~/.ssh/id_rsa"
+                    disabled={(!isSSHChecked || ssh.password )}
+                    value={ssh.privateKey}
+                    onChange={::this.handleChange} />
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div className="actions">
+          <div className="small ui black deny right labeled icon button"
+            tabIndex="0">
+            Cancel
+            <i className="ban icon"></i>
+          </div>
+          <div className="small ui positive right labeled icon button"
+            tabIndex="0">
+            Save
+            <i className="checkmark icon"></i>
+          </div>
+          {isNew && <div className="small ui red right labeled icon button"
+            tabIndex="0"
+            onClick={::this.onRemoveOpenClick}>
+            Remove
+            <i className="trash icon"></i>
+          </div>}
+        </div>
+        {confirmingRemove && <ConfirmModal
+          context="#server-modal"
+          title={`Delete ${this.state.name}`}
+          message="Are you sure you want to remove this server connection?"
+          onCancelClick={::this.onRemoveCancelClick}
+          onRemoveClick={::this.onRemoveConfirmClick} />}
+      </div>
+    );
+  }
+}

@@ -2,7 +2,7 @@ import conn from 'sqlectron-db';
 
 
 let connection = null;
-export async function getDBSession () {
+export async function getDBSession() {
   if (connection) { return connection; }
   try {
     // connection = await conn('mysql', {
@@ -19,8 +19,8 @@ export async function getDBSession () {
       database: 'postgres',
     });
     return connection;
-  } catch (e) {
-    console.error('error', e.stack || e.message || e);
-    throw e;
+  } catch (err) {
+    console.error('error', err.stack || err.message || err);
+    throw err;
   }
 }

@@ -10,22 +10,17 @@ import Header from '../components/header.jsx';
 
 
 const STYLES = {
-  wrapper: {
-    paddingTop: '50px'
-  },
-  header: {
-
-  },
-  container: {
-    display: 'flex'
-  },
-  sidebar: {
-    width: '220px'
-  },
-  content: {
-    flex: 1
-  }
+  wrapper: { paddingTop: '50px' },
+  container: { display: 'flex' },
+  sidebar: { width: '220px' },
+  content: { flex: 1 },
 };
+
+
+const BREADCRUMB = [
+  { icon: 'server', label: 'server-name' },
+  { icon: 'database', label: 'database-name' },
+];
 
 
 export default class DatabaseListContainer extends Component {
@@ -37,18 +32,14 @@ export default class DatabaseListContainer extends Component {
     route: PropTypes.object.isRequired,
     routeParams: PropTypes.object.isRequired,
     location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired
+      pathname: PropTypes.string.isRequired,
     }),
-    params: PropTypes.shape({
-      userLogin: PropTypes.string,
-      repoName: PropTypes.string
-    }).isRequired,
-    children: PropTypes.node
-  }
+    children: PropTypes.node,
+  };
 
   static contextTypes = {
-    history: PropTypes.object.isRequired
-  }
+    history: PropTypes.object.isRequired,
+  };
 
   render() {
     const { databases, query, dispatch } = this.props;
@@ -58,7 +49,7 @@ export default class DatabaseListContainer extends Component {
     return (
       <div style={STYLES.wrapper}>
         <div style={STYLES.header}>
-          <Header />
+          <Header items={BREADCRUMB} includeButtonCloseConn />
         </div>
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>
@@ -76,14 +67,15 @@ export default class DatabaseListContainer extends Component {
       </div>
     );
   }
-};
+}
 
 
 function mapStateToProps(state) {
   return {
     databases: state.databases,
-    query: state.query
+    query: state.query,
   };
 }
+
 
 export default connect(mapStateToProps)(DatabaseListContainer);

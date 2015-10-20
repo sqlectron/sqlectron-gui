@@ -1,6 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import LoadingPage from './loading.jsx';
-import { Link } from 'react-router';
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/github';
@@ -9,21 +7,21 @@ const STYLES = {
   queryBox: {
   },
   resultBox: {
-    background: '#ececec'
-  }
-}
+    background: '#ececec',
+  },
+};
 
 export default class DatabaseList extends Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
   static propTypes = {
     query: PropTypes.object.isRequired,
     actions: PropTypes.object.isRequired
   }
 
-  onExecQueryClick(database) {
+  constructor(props, context) {
+    super(props, context);
+  }
+
+  onExecQueryClick() {
     const { actions } = this.props;
     const sql = React.findDOMNode(this.refs.queryBoxTextarea).value;
     actions.executeQuery(sql);
@@ -48,7 +46,7 @@ export default class DatabaseList extends Component {
         <thead>
           <tr>
             {Object.keys((query.rows[0] || {})).map(name => {
-              return <th>{name}</th>
+              return <th>{name}</th>;
             })}
           </tr>
         </thead>
@@ -56,7 +54,7 @@ export default class DatabaseList extends Component {
           {query.rows.map(row => {
             return (<tr>
               {Object.keys(row).map(name => {
-                return (<td>{row[name]}</td>)
+                return <td>{row[name]}</td>;
               })}
             </tr>);
           })}
@@ -66,7 +64,7 @@ export default class DatabaseList extends Component {
   }
 
   render() {
-    const { query, actions } = this.props;
+    const { query } = this.props;
     return (
       <div>
         <div>
@@ -84,7 +82,7 @@ export default class DatabaseList extends Component {
                 onChange={::this.onSQLChange}
                 />
             </div>
-            <div className="ui secondary menu" style={{marginTop:0}}>
+            <div className="ui secondary menu" style={{marginTop: 0}}>
               <div className="right menu">
                 <div className="item">
                   <div className="ui buttons">
@@ -104,4 +102,4 @@ export default class DatabaseList extends Component {
       </div>
     );
   }
-};
+}
