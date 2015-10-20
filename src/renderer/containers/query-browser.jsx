@@ -10,22 +10,17 @@ import Header from '../components/header.jsx';
 
 
 const STYLES = {
-  wrapper: {
-    paddingTop: '50px',
-  },
-  header: {
-
-  },
-  container: {
-    display: 'flex',
-  },
-  sidebar: {
-    width: '220px',
-  },
-  content: {
-    flex: 1,
-  },
+  wrapper: { paddingTop: '50px' },
+  container: { display: 'flex' },
+  sidebar: { width: '220px' },
+  content: { flex: 1 },
 };
+
+
+const BREADCRUMB = [
+  { icon: 'server', label: 'server-name' },
+  { icon: 'database', label: 'database-name' },
+];
 
 
 export default class DatabaseListContainer extends Component {
@@ -54,7 +49,7 @@ export default class DatabaseListContainer extends Component {
     return (
       <div style={STYLES.wrapper}>
         <div style={STYLES.header}>
-          <Header />
+          <Header items={BREADCRUMB} includeButtonCloseConn />
         </div>
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>

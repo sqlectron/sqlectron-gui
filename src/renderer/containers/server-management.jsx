@@ -1,9 +1,19 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as ServersActions from '../actions/servers.js';
+import Header from '../components/header.jsx';
 import ServerList from '../components/server-list.jsx';
 import ServerModalForm from '../components/server-modal-form.jsx';
 import ServerFilter from '../components/server-filter.jsx';
+
+
+const STYLES = {
+  wrapper: { paddingTop: '50px' },
+  container: { padding: '10px' },
+};
+
+
+const BREADCRUMB = [{ icon: 'server', label: 'servers'}];
 
 
 export default class ServerManagerment extends Component {
@@ -72,24 +82,26 @@ export default class ServerManagerment extends Component {
     const selected = selectedId !== null ? servers.items[selectedId] : {};
 
     return (
-      <div className="ui" style={{padding: '1em'}}>
-        <h1 className="ui header">Servers</h1>
-        <div className="ui divider"></div>
+      <div style={STYLES.wrapper}>
+        <div style={STYLES.header}>
+          <Header items={BREADCRUMB} />
+        </div>
+        <div style={STYLES.container}>
+          <ServerFilter
+            onFilterChange={::this.onFilterChange}
+            onAddClick={::this.onAddClick} />
 
-        <ServerFilter
-          onFilterChange={::this.onFilterChange}
-          onAddClick={::this.onAddClick} />
+          <ServerList servers={servers.items}
+                      onEditClick={::this.onEditClick}
+                      onConnectClick={::this.onConnectClick} />
 
-        <ServerList servers={servers.items}
-                    onEditClick={::this.onEditClick}
-                    onConnectClick={::this.onConnectClick} />
-
-        {modalVisible && <ServerModalForm
-               server={selected}
-               error={servers.error}
-               onSaveClick={::this.onSaveClick}
-               onCancelClick={::this.onCancelClick}
-               onRemoveClick={::this.onRemoveClick} />}
+          {modalVisible && <ServerModalForm
+                 server={selected}
+                 error={servers.error}
+                 onSaveClick={::this.onSaveClick}
+                 onCancelClick={::this.onCancelClick}
+                 onRemoveClick={::this.onRemoveClick} />}
+        </div>
       </div>
     );
   }
