@@ -29,7 +29,11 @@ export default class ServerModalForm extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = { ...(props.server || {}) };
+    const server = props.server || {};
+    this.state = {
+      ...server,
+      isNew: !!Object.keys(server).length,
+    };
   }
 
   componentDidMount() {
@@ -117,7 +121,7 @@ export default class ServerModalForm extends Component {
   }
 
   render() {
-    const { confirmingRemove } = this.state;
+    const { confirmingRemove, isNew } = this.state;
     const isSSHChecked = !!this.state.ssh;
     const ssh = this.state.ssh || {};
 
@@ -291,12 +295,12 @@ export default class ServerModalForm extends Component {
             Save
             <i className="checkmark icon"></i>
           </div>
-          <div className="small ui red right labeled icon button"
+          {isNew && <div className="small ui red right labeled icon button"
             tabIndex="0"
             onClick={::this.onRemoveOpenClick}>
             Remove
             <i className="trash icon"></i>
-          </div>
+          </div>}
         </div>
         {confirmingRemove && <ConfirmModal
           context="#server-modal"
