@@ -44,7 +44,7 @@ export default class ServerList extends Component {
               <div key={id} className="wide column">
                 <div className="ui">
                   <ServerListItem
-                    onConnectClick={onConnectClick}
+                    onConnectClick={() => onConnectClick(id, server) }
                     onEditClick={() => onEditClick(id) }
                     server={server} />
                   </div>

@@ -8,7 +8,7 @@ function renderBreadcrumb(items) {
       {items.map(({icon, label}, index) => {
         const isLast = (index !== items.length - 1);
         return (
-          <span key={label}>
+          <span key={index + label}>
             <i className={`${icon} icon`}></i>
             <a className={`section ${isLast ? 'active' : ''}`}>
               {label}

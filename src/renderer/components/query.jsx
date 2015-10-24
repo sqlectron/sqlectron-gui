@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { debounce } from 'lodash';
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/github';
@@ -11,10 +12,11 @@ const STYLES = {
   },
 };
 
-export default class DatabaseList extends Component {
+export default class Query extends Component {
   static propTypes = {
     query: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired
+    onExecQueryClick: PropTypes.func.isRequired,
+    onSQLChange: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -22,49 +24,71 @@ export default class DatabaseList extends Component {
   }
 
   onExecQueryClick() {
-    const { actions } = this.props;
-    const sql = React.findDOMNode(this.refs.queryBoxTextarea).value;
-    actions.executeQuery(sql);
-  }
-
-  onSQLChange(newValue) {
-    const { actions } = this.props;
-    actions.updateSQL(newValue);
+    this.props.onExecQueryClick(this.props.query.query);
   }
 
   onDiscQueryClick() {
-    React.findDOMNode(this.refs.queryBoxTextarea).value = '';
+    this.refs.queryBoxTextarea.value = '';
   }
 
-  buildQueryResult(query) {
+  renderQueryResult() {
+    const { query } = this.props;
     if (query.error) {
       return <pre>{JSON.stringify(query.error, null, 2)}</pre>;
+    }
+
+    if (!query.result) {
+      return null;
     }
 
     return (
       <table className="ui celled table">
         <thead>
           <tr>
-            {Object.keys((query.rows[0] || {})).map(name => {
-              return <th>{name}</th>;
-            })}
+            {query.result.fields.map(({ name }) => (
+              <th key={name}>{name}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {query.rows.map(row => {
-            return (<tr>
-              {Object.keys(row).map(name => {
-                return <td>{row[name]}</td>;
-              })}
-            </tr>);
-          })}
+          {this.renderQueryResultRows()}
         </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan={query.result.fields.length}>
+              Rows: {query.result.rowCount}
+            </td>
+          </tr>
+        </tfoot>
       </table>
     );
   }
 
-  render() {
+  renderQueryResultRows() {
     const { query } = this.props;
+    if (!query.result.rowCount) {
+      return (
+        <tr>
+          <td colSpan={query.result.fields.length}>
+            Not results found
+          </td>
+        </tr>
+      );
+    }
+
+    return query.result.rows.map((row, index) => {
+      return (
+        <tr key={index}>
+          {Object.keys(row).map(name => {
+            return <td key={name}>{row[name]}</td>;
+          })}
+        </tr>
+      );
+    });
+  }
+
+  render() {
+    const { query, onSQLChange } = this.props;
     return (
       <div>
         <div>
@@ -78,8 +102,8 @@ export default class DatabaseList extends Component {
                 height="10em"
                 width="100%"
                 ref="queryBoxTextarea"
-                value={query && query.sql}
-                onChange={::this.onSQLChange}
+                value={query.query}
+                onChange={debounce(onSQLChange, 750)}
                 />
             </div>
             <div className="ui secondary menu" style={{marginTop: 0}}>
@@ -97,7 +121,7 @@ export default class DatabaseList extends Component {
         </div>
 
         <div style={STYLES.resultBox}>
-          {::this.buildQueryResult(query)}
+          {::this.renderQueryResult()}
         </div>
       </div>
     );

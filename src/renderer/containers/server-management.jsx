@@ -52,8 +52,8 @@ export default class ServerManagerment extends Component {
     }
   }
 
-  onConnectClick(server) {
-    this.props.history.pushState(null, `/${server.name}`);
+  onConnectClick(id, { database }) {
+    this.props.history.pushState(null, `/server/${id}/database/${database}`);
   }
 
   onAddClick() {
