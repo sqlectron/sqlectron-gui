@@ -1,18 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { connect as connectDatabase } from '../actions/connections';
+import { fetchDatabasesIfNeeded } from '../actions/databases';
+import { fetchTablesIfNeeded } from '../actions/tables';
+import { executeQueryIfNeeded } from '../actions/queries';
 import * as DatabaseActions from '../actions/databases.js';
-// import * as QueryActions from '../actions/query.js';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
-// import Query from '../components/query.jsx';
 import Header from '../components/header.jsx';
-import {
-  connect as connectDatabase,
-  fetchTablesIfNeeded,
-  executeQueryIfNeeded,
-  fetchDatabasesIfNeeded,
-} from '../actions/db';
 
 
 const STYLES = {
@@ -144,26 +140,17 @@ export default class ConnectionContainer extends Component {
 }
 
 
-// function mapStateToProps(state) {
-//   return {
-//     databases: state.databases,
-//     query: state.query,
-//   };
-// }
-
-
 function mapStateToProps (state, props) {
-  // debugger;
   // console.info('conn:mapStateToProps', state, props);
-  const { connection, databases, tables } = state;
+  const { connections, databases, tables } = state;
 
   const isSameServer =
-    connection
-    && connection.server
-    && parseInt(props.params.id, 10) === connection.server.id
-    && props.params.database === connection.database;
+    connections
+    && connections.server
+    && parseInt(props.params.id, 10) === connections.server.id
+    && props.params.database === connections.database;
 
-  return { ...connection, isSameServer: !!isSameServer, databases, tables };
+  return { ...connections, isSameServer: !!isSameServer, databases, tables };
 }
 
 

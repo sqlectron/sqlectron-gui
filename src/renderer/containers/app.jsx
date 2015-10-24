@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as QueryActions from '../actions/query.js';
 import Menu from '../menu.jsx';
 
 import 'semantic-ui-css/semantic.css';
@@ -26,9 +24,10 @@ class AppContainer extends Component {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    // const { dispatch } = this.props;
     this.menu = new Menu({
-      queryActions: bindActionCreators(QueryActions, dispatch),
+      // queryActions: bindActionCreators(QueryActions, dispatch),
+      queryActions: {},
     });
 
     // wait a bit more until remove the splash screen

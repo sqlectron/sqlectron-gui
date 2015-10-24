@@ -1,11 +1,4 @@
-import {
-  LOAD_SERVERS_SUCCESS,
-  SAVE_SERVER_SUCCESS,
-  SAVE_SERVER_FAILURE,
-  REMOVE_SERVER_SUCCESS,
-  REMOVE_SERVER_FAILURE,
-  FILTER_SERVERS,
-} from '../actions/types';
+import * as types from '../actions/servers';
 
 
 const INITIAL_STATE = {
@@ -15,30 +8,30 @@ const INITIAL_STATE = {
 
 export default function servers(state = INITIAL_STATE, action) {
   switch (action.type) {
-  case LOAD_SERVERS_SUCCESS:
+  case types.LOAD_SERVERS_SUCCESS:
     return {
       ...state,
       items: loadAll(action.servers),
     };
-  case FILTER_SERVERS:
+  case types.FILTER_SERVERS:
     return {
       ...state,
       items: filter(state.items, action.name),
     };
-  case SAVE_SERVER_SUCCESS:
+  case types.SAVE_SERVER_SUCCESS:
     return {
       ...state,
       items: save(state.items, action.server, action.id),
       error: null,
     };
-  case REMOVE_SERVER_SUCCESS:
+  case types.REMOVE_SERVER_SUCCESS:
     return {
       ...state,
       items: remove(state.items, action.id),
       error: null,
     };
-  case SAVE_SERVER_FAILURE:
-  case REMOVE_SERVER_FAILURE: {
+  case types.SAVE_SERVER_FAILURE:
+  case types.REMOVE_SERVER_FAILURE: {
     return {
       ...state,
       error: action.error.validationErrors,

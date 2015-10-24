@@ -1,16 +1,16 @@
 import { combineReducers } from 'redux';
 import databases from './databases';
 import servers from './servers';
-import query from './query';
-import connection from './connection';
+import queries from './queries';
+import connections from './connections';
 import tables from './tables';
 
 
 const rootReducer = combineReducers({
   databases,
   servers,
-  query,
-  connection,
+  queries,
+  connections,
   tables,
 });
 

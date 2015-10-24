@@ -1,4 +1,5 @@
-import * as types from '../actions/db';
+import * as connTypes from '../actions/connections';
+import * as types from '../actions/databases';
 
 
 export default function (state = {
@@ -7,13 +8,13 @@ export default function (state = {
   items: [],
 }, action) {
   switch (action.type) {
-  case types.DB_CONNECT_SUCCESS: {
+  case connTypes.CONNECTION_SUCCESS: {
     return { ...state, items: [], didInvalidate: true };
   }
-  case types.DB_FETCH_DATABASES_REQUEST: {
+  case types.FETCH_DATABASES_REQUEST: {
     return { ...state, isFetching: true, didInvalidate: false, error: null };
   }
-  case types.DB_FETCH_DATABASES_SUCCESS: {
+  case types.FETCH_DATABASES_SUCCESS: {
     return {
       ...state,
       isFetching: false,
@@ -23,7 +24,7 @@ export default function (state = {
       error: null,
     };
   }
-  case types.DB_FETCH_DATABASES_FAILURE: {
+  case types.FETCH_DATABASES_FAILURE: {
     return {
       ...state,
       isFetching: false,

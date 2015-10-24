@@ -10,7 +10,6 @@ export default function(serverInfo) {
   return new Promise(async (resolve, reject) => {
     debug('building ssh tunnel configuration %j', serverInfo);
     const config = await _configTunnel(serverInfo);
-    debug('ssh tunnel configuration %j', config);
 
     const connections = [];
 

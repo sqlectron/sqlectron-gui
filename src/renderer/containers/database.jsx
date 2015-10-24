@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Query from '../components/query.jsx';
-import {
-  executeQueryIfNeeded,
-} from '../actions/db';
+import { executeQueryIfNeeded, updateQuery } from '../actions/queries';
 
 
 export default class DatabaseContainer extends Component {
@@ -13,7 +11,7 @@ export default class DatabaseContainer extends Component {
     params: PropTypes.object.isRequired,
 
     tables: PropTypes.any,
-    query: PropTypes.any,
+    queries: PropTypes.any,
   };
 
   static contextTypes = {
@@ -32,8 +30,8 @@ export default class DatabaseContainer extends Component {
     this.handleEvents(nextProps);
   }
 
-  onSQLChange () {
-    console.log('onSQLChange');
+  onSQLChange (sqlQuery) {
+    this.props.dispatch(updateQuery(sqlQuery));
   }
 
   handleEvents (/* { tables, query } */) {
@@ -72,10 +70,10 @@ export default class DatabaseContainer extends Component {
   }
 
   render() {
-    const { query } = this.props;
+    const { queries } = this.props;
 
     return (
-      <Query query={query}
+      <Query query={queries}
         onExecQueryClick={::this.handleExecuteQuery}
         onSQLChange={::this.onSQLChange} />
     );
@@ -86,7 +84,7 @@ export default class DatabaseContainer extends Component {
 function mapStateToProps (state) {
   return {
     tables: state.tables,
-    query: state.query,
+    queries: state.queries,
   };
 }
 

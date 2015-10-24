@@ -1,17 +1,17 @@
-import * as types from '../actions/db';
+import * as types from '../actions/connections';
 
 
 export default function(state = {}, action) {
   switch (action.type) {
-  case types.DB_CONNECT_REQUEST: {
+  case types.CONNECTION_REQUEST: {
     const { server, database } = action;
     return { connected: false, connecting: true, server, database };
   }
-  case types.DB_CONNECT_SUCCESS: {
+  case types.CONNECTION_SUCCESS: {
     if (!_isSameConnection(state, action)) return state;
     return { ...state, connected: true, connecting: false };
   }
-  case types.DB_CONNECT_FAILURE: {
+  case types.CONNECTION_FAILURE: {
     if (!_isSameConnection(state, action)) return state;
     return { ...state, connected: false, connecting: false, error: action.error };
   }
