@@ -2,11 +2,14 @@ import * as connTypes from '../actions/connections';
 import * as types from '../actions/tables';
 
 
-export default function (state = {
+const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
   itemsByDatabase: {},
-}, action) {
+};
+
+
+export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
   case connTypes.CONNECTION_SUCCESS: {
     // return { ...state, itemsByDatabase: {}, didInvalidate: true };
