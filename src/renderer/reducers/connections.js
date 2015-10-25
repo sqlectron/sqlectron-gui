@@ -1,7 +1,10 @@
 import * as types from '../actions/connections';
 
 
-export default function(state = {}, action) {
+const INITIAL_STATE = {};
+
+
+export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
   case types.CONNECTION_REQUEST: {
     const { server, database } = action;
