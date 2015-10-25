@@ -84,13 +84,19 @@ export default class ServerManagerment extends Component {
   }
 
   onFilterChange(event) {
-    this.props.dispatch(ServersActions.filterServers(event.target.value));
+    this.setState({ filter: event.target.value });
+  }
+
+  filterServers(name, servers) {
+    const regex = RegExp(name, 'i');
+    return servers.filter(srv => regex.test(srv.name));
   }
 
   render() {
-    const { modalVisible, selectedId } = this.state;
+    const { modalVisible, selectedId, filter } = this.state;
     const { servers } = this.props;
     const selected = selectedId !== null ? servers.items[selectedId] : {};
+    const filteredServers = this.filterServers(filter, servers.items);
 
     return (
       <div style={STYLES.wrapper}>
@@ -102,7 +108,7 @@ export default class ServerManagerment extends Component {
             onFilterChange={::this.onFilterChange}
             onAddClick={::this.onAddClick} />
 
-          <ServerList servers={servers.items}
+          <ServerList servers={filteredServers}
                       onEditClick={::this.onEditClick}
                       onConnectClick={::this.onConnectClick} />
 

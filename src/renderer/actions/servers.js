@@ -10,7 +10,6 @@ export const SAVE_SERVER_FAILURE = 'SAVE_SERVER_FAILURE';
 export const REMOVE_SERVER_REQUEST = 'REMOVE_SERVER_REQUEST';
 export const REMOVE_SERVER_SUCCESS = 'REMOVE_SERVER_SUCCESS';
 export const REMOVE_SERVER_FAILURE = 'REMOVE_SERVER_FAILURE';
-export const FILTER_SERVERS = 'FILTER_SERVERS';
 
 
 export function loadServers() {
@@ -27,6 +26,7 @@ export function loadServers() {
     }
   };
 }
+
 
 export function saveServer ({ id, server }) {
   return async dispatch => {
@@ -46,6 +46,7 @@ export function saveServer ({ id, server }) {
   };
 }
 
+
 export function removeServer ({ id }) {
   return async dispatch => {
     dispatch({ type: REMOVE_SERVER_REQUEST, id });
@@ -60,9 +61,4 @@ export function removeServer ({ id }) {
       dispatch({ type: REMOVE_SERVER_FAILURE, error });
     }
   };
-}
-
-
-export function filterServers(name) {
-  return { type: FILTER_SERVERS, name };
 }

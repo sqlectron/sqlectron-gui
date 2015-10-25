@@ -11,12 +11,7 @@ export default function servers(state = INITIAL_STATE, action) {
   case types.LOAD_SERVERS_SUCCESS:
     return {
       ...state,
-      items: loadAll(action.servers),
-    };
-  case types.FILTER_SERVERS:
-    return {
-      ...state,
-      items: filter(state.items, action.name),
+      items: action.servers,
     };
   case types.SAVE_SERVER_SUCCESS:
     return {
@@ -40,26 +35,6 @@ export default function servers(state = INITIAL_STATE, action) {
   default:
     return state;
   }
-}
-
-
-function loadAll(items) {
-  return items.map(item => {
-    return { ...item, visible: true };
-  });
-}
-
-
-function filter(items, name) {
-  if (!name) { return loadAll(items); }
-
-  const regex = RegExp(name, 'i');
-  return items.map(db => {
-    return {
-      ...db,
-      visible: regex.test(db.name),
-    };
-  });
 }
 
 

@@ -16,7 +16,7 @@ export default class ServerList extends Component {
 
   groupItemsInRows(items) {
     const itemsPerRow = 4;
-    return items.filter(item => item.visible).reduce((rows, item, index) => {
+    return items.reduce((rows, item, index) => {
       const data = { id: index, server: item };
 
       const position = Math.floor(index / itemsPerRow);
