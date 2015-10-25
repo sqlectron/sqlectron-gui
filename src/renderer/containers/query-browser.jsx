@@ -20,7 +20,7 @@ const STYLES = {
 };
 
 
-export default class ConnectionContainer extends Component {
+export default class QueryBrowserContainer extends Component {
   static propTypes = {
     databases: PropTypes.object.isRequired,
     tables: PropTypes.object.isRequired,
@@ -43,6 +43,11 @@ export default class ConnectionContainer extends Component {
   static contextTypes = {
     history: PropTypes.object.isRequired,
   };
+
+  constructor(props, context) {
+    super(props, context);
+    this.state = {};
+  }
 
   componentWillMount () {
     const { dispatch, params, isSameServer, error } = this.props;
@@ -84,6 +89,10 @@ export default class ConnectionContainer extends Component {
     this.props.dispatch(updateQuery(sqlQuery));
   }
 
+  onFilterChange (value) {
+    this.setState({ filter: value });
+  }
+
   handleProps (props) {
     // const { dispatch, connected, connecting, error } = props;
     const { connected, connecting, error } = props;
@@ -113,10 +122,16 @@ export default class ConnectionContainer extends Component {
     this.props.dispatch(executeQueryIfNeeded(sqlQuery));
   }
 
+  filterDatabases(name, databases) {
+    const regex = RegExp(name, 'i');
+    return databases.filter(db => regex.test(db.name));
+  }
+
   render() {
+    const { filter } = this.state;
     const { dispatch, params: { database } } = this.props;
     const dbActions = bindActionCreators(DatabaseActions, dispatch);
-    const { children, connected, server, isSameServer, databases, tables, queries } = this.props;
+    const { connected, server, isSameServer, databases, tables, queries } = this.props;
 
     const breadcrumb = server ? [
       { icon: 'server', label: server.name },
@@ -125,6 +140,8 @@ export default class ConnectionContainer extends Component {
 
     const loading = <h1>Loading{this.state && this.state.status}</h1>;
     const isLoading = (!connected || !isSameServer);
+
+    const filteredDatabases = this.filterDatabases(filter, databases.items);
 
     return (
       <div style={STYLES.wrapper}>
@@ -136,11 +153,11 @@ export default class ConnectionContainer extends Component {
             <div style={STYLES.sidebar}>
               <div className="ui vertical menu">
                 <div className="item">
-                  <DatabaseFilter actions={dbActions} />
+                  <DatabaseFilter onFilterChange={::this.onFilterChange} />
                 </div>
                 <DatabaseList
-                  databases={databases.items}
-                  tablesByDatabase={tables && tables.itemsByDatabase}
+                  databases={filteredDatabases}
+                  tablesByDatabase={tables.itemsByDatabase}
                   actions={dbActions}
                   onSelectDatabase={::this.onSelectDatabase}
                   onSelectTable={::this.onSelectTable} />
@@ -179,4 +196,4 @@ function mapStateToProps (state, props) {
 }
 
 
-export default connect(mapStateToProps)(ConnectionContainer);
+export default connect(mapStateToProps)(QueryBrowserContainer);

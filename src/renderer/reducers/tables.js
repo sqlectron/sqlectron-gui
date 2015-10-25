@@ -12,7 +12,6 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
   case connTypes.CONNECTION_SUCCESS: {
-    // return { ...state, itemsByDatabase: {}, didInvalidate: true };
     return { ...state, didInvalidate: true };
   }
   case types.FETCH_TABLES_REQUEST: {
@@ -25,7 +24,7 @@ export default function (state = INITIAL_STATE, action) {
       didInvalidate: false,
       itemsByDatabase: {
         ...state.itemsByDatabase,
-        [action.database]: action.tables.map(name => ({ name, visible: true })),
+        [action.database]: action.tables.map(name => ({ name })),
       },
       error: null,
     };

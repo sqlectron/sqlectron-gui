@@ -31,7 +31,7 @@ export default class DatabaseList extends Component {
 
     return (<div>
       {databases.map((database, idx) =>
-        <div className="item" key={idx} style={{display: database.visible ? 'block' : 'none'}}>
+        <div className="item" key={idx}>
           <i className="grid database icon"></i>
           <span style={STYLE.database}
             onDoubleClick={() => onSelectDatabase(database)}>
@@ -42,7 +42,7 @@ export default class DatabaseList extends Component {
               return (
                 <span key={idxChild}
                   className="item"
-                  style={{...STYLE.database, textDecoration: table.visible ? 'none' : 'line-through'}}
+                  style={STYLE.database}
                   onDoubleClick={() => onSelectTable(table.name)}>
                   {table.name}
                 </span>
