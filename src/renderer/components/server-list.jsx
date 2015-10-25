@@ -16,7 +16,7 @@ export default class ServerList extends Component {
 
   groupItemsInRows(items) {
     const itemsPerRow = 4;
-    return items.filter(item => item.visible).reduce((rows, item, index) => {
+    return items.reduce((rows, item, index) => {
       const data = { id: index, server: item };
 
       const position = Math.floor(index / itemsPerRow);
@@ -44,7 +44,7 @@ export default class ServerList extends Component {
               <div key={id} className="wide column">
                 <div className="ui">
                   <ServerListItem
-                    onConnectClick={onConnectClick}
+                    onConnectClick={() => onConnectClick(id, server) }
                     onEditClick={() => onEditClick(id) }
                     server={server} />
                   </div>

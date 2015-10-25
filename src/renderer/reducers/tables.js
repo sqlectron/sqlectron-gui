@@ -1,32 +1,35 @@
 import * as connTypes from '../actions/connections';
-import * as types from '../actions/databases';
+import * as types from '../actions/tables';
 
 
 const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
-  items: [],
+  itemsByDatabase: {},
 };
 
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
   case connTypes.CONNECTION_SUCCESS: {
-    return { ...state, items: [], didInvalidate: true };
+    return { ...state, didInvalidate: true };
   }
-  case types.FETCH_DATABASES_REQUEST: {
+  case types.FETCH_TABLES_REQUEST: {
     return { ...state, isFetching: true, didInvalidate: false, error: null };
   }
-  case types.FETCH_DATABASES_SUCCESS: {
+  case types.FETCH_TABLES_SUCCESS: {
     return {
       ...state,
       isFetching: false,
       didInvalidate: false,
-      items: action.databases.map(name => ({ name })),
+      itemsByDatabase: {
+        ...state.itemsByDatabase,
+        [action.database]: action.tables.map(name => ({ name })),
+      },
       error: null,
     };
   }
-  case types.FETCH_DATABASES_FAILURE: {
+  case types.FETCH_TABLES_FAILURE: {
     return {
       ...state,
       isFetching: false,

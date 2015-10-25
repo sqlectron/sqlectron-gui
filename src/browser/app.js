@@ -1,6 +1,6 @@
-import ipc from 'ipc';
 import app from 'app';
 import BrowserWindow from 'browser-window';
+import { attachMenuToWindow } from './app-menu';
 
 const devMode = (process.argv || []).indexOf('--dev') !== -1;
 
@@ -25,15 +25,14 @@ app.on('ready', function() {
     height: 600,
   });
 
+  attachMenuToWindow(app, mainWindow);
+
   // and load the index.html of the app.
   const entryBasePath = devMode ? 'http://localhost:8080' : ('file://' + __dirname);
   mainWindow.loadUrl(entryBasePath + '/static/index.html');
 
   // Open the devtools.
   mainWindow.openDevTools();
-
-  // Allow close the app by shortcut
-  ipc.on('quit-app', () => app.quit());
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => mainWindow = null);

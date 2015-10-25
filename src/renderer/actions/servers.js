@@ -1,18 +1,15 @@
 import { services } from '../../browser/remote';
 
 
-import {
-  LOAD_SERVERS_REQUEST,
-  LOAD_SERVERS_SUCCESS,
-  LOAD_SERVERS_FAILURE,
-  SAVE_SERVER_REQUEST,
-  SAVE_SERVER_SUCCESS,
-  SAVE_SERVER_FAILURE,
-  REMOVE_SERVER_REQUEST,
-  REMOVE_SERVER_SUCCESS,
-  REMOVE_SERVER_FAILURE,
-  FILTER_SERVERS,
-} from './types';
+export const LOAD_SERVERS_REQUEST = 'LOAD_SERVERS_REQUEST';
+export const LOAD_SERVERS_SUCCESS = 'LOAD_SERVERS_SUCCESS';
+export const LOAD_SERVERS_FAILURE = 'LOAD_SERVERS_FAILURE';
+export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';
+export const SAVE_SERVER_SUCCESS = 'SAVE_SERVER_SUCCESS';
+export const SAVE_SERVER_FAILURE = 'SAVE_SERVER_FAILURE';
+export const REMOVE_SERVER_REQUEST = 'REMOVE_SERVER_REQUEST';
+export const REMOVE_SERVER_SUCCESS = 'REMOVE_SERVER_SUCCESS';
+export const REMOVE_SERVER_FAILURE = 'REMOVE_SERVER_FAILURE';
 
 
 export function loadServers() {
@@ -29,6 +26,7 @@ export function loadServers() {
     }
   };
 }
+
 
 export function saveServer ({ id, server }) {
   return async dispatch => {
@@ -48,6 +46,7 @@ export function saveServer ({ id, server }) {
   };
 }
 
+
 export function removeServer ({ id }) {
   return async dispatch => {
     dispatch({ type: REMOVE_SERVER_REQUEST, id });
@@ -62,9 +61,4 @@ export function removeServer ({ id }) {
       dispatch({ type: REMOVE_SERVER_FAILURE, error });
     }
   };
-}
-
-
-export function filterServers(name) {
-  return { type: FILTER_SERVERS, name };
 }

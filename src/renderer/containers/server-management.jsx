@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as ServersActions from '../actions/servers.js';
 import Header from '../components/header.jsx';
+import Footer from '../components/footer.jsx';
 import ServerList from '../components/server-list.jsx';
 import ServerModalForm from '../components/server-modal-form.jsx';
 import ServerFilter from '../components/server-filter.jsx';
@@ -18,6 +19,7 @@ const BREADCRUMB = [{ icon: 'server', label: 'servers'}];
 
 export default class ServerManagerment extends Component {
   static propTypes = {
+    status: PropTypes.string.isRequired,
     servers: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
@@ -52,8 +54,8 @@ export default class ServerManagerment extends Component {
     }
   }
 
-  onConnectClick(server) {
-    this.props.history.pushState(null, `/${server.name}`);
+  onConnectClick(id, { database }) {
+    this.props.history.pushState(null, `/server/${id}/database/${database}`);
   }
 
   onAddClick() {
@@ -84,13 +86,19 @@ export default class ServerManagerment extends Component {
   }
 
   onFilterChange(event) {
-    this.props.dispatch(ServersActions.filterServers(event.target.value));
+    this.setState({ filter: event.target.value });
+  }
+
+  filterServers(name, servers) {
+    const regex = RegExp(name, 'i');
+    return servers.filter(srv => regex.test(srv.name));
   }
 
   render() {
-    const { modalVisible, selectedId } = this.state;
-    const { servers } = this.props;
+    const { modalVisible, selectedId, filter } = this.state;
+    const { servers, status } = this.props;
     const selected = selectedId !== null ? servers.items[selectedId] : {};
+    const filteredServers = this.filterServers(filter, servers.items);
 
     return (
       <div style={STYLES.wrapper}>
@@ -102,7 +110,7 @@ export default class ServerManagerment extends Component {
             onFilterChange={::this.onFilterChange}
             onAddClick={::this.onAddClick} />
 
-          <ServerList servers={servers.items}
+          <ServerList servers={filteredServers}
                       onEditClick={::this.onEditClick}
                       onConnectClick={::this.onConnectClick} />
 
@@ -113,6 +121,9 @@ export default class ServerManagerment extends Component {
                  onCancelClick={::this.onCancelClick}
                  onRemoveClick={::this.onRemoveClick} />}
         </div>
+        <div style={STYLES.footer}>
+          <Footer status={status} />
+        </div>
       </div>
     );
   }
@@ -122,6 +133,7 @@ export default class ServerManagerment extends Component {
 function mapStateToProps(state) {
   return {
     servers: state.servers,
+    status: state.status,
   };
 }
 

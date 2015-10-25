@@ -8,15 +8,17 @@ import configureStore from './store/configure';
 import ServerManagementContainer from './containers/server-management.jsx';
 import QueryBrowserContainer from './containers/query-browser.jsx';
 
+
 const history = createHashHistory();
 const store = configureStore();
+
 
 ReactDOM.render(
   <Provider store={store}>
     <Router history={history}>
       <Route component={App}>
         <Route path="/" component={ServerManagementContainer} />
-        <Route path="/:name" component={QueryBrowserContainer} />
+        <Route path="/server/:id/database/:database" component={QueryBrowserContainer} />
       </Route>
     </Router>
   </Provider>,

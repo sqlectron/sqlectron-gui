@@ -4,7 +4,7 @@ import { debounce } from 'lodash';
 
 export default class DatabaseFilter extends Component {
   static propTypes = {
-    actions: PropTypes.object.isRequired,
+    onFilterChange: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -12,8 +12,7 @@ export default class DatabaseFilter extends Component {
   }
 
   onFilterChange(event) {
-    const { actions } = this.props;
-    actions.filterDatabases(event.target.value);
+    this.props.onFilterChange(event.target.value);
   }
 
   render() {
