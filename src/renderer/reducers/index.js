@@ -4,6 +4,7 @@ import servers from './servers';
 import queries from './queries';
 import connections from './connections';
 import tables from './tables';
+import status from './status';
 
 
 const rootReducer = combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   queries,
   connections,
   tables,
+  status,
 });
 
 

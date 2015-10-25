@@ -9,6 +9,7 @@ import * as DatabaseActions from '../actions/databases.js';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import Header from '../components/header.jsx';
+import Footer from '../components/footer.jsx';
 import Query from '../components/query.jsx';
 
 
@@ -22,6 +23,7 @@ const STYLES = {
 
 export default class QueryBrowserContainer extends Component {
   static propTypes = {
+    status: PropTypes.string.isRequired,
     databases: PropTypes.object.isRequired,
     tables: PropTypes.object.isRequired,
     queries: PropTypes.object.isRequired,
@@ -51,28 +53,17 @@ export default class QueryBrowserContainer extends Component {
 
   componentWillMount () {
     const { dispatch, params, isSameServer, error } = this.props;
-    console.info('conn:componentWillMount');
-    // console.info('conn:componentWillMount:error', error);
-    // console.info('conn:componentWillMount:isSameServer', isSameServer);
     if (error || !isSameServer) dispatch(connectDatabase(params.id, params.database));
-    this.handleProps(this.props);
-    this.handleEvents(this.props);
   }
 
   componentWillReceiveProps (nextProps) {
-    console.info('conn:componentWillReceiveProps');
     const { dispatch, params, isSameServer, connecting, connected, error } = nextProps;
-    // console.info('conn:componentWillReceiveProps:connecting', connecting);
-    // console.info('conn:componentWillReceiveProps:error', error);
-    // console.info('conn:componentWillReceiveProps:isSameServer', isSameServer);
     if (!connecting && (error || !isSameServer)) {
       dispatch(connectDatabase(params.id, params.database));
     } else if (connected) {
       this.props.dispatch(fetchDatabasesIfNeeded());
       this.props.dispatch(fetchTablesIfNeeded(params.database));
     }
-    this.handleProps(nextProps);
-    this.handleEvents(this.props);
   }
 
   onSelectDatabase(database) {
@@ -93,31 +84,6 @@ export default class QueryBrowserContainer extends Component {
     this.setState({ filter: value });
   }
 
-  handleProps (props) {
-    // const { dispatch, connected, connecting, error } = props;
-    const { connected, connecting, error } = props;
-
-    const setStatus = (status) => this.setState({ status });
-
-    // if (error) dispatch(setStatus(error));
-    // if (connecting) dispatch(setStatus('Connecting to server...'));
-    // if (connected) dispatch(setStatus('Connection to server established'));
-    if (error) setStatus(error);
-    if (connecting) setStatus('Connecting to server...');
-    if (connected) setStatus('Connection to server established');
-  }
-
-  handleEvents (/* { tables, query } */) {
-    // const { dispatch } = this.props;
-    //
-    // if (tables.error) return dispatch(setStatus(tables.error));
-    // if (tables.isFetching) return dispatch(setStatus('Loading list of tables...'));
-    // if (query.isExecuting) return dispatch(setStatus('Executing query...'));
-    // if (query.error) return dispatch(setStatus(query.error));
-    //
-    // dispatch(clearStatus());
-  }
-
   handleExecuteQuery (sqlQuery) {
     this.props.dispatch(executeQueryIfNeeded(sqlQuery));
   }
@@ -129,9 +95,18 @@ export default class QueryBrowserContainer extends Component {
 
   render() {
     const { filter } = this.state;
-    const { dispatch, params: { database } } = this.props;
     const dbActions = bindActionCreators(DatabaseActions, dispatch);
-    const { connected, server, isSameServer, databases, tables, queries } = this.props;
+    const {
+      dispatch,
+      params: { database },
+      status,
+      connected,
+      server,
+      isSameServer,
+      databases,
+      tables,
+      queries,
+    } = this.props;
 
     const breadcrumb = server ? [
       { icon: 'server', label: server.name },
@@ -170,6 +145,9 @@ export default class QueryBrowserContainer extends Component {
             </div>
           </div>
         }
+        <div style={STYLES.footer}>
+          <Footer status={status} />
+        </div>
       </div>
     );
   }
@@ -177,8 +155,7 @@ export default class QueryBrowserContainer extends Component {
 
 
 function mapStateToProps (state, props) {
-  // console.info('conn:mapStateToProps', state, props);
-  const { connections, databases, tables, queries } = state;
+  const { connections, databases, tables, queries, status } = state;
 
   const isSameServer =
     connections
@@ -192,6 +169,7 @@ function mapStateToProps (state, props) {
     databases,
     tables,
     queries,
+    status,
   };
 }
 

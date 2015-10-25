@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as ServersActions from '../actions/servers.js';
 import Header from '../components/header.jsx';
+import Footer from '../components/footer.jsx';
 import ServerList from '../components/server-list.jsx';
 import ServerModalForm from '../components/server-modal-form.jsx';
 import ServerFilter from '../components/server-filter.jsx';
@@ -18,6 +19,7 @@ const BREADCRUMB = [{ icon: 'server', label: 'servers'}];
 
 export default class ServerManagerment extends Component {
   static propTypes = {
+    status: PropTypes.string.isRequired,
     servers: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
@@ -94,7 +96,7 @@ export default class ServerManagerment extends Component {
 
   render() {
     const { modalVisible, selectedId, filter } = this.state;
-    const { servers } = this.props;
+    const { servers, status } = this.props;
     const selected = selectedId !== null ? servers.items[selectedId] : {};
     const filteredServers = this.filterServers(filter, servers.items);
 
@@ -119,6 +121,9 @@ export default class ServerManagerment extends Component {
                  onCancelClick={::this.onCancelClick}
                  onRemoveClick={::this.onRemoveClick} />}
         </div>
+        <div style={STYLES.footer}>
+          <Footer status={status} />
+        </div>
       </div>
     );
   }
@@ -128,6 +133,7 @@ export default class ServerManagerment extends Component {
 function mapStateToProps(state) {
   return {
     servers: state.servers,
+    status: state.status,
   };
 }
 
