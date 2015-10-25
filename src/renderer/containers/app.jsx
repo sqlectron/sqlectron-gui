@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Menu from '../menu.jsx';
+
 
 import 'semantic-ui-css/semantic.css';
 import 'semantic-ui-css/semantic';
 import './app.css';
+
 
 class AppContainer extends Component {
   static propTypes = {
@@ -24,19 +25,8 @@ class AppContainer extends Component {
   };
 
   componentDidMount() {
-    // const { dispatch } = this.props;
-    this.menu = new Menu({
-      // queryActions: bindActionCreators(QueryActions, dispatch),
-      queryActions: {},
-    });
-
     // wait a bit more until remove the splash screen
     setTimeout(() => document.getElementById('loading').remove(), 2000);
-  }
-
-  componentDidUpdate() {
-    const { queryResult } = this.props;
-    this.menu.build({ store: { queryResult } });
   }
 
   render() {

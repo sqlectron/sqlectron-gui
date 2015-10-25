@@ -9,6 +9,7 @@ import DatabaseList from '../components/database-list.jsx';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 import Query from '../components/query.jsx';
+import MenuHandler from '../menu-handler';
 
 
 const STYLES = {
@@ -47,11 +48,16 @@ export default class QueryBrowserContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {};
+    this.menuHandler = new MenuHandler();
   }
 
   componentWillMount () {
     const { dispatch, params, isSameServer, error } = this.props;
     if (error || !isSameServer) dispatch(connectDatabase(params.id, params.database));
+  }
+
+  componentDidMount() {
+    this.setMenus();
   }
 
   componentWillReceiveProps (nextProps) {
@@ -61,7 +67,12 @@ export default class QueryBrowserContainer extends Component {
     } else if (connected) {
       this.props.dispatch(fetchDatabasesIfNeeded());
       this.props.dispatch(fetchTablesIfNeeded(params.database));
+      this.setMenus();
     }
+  }
+
+  componentWillUnmount() {
+    this.menuHandler.removeAllMenus();
   }
 
   onSelectDatabase(database) {
@@ -80,6 +91,14 @@ export default class QueryBrowserContainer extends Component {
 
   onFilterChange (value) {
     this.setState({ filter: value });
+  }
+
+  setMenus() {
+    this.menuHandler.setMenus({
+      'sqlectron:query-execute': () => {
+        this.handleExecuteQuery(this.props.queries.query);
+      },
+    });
   }
 
   handleExecuteQuery (sqlQuery) {
