@@ -1,11 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { connect as connectDatabase } from '../actions/connections';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
 import { executeQueryIfNeeded, updateQuery } from '../actions/queries';
-import * as DatabaseActions from '../actions/databases.js';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import Header from '../components/header.jsx';
@@ -95,9 +93,7 @@ export default class QueryBrowserContainer extends Component {
 
   render() {
     const { filter } = this.state;
-    const dbActions = bindActionCreators(DatabaseActions, dispatch);
     const {
-      dispatch,
       params: { database },
       status,
       connected,
@@ -133,7 +129,6 @@ export default class QueryBrowserContainer extends Component {
                 <DatabaseList
                   databases={filteredDatabases}
                   tablesByDatabase={tables.itemsByDatabase}
-                  actions={dbActions}
                   onSelectDatabase={::this.onSelectDatabase}
                   onSelectTable={::this.onSelectTable} />
               </div>

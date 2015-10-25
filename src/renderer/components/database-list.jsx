@@ -11,7 +11,6 @@ export default class DatabaseList extends Component {
   static propTypes = {
     databases: PropTypes.array.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
-    actions: PropTypes.object.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
   }
