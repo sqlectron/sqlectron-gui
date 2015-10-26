@@ -103,6 +103,7 @@ export default class Query extends Component {
                 width="100%"
                 ref="queryBoxTextarea"
                 value={query.query}
+                editorProps={{$blockScrolling: true}}
                 onChange={debounce(onSQLChange, 750)}
                 />
             </div>
