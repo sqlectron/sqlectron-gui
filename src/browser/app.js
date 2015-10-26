@@ -1,6 +1,8 @@
+import { resolve } from 'path';
 import app from 'app';
 import BrowserWindow from 'browser-window';
 import { attachMenuToWindow } from './app-menu';
+import { productName } from '../../package.json';
 
 const devMode = (process.argv || []).indexOf('--dev') !== -1;
 
@@ -18,11 +20,12 @@ app.on('window-all-closed', () => {
 
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
-app.on('ready', function() {
-  // Create the browser window.
+app.on('ready', function onAppReady() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    title: productName,
+    icon: resolve(__dirname, '..', '..', 'resources', 'app.png'),
+    width: 1024,
+    height: 700,
   });
 
   attachMenuToWindow(app, mainWindow);
@@ -31,11 +34,10 @@ app.on('ready', function() {
   const entryBasePath = devMode ? 'http://localhost:8080' : ('file://' + __dirname);
   mainWindow.loadUrl(entryBasePath + '/static/index.html');
 
-  // Open the devtools.
-  mainWindow.openDevTools();
-
   // Emitted when the window is closed.
   mainWindow.on('closed', () => mainWindow = null);
 
-  mainWindow.maximize();
+  if (devMode) {
+    mainWindow.openDevTools();
+  }
 });
