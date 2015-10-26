@@ -11,3 +11,17 @@ if (devMode) {
 
 // starts the electron app
 require('./app');
+
+
+if (devMode) {
+  /**
+   * Terrible workaround for:
+   * https://github.com/atom/electron/issues/3089
+   */
+  var configEnumerable = {
+    configurable: true,
+    enumerable: true,
+  };
+  Object.defineProperty(Error.prototype, 'message', configEnumerable);
+  Object.defineProperty(Error.prototype, 'stack', configEnumerable);
+}
