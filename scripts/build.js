@@ -97,10 +97,10 @@ async function buildBrowserCode() {
 
 
 /**
- * Copy schema json validations
+ * Copy resources
  */
-async function copySchemaJSONValidations() {
-  return denodeify(exec).call(exec, `cp -R ./src/browser/schemas build`, { cwd: ROOT_PATH });
+async function copyResources() {
+  return denodeify(exec).call(exec, `cp -R ./resources build`, { cwd: ROOT_PATH });
 }
 
 
@@ -134,8 +134,8 @@ async function packElectronApp(opts) {
     console.log('> building browser code with babel');
     await buildBrowserCode();
 
-    console.log('> copying schema validations');
-    await copySchemaJSONValidations();
+    console.log('> copying resources');
+    await copyResources();
 
     console.log('> building renderer code with webpack');
     await buildRendererCode();
