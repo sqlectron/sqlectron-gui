@@ -69,7 +69,6 @@ export default class ServerManagerment extends Component {
   onSaveClick(server) {
     const { selectedId } = this.state;
     const { dispatch } = this.props;
-    this.setState({ processing: true });
     dispatch(ServersActions.saveServer({ id: selectedId, server }))
       .then(() => this.setState({ processing: true }));
   }

@@ -45,10 +45,7 @@ export default class ServerModalForm extends Component {
         this.props.onCancelClick();
         return true;
       },
-      onApprove: () => {
-        this.props.onSaveClick(this.mapStateToServer(this.state));
-        return false;
-      },
+      onApprove: () => false,
     }).modal('show');
 
     $(this.refs.sshTunnel).checkbox({
@@ -63,6 +60,10 @@ export default class ServerModalForm extends Component {
 
   componentWillUnmount() {
     $(this.refs.serverModal).modal('hide');
+  }
+
+  onSaveClick() {
+    this.props.onSaveClick(this.mapStateToServer(this.state));
   }
 
   onRemoveCancelClick() {
@@ -290,8 +291,9 @@ export default class ServerModalForm extends Component {
             Cancel
             <i className="ban icon"></i>
           </div>
-          <div className="small ui positive right labeled icon button"
-            tabIndex="0">
+          <div className="small ui green right labeled icon button"
+            tabIndex="0"
+            onClick={::this.onSaveClick}>
             Save
             <i className="checkmark icon"></i>
           </div>
