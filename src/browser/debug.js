@@ -1,4 +1,4 @@
 import debug from 'debug';
 
 
-export default (namespace) => debug(`sqlectron:${namespace || '*'}`);
+export default (namespace) => debug(`sqlectron-gui:${namespace || '*'}`);
