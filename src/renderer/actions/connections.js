@@ -15,14 +15,11 @@ export function connect (serverId, database) {
       id,
     };
 
-    console.info('actions:db:connect', server, database);
     dispatch({ type: CONNECTION_REQUEST, server, database });
     try {
       await services.db.connect(server, database);
-      console.info('actions:db:connected');
       dispatch({ type: CONNECTION_SUCCESS, server, database });
     } catch (error) {
-      console.info('actions:db:error', error);
       dispatch({ type: CONNECTION_FAILURE, server, database, error });
     }
   };
