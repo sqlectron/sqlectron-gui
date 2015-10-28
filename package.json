@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start-webpack": "webpack-dev-server --config ./webpack.dev.config.js",
-    "start-electron": "DEBUG=sqlectron-gui:*,spawn-auto-restart node scripts/dev-auto-restart.js",
+    "start-electron": "DEBUG=sqlectron-gui:*,sqlectron-core:*,spawn-auto-restart node scripts/dev-auto-restart.js",
     "build": "NODE_ENV=production babel-node scripts/build.js --all",
     "run-local-release": "babel-node scripts/run-local-release.js",
     "test": "eslint ."
@@ -32,11 +32,7 @@
     "babel-core": "^5.8.29",
     "babel-runtime": "^5.8.29",
     "debug": "^2.2.0",
-    "pg": "^4.4.3",
-    "portfinder": "^0.4.0",
-    "sqlectron-db": "0.0.2",
-    "ssh2": "^0.4.11",
-    "valida": "^2.0.0"
+    "sqlectron-core": "^0.1.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",

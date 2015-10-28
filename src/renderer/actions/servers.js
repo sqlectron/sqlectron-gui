@@ -16,7 +16,7 @@ export function loadServers() {
   return async dispatch => {
     dispatch({ type: LOAD_SERVERS_REQUEST });
     try {
-      const data = await services.servers.loadServerListFromFile();
+      const data = await services.servers.getAll();
       dispatch({
         type: LOAD_SERVERS_SUCCESS,
         servers: data.servers,
@@ -28,16 +28,15 @@ export function loadServers() {
 }
 
 
-export function saveServer ({ id, server }) {
+export function saveServer ({ name, server }) {
   return async dispatch => {
-    dispatch({ type: SAVE_SERVER_REQUEST, id, server });
+    dispatch({ type: SAVE_SERVER_REQUEST, name, server });
     try {
-      const { addServer, updateServer } = services.servers;
-      const data = await (id !== null ? updateServer(id, server) : addServer(server));
+      const data = await services.servers.addOrUpdate(name, server);
 
       dispatch({
         type: SAVE_SERVER_SUCCESS,
-        id: id,
+        name,
         server: data,
       });
     } catch (error) {
@@ -47,15 +46,15 @@ export function saveServer ({ id, server }) {
 }
 
 
-export function removeServer ({ id }) {
+export function removeServer ({ name }) {
   return async dispatch => {
-    dispatch({ type: REMOVE_SERVER_REQUEST, id });
+    dispatch({ type: REMOVE_SERVER_REQUEST, name });
     try {
-      await services.servers.removeServer(id);
+      await services.servers.removeByName(name);
 
       dispatch({
         type: REMOVE_SERVER_SUCCESS,
-        id: id,
+        name,
       });
     } catch (error) {
       dispatch({ type: REMOVE_SERVER_FAILURE, error });

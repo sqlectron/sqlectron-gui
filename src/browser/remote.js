@@ -1,6 +1,5 @@
 const remote = require('remote');
-const servers = remote.require('./services/servers');
-const db = remote.require('./services/db');
+const sqlectron = remote.require('sqlectron-core');
 
 
 /**
@@ -8,7 +7,7 @@ const db = remote.require('./services/db');
  */
 export default {
   services: {
-    servers,
-    db,
+    servers: sqlectron.servers,
+    db: sqlectron.db,
   },
 };

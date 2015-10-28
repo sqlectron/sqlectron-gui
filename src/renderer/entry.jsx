@@ -18,7 +18,7 @@ ReactDOM.render(
     <Router history={history}>
       <Route component={App}>
         <Route path="/" component={ServerManagementContainer} />
-        <Route path="/server/:id/database/:database" component={QueryBrowserContainer} />
+        <Route path="/server/:name/database/:database" component={QueryBrowserContainer} />
       </Route>
     </Router>
   </Provider>,

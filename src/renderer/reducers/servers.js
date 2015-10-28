@@ -16,13 +16,13 @@ export default function servers(state = INITIAL_STATE, action) {
   case types.SAVE_SERVER_SUCCESS:
     return {
       ...state,
-      items: save(state.items, action.server, action.id),
+      items: save(state.items, action.server, action.name),
       error: null,
     };
   case types.REMOVE_SERVER_SUCCESS:
     return {
       ...state,
-      items: remove(state.items, action.id),
+      items: remove(state.items, action.name),
       error: null,
     };
   case types.SAVE_SERVER_FAILURE:
@@ -38,11 +38,12 @@ export default function servers(state = INITIAL_STATE, action) {
 }
 
 
-function save(items, server, id) {
+function save(items, server, name) {
   const _items = ([...items] || []);
   const _server = { ...server, visible: true };
-  if (id !== null) {
-    _items[id] = _server;
+  if (name) {
+    const index = _items.findIndex(srv => srv.name === name);
+    _items[index] = _server;
   } else {
     _items.push(_server);
   }
@@ -50,9 +51,10 @@ function save(items, server, id) {
 }
 
 
-function remove(items, id) {
+function remove(items, name) {
+  const index = items.findIndex(srv => srv.name === name);
   return [
-    ...items.slice(0, id),
-    ...items.slice(id + 1),
+    ...items.slice(0, index),
+    ...items.slice(index + 1),
   ];
 }

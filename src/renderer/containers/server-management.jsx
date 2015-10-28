@@ -48,39 +48,39 @@ export default class ServerManagerment extends Component {
     if (this.state.processing && !nextProps.servers.error) {
       this.setState({
         processing: false,
-        selectedId: null,
+        selectedName: null,
         modalVisible: false,
       });
     }
   }
 
-  onConnectClick(id, { database }) {
-    this.props.history.pushState(null, `/server/${id}/database/${database}`);
+  onConnectClick({ name, database }) {
+    this.props.history.pushState(null, `/server/${name}/database/${database}`);
   }
 
   onAddClick() {
-    this.setState({ modalVisible: true, selectedId: null });
+    this.setState({ modalVisible: true, selectedName: null });
   }
 
-  onEditClick(index) {
-    this.setState({ modalVisible: true, selectedId: index });
+  onEditClick(server) {
+    this.setState({ modalVisible: true, selectedName: server.name });
   }
 
   onSaveClick(server) {
-    const { selectedId } = this.state;
+    const { selectedName } = this.state;
     const { dispatch } = this.props;
-    dispatch(ServersActions.saveServer({ id: selectedId, server }))
+    dispatch(ServersActions.saveServer({ name: selectedName, server }))
       .then(() => this.setState({ processing: true }));
   }
 
   onCancelClick() {
-    this.setState({ modalVisible: false, selectedId: null });
+    this.setState({ modalVisible: false, selectedName: null });
   }
 
   onRemoveClick() {
-    const { selectedId } = this.state;
+    const { selectedName } = this.state;
     const { dispatch } = this.props;
-    dispatch(ServersActions.removeServer({ id: selectedId }))
+    dispatch(ServersActions.removeServer({ name: selectedName }))
       .then(() => this.setState({ processing: true }));
   }
 
@@ -94,9 +94,9 @@ export default class ServerManagerment extends Component {
   }
 
   render() {
-    const { modalVisible, selectedId, filter } = this.state;
+    const { modalVisible, selectedName, filter } = this.state;
     const { servers, status } = this.props;
-    const selected = selectedId !== null ? servers.items[selectedId] : {};
+    const selected = selectedName !== null ? servers.items.find(srv => srv.name === selectedName) : {};
     const filteredServers = this.filterServers(filter, servers.items);
 
     return (

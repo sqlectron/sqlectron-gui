@@ -3,13 +3,17 @@ import { connect } from 'react-redux';
 import { connect as connectDatabase } from '../actions/connections';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
-import { executeQueryIfNeeded, updateQuery } from '../actions/queries';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 import Query from '../components/query.jsx';
 import MenuHandler from '../menu-handler';
+import {
+  executeQueryIfNeeded,
+  executeDefaultSelectQueryIfNeeded,
+  updateQuery,
+} from '../actions/queries';
 
 
 const STYLES = {
@@ -53,7 +57,7 @@ export default class QueryBrowserContainer extends Component {
 
   componentWillMount () {
     const { dispatch, params, isSameServer, error } = this.props;
-    if (error || !isSameServer) dispatch(connectDatabase(params.id, params.database));
+    if (error || !isSameServer) dispatch(connectDatabase(params.name, params.database));
   }
 
   componentDidMount() {
@@ -63,7 +67,7 @@ export default class QueryBrowserContainer extends Component {
   componentWillReceiveProps (nextProps) {
     const { dispatch, params, isSameServer, connecting, connected, error } = nextProps;
     if (!connecting && (error || !isSameServer)) {
-      dispatch(connectDatabase(params.id, params.database));
+      dispatch(connectDatabase(params.name, params.database));
     } else if (connected) {
       this.props.dispatch(fetchDatabasesIfNeeded());
       this.props.dispatch(fetchTablesIfNeeded(params.database));
@@ -77,12 +81,11 @@ export default class QueryBrowserContainer extends Component {
 
   onSelectDatabase(database) {
     const { params, history } = this.props;
-    history.pushState(null, `/server/${params.id}/database/${database.name}`);
+    history.pushState(null, `/server/${params.name}/database/${database.name}`);
   }
 
   onSelectTable(table) {
-    const query = `select * from "${table}" limit 1000`;
-    this.props.dispatch(executeQueryIfNeeded(query));
+    this.props.dispatch(executeDefaultSelectQueryIfNeeded(table));
   }
 
   onSQLChange (sqlQuery) {
@@ -174,7 +177,7 @@ function mapStateToProps (state, props) {
   const isSameServer =
     connections
     && connections.server
-    && parseInt(props.params.id, 10) === connections.server.id
+    && props.params.name === connections.server.name
     && props.params.database === connections.database;
 
   return {

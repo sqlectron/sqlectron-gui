@@ -16,6 +16,16 @@ export function executeQueryIfNeeded (query) {
 }
 
 
+export function executeDefaultSelectQueryIfNeeded (table) {
+  return (dispatch, getState) => {
+    const query = services.db.getQuerySelectTop(table);
+    if (shouldExecuteQuery(query, getState())) {
+      return dispatch(executeQuery(query));
+    }
+  };
+}
+
+
 export function updateQuery (query) {
   return { type: UPDATE_QUERY, query };
 }
