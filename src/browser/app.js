@@ -31,7 +31,7 @@ app.on('ready', function onAppReady() {
   attachMenuToWindow(app, mainWindow);
 
   // and load the index.html of the app.
-  const entryBasePath = devMode ? 'http://localhost:8080' : ('file://' + __dirname);
+  const entryBasePath = devMode ? 'http://localhost:8080' : ('file://' + resolve(__dirname, '..'));
   mainWindow.loadUrl(entryBasePath + '/static/index.html');
 
   // Emitted when the window is closed.

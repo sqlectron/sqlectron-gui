@@ -92,7 +92,7 @@ const TASKS = [
  * Build browser code with babel
  */
 async function buildBrowserCode() {
-  return denodeify(exec).call(exec, `babel ./src/browser -d build`, { cwd: ROOT_PATH });
+  return denodeify(exec).call(exec, `babel ./src/browser -d build/browser`, { cwd: ROOT_PATH });
 }
 
 
