@@ -6,7 +6,7 @@ export default class LoadingPage extends Component {
   }
 
   render() {
-    return <span>Crunching stdout...</span>;
+    return <div style={{textAlign: 'center'}}>No results</div>;
   }
 
 }
