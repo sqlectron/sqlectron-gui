@@ -8,6 +8,7 @@ import DatabaseList from '../components/database-list.jsx';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 import Query from '../components/query.jsx';
+import Loader from '../components/loader.jsx';
 import MenuHandler from '../menu-handler';
 import {
   executeQueryIfNeeded,
@@ -160,13 +161,15 @@ export default class QueryBrowserContainer extends Component {
       queries,
     } = this.props;
 
+    const isLoading = (!connected || !isSameServer);
+    if (isLoading) {
+      return <Loader message={status} type="page" />;
+    }
+
     const breadcrumb = server ? [
       { icon: 'server', label: server.name },
       { icon: 'database', label: database },
     ] : [];
-
-    const loading = <h1>Loading{this.state && this.state.status}</h1>;
-    const isLoading = (!connected || !isSameServer);
 
     const filteredDatabases = this.filterDatabases(filter, databases.items);
 
@@ -175,27 +178,25 @@ export default class QueryBrowserContainer extends Component {
         <div style={STYLES.header}>
           <Header items={breadcrumb} includeButtonCloseConn />
         </div>
-        {
-          isLoading ? loading : <div style={STYLES.container}>
-            <div style={STYLES.sidebar}>
-              <div className="ui vertical menu">
-                <div className="item">
-                  <DatabaseFilter onFilterChange={::this.onFilterChange} />
-                </div>
-                <DatabaseList
-                  databases={filteredDatabases}
-                  tablesByDatabase={tables.itemsByDatabase}
-                  onSelectDatabase={::this.onSelectDatabase}
-                  onSelectTable={::this.onSelectTable} />
+        <div style={STYLES.container}>
+          <div style={STYLES.sidebar}>
+            <div className="ui vertical menu">
+              <div className="item">
+                <DatabaseFilter onFilterChange={::this.onFilterChange} />
               </div>
-            </div>
-            <div style={STYLES.content}>
-              <Query query={queries}
-                onExecQueryClick={::this.handleExecuteQuery}
-                onSQLChange={::this.onSQLChange} />
+              <DatabaseList
+                databases={filteredDatabases}
+                tablesByDatabase={tables.itemsByDatabase}
+                onSelectDatabase={::this.onSelectDatabase}
+                onSelectTable={::this.onSelectTable} />
             </div>
           </div>
-        }
+          <div style={STYLES.content}>
+            <Query query={queries}
+              onExecQueryClick={::this.handleExecuteQuery}
+              onSQLChange={::this.onSQLChange} />
+          </div>
+        </div>
         <div style={STYLES.footer}>
           <Footer status={status} />
         </div>

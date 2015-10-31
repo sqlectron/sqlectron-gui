@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import ServerListItem from './server-list-item.jsx';
-import LoadingPage from './loading.jsx';
+import Message from './message.jsx';
 
 
 export default class ServerList extends Component {
@@ -31,7 +31,7 @@ export default class ServerList extends Component {
     const { servers, onEditClick, onConnectClick } = this.props;
 
     if (!servers.length) {
-      return <LoadingPage />;
+      return <Message message="No results" type="info" />;
     }
 
     return (

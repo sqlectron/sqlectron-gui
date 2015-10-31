@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import LoadingPage from './loading.jsx';
+import Loader from './loader.jsx';
 
 
 const STYLE = {
@@ -26,7 +26,7 @@ export default class DatabaseList extends Component {
 
   render() {
     const { databases, onSelectDatabase, onSelectTable } = this.props;
-    if (!databases.length) { return <LoadingPage />; }
+    if (!databases.length) { return <Loader type="active" />; }
 
     return (<div>
       {databases.map((database, idx) =>
