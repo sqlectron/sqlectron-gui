@@ -41,6 +41,10 @@ export default class Query extends Component {
       return null;
     }
 
+    const rowCount = query.result.rowCount
+      || (query.result.rows && query.result.rows.length)
+      || 0;
+
     return (
       <table className="ui celled table">
         <thead>
@@ -51,12 +55,12 @@ export default class Query extends Component {
           </tr>
         </thead>
         <tbody>
-          {this.renderQueryResultRows()}
+          {this.renderQueryResultRows(rowCount)}
         </tbody>
         <tfoot>
           <tr>
             <td colSpan={query.result.fields.length}>
-              Rows: {query.result.rowCount}
+              Rows: {rowCount}
             </td>
           </tr>
         </tfoot>
@@ -64,9 +68,9 @@ export default class Query extends Component {
     );
   }
 
-  renderQueryResultRows() {
+  renderQueryResultRows(rowCount) {
     const { query } = this.props;
-    if (!query.result.rowCount) {
+    if (!rowCount) {
       return (
         <tr>
           <td colSpan={query.result.fields.length}>
