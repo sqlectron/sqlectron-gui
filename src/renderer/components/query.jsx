@@ -145,7 +145,7 @@ export default class Query extends Component {
         </div>
 
         <div style={STYLES.resultBox}>
-          {::this.renderQueryResult()}
+          {this.renderQueryResult()}
         </div>
       </div>
     );
