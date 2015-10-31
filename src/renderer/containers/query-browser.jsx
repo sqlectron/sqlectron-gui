@@ -70,13 +70,18 @@ export default class QueryBrowserContainer extends Component {
       dispatch,
       params,
       location,
+      history,
       isSameServer,
       connecting,
       connected,
       error
     } = nextProps;
 
-    if (!connecting && (error || !isSameServer)) {
+    if (error) {
+      history.pushState(null, '/');
+      return;
+    }
+    if (!connecting && !isSameServer) {
       dispatch(connectDatabase(params.name, params.database));
       return;
     }
