@@ -100,6 +100,9 @@ export default class Query extends Component {
             if ((value + '') === '[object Date]') {
               value = 'Ignored date value';
             }
+            if (typeof value === 'object') {
+              value = JSON.stringify(value);
+            }
             return <td key={name}>{value}</td>;
           })}
         </tr>
