@@ -36,6 +36,7 @@ export default class QueryBrowserContainer extends Component {
     params: PropTypes.object.isRequired,
     routeParams: PropTypes.object.isRequired,
     location: PropTypes.shape({
+      query: PropTypes.object,
       pathname: PropTypes.string.isRequired,
     }),
     children: PropTypes.node,
@@ -65,27 +66,55 @@ export default class QueryBrowserContainer extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { dispatch, params, isSameServer, connecting, connected, error } = nextProps;
+    const {
+      dispatch,
+      params,
+      location,
+      isSameServer,
+      connecting,
+      connected,
+      error
+    } = nextProps;
+
     if (!connecting && (error || !isSameServer)) {
       dispatch(connectDatabase(params.name, params.database));
-    } else if (connected) {
-      this.props.dispatch(fetchDatabasesIfNeeded());
-      this.props.dispatch(fetchTablesIfNeeded(params.database));
-      this.setMenus();
+      return;
     }
+    if (!connected) { return; }
+
+    dispatch(fetchDatabasesIfNeeded());
+    dispatch(fetchTablesIfNeeded(params.database));
+
+    const table = location.query && location.query.table;
+    if (table) {
+      dispatch(executeDefaultSelectQueryIfNeeded(table));
+    }
+
+    this.setMenus();
   }
 
   componentWillUnmount() {
     this.menuHandler.removeAllMenus();
   }
 
-  onSelectDatabase(database) {
+  onSelectDatabase(database, table) {
     const { params, history } = this.props;
-    history.pushState(null, `/server/${params.name}/database/${database.name}`);
+
+    let newStateLocation = `/server/${params.name}/database/${database.name}`;
+    if (table) {
+      newStateLocation += `?table=${table.name}`;
+    }
+
+    history.pushState(null, newStateLocation);
   }
 
-  onSelectTable(table) {
-    this.props.dispatch(executeDefaultSelectQueryIfNeeded(table));
+  onSelectTable(database, table) {
+    if (database.name !== this.props.params.database) {
+      this.onSelectDatabase(database, table);
+      return;
+    }
+
+    this.props.dispatch(executeDefaultSelectQueryIfNeeded(table.name));
   }
 
   onSQLChange (sqlQuery) {

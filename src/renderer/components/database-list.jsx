@@ -42,7 +42,7 @@ export default class DatabaseList extends Component {
                 <span key={idxChild}
                   className="item"
                   style={STYLE.database}
-                  onDoubleClick={() => onSelectTable(table.name)}>
+                  onDoubleClick={() => onSelectTable(database, table)}>
                   {table.name}
                 </span>
               );
