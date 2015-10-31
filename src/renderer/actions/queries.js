@@ -32,10 +32,10 @@ export function updateQuery (query) {
 
 
 function shouldExecuteQuery (query, state) {
-  if (!state.query) return true;
-  if (state.query.isExecuting) return false;
-  if (state.query.query !== query) return true;
-  return state.query.didInvalidate;
+  if (!state.queries) return true;
+  if (state.queries.isExecuting) return false;
+  if (state.queries.query !== query) return true;
+  return state.queries.didInvalidate;
 }
 
 
