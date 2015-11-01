@@ -48,39 +48,39 @@ export default class ServerManagerment extends Component {
     if (this.state.processing && !nextProps.servers.error) {
       this.setState({
         processing: false,
-        selectedName: null,
+        selectedId: null,
         modalVisible: false,
       });
     }
   }
 
-  onConnectClick({ name, database }) {
-    this.props.history.pushState(null, `/server/${name}/database/${database}`);
+  onConnectClick({ id, database }) {
+    this.props.history.pushState(null, `/server/${id}/database/${database}`);
   }
 
   onAddClick() {
-    this.setState({ modalVisible: true, selectedName: null });
+    this.setState({ modalVisible: true, selectedId: null });
   }
 
   onEditClick(server) {
-    this.setState({ modalVisible: true, selectedName: server.name });
+    this.setState({ modalVisible: true, selectedId: server.id });
   }
 
   onSaveClick(server) {
-    const { selectedName } = this.state;
+    const { selectedId } = this.state;
     const { dispatch } = this.props;
-    dispatch(ServersActions.saveServer({ name: selectedName, server }))
+    dispatch(ServersActions.saveServer({ id: selectedId, server }))
       .then(() => this.setState({ processing: true }));
   }
 
   onCancelClick() {
-    this.setState({ modalVisible: false, selectedName: null });
+    this.setState({ modalVisible: false, selectedId: null });
   }
 
   onRemoveClick() {
-    const { selectedName } = this.state;
+    const { selectedId } = this.state;
     const { dispatch } = this.props;
-    dispatch(ServersActions.removeServer({ name: selectedName }))
+    dispatch(ServersActions.removeServer({ id: selectedId }))
       .then(() => this.setState({ processing: true }));
   }
 
@@ -94,9 +94,9 @@ export default class ServerManagerment extends Component {
   }
 
   render() {
-    const { modalVisible, selectedName, filter } = this.state;
+    const { modalVisible, selectedId, filter } = this.state;
     const { servers, status } = this.props;
-    const selected = selectedName !== null ? servers.items.find(srv => srv.name === selectedName) : {};
+    const selected = selectedId !== null ? servers.items.find(srv => srv.id === selectedId) : {};
     const filteredServers = this.filterServers(filter, servers.items);
 
     return (
