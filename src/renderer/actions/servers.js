@@ -16,6 +16,7 @@ export function loadServers() {
   return async dispatch => {
     dispatch({ type: LOAD_SERVERS_REQUEST });
     try {
+      await services.servers.prepareConfiguration();
       const data = await services.servers.getAll();
       dispatch({
         type: LOAD_SERVERS_SUCCESS,

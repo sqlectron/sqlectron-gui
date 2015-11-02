@@ -32,7 +32,7 @@
     "babel-core": "^5.8.29",
     "babel-runtime": "^5.8.29",
     "debug": "^2.2.0",
-    "sqlectron-core": "^0.2.0"
+    "sqlectron-core": "^0.3.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",

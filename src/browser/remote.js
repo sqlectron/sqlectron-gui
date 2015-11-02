@@ -1,4 +1,6 @@
-const remote = require('remote');
+import remote from 'remote';
+
+
 const sqlectron = remote.require('sqlectron-core');
 
 
