@@ -75,7 +75,7 @@ export default class QueryBrowserContainer extends Component {
       isSameServer,
       connecting,
       connected,
-      error
+      error,
     } = nextProps;
 
     if (error) {
