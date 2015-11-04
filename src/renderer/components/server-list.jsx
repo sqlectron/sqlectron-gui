@@ -39,7 +39,7 @@ export default class ServerList extends Component {
         {this.groupItemsInRows(servers).map((row, rowIdx) =>
           <div key={rowIdx} className="doubling four column row">
             {row.map(server =>
-              <div key={server.name} className="wide column">
+              <div key={`${server.name}_${server.client}`} className="wide column">
                 <div className="ui">
                   <ServerListItem
                     onConnectClick={() => onConnectClick(server) }
