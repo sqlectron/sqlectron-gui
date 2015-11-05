@@ -59,7 +59,7 @@ export default class QueryBrowserContainer extends Component {
 
   componentWillMount () {
     const { dispatch, params, isSameServer, error } = this.props;
-    if (error || !isSameServer) dispatch(connectDatabase(params.name, params.database));
+    if (error || !isSameServer) dispatch(connectDatabase(params.id, params.database));
   }
 
   componentDidMount() {
@@ -83,7 +83,7 @@ export default class QueryBrowserContainer extends Component {
       return;
     }
     if (!connecting && !isSameServer) {
-      dispatch(connectDatabase(params.name, params.database));
+      dispatch(connectDatabase(params.id, params.database));
       return;
     }
     if (!connected) { return; }
@@ -106,7 +106,7 @@ export default class QueryBrowserContainer extends Component {
   onSelectDatabase(database, table) {
     const { params, history } = this.props;
 
-    let newStateLocation = `/server/${params.name}/database/${database.name}`;
+    let newStateLocation = `/server/${params.id}/database/${database.name}`;
     if (table) {
       newStateLocation += `?table=${table.name}`;
     }
@@ -212,7 +212,7 @@ function mapStateToProps (state, props) {
   const isSameServer =
     connections
     && connections.server
-    && props.params.name === connections.server.name
+    && props.params.id === connections.server.id
     && props.params.database === connections.database;
 
   return {

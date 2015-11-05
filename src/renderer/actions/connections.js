@@ -6,10 +6,10 @@ export const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS';
 export const CONNECTION_FAILURE = 'CONNECTION_FAILURE';
 
 
-export function connect (serverName, database) {
+export function connect (id, database) {
   return async (dispatch, getState) => {
     const { servers } = getState();
-    const server = servers.items.find(srv => srv.name === serverName);
+    const server = servers.items.find(srv => srv.id === id);
 
     dispatch({ type: CONNECTION_REQUEST, server, database });
     try {
