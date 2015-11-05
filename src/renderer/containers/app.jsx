@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
 
 
 import 'semantic-ui-css/semantic.css';
@@ -7,9 +6,8 @@ import 'semantic-ui-css/semantic';
 import './app.css';
 
 
-class AppContainer extends Component {
+export default class AppContainer extends Component {
   static propTypes = {
-    dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
     routeParams: PropTypes.object.isRequired,
@@ -17,7 +15,6 @@ class AppContainer extends Component {
       pathname: PropTypes.string.isRequired,
     }),
     children: PropTypes.node,
-    queryResult: PropTypes.object,
   };
 
   static contextTypes = {
@@ -39,11 +36,3 @@ class AppContainer extends Component {
     );
   }
 }
-
-function mapStateToProps(state) {
-  return {
-    queryResult: state.queryResult,
-  };
-}
-
-export default connect(mapStateToProps)(AppContainer);
