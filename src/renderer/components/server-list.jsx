@@ -10,10 +10,6 @@ export default class ServerList extends Component {
     onConnectClick: PropTypes.func.isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context);
-  }
-
   groupItemsInRows(items) {
     const itemsPerRow = 4;
     return items.reduce((rows, item, index) => {

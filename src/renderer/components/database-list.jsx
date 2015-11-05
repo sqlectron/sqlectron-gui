@@ -15,10 +15,6 @@ export default class DatabaseList extends Component {
     onSelectTable: PropTypes.func.isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context);
-  }
-
   getTablesByDatabase({ name }) {
     const { tablesByDatabase } = this.props;
     return tablesByDatabase[name] || [];

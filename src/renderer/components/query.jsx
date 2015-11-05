@@ -19,10 +19,6 @@ export default class Query extends Component {
     onSQLChange: PropTypes.func.isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context);
-  }
-
   onExecQueryClick() {
     this.props.onExecQueryClick(this.props.query.query);
   }

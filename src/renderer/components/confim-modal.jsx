@@ -10,10 +10,6 @@ export default class ServerModalForm extends Component {
     context: PropTypes.string.isRequired,
   }
 
-  constructor(props, context) {
-    super(props, context);
-  }
-
   componentDidMount() {
     $(this.refs.confirmModal).modal({
       closable: false,
