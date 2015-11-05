@@ -38,6 +38,7 @@ export default class QueryBrowserContainer extends Component {
     location: PropTypes.shape({ query: PropTypes.object }),
     children: PropTypes.node,
     connected: PropTypes.bool,
+    server: PropTypes.object,
     connecting: PropTypes.bool,
     error: PropTypes.any,
     isSameServer: PropTypes.bool.isRequired,
