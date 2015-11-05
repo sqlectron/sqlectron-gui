@@ -16,7 +16,7 @@ export default function (state = INITIAL_STATE, action) {
     return 'Loading list of tables...';
   case queriesTypes.EXECUTE_QUERY_REQUEST:
     return 'Executing query...';
-  default :
-    return '';
+  default:
+    return INITIAL_STATE;
   }
 }
