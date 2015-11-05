@@ -41,6 +41,7 @@ export default class ServerModalForm extends Component {
       closable: false,
       detachable: false,
       allowMultiple: true,
+      observeChanges: true,
       onDeny: () => {
         this.props.onCancelClick();
         return true;
