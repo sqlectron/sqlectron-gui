@@ -2,6 +2,7 @@ import * as types from '../actions/servers';
 
 
 const INITIAL_STATE = {
+  isSaving: false,
   items: [],
 };
 
@@ -13,23 +14,33 @@ export default function servers(state = INITIAL_STATE, action) {
       ...state,
       items: action.servers.map(convertToPlainObject),
     };
+  case types.SAVE_SERVER_REQUEST:
+  case types.REMOVE_SERVER_REQUEST: {
+    return {
+      ...state,
+      isSaving: true,
+    };
+  }
   case types.SAVE_SERVER_SUCCESS:
     return {
       ...state,
       items: save(state.items, convertToPlainObject(action.server)),
       error: null,
+      isSaving: false,
     };
   case types.REMOVE_SERVER_SUCCESS:
     return {
       ...state,
       items: remove(state.items, action.id),
       error: null,
+      isSaving: false,
     };
   case types.SAVE_SERVER_FAILURE:
   case types.REMOVE_SERVER_FAILURE: {
     return {
       ...state,
       error: action.error.validationErrors,
+      isSaving: false,
     };
   }
   default:
