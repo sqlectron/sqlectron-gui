@@ -35,11 +35,7 @@ export default class QueryBrowserContainer extends Component {
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    routeParams: PropTypes.object.isRequired,
-    location: PropTypes.shape({
-      query: PropTypes.object,
-      pathname: PropTypes.string.isRequired,
-    }),
+    location: PropTypes.shape({ query: PropTypes.object }),
     children: PropTypes.node,
     connected: PropTypes.bool,
     connecting: PropTypes.bool,
