@@ -3,6 +3,7 @@ import React, {Component, PropTypes} from 'react';
 export default class Loading extends Component {
   static propTypes = {
     message: PropTypes.string,
+    type: PropTypes.string,
   }
 
   componentDidMount() {
