@@ -37,7 +37,7 @@ export default class ServerManagerment extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {};
+    this.state = { selectedId: null };
   }
 
   componentDidMount() {
