@@ -117,7 +117,6 @@ export default class Query extends Component {
                 mode="sql"
                 theme="github"
                 name="querybox"
-                showGutter={false}
                 height="10em"
                 width="100%"
                 ref="queryBoxTextarea"
