@@ -2,6 +2,9 @@ import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
 
+const LOGO_PATH = require('./logo-200px.png');
+
+
 function renderBreadcrumb(items) {
   return (
     <div className="ui breadcrumb">
@@ -26,7 +29,7 @@ const Header = ({ items, includeButtonCloseConn = false }) => {
   return (
     <div className="ui top fixed menu borderless">
       <div className="item">
-        <img src="https://www.dropbox.com/s/4n3h2czpc8fu2ss/SQLECTRON-200px.png?raw=1" style={{width: '5.5em'}} />
+        <img src={LOGO_PATH} style={{width: '5.5em'}} />
       </div>
       <div style={{margin: '0 auto'}}>
         <div className="item borderless">
