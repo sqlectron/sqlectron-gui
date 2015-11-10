@@ -52,7 +52,7 @@ export default function servers(state = INITIAL_STATE, action) {
 function save(items, server) {
   const _items = ([...items] || []);
   const index = server.id && _items.findIndex(srv => srv.id === server.id);
-  if (index) {
+  if (index >= 0) {
     _items[index] = server;
   } else {
     _items.push(server);
