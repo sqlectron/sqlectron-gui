@@ -2,6 +2,8 @@
 
 A simple and lightweight SQL client with cross database and platform support.
 
+![demo](https://www.dropbox.com/s/lfrdhgk1k2hwmhg/sqlectron-demo-v0.1.0.gif?raw=1)
+
 #### Current supported databases
 * PostgreSQL
 * MySQL
