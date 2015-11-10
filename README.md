@@ -2,6 +2,13 @@
 
 A simple and lightweight SQL client with cross database and platform support.
 
+#### Current supported databases
+* PostgreSQL
+* MySQL
+
+Do you wanna support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
+
+
 ## Configuration
 
 Example configuration file `~/.sqlectron.json`
@@ -29,6 +36,8 @@ Example configuration file `~/.sqlectron.json`
   ]
 }
 ```
+
+Although you should not care about this file. Because SQLECTRON will manage it for you.
 
 ## Development
 
@@ -61,10 +70,4 @@ You will need follow [it](https://github.com/maxogden/electron-packager#building
 
 ```shell
 docker-compose build
-```
-
-### Running the local release
-
-```shell
-npm run run-local-release
 ```
