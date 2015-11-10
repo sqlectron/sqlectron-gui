@@ -12,7 +12,7 @@ export default function servers(state = INITIAL_STATE, action) {
   case types.LOAD_SERVERS_SUCCESS:
     return {
       ...state,
-      items: action.servers.map(convertToPlainObject),
+      items: action.servers,
     };
   case types.SAVE_SERVER_REQUEST:
   case types.REMOVE_SERVER_REQUEST: {
@@ -24,7 +24,7 @@ export default function servers(state = INITIAL_STATE, action) {
   case types.SAVE_SERVER_SUCCESS:
     return {
       ...state,
-      items: save(state.items, convertToPlainObject(action.server)),
+      items: save(state.items, action.server),
       error: null,
       isSaving: false,
     };
@@ -67,14 +67,4 @@ function remove(items, id) {
     ...items.slice(0, index),
     ...items.slice(index + 1),
   ];
-}
-
-
-/**
- * Force the object has the values instead of getter and setter properties.
- * This is necessary because seems there is some bug around React accessing
- * getter properties from objects comming from Electron remote API.
- */
-function convertToPlainObject(item) {
-  return JSON.parse(JSON.stringify(item));
 }

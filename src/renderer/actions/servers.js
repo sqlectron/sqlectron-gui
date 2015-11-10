@@ -20,7 +20,7 @@ export function loadServers() {
       const data = await services.servers.getAll();
       dispatch({
         type: LOAD_SERVERS_SUCCESS,
-        servers: data.servers,
+        servers: data.servers.map(convertToPlainObject),
       });
     } catch (error) {
       dispatch({ type: LOAD_SERVERS_FAILURE, error });
@@ -37,7 +37,7 @@ export function saveServer ({ server, id }) {
 
       dispatch({
         type: SAVE_SERVER_SUCCESS,
-        server: data,
+        server: convertToPlainObject(data),
       });
     } catch (error) {
       dispatch({ type: SAVE_SERVER_FAILURE, error });
@@ -60,4 +60,14 @@ export function removeServer ({ id }) {
       dispatch({ type: REMOVE_SERVER_FAILURE, error });
     }
   };
+}
+
+
+/**
+ * Force the object has the values instead of getter and setter properties.
+ * This is necessary because seems there is some bug around React accessing
+ * getter properties from objects comming from Electron remote API.
+ */
+function convertToPlainObject(item) {
+  return JSON.parse(JSON.stringify(item));
 }
