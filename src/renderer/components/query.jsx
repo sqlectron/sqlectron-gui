@@ -82,20 +82,6 @@ export default class Query extends Component {
         <tr key={index}>
           {columnNames.map(name => {
             let value = row[name];
-            /**
-             * Important!!!
-             * It fixes temporally a problem with electron passing
-             * date objects through the remote.
-             * It is already fixed in the latest electron version
-             * but we still can't use it because the latest have another
-             * problem passing exceptions though the remote.
-             *
-             * This way we can see the date value. But at least
-             *  we can see the rest of the result.
-             */
-            if ((value + '') === '[object Date]') {
-              value = 'Ignored date value';
-            }
             if (typeof value === 'object') {
               value = JSON.stringify(value);
             }
