@@ -32,7 +32,7 @@ const Header = ({ items, includeButtonCloseConn = false }) => {
         <img src={LOGO_PATH} style={{width: '5.5em'}} />
       </div>
       <div style={{margin: '0 auto'}}>
-        <div className="item borderless">
+        <div className="item borderless" style={{marginLeft: '-109px'}}>
           {renderBreadcrumb(items)}
         </div>
       </div>
