@@ -8,6 +8,9 @@ A simple and lightweight SQL client with cross database and platform support.
 
 Do you wanna support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
 
+## Download
+
+All versions available are at the [release page](https://github.com/sqlectron/sqlectron-gui/releases).
 
 ## Configuration
 
