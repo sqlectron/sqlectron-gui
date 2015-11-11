@@ -19,7 +19,7 @@ import {
 
 const STYLES = {
   wrapper: { paddingTop: '50px' },
-  container: { display: 'flex' },
+  container: { display: 'flex', paddingBottom: '50px' },
   sidebar: { width: '220px' },
   content: { flex: 1 },
 };
