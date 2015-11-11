@@ -10,7 +10,7 @@ import ServerFilter from '../components/server-filter.jsx';
 
 const STYLES = {
   wrapper: { paddingTop: '50px' },
-  container: { padding: '10px 0 50px 0' },
+  container: { padding: '10px 10px 50px 10px' },
 };
 
 
