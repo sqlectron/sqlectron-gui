@@ -1,8 +1,15 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+import shell from 'shell';
 
 
 const LOGO_PATH = require('./logo-200px.png');
+
+
+function onGithubClick(event) {
+  event.preventDefault();
+  shell.openExternal('https://github.com/sqlectron/sqlectron-gui');
+}
 
 
 function renderBreadcrumb(items) {
@@ -28,9 +35,9 @@ function renderBreadcrumb(items) {
 const Header = ({ items, includeButtonCloseConn = false }) => {
   return (
     <div className="ui top fixed menu borderless">
-      <div className="item">
+      <a href="#" className="item" onClick={onGithubClick}>
         <img src={LOGO_PATH} style={{width: '5.5em'}} />
-      </div>
+      </a>
       <div style={{margin: '0 auto'}}>
         <div className="item borderless" style={{marginLeft: '-109px'}}>
           {renderBreadcrumb(items)}
