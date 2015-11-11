@@ -45,7 +45,7 @@ export default class Query extends Component {
       || 0;
 
     return (
-      <table className="ui celled table">
+      <table className="ui selectable small celled table">
         <thead>
           <tr>
             {query.result.fields.map(({ name }) => (
@@ -58,9 +58,9 @@ export default class Query extends Component {
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={query.result.fields.length}>
+            <th colSpan={query.result.fields.length}>
               Rows: {rowCount}
-            </td>
+            </th>
           </tr>
         </tfoot>
       </table>
