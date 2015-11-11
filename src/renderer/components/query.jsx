@@ -30,6 +30,9 @@ export default class Query extends Component {
   renderQueryResult() {
     const { query } = this.props;
     if (query.error) {
+      if (query.error.message) {
+        return <div className="ui red message">{query.error.message}</div>;
+      }
       return <pre>{JSON.stringify(query.error, null, 2)}</pre>;
     }
 
