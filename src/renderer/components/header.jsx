@@ -45,8 +45,8 @@ const Header = ({ items, includeButtonCloseConn = false }) => {
       </div>
       {includeButtonCloseConn && <div className="right menu" style={{marginLeft: '0 !important'}}>
         <div className="item borderless">
-          <Link to="/" className="ui icon button" title="Close connection">
-            <i className="ban icon"></i>
+          <Link to="/" className="ui icon button" title="Sign out server">
+            <i className="sign out icon"></i>
           </Link>
         </div>
       </div>}
