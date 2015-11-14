@@ -148,8 +148,8 @@ export default class ServerModalForm extends Component {
                 <label>Client</label>
                 <Select
                   name="client"
-        					placeholder="Select"
-        					options={CLIENTS}
+                  placeholder="Select"
+                  options={CLIENTS}
                   onChange={client => this.setState({ client })}
                   optionRenderer={this.renderClientItem}
                   valueRenderer={this.renderClientItem}
