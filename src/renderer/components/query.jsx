@@ -24,7 +24,7 @@ export default class Query extends Component {
   }
 
   onDiscQueryClick() {
-    this.refs.queryBoxTextarea.value = '';
+    this.props.onSQLChange('');
   }
 
   renderQueryResult() {
