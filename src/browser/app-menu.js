@@ -56,7 +56,7 @@ function buildTemplate(app, mainWindow) {
       submenu: [
         {
           label: 'Execute',
-          accelerator: 'CmdOrCtrl+E',
+          accelerator: 'CmdOrCtrl+Enter',
           click: () => mainWindow.webContents.send('sqlectron:query-execute'),
         },
       ],
