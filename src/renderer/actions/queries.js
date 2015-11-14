@@ -32,9 +32,11 @@ export function updateQuery (query) {
 
 
 function shouldExecuteQuery (query, state) {
-  if (!state.queries) return true;
-  if (state.queries.isExecuting) return false;
-  if (state.queries.query !== query) return true;
+  const { queries } = state;
+  if (!queries) return true;
+  if (queries.isExecuting) return false;
+  const previousQuery = queries.queryHistory[queries.queryHistory.length - 1];
+  if (previousQuery !== query) return true;
   return state.queries.didInvalidate;
 }
 

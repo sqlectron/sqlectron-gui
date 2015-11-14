@@ -1,12 +1,13 @@
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/queries';
 
-
 const INITIAL_STATE = {
   isExecuting: false,
   didInvalidate: true,
   query: '',
-  result: null,
+  queryHistory: [],
+  resultFields: null,
+  resultRows: null,
   error: null,
 };
 
@@ -18,30 +19,41 @@ export default function (state = INITIAL_STATE, action) {
   }
   case types.EXECUTE_QUERY_REQUEST: {
     return {
-      ...INITIAL_STATE,
+      ...state,
       isExecuting: true,
       didInvalidate: false,
       query: action.query,
+      queryHistory: [
+        ...state.queryHistory,
+        action.query,
+      ],
     };
   }
   case types.EXECUTE_QUERY_SUCCESS: {
     return {
-      ...INITIAL_STATE,
-      didInvalidate: false,
-      query: action.query,
-      result: action.result,
+      ...state,
+      error: null,
+      isExecuting: false,
+      resultFields: action.result.fields,
+      resultRows: action.result.rows,
+      resultRowCount: action.result.RowCount
+        || (action.result.rows && action.result.rows.length)
+        || 0,
     };
   }
   case types.EXECUTE_QUERY_FAILURE: {
     return {
-      ...INITIAL_STATE,
+      ...state,
+      resultFields: null,
+      resultRows: null,
+      isExecuting: false,
       query: action.query,
       error: action.error,
     };
   }
   case types.UPDATE_QUERY: {
     return {
-      ...INITIAL_STATE,
+      ...state,
       query: action.query,
     };
   }

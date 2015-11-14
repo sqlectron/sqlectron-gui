@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/github';
+import QueryResult from './query-result.jsx';
 
 const STYLES = {
   queryBox: {
@@ -25,74 +26,6 @@ export default class Query extends Component {
 
   onDiscQueryClick() {
     this.props.onSQLChange('');
-  }
-
-  renderQueryResult() {
-    const { query } = this.props;
-    if (query.error) {
-      if (query.error.message) {
-        return <div className="ui red message">{query.error.message}</div>;
-      }
-      return <pre>{JSON.stringify(query.error, null, 2)}</pre>;
-    }
-
-    if (!query.result) {
-      return null;
-    }
-
-    const rowCount = query.result.rowCount
-      || (query.result.rows && query.result.rows.length)
-      || 0;
-
-    return (
-      <table className="ui selectable small celled table">
-        <thead>
-          <tr>
-            {query.result.fields.map(({ name }) => (
-              <th key={name}>{name}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderQueryResultRows(rowCount)}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th colSpan={query.result.fields.length}>
-              Rows: {rowCount}
-            </th>
-          </tr>
-        </tfoot>
-      </table>
-    );
-  }
-
-  renderQueryResultRows(rowCount) {
-    const { query } = this.props;
-    if (!rowCount) {
-      return (
-        <tr>
-          <td colSpan={query.result.fields.length}>
-            Not results found
-          </td>
-        </tr>
-      );
-    }
-
-    return query.result.rows.map((row, index) => {
-      const columnNames = Object.keys(row);
-      return (
-        <tr key={index}>
-          {columnNames.map(name => {
-            let value = row[name];
-            if (typeof value === 'object') {
-              value = JSON.stringify(value);
-            }
-            return <td key={name}>{value}</td>;
-          })}
-        </tr>
-      );
-    });
   }
 
   render() {
@@ -127,10 +60,18 @@ export default class Query extends Component {
             </div>
           </div>
         </div>
-
-        <div style={STYLES.resultBox}>
-          {this.renderQueryResult()}
-        </div>
+        {
+          !query.isExecuting &&
+          query.resultRows &&
+          <div style={STYLES.resultBox}>
+            <QueryResult
+              query={query.queryHistory[query.queryHistory.length - 1]}
+              fields={query.resultFields}
+              rows={query.resultRows}
+              rowCount={query.resultRowCount}
+              error={query.error} />
+          </div>
+        }
       </div>
     );
   }
