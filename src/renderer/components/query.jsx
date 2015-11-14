@@ -44,7 +44,7 @@ export default class Query extends Component {
                 ref="queryBoxTextarea"
                 value={query.query}
                 editorProps={{$blockScrolling: true}}
-                onChange={debounce(onSQLChange, 750)}
+                onChange={debounce(onSQLChange, 300)}
                 />
             </div>
             <div className="ui secondary menu" style={{marginTop: 0}}>
