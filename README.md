@@ -16,33 +16,7 @@ All versions available are at the [release page](https://github.com/sqlectron/sq
 
 ## Configuration
 
-Example configuration file `~/.sqlectron.json`
-```json
-{
-  "servers": [
-    {
-      "name": "postgres",
-      "client": "postgresql",
-      "host": "10.10.10.10",
-      "port": 5432,
-      "database": "postgres",
-      "user": "user",
-      "password": "password"
-    },
-    {
-      "name": "mysql",
-      "client": "mysql",
-      "host": "10.10.10.10",
-      "port": 3306,
-      "database": "authentication",
-      "user": "root",
-      "password": "password"
-    }
-  ]
-}
-```
-
-Although you should not care about this file. Because SQLECTRON will manage it for you.
+See the available configuration at [here](https://github.com/sqlectron/sqlectron-core#configuration).
 
 ## Development
 
