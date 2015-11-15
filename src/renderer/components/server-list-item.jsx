@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 
 
 const ICONS = {
-  mysql: 'https://www.mysql.com/common/logos/logo-mysql-170x115.png',
-  postgresql: 'https://wiki.postgresql.org/images/3/30/PostgreSQL_logo.3colors.120x120.png',
+  mysql: require('./server-db-client-mysql.png'),
+  postgresql: require('./server-db-client-postgresql.png'),
 };
 
 
