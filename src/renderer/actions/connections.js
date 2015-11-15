@@ -1,4 +1,4 @@
-import { services } from '../../browser/remote';
+import { sqlectron } from '../../browser/remote';
 
 
 export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
@@ -13,7 +13,7 @@ export function connect (id, database) {
 
     dispatch({ type: CONNECTION_REQUEST, server, database });
     try {
-      await services.db.connect(server, database);
+      await sqlectron.db.connect(server, database);
       dispatch({ type: CONNECTION_SUCCESS, server, database });
     } catch (error) {
       dispatch({ type: CONNECTION_FAILURE, server, database, error });

@@ -1,4 +1,4 @@
-import { services } from '../../browser/remote';
+import { sqlectron } from '../../browser/remote';
 
 
 export const FETCH_DATABASES_REQUEST = 'FETCH_DATABASES_REQUEST';
@@ -33,7 +33,7 @@ function fetchDatabases () {
   return async dispatch => {
     dispatch({ type: FETCH_DATABASES_REQUEST });
     try {
-      const databases = await services.db.listDatabases();
+      const databases = await sqlectron.db.listDatabases();
       dispatch({ type: FETCH_DATABASES_SUCCESS, databases });
     } catch (error) {
       dispatch({ type: FETCH_DATABASES_FAILURE, error });

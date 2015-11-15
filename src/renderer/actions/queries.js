@@ -1,4 +1,4 @@
-import { services } from '../../browser/remote';
+import { sqlectron } from '../../browser/remote';
 
 
 export const EXECUTE_QUERY_REQUEST = 'EXECUTE_QUERY_REQUEST';
@@ -18,7 +18,7 @@ export function executeQueryIfNeeded (query) {
 
 export function executeDefaultSelectQueryIfNeeded (table) {
   return (dispatch, getState) => {
-    const query = services.db.getQuerySelectTop(table);
+    const query = sqlectron.db.getQuerySelectTop(table);
     if (shouldExecuteQuery(query, getState())) {
       return dispatch(executeQuery(query));
     }
@@ -45,7 +45,7 @@ function executeQuery (query) {
   return async dispatch => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query });
     try {
-      const result = await services.db.executeQuery(query);
+      const result = await sqlectron.db.executeQuery(query);
       dispatch({ type: EXECUTE_QUERY_SUCCESS, query, result });
     } catch (error) {
       dispatch({ type: EXECUTE_QUERY_FAILURE, query, error });

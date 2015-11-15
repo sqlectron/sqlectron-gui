@@ -1,4 +1,4 @@
-import { services } from '../../browser/remote';
+import { sqlectron } from '../../browser/remote';
 
 
 export const LOAD_SERVERS_REQUEST = 'LOAD_SERVERS_REQUEST';
@@ -16,8 +16,8 @@ export function loadServers() {
   return async dispatch => {
     dispatch({ type: LOAD_SERVERS_REQUEST });
     try {
-      await services.servers.prepareConfiguration();
-      const data = await services.servers.getAll();
+      await sqlectron.servers.prepareConfiguration();
+      const data = await sqlectron.servers.getAll();
       dispatch({
         type: LOAD_SERVERS_SUCCESS,
         servers: data.servers.map(convertToPlainObject),
@@ -33,7 +33,7 @@ export function saveServer ({ server, id }) {
   return async dispatch => {
     dispatch({ type: SAVE_SERVER_REQUEST, server });
     try {
-      const data = await services.servers.addOrUpdate({ id, ...server });
+      const data = await sqlectron.servers.addOrUpdate({ id, ...server });
 
       dispatch({
         type: SAVE_SERVER_SUCCESS,
@@ -50,7 +50,7 @@ export function removeServer ({ id }) {
   return async dispatch => {
     dispatch({ type: REMOVE_SERVER_REQUEST, id });
     try {
-      await services.servers.removeById(id);
+      await sqlectron.servers.removeById(id);
 
       dispatch({
         type: REMOVE_SERVER_SUCCESS,
