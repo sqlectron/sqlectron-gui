@@ -102,8 +102,9 @@ export default class ServerModalForm extends Component {
 
   handleChange(event) {
     const newState = {};
-    const value = event.target.value;
-    const [name1, name2] = event.target.name.split('.');
+    const { target } = event;
+    const value = target.files ? target.files[0].path : target.value;
+    const [name1, name2] = target.name.replace(/^file\./, '').split('.');
 
     if (name1 === 'ssh') {
       newState.ssh = { ...this.state.ssh, [name2]: value };
@@ -178,13 +179,24 @@ export default class ServerModalForm extends Component {
                     disabled={this.state.socketPath} />
                 </div>
                 <div className={`six wide field ${this.highlightError('socketPath')}`}>
-                  <input type="text"
-                    name="socketPath"
-                    maxLength="250"
-                    placeholder="Unix socket path"
-                    value={this.state.socketPath}
-                    onChange={::this.handleChange}
-                    disabled={(this.state.host || this.state.port)} />
+                  <div className="ui action input">
+                      <input type="text"
+                        name="socketPath"
+                        maxLength="250"
+                        placeholder="Unix socket path"
+                        value={this.state.socketPath}
+                        onChange={::this.handleChange}
+                        disabled={(this.state.host || this.state.port)} />
+                      <label htmlFor="file.socketPath" className="ui icon button btn-file">
+                         <i className="file outline icon" />
+                         <input
+                           type="file"
+                           id="file.socketPath"
+                           name="file.socketPath"
+                           onChange={::this.handleChange}
+                           style={{display: 'none'}} />
+                      </label>
+                    </div>
                 </div>
               </div>
             </div>
@@ -274,13 +286,24 @@ export default class ServerModalForm extends Component {
                 </div>
                 <div className={`six wide field ${this.highlightError('ssh.privateKey')}`}>
                   <label>Private Key</label>
-                  <input type="text"
-                    name="ssh.privateKey"
-                    maxLength="250"
-                    placeholder="~/.ssh/id_rsa"
-                    disabled={(!isSSHChecked || ssh.password )}
-                    value={ssh.privateKey}
-                    onChange={::this.handleChange} />
+                  <div className="ui action input">
+                    <input type="text"
+                      name="ssh.privateKey"
+                      maxLength="250"
+                      placeholder="~/.ssh/id_rsa"
+                      disabled={(!isSSHChecked || ssh.password )}
+                      value={ssh.privateKey}
+                      onChange={::this.handleChange} />
+                    <label htmlFor="file.ssh.privateKey" className="ui icon button btn-file">
+                       <i className="file outline icon" />
+                       <input
+                         type="file"
+                         id="file.ssh.privateKey"
+                         name="file.ssh.privateKey"
+                         onChange={::this.handleChange}
+                         style={{display: 'none'}} />
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
