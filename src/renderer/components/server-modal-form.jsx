@@ -83,21 +83,36 @@ export default class ServerModalForm extends Component {
     const server = {
       name: state.name,
       client: state.client,
-      host: state.host,
+      host: state.host && state.host.length ? state.host : null,
       port: state.port,
+      socketPath: state.socketPath && state.socketPath.length ? state.socketPath : null,
       user: state.user,
       password: state.password,
       database: state.database,
     };
     if (!this.state.ssh) { return server; }
 
-    server.ssh = state.ssh;
+    const { ssh } = state;
+    server.ssh = {
+      host: ssh.host,
+      port: ssh.port,
+      user: ssh.user,
+      password: ssh.password && ssh.password.length ? ssh.password : null,
+      privateKey: ssh.privateKey && ssh.privateKey.length ? ssh.privateKey : null,
+    };
+
     return server;
   }
 
   highlightError(name) {
     const { error } = this.state;
-    return error && error[name] ? 'error' : '';
+    let hasError = !!(error && error[name]);
+    if (error && error.ssh && /^ssh\./.test(name)) {
+      const sshErrors = error.ssh[0].errors[0];
+      const lastName = name.replace(/^ssh\./, '');
+      hasError = !!~Object.keys(sshErrors).indexOf(lastName);
+    }
+    return hasError ? 'error' : '';
   }
 
   handleChange(event) {
