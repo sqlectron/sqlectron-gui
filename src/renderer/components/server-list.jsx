@@ -31,18 +31,15 @@ export default class ServerList extends Component {
     }
 
     return (
-      <div className="ui grid">
+      <div>
         {this.groupItemsInRows(servers).map((row, rowIdx) =>
-          <div key={rowIdx} className="doubling four column row">
+          <div key={rowIdx} className="ui four cards">
             {row.map(server =>
-              <div key={server.id} className="wide column">
-                <div className="ui">
-                  <ServerListItem
-                    onConnectClick={() => onConnectClick(server) }
-                    onEditClick={() => onEditClick(server) }
-                    server={server} />
-                  </div>
-              </div>
+              <ServerListItem
+                key={server.id}
+                onConnectClick={() => onConnectClick(server) }
+                onEditClick={() => onEditClick(server) }
+                server={server} />
             )}
           </div>
         )}
