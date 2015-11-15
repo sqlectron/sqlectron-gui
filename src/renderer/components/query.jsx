@@ -52,7 +52,7 @@ export default class Query extends Component {
         </div>
         {
           !query.isExecuting &&
-          query.resultRows &&
+          (query.resultRows || query.error) &&
           <QueryResult
             query={query.queryHistory[query.queryHistory.length - 1]}
             fields={query.resultFields}

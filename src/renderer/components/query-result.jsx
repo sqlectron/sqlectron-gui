@@ -3,10 +3,10 @@ import React, { Component, PropTypes } from 'react';
 
 export default class QueryResult extends Component {
   static propTypes = {
-    query: PropTypes.string.isRequired,
-    fields: PropTypes.array.isRequired,
-    rows: PropTypes.array.isRequired,
-    rowCount: PropTypes.number.isRequired,
+    query: PropTypes.string,
+    fields: PropTypes.array,
+    rows: PropTypes.array,
+    rowCount: PropTypes.number,
     error: PropTypes.object,
   }
 
