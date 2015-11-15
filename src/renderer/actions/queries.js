@@ -17,8 +17,8 @@ export function executeQueryIfNeeded (query) {
 
 
 export function executeDefaultSelectQueryIfNeeded (table) {
-  return (dispatch, getState) => {
-    const query = sqlectron.db.getQuerySelectTop(table);
+  return async (dispatch, getState) => {
+    const query = await sqlectron.db.getQuerySelectTop(table);
     if (shouldExecuteQuery(query, getState())) {
       return dispatch(executeQuery(query));
     }

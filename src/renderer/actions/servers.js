@@ -16,11 +16,11 @@ export function loadServers() {
   return async dispatch => {
     dispatch({ type: LOAD_SERVERS_REQUEST });
     try {
-      await sqlectron.servers.prepareConfiguration();
-      const data = await sqlectron.servers.getAll();
+      await sqlectron.config.prepare();
+      const dataServers = await sqlectron.servers.getAll();
       dispatch({
         type: LOAD_SERVERS_SUCCESS,
-        servers: data.servers.map(convertToPlainObject),
+        servers: dataServers.map(convertToPlainObject),
       });
     } catch (error) {
       dispatch({ type: LOAD_SERVERS_FAILURE, error });
