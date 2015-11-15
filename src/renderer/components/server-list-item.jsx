@@ -29,7 +29,7 @@ export default class ServerListItem extends Component {
           <div className="header">
             {server.name}
           </div>
-          <div className="meta">
+          <div className="meta" style={{lineHeight: '1.5em', marginTop: '5px'}}>
             {server.host ? `${server.host}:${server.port}` : server.socketPath}
           </div>
         </div>
