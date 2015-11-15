@@ -19,7 +19,9 @@ export default class ServerListItem extends Component {
     return (
       <div className="card">
         <div className="content">
-          <img className="left floated mini ui image" src={ICONS[server.client]} />
+          <div className="left floated" style={{height: '35px', width: '35px', margin: '5px 10px 0 0'}}>
+            <img className="ui image" style={{width: '100%'}} src={ICONS[server.client]} />
+          </div>
           <button className="right floated circular ui icon button mini"
             onClick={() => onEditClick(server)}>
             <i className="icon pencil"></i>
