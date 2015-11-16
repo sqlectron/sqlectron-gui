@@ -14,6 +14,10 @@ Do you wanna support for another SQL database? Please send a pull request to [sq
 
 All versions available are at the [release page](https://github.com/sqlectron/sqlectron-gui/releases).
 
+## Terminal
+
+SQLECTRON has also a terminal-based interface called [sqlectron-term](https://github.com/sqlectron/sqlectron-term).
+
 ## Configuration
 
 See the available configuration at [here](https://github.com/sqlectron/sqlectron-core#configuration).
