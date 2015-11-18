@@ -44,7 +44,7 @@ export default class QueryResult extends Component {
     const { error, rows, rowCount, fields } = this.props;
     if (error) {
       if (error.message) {
-        return <div className="ui red message">{error.message}</div>;
+        return <div className="ui negative message">{error.message}</div>;
       }
       return <pre>{JSON.stringify(error, null, 2)}</pre>;
     }
