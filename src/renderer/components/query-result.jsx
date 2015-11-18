@@ -53,6 +53,11 @@ export default class QueryResult extends Component {
       return null;
     }
 
+    const queryWithOutput = !!(fields && fields.length);
+    if (!queryWithOutput) {
+      return <div className="ui positive message">Query executed successfully</div>;
+    }
+
     return (
       <table className="ui selectable small celled table">
         <thead>
