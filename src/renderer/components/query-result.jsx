@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Loader from '../components/loader.jsx';
 
 
 export default class QueryResult extends Component {
@@ -7,11 +8,15 @@ export default class QueryResult extends Component {
     fields: PropTypes.array,
     rows: PropTypes.array,
     rowCount: PropTypes.number,
+    isExecuting: PropTypes.bool,
     error: PropTypes.object,
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.query !== this.props.query;
+    return (
+      (!nextProps.isExecuting && this.props.isExecuting) ||
+      (nextProps.query !== this.props.query)
+    );
   }
 
   renderQueryResultRows(rowCount) {
@@ -41,12 +46,20 @@ export default class QueryResult extends Component {
   }
 
   render() {
-    const { error, rows, rowCount, fields } = this.props;
+    const { isExecuting, error, rows, rowCount, fields } = this.props;
     if (error) {
       if (error.message) {
         return <div className="ui negative message">{error.message}</div>;
       }
       return <pre>{JSON.stringify(error, null, 2)}</pre>;
+    }
+
+    if (isExecuting) {
+      return (
+        <div style={{minHeight: '250px'}}>
+          <Loader message="Loading" type="active" inverted />
+        </div>
+      );
     }
 
     if (!rows) {

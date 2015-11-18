@@ -42,24 +42,25 @@ export default class Query extends Component {
             <div className="right menu">
               <div className="item">
                 <div className="ui buttons">
-                  <button className="ui positive button" onClick={::this.onExecQueryClick}>Execute</button>
+                  <button
+                    className={`ui positive button ${query.isExecuting ? 'loading' : ''}`}
+                    onClick={::this.onExecQueryClick}>Execute</button>
                   <div className="or"></div>
-                  <button className="ui button" onClick={::this.onDiscQueryClick}>Discard</button>
+                  <button
+                    className={`ui button ${query.isExecuting ? 'disabled' : ''}`}
+                    onClick={::this.onDiscQueryClick}>Discard</button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {
-          !query.isExecuting &&
-          (query.resultRows || query.error) &&
-          <QueryResult
-            query={query.queryHistory[query.queryHistory.length - 1]}
-            fields={query.resultFields}
-            rows={query.resultRows}
-            rowCount={query.resultRowCount}
-            error={query.error} />
-        }
+        <QueryResult
+          query={query.queryHistory[query.queryHistory.length - 1]}
+          fields={query.resultFields}
+          rows={query.resultRows}
+          rowCount={query.resultRowCount}
+          isExecuting={query.isExecuting}
+          error={query.error} />
       </div>
     );
   }
