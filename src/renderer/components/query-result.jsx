@@ -19,7 +19,7 @@ export default class QueryResult extends Component {
     if (!rowCount) {
       return (
         <tr>
-          <td colSpan={fields.length}>Not results found</td>
+          <td colSpan={fields.length}>No results found</td>
         </tr>
       );
     }
