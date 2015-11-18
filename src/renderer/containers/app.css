@@ -12,14 +12,12 @@ html {
   box-sizing: inherit;
   margin: 0;
   padding: 0;
-  }
+}
 
 body {
   /* margin: 20px; */
   padding: 0;
-  font-family: 'Roboto', sans-serif;
   font-size: 14px;
   line-height: 30px;
   color: rgba(0,0,0,.87);
 }
-

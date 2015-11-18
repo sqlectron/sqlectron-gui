@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 
 
-import 'semantic-ui-css/semantic.css';
-import 'semantic-ui-css/semantic';
-import './app.css';
+import '../vendor/semantic-ui/semantic';
+require('../vendor/lato/latofonts.css');
+require('../vendor/semantic-ui/semantic.css');
+require('./app.css');
 
 
 export default class AppContainer extends Component {

@@ -70,7 +70,6 @@
     "redux": "^3.0.4",
     "redux-logger": "^2.0.4",
     "redux-thunk": "^1.0.0",
-    "semantic-ui-css": "^2.1.4",
     "spawn-auto-restart": "^2.0.0",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.6",
