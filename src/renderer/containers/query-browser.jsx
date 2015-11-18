@@ -179,10 +179,13 @@ export default class QueryBrowserContainer extends Component {
           <div style={STYLES.sidebar}>
             <div className="ui vertical menu">
               <div className="item">
-                <DatabaseFilter onFilterChange={::this.onFilterChange} />
+                <DatabaseFilter
+                  isFetching={databases.isFetching}
+                  onFilterChange={::this.onFilterChange} />
               </div>
               <DatabaseList
                 databases={filteredDatabases}
+                isFetching={databases.isFetching}
                 tablesByDatabase={tables.itemsByDatabase}
                 onSelectDatabase={::this.onSelectDatabase}
                 onSelectTable={::this.onSelectTable} />

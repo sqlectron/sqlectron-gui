@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react';
-import Loader from './loader.jsx';
 
 
 const STYLE = {
@@ -10,6 +9,7 @@ const STYLE = {
 export default class DatabaseList extends Component {
   static propTypes = {
     databases: PropTypes.array.isRequired,
+    isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
@@ -21,8 +21,18 @@ export default class DatabaseList extends Component {
   }
 
   render() {
-    const { databases, onSelectDatabase, onSelectTable } = this.props;
-    if (!databases.length) { return <Loader type="active" />; }
+    const { databases, isFetching, onSelectDatabase, onSelectTable } = this.props;
+    if (isFetching) {
+      return (
+        <div className="ui grey item">Loading...</div>
+      );
+    }
+
+    if (!databases.length) {
+      return (
+        <div className="ui grey item">No results found</div>
+      );
+    }
 
     return (<div>
       {databases.map((database, idx) =>
