@@ -34,11 +34,7 @@ export default class QueryResult extends Component {
       return (
         <tr key={index}>
           {columnNames.map(name => {
-            let value = row[name];
-            if (typeof value === 'object') {
-              value = JSON.stringify(value);
-            }
-            return <td key={name}>{value}</td>;
+            return <td key={name}>{valueToString(row[name])}</td>;
           })}
         </tr>
       );
@@ -93,4 +89,16 @@ export default class QueryResult extends Component {
       </table>
     );
   }
+}
+
+
+function valueToString(value) {
+  if (!value) { return value; }
+  if (value.toISOString) {
+    return value.toISOString();
+  }
+  if (typeof value === 'object') {
+    return JSON.stringify(value);
+  }
+  return value;
 }
