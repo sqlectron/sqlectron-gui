@@ -5,6 +5,10 @@ import 'brace/mode/sql';
 import 'brace/theme/github';
 import QueryResult from './query-result.jsx';
 
+import { ResizableBox } from 'react-resizable';
+require('./react-resizable.css');
+
+
 export default class Query extends Component {
   static propTypes = {
     query: PropTypes.object.isRequired,
@@ -25,19 +29,20 @@ export default class Query extends Component {
     return (
       <div>
         <div>
-          <div className="ui segment">
+          <ResizableBox className="react-resizable ui segment" height={200} width={500}>
             <AceEditor
               mode="sql"
               theme="github"
               name="querybox"
-              height="10em"
+              height="100%"
               width="100%"
               ref="queryBoxTextarea"
               value={query.query}
+              showPrintMargin={false}
               editorProps={{$blockScrolling: true}}
               onChange={debounce(onSQLChange, 300)}
               />
-          </div>
+          </ResizableBox>
           <div className="ui secondary menu" style={{marginTop: 0}}>
             <div className="right menu">
               <div className="item">
