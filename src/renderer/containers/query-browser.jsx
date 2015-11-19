@@ -189,6 +189,7 @@ export default class QueryBrowserContainer extends Component {
               </div>
               <div className="item">
                 <DatabaseFilter
+                  value={filter}
                   isFetching={databases.isFetching}
                   onFilterChange={::this.onFilterChange} />
               </div>
