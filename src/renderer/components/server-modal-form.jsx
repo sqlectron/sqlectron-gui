@@ -9,11 +9,11 @@ require('./override-select.css');
 
 const CLIENTS = [{
   value: 'mysql',
-  logo: 'https://www.mysql.com/common/logos/logo-mysql-170x115.png',
+  logo: require('./server-db-client-mysql.png'),
   label: 'MySQL',
 }, {
   value: 'postgresql',
-  logo: 'https://wiki.postgresql.org/images/3/30/PostgreSQL_logo.3colors.120x120.png',
+  logo: require('./server-db-client-postgresql.png'),
   label: 'PostgreSQL',
 }];
 
