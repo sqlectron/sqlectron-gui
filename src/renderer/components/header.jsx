@@ -14,7 +14,7 @@ function onGithubClick(event) {
 
 function renderBreadcrumb(items) {
   return (
-    <div className="ui breadcrumb">
+    <div className="ui breadcrumb" style={{margin: '0 auto'}}>
       {items.map(({icon, label}, index) => {
         const isLast = (index !== items.length - 1);
         return (
@@ -33,23 +33,24 @@ function renderBreadcrumb(items) {
 
 
 const Header = ({ items, includeButtonCloseConn = false }) => {
+  const visibilityLeaveButton = includeButtonCloseConn ? 'visible' : 'hidden';
   return (
     <div className="ui top fixed menu borderless">
       <a href="#" className="item" onClick={onGithubClick}>
         <img src={LOGO_PATH} style={{width: '5.5em'}} />
       </a>
       <div style={{margin: '0 auto'}}>
-        <div className="item borderless" style={{marginLeft: '-109px'}}>
+        <div className="item" style={{marginLeft: '-109px', marginRight: '-70px'}}>
           {renderBreadcrumb(items)}
         </div>
       </div>
-      {includeButtonCloseConn && <div className="right menu" style={{marginLeft: '0 !important'}}>
+      <div className="right menu" style={{marginLeft: '0 !important', visibility: visibilityLeaveButton}}>
         <div className="item borderless">
           <Link to="/" className="ui icon button" title="Sign out server">
             <i className="sign out icon"></i>
           </Link>
         </div>
-      </div>}
+      </div>
     </div>
   );
 };
