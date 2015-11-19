@@ -24,6 +24,11 @@ const STYLES = {
   content: { flex: 1 },
 };
 
+const CLIENTS = {
+  mysql: { title: 'MySQL' },
+  postgresql: { title: 'PostgreSQL' },
+};
+
 
 export default class QueryBrowserContainer extends Component {
   static propTypes = {
@@ -168,6 +173,7 @@ export default class QueryBrowserContainer extends Component {
       { icon: 'database', label: database },
     ] : [];
 
+    const currentClient = CLIENTS[server.client];
     const filteredDatabases = this.filterDatabases(filter, databases.items);
 
     return (
@@ -178,6 +184,9 @@ export default class QueryBrowserContainer extends Component {
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>
             <div className="ui vertical menu">
+              <div className="item active" style={{textAlign: 'center'}}>
+                <b>{currentClient.title}</b>
+              </div>
               <div className="item">
                 <DatabaseFilter
                   isFetching={databases.isFetching}

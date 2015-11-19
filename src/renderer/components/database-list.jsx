@@ -34,7 +34,7 @@ export default class DatabaseList extends Component {
       );
     }
 
-    return (<div>
+    return (<div className="item" style={{padding: 0}}>
       {databases.map((database, idx) =>
         <div className="item" key={idx}>
           <i className="grid database icon"></i>
