@@ -76,9 +76,9 @@ const ELECTRON_PACKAGER_OPTS = {
  * Supported platforms and platfrom specific options
  */
 const TASKS = [
-  { platform: 'darwin', arch: 'x64', icon: 'app.icns' },
-  { platform: 'linux', arch: 'x64', icon: 'app.png' },
-  { platform: 'win32', arch: 'x64', icon: 'app.ico' },
+  { platform: 'darwin', arch: 'all', icon: 'app.icns' },
+  { platform: 'linux', arch: 'all', icon: 'app.png' },
+  { platform: 'win32', arch: 'all', icon: 'app.ico' },
 ].map(item => {
   return {
     ...item,
