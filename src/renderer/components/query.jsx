@@ -39,7 +39,7 @@ export default class Query extends Component {
               ref="queryBoxTextarea"
               value={query.query}
               showPrintMargin={false}
-              editorProps={{$blockScrolling: true}}
+              editorProps={{$blockScrolling: Infinity}}
               onChange={debounce(onSQLChange, 300)}
               />
           </ResizableBox>
