@@ -12,16 +12,37 @@ module.exports = {
   },
   entry: {
     app: './src/renderer/entry.jsx',
+    vendorCommon: [
+      'jquery',
+      'lodash',
+    ],
+    vendorCommonReact: [
+      'classnames',
+      'react',
+      'react-ace',
+      'react-dom',
+      'react-redux',
+      'react-resizable',
+      'react-router',
+      'react-select',
+      'redux',
+      'redux-thunk',
+    ],
+    vendorSemanticUI: [
+      './src/renderer/vendor/lato/latofonts.css',
+      './src/renderer/vendor/semantic-ui/semantic.js',
+      './src/renderer/vendor/semantic-ui/semantic.css',
+    ],
   },
   output: {
     path: path.join(__dirname, 'build/static'),
-    filename: 'bundle.js',
+    filename: '[name].bundle.js',
   },
   module: {
     loaders: [
       {
         test: /\.jsx?$/,
-        exclude: /node_modules/,
+        exclude: /(node_modules|src\/renderer\/vendor)/,
         loaders: ['babel'],
       },
       {
@@ -34,7 +55,7 @@ module.exports = {
       },
       {
         test: /\.(?:eot|ttf|woff2?|svg)$/,
-        loader: 'file?name=[path][name]-[hash:6].[ext]&context=assets',
+        loader: 'file?name=fonts/[name]-[hash:6].[ext]',
       },
       {
         test: /\.json?$/,
@@ -43,6 +64,21 @@ module.exports = {
     ],
   },
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendorCommon',
+      filename: 'vendor-common.bundle.js',
+      children: true,
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendorCommonReact',
+      filename: 'vendor-common-react.bundle.js',
+      children: true,
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendorSemanticUI',
+      filename: 'vendor-semantic-ui.bundle.js',
+      children: true,
+    }),
     new HtmlWebpackPlugin({
       template: 'src/renderer/index.html',
       inject: 'body',
