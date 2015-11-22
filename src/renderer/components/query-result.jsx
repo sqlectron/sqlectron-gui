@@ -68,25 +68,27 @@ export default class QueryResult extends Component {
     }
 
     return (
-      <table className="ui selectable small celled table">
-        <thead>
-          <tr>
-            {fields.map(({ name }) => (
-              <th key={name}>{name}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderQueryResultRows(rowCount)}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th colSpan={fields.length}>
-              Rows: {rowCount}
-            </th>
-          </tr>
-        </tfoot>
-      </table>
+      <div style={{overflowY: 'scroll'}}>
+        <table className="ui selectable small celled table">
+          <thead>
+            <tr>
+              {fields.map(({ name }) => (
+                <th key={name}>{name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {this.renderQueryResultRows(rowCount)}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th colSpan={fields.length}>
+                Rows: {rowCount}
+              </th>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     );
   }
 }
