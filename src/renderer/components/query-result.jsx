@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import Loader from '../components/loader.jsx';
+import Loader from './loader.jsx';
+import Message from './message.jsx';
 
 
 export default class QueryResult extends Component {
@@ -27,8 +28,53 @@ export default class QueryResult extends Component {
     }
   }
 
-  renderQueryResultRows(rowCount) {
-    const { fields, rows } = this.props;
+  renderQueryResult({ fields, rows, rowCount, queryIndex, totalQueries }) {
+    const queryWithOutput = !!(fields && fields.length);
+    if (!queryWithOutput) {
+      return (
+        <Message
+          message="Query executed successfully"
+          type="success" />
+      );
+    }
+
+    const tableResult = (
+      <table className="ui selectable small celled table">
+        <thead>
+          <tr>
+            {fields.map(({ name }) => (
+              <th key={name}>{name}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {this.renderQueryResultRows({ fields, rows, rowCount })}
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colSpan={fields.length}>
+              Rows: {rowCount}
+            </th>
+          </tr>
+        </tfoot>
+      </table>
+    );
+
+    if (totalQueries === 1) {
+      return tableResult;
+    }
+
+    return (
+      <div key={queryIndex} className="ui segment">
+        <div className="ui top left attached label">
+          Query {queryIndex + 1}
+        </div>
+        {tableResult}
+      </div>
+    );
+  }
+
+  renderQueryResultRows({ fields, rows, rowCount }) {
     if (!rowCount) {
       return (
         <tr>
@@ -50,7 +96,7 @@ export default class QueryResult extends Component {
   }
 
   render() {
-    const { isExecuting, error, rows, rowCount, fields } = this.props;
+    const { isExecuting, error, rows, fields } = this.props;
     if (error) {
       if (error.message) {
         return <div className="ui negative message">{error.message}</div>;
@@ -70,32 +116,22 @@ export default class QueryResult extends Component {
       return null;
     }
 
-    const queryWithOutput = !!(fields && fields.length);
-    if (!queryWithOutput) {
-      return <div className="ui positive message">Query executed successfully</div>;
-    }
+    const isMultipleResult = fields && fields.length && Array.isArray(fields[0]);
+    const _fields = isMultipleResult ? fields : [fields];
+    const _rows = isMultipleResult ? rows : [rows];
+    const totalQueries = _fields.length;
 
     return (
       <div style={{overflowY: 'scroll'}}>
-        <table className="ui selectable small celled table">
-          <thead>
-            <tr>
-              {fields.map(({ name }) => (
-                <th key={name}>{name}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {this.renderQueryResultRows(rowCount)}
-          </tbody>
-          <tfoot>
-            <tr>
-              <th colSpan={fields.length}>
-                Rows: {rowCount}
-              </th>
-            </tr>
-          </tfoot>
-        </table>
+        {
+          _fields.map((field, idx) => this.renderQueryResult({
+            totalQueries,
+            fields: _fields[idx],
+            rows: _rows[idx],
+            rowCount: _rows[idx].length,
+            queryIndex: idx,
+          }))
+        }
       </div>
     );
   }
