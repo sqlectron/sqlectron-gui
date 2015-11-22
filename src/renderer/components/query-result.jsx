@@ -19,6 +19,14 @@ export default class QueryResult extends Component {
     );
   }
 
+  componentWillUpdate(nextProps) {
+    const renderingResults = !nextProps.isExecuting && this.props.isExecuting;
+    if (renderingResults) {
+      const loader = this.refs.loader.getElementsByClassName('text loader')[0];
+      loader.innerText = 'Rendering result';
+    }
+  }
+
   renderQueryResultRows(rowCount) {
     const { fields, rows } = this.props;
     if (!rowCount) {
@@ -52,7 +60,7 @@ export default class QueryResult extends Component {
 
     if (isExecuting) {
       return (
-        <div style={{minHeight: '250px'}}>
+        <div ref="loader" style={{minHeight: '250px'}}>
           <Loader message="Loading" type="active" inverted />
         </div>
       );
