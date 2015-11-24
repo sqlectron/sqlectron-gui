@@ -47,7 +47,7 @@ function ignoreFilesInRelease() {
 
   const autoExcluded = readdirSync(ROOT_PATH)
     .filter(filename => !~include.indexOf(filename))
-    .map(filename => `/${escapeRegExp(filename)}($|/)`);
+    .map(filename => `^/${escapeRegExp(filename)}($|/)`);
 
   return exclude.concat(autoExcluded);
 }
