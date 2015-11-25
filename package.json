@@ -14,8 +14,8 @@
     "url": "https://github.com/sqlectron/sqlectron"
   },
   "scripts": {
-    "start-webpack": "webpack-dev-server --config ./webpack.dev.config.js",
-    "start-electron": "DEBUG=sqlectron-gui:*,sqlectron-core:*,spawn-auto-restart node scripts/dev-auto-restart.js",
+    "dev:webpack": "webpack-dev-server --config ./webpack.dev.config.js",
+    "dev:electron": "DEBUG=sqlectron-gui:*,sqlectron-core:*,spawn-auto-restart node scripts/dev-auto-restart.js",
     "build": "NODE_ENV=production babel-node scripts/build.js --all",
     "run-local-release": "babel-node scripts/run-local-release.js",
     "test": "eslint ."

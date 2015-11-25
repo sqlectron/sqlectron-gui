@@ -28,10 +28,10 @@ Running the application:
 
 ```shell
 # first shell window
-npm run start-webpack
+npm run dev:webpack
 
 # second shell window
-npm run start-electron
+npm run dev:electron
 ```
 
 ### Setup databases
