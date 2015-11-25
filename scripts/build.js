@@ -62,7 +62,7 @@ const ELECTRON_PACKAGER_OPTS = {
   'app-bundle-id': pkg.appBundleId,
   'helper-bundle-id': pkg.helperBundleId,
   version: pkg.devDependencies['electron-prebuilt'].replace('^', ''),
-  asar: false, // does not use asar right now because it is breaking the app
+  asar: true,
   prune: true,
   overwrite: true,
   dir: '.',
