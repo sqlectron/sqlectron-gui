@@ -6,6 +6,10 @@ import pkg from '../package.json';
 
 /**
  * This script runs the local release based in the current platform and arch
+ *
+ * It only works if the app has been built it the current platform.
+ * For example, building an app for OSX through a Linux will not work running
+ * the app on OSX with this script.
  */
 const ROOT_PATH = join(__dirname, '..');
 const RELEASE_APP_PATH = `releases/SQLECTRON-${platform()}-${arch()}/SQLECTRON.app/Contents/Resources`;
