@@ -1,4 +1,4 @@
-import ipc from 'ipc';
+import { ipcRenderer } from 'electron';
 
 
 export default class MenuHandler {
@@ -8,14 +8,14 @@ export default class MenuHandler {
     }
 
     Object.keys(commands)
-      .forEach(command => ipc.on(command, commands[command]));
+      .forEach(command => ipcRenderer.on(command, commands[command]));
 
     this.commands = commands;
   }
 
   removeAllMenus() {
     Object.keys(this.commands)
-      .forEach(command => ipc.removeListener(command, this.commands[command]));
+      .forEach(command => ipcRenderer.removeListener(command, this.commands[command]));
 
     this.commands = null;
   }

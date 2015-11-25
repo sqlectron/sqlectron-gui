@@ -46,7 +46,7 @@
     "del": "^2.0.2",
     "denodeify": "^1.2.1",
     "electron-packager": "^5.1.0",
-    "electron-prebuilt": "^0.34.3",
+    "electron-prebuilt": "^0.35.1",
     "eslint": "^1.7.3",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
@@ -74,7 +74,7 @@
     "spawn-auto-restart": "^2.0.0",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.6",
-    "webpack": "^1.12.2",
+    "webpack": "git+https://github.com/maxcnunes/webpack.git#v1.12.8-electron",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-dev-server": "^1.12.1"
   }

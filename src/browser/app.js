@@ -32,7 +32,7 @@ app.on('ready', function onAppReady() {
 
   // and load the index.html of the app.
   const entryBasePath = devMode ? 'http://localhost:8080' : ('file://' + resolve(__dirname, '..'));
-  mainWindow.loadUrl(entryBasePath + '/static/index.html');
+  mainWindow.loadURL(entryBasePath + '/static/index.html');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => mainWindow = null);
