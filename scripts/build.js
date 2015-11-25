@@ -13,13 +13,14 @@ import webpackConfig from '../webpack.prod.config';
 /**
  * Script arguments:
  * ===============================================
- * -v       verbose (default=false)
- * --all    build for all platforms (default=true)
+ * -v             verbose (default=false)
+ * --platform     build for all platforms (default=true)
  */
-const argv = require('minimist')(process.argv.slice(2), { boolean: ['all', 'v'] });
+const argv = require('minimist')(process.argv.slice(2), { boolean: ['v'] });
 const ROOT_PATH = join(__dirname, '..');
-const BUILD_PATH = join(ROOT_PATH, 'build');
-const RELEASE_PATH = join(ROOT_PATH, 'releases');
+const DIST_PATH = join(ROOT_PATH, 'dist');
+const BUILD_PATH = join(DIST_PATH, 'build');
+const RELEASE_PATH = join(DIST_PATH, 'releases');
 const TMP_PATH = join(ROOT_PATH, '.tmp');
 const CACHE_PATH = join(TMP_PATH, 'cache');
 const RESOURCES_PATH = join(ROOT_PATH, 'resources');
@@ -85,14 +86,19 @@ const TASKS = [
     ...ELECTRON_PACKAGER_OPTS,
     icon: join(RESOURCES_PATH, item.icon),
   };
-}).filter(task => argv.all || task.platform === platform());
+}).filter(task => (
+  argv.platform && (
+    argv.platform === 'all' || argv.platform === task.platform
+  ) || task.platform === platform())
+);
 
 
 /**
  * Build browser code with babel
  */
-async function buildBrowserCode() {
-  return denodeify(exec).call(exec, `babel ./src/browser -d build/browser`, { cwd: ROOT_PATH });
+async function buildBrowserCode () {
+  const browserBuildPath = join(BUILD_PATH, 'browser');
+  return denodeify(exec).call(exec, `babel ./src/browser -d ${browserBuildPath}`, { cwd: ROOT_PATH });
 }
 
 
@@ -100,7 +106,7 @@ async function buildBrowserCode() {
  * Copy resources
  */
 async function copyResources() {
-  return denodeify(exec).call(exec, `cp -R ./resources build`, { cwd: ROOT_PATH });
+  return denodeify(exec).call(exec, `cp -R ./resources ${BUILD_PATH}`, { cwd: ROOT_PATH });
 }
 
 
@@ -128,8 +134,8 @@ async function packElectronApp(opts) {
  */
 (async function startPack() {
   try {
-    console.log('> cleaning old builds and releases');
-    await del([ BUILD_PATH, RELEASE_PATH ]);
+    console.log('> cleaning old distribution files');
+    await del([ DIST_PATH ]);
 
     console.log('> building browser code with babel');
     await buildBrowserCode();

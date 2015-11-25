@@ -1,6 +1,5 @@
 node_modules
-releases
-build
+dist
 npm-debug.log
 .DS_Store
 .tmp
