@@ -32,6 +32,7 @@
     "build-pack": "npm run build && npm run pack",
     "build-pack:osx": "npm run build:osx && npm run pack:osx",
     "build-pack:win": "npm run build:win && npm run pack:win32 && npm run pack:win64",
+    "build-pack-from-linux": "npm run build && npm run pack:win32 && npm run pack:win64",
 
     "run-local-release": "babel-node scripts/run-local-release.js"
   },

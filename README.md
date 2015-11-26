@@ -52,5 +52,5 @@ npm run build
 You will need follow [it](https://github.com/maxogden/electron-packager#building-windows-apps-from-non-windows-platforms) or build through the docker:
 
 ```shell
-docker-compose build
+docker-compose dist
 ```
