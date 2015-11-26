@@ -1,5 +1,7 @@
 node_modules
-dist
+build
+releases
+installers
 npm-debug.log
 .DS_Store
 .tmp

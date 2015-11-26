@@ -18,9 +18,9 @@ import webpackConfig from '../webpack.prod.config';
  */
 const argv = require('minimist')(process.argv.slice(2), { boolean: ['v'] });
 const ROOT_PATH = join(__dirname, '..');
-const DIST_PATH = join(ROOT_PATH, 'dist');
-const BUILD_PATH = join(DIST_PATH, 'build');
-const RELEASE_PATH = join(DIST_PATH, 'releases');
+const BUILD_PATH = join(ROOT_PATH, 'build');
+const RELEASE_PATH = join(ROOT_PATH, 'releases');
+const INSTALLERS_PATH = join(ROOT_PATH, 'installers');
 const TMP_PATH = join(ROOT_PATH, '.tmp');
 const CACHE_PATH = join(TMP_PATH, 'cache');
 const RESOURCES_PATH = join(ROOT_PATH, 'resources');
@@ -135,7 +135,7 @@ async function packElectronApp(opts) {
 (async function startPack() {
   try {
     console.log('> cleaning old distribution files');
-    await del([ DIST_PATH ]);
+    await del([ BUILD_PATH, RELEASE_PATH, INSTALLERS_PATH ]);
 
     console.log('> building browser code with babel');
     await buildBrowserCode();

@@ -16,24 +16,19 @@
   "scripts": {
     "dev:webpack": "webpack-dev-server --config ./webpack.dev.config.js",
     "dev:electron": "DEBUG=sqlectron-gui:*,sqlectron-core:*,spawn-auto-restart node scripts/dev-auto-restart.js",
-
     "test": "eslint .",
-
     "build": "NODE_ENV=production babel-node scripts/build.js --platform=all",
     "build:osx": "NODE_ENV=production babel-node scripts/build.js --platform=darwin",
     "build:linux": "NODE_ENV=production babel-node scripts/build.js --platform=linux",
     "build:win": "NODE_ENV=production babel-node scripts/build.js --platform=win",
-
     "pack": "npm run pack:osx && npm run pack:win",
-    "pack:osx": "electron-builder 'dist/releases/SQLECTRON-darwin-x64/SQLECTRON.app' --platform=osx --out='dist/installers/osx' --config=packager.json",
-    "pack:win32": "electron-builder 'dist/releases/SQLECTRON-win32-ia32' --platform=win --out='dist/installers/win' --config=packager.json",
-    "pack:win64": "electron-builder 'dist/releases/SQLECTRON-win32-x64' --platform=win --out='dist/installers/win' --config=packager.json",
-
+    "pack:osx": "electron-builder 'releases/SQLECTRON-darwin-x64/SQLECTRON.app' --platform=osx --out='installers/osx' --config=packager.json",
+    "pack:win32": "electron-builder 'releases/SQLECTRON-win32-ia32' --platform=win --out='installers/win' --config=packager.json",
+    "pack:win64": "electron-builder 'releases/SQLECTRON-win32-x64' --platform=win --out='installers/win' --config=packager.json",
     "build-pack": "npm run build && npm run pack",
     "build-pack:osx": "npm run build:osx && npm run pack:osx",
     "build-pack:win": "npm run build:win && npm run pack:win32 && npm run pack:win64",
     "build-pack-from-linux": "npm run build && npm run pack:win32 && npm run pack:win64",
-
     "run-local-release": "babel-node scripts/run-local-release.js"
   },
   "keywords": [
