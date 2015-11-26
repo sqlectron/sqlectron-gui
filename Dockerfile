@@ -16,6 +16,6 @@ COPY package.json /usr/src/app/
 RUN npm install
 COPY . /usr/src/app
 
-# buil all and pack only for Windows
+# build all and pack only for Windows
 # because is not possible packing for OSX from Linux
 CMD ["npm", "run", "build-pack-from-linux"]
