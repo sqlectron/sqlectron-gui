@@ -20,7 +20,7 @@
     "build": "NODE_ENV=production babel-node scripts/build.js --platform=all",
     "build:osx": "NODE_ENV=production babel-node scripts/build.js --platform=darwin",
     "build:linux": "NODE_ENV=production babel-node scripts/build.js --platform=linux",
-    "build:win": "NODE_ENV=production babel-node scripts/build.js --platform=win",
+    "build:win": "NODE_ENV=production babel-node scripts/build.js --platform=win32",
     "pack": "npm run pack:osx && npm run pack:win",
     "pack:osx": "electron-builder 'releases/SQLECTRON-darwin-x64/SQLECTRON.app' --platform=osx --out='installers/osx' --config=packager.json",
     "pack:win32": "electron-builder 'releases/SQLECTRON-win32-ia32' --platform=win --out='installers/win/32' --config=packager.json",
