@@ -1,6 +1,6 @@
 {
   "osx" : {
-    "title": "SQLECTRON",
+    "title": "Sqlectron",
     "background": "resources/osx-installer-bg.png",
     "icon": "resources/app.icns",
     "icon-size": 80,
@@ -10,7 +10,7 @@
     ]
   },
   "win" : {
-    "title" : "SQLECTRON",
+    "title" : "Sqlectron",
     "icon" : "resources/app.ico"
   }
 }
