@@ -26,11 +26,6 @@ const CACHE_PATH = join(TMP_PATH, 'cache');
 const RESOURCES_PATH = join(ROOT_PATH, 'resources');
 
 
-// when running it from Docker there is something changing the TMPDIR to the
-// app's root path, so we prevent it setting the path again
-process.env.TMPDIR = TMP_PATH;
-
-
 /**
  * Ignore anything that is not required in the release app
  */

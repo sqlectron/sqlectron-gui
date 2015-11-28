@@ -1,4 +1,4 @@
 build/
 releases/
 installers/
-electron-packager/
+.tmp/

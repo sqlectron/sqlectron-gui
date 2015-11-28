@@ -5,4 +5,3 @@ installers
 npm-debug.log
 .DS_Store
 .tmp
-electron-packager

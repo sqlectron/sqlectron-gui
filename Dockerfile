@@ -1,21 +1,10 @@
-FROM node:0.12.7
+FROM electron-distribution:0.12-onbuild
 
-# install wine and nsis
-RUN dpkg --add-architecture i386 && \
-    echo "deb http://httpredir.debian.org/debian jessie-backports main" >> /etc/apt/sources.list && \
-    apt-get -y update && \
-    apt-get install -y wine nsis && \
-    apt-get clean autoclean && \
-    apt-get autoremove -y && \
-    rm -rf /var/lib/{apt,dpkg,cache,log}
+# Keep the tmp folder inside the project.
+# This way we dont lose some cache files between distribution tasks
+ENV TMPDIR /usr/src/app/.tmp
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-
-COPY package.json /usr/src/app/
-RUN npm install
-COPY . /usr/src/app
-
-# build all and pack only for Windows
-# because is not possible packing for OSX from Linux
-CMD ["npm", "run", "build-pack-from-linux"]
+# Build all and pack only for Windows
+# because is not possible packing for OSX from Linux.
+# Use unsafe-perm to force npm respect the tmp path (http://git.io/vB2oR)
+CMD ["npm", "run", "--unsafe-perm", "build-pack-from-linux"]
