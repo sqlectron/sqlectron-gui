@@ -1,7 +1,7 @@
 import { resolve } from 'path';
 import app from 'app';
 import BrowserWindow from 'browser-window';
-import { attachMenuToWindow } from './app-menu';
+import { attachMenuToWindow } from './menu';
 import { productName } from '../../package.json';
 
 const devMode = (process.argv || []).indexOf('--dev') !== -1;

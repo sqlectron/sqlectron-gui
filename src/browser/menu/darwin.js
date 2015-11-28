@@ -1,14 +1,4 @@
-import Menu from 'menu';
-
-
-export function attachMenuToWindow(app, mainWindow) {
-  const template = buildTemplate(app, mainWindow);
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
-}
-
-
-function buildTemplate(app, mainWindow) {
+export function buildTemplate(app, mainWindow) {
   return [
     {
       label: 'Sqlectron',
@@ -29,12 +19,12 @@ function buildTemplate(app, mainWindow) {
         },
         {
           label: 'Hide Sqlectron',
-          accelerator: 'CmdOrCtrl+H',
+          accelerator: 'Cmd+H',
           selector: 'hide:',
         },
         {
           label: 'Hide Others',
-          accelerator: 'CmdOrCtrl+Shift+H',
+          accelerator: 'Cmd+Shift+H',
           selector: 'hideOtherApplications:',
         },
         {
@@ -46,7 +36,7 @@ function buildTemplate(app, mainWindow) {
         },
         {
           label: 'Quit',
-          accelerator: 'CmdOrCtrl+Q',
+          accelerator: 'Cmd+Q',
           click: () => app.quit(),
         },
       ],
@@ -56,7 +46,7 @@ function buildTemplate(app, mainWindow) {
       submenu: [
         {
           label: 'Execute',
-          accelerator: 'CmdOrCtrl+Enter',
+          accelerator: 'Cmd+Enter',
           click: () => mainWindow.webContents.send('sqlectron:query-execute'),
         },
       ],
@@ -66,12 +56,12 @@ function buildTemplate(app, mainWindow) {
       submenu: [
         {
           label: 'Undo',
-          accelerator: 'CmdOrCtrl+Z',
+          accelerator: 'Cmd+Z',
           selector: 'undo:',
         },
         {
           label: 'Redo',
-          accelerator: 'Shift+CmdOrCtrl+Z',
+          accelerator: 'Shift+Cmd+Z',
           selector: 'redo:',
         },
         {
@@ -79,22 +69,22 @@ function buildTemplate(app, mainWindow) {
         },
         {
           label: 'Cut',
-          accelerator: 'CmdOrCtrl+X',
+          accelerator: 'Cmd+X',
           selector: 'cut:',
         },
         {
           label: 'Copy',
-          accelerator: 'CmdOrCtrl+C',
+          accelerator: 'Cmd+C',
           selector: 'copy:',
         },
         {
           label: 'Paste',
-          accelerator: 'CmdOrCtrl+V',
+          accelerator: 'Cmd+V',
           selector: 'paste:',
         },
         {
           label: 'Select All',
-          accelerator: 'CmdOrCtrl+A',
+          accelerator: 'Cmd+A',
           selector: 'selectAll:',
         },
       ],
@@ -104,12 +94,12 @@ function buildTemplate(app, mainWindow) {
       submenu: [
         {
           label: 'Reload',
-          accelerator: 'CmdOrCtrl+R',
+          accelerator: 'Cmd+R',
           click: () => mainWindow.reloadIgnoringCache(),
         },
         {
           label: 'Toggle DevTools',
-          accelerator: 'Alt+CmdOrCtrl+I',
+          accelerator: 'Alt+Cmd+I',
           click: () => mainWindow.toggleDevTools(),
         },
       ],
@@ -119,12 +109,12 @@ function buildTemplate(app, mainWindow) {
       submenu: [
         {
           label: 'Minimize',
-          accelerator: 'CmdOrCtrl+M',
+          accelerator: 'Cmd+M',
           selector: 'performMiniaturize:',
         },
         {
           label: 'Close',
-          accelerator: 'CmdOrCtrl+W',
+          accelerator: 'Cmd+W',
           selector: 'performClose:',
         },
         {

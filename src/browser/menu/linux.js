@@ -1,0 +1,85 @@
+export function buildTemplate(app, mainWindow) {
+  return [
+    {
+      'label': 'File',
+      'submenu': [
+        {
+          'label': 'Preferences',
+          'command': 'application:show-settings',
+        },
+        {
+          'label': 'Quit',
+          'command': 'application:quit',
+          'accelerator': 'Ctrl+Q',
+        },
+      ],
+    },
+    {
+      label: 'Query',
+      submenu: [
+        {
+          label: 'Execute',
+          accelerator: 'Ctrl+Enter',
+          click: () => mainWindow.webContents.send('sqlectron:query-execute'),
+        },
+      ],
+    },
+    {
+      label: 'Edit',
+      submenu: [
+        {
+          label: 'Undo',
+          accelerator: 'Ctrl+Z',
+          selector: 'undo:',
+        },
+        {
+          label: 'Redo',
+          accelerator: 'Shift+Ctrl+Z',
+          selector: 'redo:',
+        },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Cut',
+          accelerator: 'Ctrl+X',
+          selector: 'cut:',
+        },
+        {
+          label: 'Copy',
+          accelerator: 'Ctrl+C',
+          selector: 'copy:',
+        },
+        {
+          label: 'Paste',
+          accelerator: 'Ctrl+V',
+          selector: 'paste:',
+        },
+        {
+          label: 'Select All',
+          accelerator: 'Ctrl+A',
+          selector: 'selectAll:',
+        },
+      ],
+    },
+    {
+      label: 'View',
+      submenu: [
+        {
+          label: 'Reload',
+          accelerator: 'Ctrl+R',
+          click: () => mainWindow.reloadIgnoringCache(),
+        },
+        {
+          label: 'Toggle DevTools',
+          accelerator: 'Alt+Ctrl+I',
+          click: () => mainWindow.toggleDevTools(),
+        },
+      ],
+    },
+    {
+      label: 'Help',
+      submenu: [],
+    },
+  ];
+}
