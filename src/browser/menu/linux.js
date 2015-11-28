@@ -4,10 +4,6 @@ export function buildTemplate(app, mainWindow) {
       'label': 'File',
       'submenu': [
         {
-          'label': 'Preferences',
-          'command': 'application:show-settings',
-        },
-        {
           'label': 'Quit',
           'command': 'application:quit',
           'accelerator': 'Ctrl+Q',
