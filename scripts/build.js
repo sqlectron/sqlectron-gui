@@ -69,7 +69,7 @@ const ELECTRON_PACKAGER_OPTS = {
 
 
 /**
- * Supported platforms and platfrom specific options
+ * Supported platforms and platform specific options
  */
 const TASKS = [
   { platform: 'darwin', arch: 'all', icon: 'app.icns' },
