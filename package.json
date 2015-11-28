@@ -57,7 +57,7 @@
     "denodeify": "^1.2.1",
     "electron-builder": "^2.3.0",
     "electron-packager": "^5.1.1",
-    "electron-prebuilt": "^0.35.1",
+    "electron-prebuilt": "^0.35.2",
     "eslint": "^1.7.3",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
