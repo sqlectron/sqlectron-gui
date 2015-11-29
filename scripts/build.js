@@ -149,5 +149,6 @@ async function packElectronApp(opts) {
     console.log('>> success');
   } catch (err) {
     console.log('>> error', err.stack || err);
+    process.exit(1);
   }
 })();
