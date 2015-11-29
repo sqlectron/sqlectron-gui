@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import shell from 'shell';
 
 
-const LOGO_PATH = require('./logo-200px.png');
+const LOGO_PATH = require('./logo-128px.png');
 
 
 function onGithubClick(event) {
