@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import app from 'app';
 import BrowserWindow from 'browser-window';
 import { attachMenuToWindow } from './menu';
+import { check as checkUpdate } from './update-checker';
 import { productName } from '../../package.json';
 
 const devMode = (process.argv || []).indexOf('--dev') !== -1;
@@ -40,4 +41,7 @@ app.on('ready', function onAppReady() {
   if (devMode) {
     mainWindow.openDevTools();
   }
+
+  checkUpdate(mainWindow)
+    .catch(err => console.error('Unable to check for updates', err));
 });

@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import shell from 'shell';
+import UpdateChecker from './update-checker.jsx';
 
 
 const STYLE = {
@@ -19,6 +20,9 @@ const Footer = ({ status }) => {
     <div className="ui bottom fixed menu borderless" style={STYLE.footer}>
       <div style={STYLE.status}>{status}</div>
       <div className="right menu">
+        <div className="item">
+          <UpdateChecker />
+        </div>
         <a href="#" className="item" onClick={onGithubClick}>Github</a>
       </div>
     </div>
