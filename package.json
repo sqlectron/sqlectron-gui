@@ -8,10 +8,10 @@
   "author": "The Sqlectron Team",
   "main": "build/browser/main.js",
   "license": "MIT",
-  "bugs": "https://github.com/sqlectron/sqlectron/issues",
+  "bugs": "https://github.com/sqlectron/sqlectron-gui/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sqlectron/sqlectron"
+    "url": "https://github.com/sqlectron/sqlectron-gui"
   },
   "scripts": {
     "dev:webpack": "webpack-dev-server --config ./webpack.dev.config.js",
