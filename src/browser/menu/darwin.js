@@ -1,10 +1,17 @@
+import shell from 'shell';
+import {
+  productName,
+  bugs as issuesURL,
+} from '../../../package.json';
+
+
 export function buildTemplate(app, mainWindow) {
   return [
     {
-      label: 'Sqlectron',
+      label: productName,
       submenu: [
         {
-          label: 'About Sqlectron',
+          label: `About ${productName}`,
           selector: 'orderFrontStandardAboutPanel:',
         },
         {
@@ -18,7 +25,7 @@ export function buildTemplate(app, mainWindow) {
           type: 'separator',
         },
         {
-          label: 'Hide Sqlectron',
+          label: `Hide ${productName}`,
           accelerator: 'Cmd+H',
           selector: 'hide:',
         },
@@ -128,7 +135,12 @@ export function buildTemplate(app, mainWindow) {
     },
     {
       label: 'Help',
-      submenu: [],
+      submenu: [
+        {
+          label: 'Report Issue',
+          click: () => shell.openExternal(issuesURL),
+        },
+      ],
     },
   ];
 }

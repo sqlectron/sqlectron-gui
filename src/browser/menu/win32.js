@@ -1,3 +1,11 @@
+import shell from 'shell';
+import {
+  productName,
+  bugs as issuesURL,
+  homepage as homepageURL,
+} from '../../../package.json';
+
+
 export function buildTemplate(app, mainWindow) {
   return [
     {
@@ -75,7 +83,16 @@ export function buildTemplate(app, mainWindow) {
     },
     {
       label: 'Help',
-      submenu: [],
+      submenu: [
+        {
+          label: 'Report Issue',
+          click: () => shell.openExternal(issuesURL),
+        },
+        {
+          'label': `About ${productName}`,
+          click: () => shell.openExternal(homepageURL),
+        },
+      ],
     },
   ];
 }

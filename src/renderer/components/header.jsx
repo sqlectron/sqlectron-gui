@@ -6,9 +6,9 @@ import shell from 'shell';
 const LOGO_PATH = require('./logo-128px.png');
 
 
-function onGithubClick(event) {
+function onSiteClick(event) {
   event.preventDefault();
-  shell.openExternal('https://github.com/sqlectron/sqlectron-gui');
+  shell.openExternal('https://sqlectron.github.io');
 }
 
 
@@ -36,7 +36,7 @@ const Header = ({ items, includeButtonCloseConn = false }) => {
   const visibilityLeaveButton = includeButtonCloseConn ? 'visible' : 'hidden';
   return (
     <div className="ui top fixed menu borderless">
-      <a href="#" className="item" onClick={onGithubClick}>
+      <a href="#" className="item" onClick={onSiteClick}>
         <img src={LOGO_PATH} style={{width: '5.5em'}} />
       </a>
       <div style={{margin: '0 auto'}}>

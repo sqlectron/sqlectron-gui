@@ -8,6 +8,7 @@
   "author": "The Sqlectron Team",
   "main": "build/browser/main.js",
   "license": "MIT",
+  "homepage": "https://sqlectron.github.io",
   "bugs": "https://github.com/sqlectron/sqlectron-gui/issues",
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "build-pack:osx": "npm run build:osx && npm run pack:osx",
     "build-pack:win": "npm run build:win && npm run pack:win32 && npm run pack:win64",
     "build-pack-from-linux": "npm run build && npm run pack:win32 && npm run pack:win64",
+    "publish": "./scripts/publish-releases.sh",
     "run-local-release": "babel-node scripts/run-local-release.js"
   },
   "keywords": [
@@ -59,6 +61,7 @@
     "electron-builder": "^2.3.0",
     "electron-packager": "^5.1.1",
     "electron-prebuilt": "^0.35.2",
+    "electron-release": "^2.2.0",
     "eslint": "^1.7.3",
     "eslint-config-airbnb": "^0.1.0",
     "eslint-plugin-react": "^3.6.3",
