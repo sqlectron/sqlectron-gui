@@ -13,8 +13,8 @@ export function buildTemplate(app, mainWindow) {
       'submenu': [
         {
           'label': 'Quit',
-          'command': 'application:quit',
           'accelerator': 'Ctrl+Q',
+          click: () => app.quit(),
         },
       ],
     },
