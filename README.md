@@ -1,8 +1,8 @@
-![SQLECTRON Logo](https://www.dropbox.com/s/dt06tif4xo1khbf/SQLECTRON-400px.png?raw=1)
+![SQLECTRON Logo](https://sqlectron.github.io/logos/logo-512.png)
 
 A simple and lightweight SQL client with cross database and platform support.
 
-![demo](https://www.dropbox.com/s/lfrdhgk1k2hwmhg/sqlectron-demo-v0.1.0.gif?raw=1)
+![demo](https://sqlectron.github.io/demos/sqlectron-demo-gui-v1.0.0.gif)
 
 #### Current supported databases
 * PostgreSQL
