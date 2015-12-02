@@ -1,8 +1,8 @@
 <p align="center">
   <img src="https://sqlectron.github.io/logos/logo-512.png">
+  <br />
+  A simple and lightweight SQL client with cross database and platform support.
 </p>
-
-A simple and lightweight SQL client with cross database and platform support.
 
 ![demo](https://sqlectron.github.io/demos/sqlectron-demo-gui-v1.0.0.gif)
 
