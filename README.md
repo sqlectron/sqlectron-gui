@@ -1,4 +1,6 @@
-![SQLECTRON Logo](https://sqlectron.github.io/logos/logo-512.png)
+<p align="center">
+  <img src="https://sqlectron.github.io/logos/logo-512.png">
+</p>
 
 A simple and lightweight SQL client with cross database and platform support.
 
