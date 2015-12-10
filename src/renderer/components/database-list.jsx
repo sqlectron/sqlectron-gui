@@ -2,7 +2,10 @@ import React, { Component, PropTypes } from 'react';
 
 
 const STYLE = {
-  database: { cursor: 'pointer' },
+  database: {
+    cursor: 'pointer',
+    wordBreak: 'break-all',
+  },
 };
 
 
