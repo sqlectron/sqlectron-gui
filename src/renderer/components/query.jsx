@@ -64,6 +64,7 @@ export default class Query extends Component {
           fields={query.resultFields}
           rows={query.resultRows}
           rowCount={query.resultRowCount}
+          affectedRows={query.resultAffectedRows}
           isExecuting={query.isExecuting}
           error={query.error} />
       </div>

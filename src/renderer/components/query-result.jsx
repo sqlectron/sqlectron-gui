@@ -8,7 +8,14 @@ export default class QueryResult extends Component {
     query: PropTypes.string,
     fields: PropTypes.array,
     rows: PropTypes.array,
-    rowCount: PropTypes.number,
+    rowCount: PropTypes.oneOfType([
+      React.PropTypes.array,
+      React.PropTypes.number,
+    ]),
+    affectedRows: PropTypes.oneOfType([
+      React.PropTypes.array,
+      React.PropTypes.number,
+    ]),
     isExecuting: PropTypes.bool,
     error: PropTypes.object,
   }
@@ -28,12 +35,12 @@ export default class QueryResult extends Component {
     }
   }
 
-  renderQueryResult({ fields, rows, rowCount, queryIndex, totalQueries }) {
+  renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries }) {
     const queryWithOutput = !!(fields && fields.length);
     if (!queryWithOutput) {
       return (
         <Message
-          message="Query executed successfully"
+          message={`Query executed successfully. Affected rows: ${affectedRows}.`}
           type="success" />
       );
     }
@@ -96,7 +103,7 @@ export default class QueryResult extends Component {
   }
 
   render() {
-    const { isExecuting, error, rows, fields } = this.props;
+    const { isExecuting, error, rows, fields, rowCount, affectedRows } = this.props;
     if (error) {
       if (error.message) {
         return <div className="ui negative message">{error.message}</div>;
@@ -119,7 +126,10 @@ export default class QueryResult extends Component {
     const isMultipleResult = fields && fields.length && Array.isArray(fields[0]);
     const _fields = isMultipleResult ? fields : [fields];
     const _rows = isMultipleResult ? rows : [rows];
+    const _rowsCount = isMultipleResult ? rowCount : [rowCount];
+    const _affectedRows = isMultipleResult ? affectedRows : [affectedRows];
     const totalQueries = _fields.length;
+
 
     return (
       <div style={{overflowY: 'scroll'}}>
@@ -128,7 +138,8 @@ export default class QueryResult extends Component {
             totalQueries,
             fields: _fields[idx],
             rows: _rows[idx],
-            rowCount: _rows[idx].length,
+            rowCount: _rowsCount[idx],
+            affectedRows: _affectedRows[idx],
             queryIndex: idx,
           }))
         }

@@ -36,9 +36,8 @@ export default function (state = INITIAL_STATE, action) {
       isExecuting: false,
       resultFields: action.result.fields,
       resultRows: action.result.rows,
-      resultRowCount: action.result.RowCount
-        || (action.result.rows && action.result.rows.length)
-        || 0,
+      resultRowCount: action.result.rowCount,
+      resultAffectedRows: action.result.affectedRows,
     };
   }
   case types.EXECUTE_QUERY_FAILURE: {
