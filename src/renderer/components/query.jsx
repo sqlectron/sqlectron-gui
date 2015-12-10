@@ -29,7 +29,7 @@ export default class Query extends Component {
     return (
       <div>
         <div>
-          <ResizableBox className="react-resizable ui segment" height={200} width={500}>
+          <ResizableBox className="react-resizable react-resizable-se-resize ui segment" height={200} width={500}>
             <AceEditor
               mode="sql"
               theme="github"

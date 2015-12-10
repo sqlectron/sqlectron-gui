@@ -17,10 +17,14 @@ import {
 } from '../actions/queries';
 
 
+import { ResizableBox } from 'react-resizable';
+require('../components/react-resizable.css');
+
+
 const STYLES = {
   wrapper: { paddingTop: '50px' },
   container: { display: 'flex', padding: '10px 10px 50px 10px' },
-  sidebar: { width: '220px' },
+  sidebar: {},
   content: { flex: 1 },
 };
 
@@ -183,23 +187,28 @@ export default class QueryBrowserContainer extends Component {
         </div>
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>
-            <div className="ui vertical menu">
-              <div className="item active" style={{textAlign: 'center'}}>
-                <b>{currentClient.title}</b>
-              </div>
-              <div className="item">
-                <DatabaseFilter
-                  value={filter}
+            <ResizableBox className="react-resizable react-resizable-ew-resize"
+              width={235}
+              minConstraints={[235, 300]}
+              maxConstraints={[750, 10000]}>
+              <div className="ui vertical menu" style={{width: 'auto'}}>
+                <div className="item active" style={{textAlign: 'center'}}>
+                  <b>{currentClient.title}</b>
+                </div>
+                <div className="item">
+                  <DatabaseFilter
+                    value={filter}
+                    isFetching={databases.isFetching}
+                    onFilterChange={::this.onFilterChange} />
+                </div>
+                <DatabaseList
+                  databases={filteredDatabases}
                   isFetching={databases.isFetching}
-                  onFilterChange={::this.onFilterChange} />
+                  tablesByDatabase={tables.itemsByDatabase}
+                  onSelectDatabase={::this.onSelectDatabase}
+                  onSelectTable={::this.onSelectTable} />
               </div>
-              <DatabaseList
-                databases={filteredDatabases}
-                isFetching={databases.isFetching}
-                tablesByDatabase={tables.itemsByDatabase}
-                onSelectDatabase={::this.onSelectDatabase}
-                onSelectTable={::this.onSelectTable} />
-            </div>
+            </ResizableBox>
           </div>
           <div style={STYLES.content}>
             <Query query={queries}
