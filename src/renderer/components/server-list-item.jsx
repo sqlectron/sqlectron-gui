@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react';
+import { sqlectron } from '../../browser/remote';
 
 
-const ICONS = {
-  mysql: require('./server-db-client-mysql.png'),
-  postgresql: require('./server-db-client-postgresql.png'),
-};
+/**
+ * Load icons for supported database clients
+ */
+const ICONS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
+  clients[dbClient.key] = require(`./server-db-client-${dbClient.key}.png`);
+  return clients;
+}, {});
 
 
 export default class ServerListItem extends Component {

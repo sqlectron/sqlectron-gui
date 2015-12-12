@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { sqlectron } from '../../browser/remote';
 import { connect as connectDatabase } from '../actions/connections';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
@@ -28,10 +29,11 @@ const STYLES = {
   content: { flex: 1 },
 };
 
-const CLIENTS = {
-  mysql: { title: 'MySQL' },
-  postgresql: { title: 'PostgreSQL' },
-};
+
+const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
+  clients[dbClient.key] = { title: dbClient.name };
+  return clients;
+}, {});
 
 
 class QueryBrowserContainer extends Component {

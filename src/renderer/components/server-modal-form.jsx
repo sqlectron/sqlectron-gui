@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
+import { sqlectron } from '../../browser/remote';
 import ConfirmModal from './confim-modal.jsx';
 
 
@@ -7,15 +8,11 @@ require('react-select/dist/default.css');
 require('./override-select.css');
 
 
-const CLIENTS = [{
-  value: 'mysql',
-  logo: require('./server-db-client-mysql.png'),
-  label: 'MySQL',
-}, {
-  value: 'postgresql',
-  logo: require('./server-db-client-postgresql.png'),
-  label: 'PostgreSQL',
-}];
+const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
+  value: dbClient.key,
+  logo: require(`./server-db-client-${dbClient.key}.png`),
+  label: dbClient.name,
+}));
 
 
 export default class ServerModalForm extends Component {
