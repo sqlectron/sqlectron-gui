@@ -2,3 +2,4 @@ build/
 releases/
 installers/
 .tmp/
+src/renderer/vendor/
