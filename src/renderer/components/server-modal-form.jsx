@@ -4,7 +4,7 @@ import { sqlectron } from '../../browser/remote';
 import ConfirmModal from './confim-modal.jsx';
 
 
-require('react-select/dist/default.css');
+require('react-resizable/css/styles.css');
 require('./override-select.css');
 
 
