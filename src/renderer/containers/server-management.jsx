@@ -18,7 +18,7 @@ const STYLES = {
 const BREADCRUMB = [{ icon: 'server', label: 'servers'}];
 
 
-export default class ServerManagerment extends Component {
+class ServerManagerment extends Component {
   static propTypes = {
     status: PropTypes.string.isRequired,
     connections: PropTypes.object.isRequired,

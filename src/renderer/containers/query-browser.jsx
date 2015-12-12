@@ -34,7 +34,7 @@ const CLIENTS = {
 };
 
 
-export default class QueryBrowserContainer extends Component {
+class QueryBrowserContainer extends Component {
   static propTypes = {
     status: PropTypes.string.isRequired,
     databases: PropTypes.object.isRequired,
