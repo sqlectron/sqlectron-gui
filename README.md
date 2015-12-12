@@ -7,8 +7,9 @@
 ![demo](https://sqlectron.github.io/demos/sqlectron-demo-gui-v1.0.0.gif)
 
 #### Current supported databases
-* PostgreSQL
-* MySQL
+* [PostgreSQL](http://www.postgresql.org/)
+* [MySQL](https://www.mysql.com/)
+* [Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/)
 
 Do you wanna support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
 
