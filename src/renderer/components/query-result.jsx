@@ -1,3 +1,4 @@
+import { clipboard } from 'electron';
 import React, { Component, PropTypes } from 'react';
 import Loader from './loader.jsx';
 import Message from './message.jsx';
@@ -20,10 +21,16 @@ export default class QueryResult extends Component {
     error: PropTypes.object,
   }
 
-  shouldComponentUpdate(nextProps) {
+  constructor(props, context) {
+    super(props, context);
+    this.state = {};
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
     return (
       (!nextProps.isExecuting && this.props.isExecuting) ||
-      (nextProps.query !== this.props.query)
+      (nextProps.query !== this.props.query) ||
+      (nextState.copied !== this.state.copied)
     );
   }
 
@@ -33,6 +40,18 @@ export default class QueryResult extends Component {
       const loader = this.refs.loader.getElementsByClassName('text loader')[0];
       loader.innerText = 'Rendering result';
     }
+  }
+
+  componentDidUpdate() {
+    if (this.state.copied) {
+      /* eslint react/no-did-update-set-state: 0 */
+      setTimeout(() => this.setState({ copied: false }), 1500);
+    }
+  }
+
+  onClickCopyToClipboard(rows) {
+    clipboard.writeText(JSON.stringify(rows, null, 2));
+    this.setState({ copied: true });
   }
 
   renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries }) {
@@ -61,6 +80,13 @@ export default class QueryResult extends Component {
           <tr>
             <th colSpan={fields.length}>
               Rows: {rowCount}
+              <button className="ui icon button"
+                style={{float: 'right'}}
+                title="Copy as JSON to clipboard"
+                onClick={() => this.onClickCopyToClipboard(rows)}>
+                <i className="copy icon"></i>
+                {this.state.copied && 'Copied'}
+              </button>
             </th>
           </tr>
         </tfoot>
@@ -129,7 +155,6 @@ export default class QueryResult extends Component {
     const _rowsCount = isMultipleResult ? rowCount : [rowCount];
     const _affectedRows = isMultipleResult ? affectedRows : [affectedRows];
     const totalQueries = _fields.length;
-
 
     return (
       <div style={{overflowY: 'scroll'}}>
