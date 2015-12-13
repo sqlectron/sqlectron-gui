@@ -16,6 +16,12 @@ export default class Query extends Component {
     onSQLChange: PropTypes.func.isRequired,
   }
 
+  componentDidUpdate() {
+    if (this.props.query.isExecuting && this.props.query.isDefaultSelect) {
+      window.scrollTo(0, 0);
+    }
+  }
+
   onExecQueryClick() {
     this.props.onExecQueryClick(this.props.query.query);
   }

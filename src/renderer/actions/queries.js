@@ -20,7 +20,7 @@ export function executeDefaultSelectQueryIfNeeded (table) {
   return async (dispatch, getState) => {
     const query = await sqlectron.db.getQuerySelectTop(table);
     if (shouldExecuteQuery(query, getState())) {
-      return dispatch(executeQuery(query));
+      return dispatch(executeQuery(query, true));
     }
   };
 }
@@ -41,9 +41,9 @@ function shouldExecuteQuery (query, state) {
 }
 
 
-function executeQuery (query) {
+function executeQuery (query, isDefaultSelect = false) {
   return async dispatch => {
-    dispatch({ type: EXECUTE_QUERY_REQUEST, query });
+    dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
       const result = await sqlectron.db.executeQuery(query);
       dispatch({ type: EXECUTE_QUERY_SUCCESS, query, result });

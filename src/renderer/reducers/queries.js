@@ -3,6 +3,7 @@ import * as types from '../actions/queries';
 
 const INITIAL_STATE = {
   isExecuting: false,
+  isDefaultSelect: false,
   didInvalidate: true,
   query: '',
   queryHistory: [],
@@ -21,6 +22,7 @@ export default function (state = INITIAL_STATE, action) {
     return {
       ...state,
       isExecuting: true,
+      isDefaultSelect: action.isDefaultSelect,
       didInvalidate: false,
       query: action.query,
       queryHistory: [
