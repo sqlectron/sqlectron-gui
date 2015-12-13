@@ -65,7 +65,7 @@ export default class QueryResult extends Component {
     }
 
     const tableResult = (
-      <table className="ui selectable small celled table">
+      <table key={queryIndex} className="ui selectable small celled table">
         <thead>
           <tr>
             {fields.map(({ name }) => (
