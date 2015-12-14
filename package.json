@@ -54,6 +54,7 @@
     "babel-loader": "^5.3.2",
     "babel-plugin-react-transform": "^1.1.1",
     "brace": "^0.7.0",
+    "breakpoint-sass": "^2.6.1",
     "classnames": "^2.2.1",
     "css-loader": "^0.23.0",
     "del": "^2.2.0",

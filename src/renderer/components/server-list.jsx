@@ -3,6 +3,9 @@ import ServerListItem from './server-list-item.jsx';
 import Message from './message.jsx';
 
 
+require('./server-list.scss');
+
+
 export default class ServerList extends Component {
   static propTypes = {
     servers: PropTypes.array.isRequired,
@@ -31,9 +34,9 @@ export default class ServerList extends Component {
     }
 
     return (
-      <div>
+      <div id="server-list">
         {this.groupItemsInRows(servers).map((row, rowIdx) =>
-          <div key={rowIdx} className="ui four cards">
+          <div key={rowIdx} className="ui cards">
             {row.map(server =>
               <ServerListItem
                 key={server.id}
