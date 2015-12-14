@@ -1,7 +1,7 @@
 {
   "name": "sqlectron-gui",
   "productName": "Sqlectron",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "appBundleId": "sqlectron.app",
   "helperBundleId": "sqlectron.app.helper",
   "description": "A simple and lightweight SQL client with cross database and platform support",
