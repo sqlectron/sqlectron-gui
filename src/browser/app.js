@@ -27,6 +27,8 @@ app.on('ready', function onAppReady() {
     icon: resolve(__dirname, '..', '..', 'resources', 'app.png'),
     width: 1024,
     height: 700,
+    minWidth: 512,
+    minHeight: 350,
   });
 
   attachMenuToWindow(app, mainWindow);
