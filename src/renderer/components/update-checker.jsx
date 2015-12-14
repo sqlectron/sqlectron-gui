@@ -4,6 +4,9 @@ import React, {Component} from 'react';
 
 
 const EVENT_KEY = 'sqlectron:update-available';
+const PACKAGE_JSON = require('remote').require('../../package.json');
+const repo = PACKAGE_JSON.repository.url.replace('https://github.com/', '');
+const LATEST_RELEASE_URL = `https://github.com/${repo}/releases/latest`;
 
 
 export default class UpdateChecker extends Component {
@@ -21,18 +24,22 @@ export default class UpdateChecker extends Component {
 
   onUpdateClick(event) {
     event.preventDefault();
-    shell.openExternal('https://github.com/sqlectron/sqlectron-gui-test-auto-update/releases/latest');
+    shell.openExternal(LATEST_RELEASE_URL);
   }
 
   render() {
     const isVisible = this.state && this.state.isVisible;
     if (!isVisible) { return null; }
 
+    // TODO: show the latest avaible version
+    // const currentVersion = `v${PACKAGE_JSON.version}`;
+    // const availableVersion = '...';
+
     return (
       <a className="ui green label" onClick={this.onUpdateClick}>
         <i className="cloud download icon" />
         Update available
-        <div className="detail">v1.1.1</div>
+        {/* <div className="detail">{APP_VERSION}</div> */}
       </a>
     );
   }
