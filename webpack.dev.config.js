@@ -31,8 +31,13 @@ module.exports = {
         loaders: ['babel'],
       },
       {
-        test: /\.css$/,
-        loader: 'style!css!autoprefixer?{browsers:["last 2 version"]}',
+        test: /\.s?css$/,
+        loaders: [
+          'style',
+          'css',
+          'autoprefixer?browsers=last 2 version',
+          'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules'),
+        ],
       },
       {
         test: /\.png$/,
