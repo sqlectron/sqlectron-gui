@@ -241,7 +241,7 @@ export default class ServerModalForm extends Component {
                   onChange={::this.handleChange} />
               </div>
             </div>
-             <div className="ui segment">
+            <div className="ui segment">
               <div className="one field">
                 <div className="ui toggle checkbox" ref="sshTunnel">
                   <input type="checkbox"
