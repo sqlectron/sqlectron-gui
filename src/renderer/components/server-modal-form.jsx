@@ -50,6 +50,11 @@ export default class ServerModalForm extends Component {
       onChecked: () => this.setState({ ssh: {} }),
       onUnchecked: () => this.setState({ ssh: null }),
     });
+
+    $(this.refs.ssl).checkbox({
+      onChecked: () => this.setState({ ssl: true }),
+      onUnchecked: () => this.setState({ ssl: false }),
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -80,6 +85,7 @@ export default class ServerModalForm extends Component {
     const server = {
       name: state.name,
       client: state.client,
+      ssl: state.ssl,
       host: state.host && state.host.length ? state.host : null,
       port: state.port,
       socketPath: state.socketPath && state.socketPath.length ? state.socketPath : null,
@@ -148,7 +154,7 @@ export default class ServerModalForm extends Component {
         <div className="content">
           <form className="ui form">
             <div className="fields">
-              <div className={`ten wide field ${this.highlightError('name')}`}>
+              <div className={`nine wide field ${this.highlightError('name')}`}>
                 <label>Name</label>
                 <input type="text"
                   name="name"
@@ -167,6 +173,16 @@ export default class ServerModalForm extends Component {
                   optionRenderer={this.renderClientItem}
                   valueRenderer={this.renderClientItem}
                   value={this.state.client} />
+              </div>
+              <div className="one field" style={{paddingTop: '2em'}}>
+                <div className="ui toggle checkbox" ref="ssl">
+                  <input type="checkbox"
+                    name="ssl"
+                    tabIndex="0"
+                    className="hidden"
+                    defaultChecked={this.state.ssl} />
+                  <label>SSL</label>
+                </div>
               </div>
             </div>
             <div className="field">
