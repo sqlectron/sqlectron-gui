@@ -139,7 +139,6 @@ export default class ServerModalForm extends Component {
     const { confirmingRemove, isNew } = this.state;
     const isSSHChecked = !!this.state.ssh;
     const ssh = this.state.ssh || {};
-    console.log('>>CLIENTS', CLIENTS);
 
     return (
       <div id="server-modal" className="ui modal" ref="serverModal">
