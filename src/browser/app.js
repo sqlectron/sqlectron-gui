@@ -15,9 +15,7 @@ require('crash-reporter').start();
 let mainWindow = null;
 
 // Quit when all windows are closed.
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') { app.quit(); }
-});
+app.on('window-all-closed', () => app.quit());
 
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
