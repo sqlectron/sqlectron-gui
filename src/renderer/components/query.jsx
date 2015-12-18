@@ -18,6 +18,7 @@ export default class Query extends Component {
 
   componentDidUpdate() {
     if (this.props.query.isExecuting && this.props.query.isDefaultSelect) {
+      this.refs.queryBoxTextarea.editor.focus();
       window.scrollTo(0, 0);
     }
   }
