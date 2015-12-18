@@ -4,8 +4,7 @@ import {
   bugs as issuesURL,
 } from '../../../package.json';
 
-
-export function buildTemplate(app, mainWindow) {
+export function buildTemplate(app, mainWindow, buildNewWindow) {
   return [
     {
       label: productName,
@@ -45,6 +44,16 @@ export function buildTemplate(app, mainWindow) {
           label: 'Quit',
           accelerator: 'Cmd+Q',
           click: () => app.quit(),
+        },
+      ],
+    },
+    {
+      label: 'File',
+      submenu: [
+        {
+          label: 'New Window',
+          accelerator: 'Cmd+N',
+          click: () => buildNewWindow(app),
         },
       ],
     },

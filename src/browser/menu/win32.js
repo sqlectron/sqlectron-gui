@@ -6,11 +6,16 @@ import {
 } from '../../../package.json';
 
 
-export function buildTemplate(app, mainWindow) {
+export function buildTemplate(app, mainWindow, buildNewWindow) {
   return [
     {
       'label': 'File',
       'submenu': [
+        {
+          label: 'New Window',
+          accelerator: 'Cmd+N',
+          click: () => buildNewWindow(app),
+        },
         {
           'label': 'Quit',
           'accelerator': 'Alt+F4',
