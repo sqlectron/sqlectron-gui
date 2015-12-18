@@ -57,9 +57,10 @@ export default class QueryResult extends Component {
   renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries }) {
     const queryWithOutput = !!(fields && fields.length);
     if (!queryWithOutput && affectedRows !== undefined) {
+      const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
         <Message
-          message={`Query executed successfully. Affected rows: ${affectedRows}.`}
+          message={`Query executed successfully. ${msgAffectedRows}`}
           type="success" />
       );
     }
