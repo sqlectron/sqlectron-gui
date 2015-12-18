@@ -60,6 +60,7 @@ export default class QueryResult extends Component {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
         <Message
+          key={queryIndex}
           message={`Query executed successfully. ${msgAffectedRows}`}
           type="success" />
       );
