@@ -1,4 +1,3 @@
-import { clipboard } from 'electron';
 import React, { Component, PropTypes } from 'react';
 import Loader from './loader.jsx';
 import Message from './message.jsx';
@@ -6,6 +5,8 @@ import Message from './message.jsx';
 
 export default class QueryResult extends Component {
   static propTypes = {
+    onCopyToClipboardClick: PropTypes.func.isRequired,
+    copied: PropTypes.bool,
     query: PropTypes.string,
     fields: PropTypes.array,
     rows: PropTypes.array,
@@ -26,11 +27,18 @@ export default class QueryResult extends Component {
     this.state = {};
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.copied) {
+      // avoid race conditions
+      setImmediate(() => this.setState({ showCopied: true }));
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     return (
       (!nextProps.isExecuting && this.props.isExecuting) ||
       (nextProps.query !== this.props.query) ||
-      (nextState.copied !== this.state.copied)
+      (nextState.showCopied !== this.state.showCopied)
     );
   }
 
@@ -43,18 +51,15 @@ export default class QueryResult extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.copied) {
+    if (this.state.showCopied) {
       /* eslint react/no-did-update-set-state: 0 */
-      setTimeout(() => this.setState({ copied: false }), 1500);
+      setTimeout(() => this.setState({ showCopied: false }), 1000);
     }
   }
 
-  onClickCopyToClipboard(rows) {
-    clipboard.writeText(JSON.stringify(rows, null, 2));
-    this.setState({ copied: true });
-  }
-
   renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries }) {
+    const { onCopyToClipboardClick } = this.props;
+
     const queryWithOutput = !!(fields && fields.length);
     if (!queryWithOutput && affectedRows !== undefined) {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
@@ -65,6 +70,9 @@ export default class QueryResult extends Component {
           type="success" />
       );
     }
+
+    const styleCopied = {display: this.state.showCopied ? 'inline-block' : 'none'};
+    const styleButtons = {display: this.state.showCopied ? 'none' : 'inline-block'};
 
     const tableResult = (
       <table key={queryIndex} className="ui selectable small celled table">
@@ -82,13 +90,16 @@ export default class QueryResult extends Component {
           <tr>
             <th colSpan={fields.length}>
               Rows: {rowCount}
-              <button className="ui icon button"
-                style={{float: 'right'}}
-                title="Copy as JSON to clipboard"
-                onClick={() => this.onClickCopyToClipboard(rows)}>
+              <div className="ui small label" title="Copy as" style={{float: 'right'}}>
                 <i className="copy icon"></i>
-                {this.state.copied && 'Copied'}
-              </button>
+                <a className="detail" style={styleCopied}>Copied</a>
+                <a className="detail"
+                  style={styleButtons}
+                  onClick={() => onCopyToClipboardClick(rows, 'CSV')}>CSV</a>
+                <a className="detail"
+                  style={styleButtons}
+                  onClick={() => onCopyToClipboardClick(rows, 'JSON')}>JSON</a>
+              </div>
             </th>
           </tr>
         </tfoot>
@@ -159,7 +170,7 @@ export default class QueryResult extends Component {
     const totalQueries = _fields.length;
 
     return (
-      <div style={{overflowY: 'scroll'}}>
+      <div id="query-result">
         {
           _fields.map((field, idx) => this.renderQueryResult({
             totalQueries,

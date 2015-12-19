@@ -13,6 +13,7 @@ export default class Query extends Component {
   static propTypes = {
     query: PropTypes.object.isRequired,
     onExecQueryClick: PropTypes.func.isRequired,
+    onCopyToClipboardClick: PropTypes.func.isRequired,
     onSQLChange: PropTypes.func.isRequired,
   }
 
@@ -32,7 +33,7 @@ export default class Query extends Component {
   }
 
   render() {
-    const { query, onSQLChange } = this.props;
+    const { query, onCopyToClipboardClick, onSQLChange } = this.props;
     return (
       <div>
         <div>
@@ -67,6 +68,8 @@ export default class Query extends Component {
           </div>
         </div>
         <QueryResult
+          onCopyToClipboardClick={onCopyToClipboardClick}
+          copied={query.copied}
           query={query.queryHistory[query.queryHistory.length - 1]}
           fields={query.resultFields}
           rows={query.resultRows}

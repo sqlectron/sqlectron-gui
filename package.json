@@ -45,6 +45,7 @@
     "babel": "^5.8.29",
     "babel-core": "^5.8.29",
     "babel-runtime": "^5.8.29",
+    "csv-stringify": "0.0.8",
     "debug": "^2.2.0",
     "sqlectron-core": "^1.4.0"
   },

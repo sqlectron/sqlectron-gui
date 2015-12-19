@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   resultFields: null,
   resultRows: null,
   error: null,
+  copied: null,
 };
 
 
@@ -21,6 +22,7 @@ export default function (state = INITIAL_STATE, action) {
   case types.EXECUTE_QUERY_REQUEST: {
     return {
       ...state,
+      copied: false,
       isExecuting: true,
       isDefaultSelect: action.isDefaultSelect,
       didInvalidate: false,
@@ -56,6 +58,21 @@ export default function (state = INITIAL_STATE, action) {
     return {
       ...state,
       query: action.query,
+      copied: false,
+    };
+  }
+  case types.COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST: {
+    return {
+      ...state,
+      error: null,
+      copied: true,
+    };
+  }
+  case types.COPY_QUERY_RESULT_TO_CLIPBOARD_FAIL: {
+    return {
+      ...state,
+      error: action.error,
+      copied: false,
     };
   }
 

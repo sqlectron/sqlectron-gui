@@ -15,6 +15,7 @@ import {
   executeQueryIfNeeded,
   executeDefaultSelectQueryIfNeeded,
   updateQuery,
+  copyToClipboard,
 } from '../actions/queries';
 
 
@@ -26,7 +27,7 @@ const STYLES = {
   wrapper: { paddingTop: '50px' },
   container: { display: 'flex', padding: '10px 10px 50px 10px' },
   sidebar: {},
-  content: { flex: 1 },
+  content: { flex: 1, overflow: 'scroll' },
 };
 
 
@@ -147,6 +148,10 @@ class QueryBrowserContainer extends Component {
     });
   }
 
+  copyToClipboard (rows, type) {
+    this.props.dispatch(copyToClipboard(rows, type));
+  }
+
   handleExecuteQuery (sqlQuery) {
     this.props.dispatch(executeQueryIfNeeded(sqlQuery));
   }
@@ -215,6 +220,7 @@ class QueryBrowserContainer extends Component {
           <div style={STYLES.content}>
             <Query query={queries}
               onExecQueryClick={::this.handleExecuteQuery}
+              onCopyToClipboardClick={::this.copyToClipboard}
               onSQLChange={::this.onSQLChange} />
           </div>
         </div>
