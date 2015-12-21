@@ -1,6 +1,30 @@
 #!/bin/bash
 set -e
 
+release_file() {
+  NAME="$1.zip"
+  FILE="$2"
+  TYPE="$3"
+
+  echo "==> Releasing file $NAME"
+
+  if [[ "$TYPE" == "installer" ]]; then
+    zip -qj9 "installers/compressed/$NAME" "installers/$FILE"
+  else
+    cd releases
+    zip -qr9 "../installers/compressed/$NAME" "$FILE"
+    cd -
+  fi
+
+  # github-release (https://github.com/aktau/github-release)
+  github-release upload \
+      --user "sqlectron" \
+      --repo "sqlectron-gui" \
+      --tag "$PACKAGE_VERSION" \
+      --name "$NAME" \
+      --file "installers/compressed/$NAME"
+}
+
 # Version key/value should be on his own line
 PACKAGE_VERSION=$(cat package.json \
   | grep version \
@@ -24,23 +48,17 @@ fi
 echo "==> Ensure the git tag is pushed"
 git push origin $PACKAGE_VERSION
 
-if [[ -z "$GITHUBKEY" ]]; then
-  echo "Missing GitHub Key"
+if [[ -z "$GITHUB_TOKEN" ]]; then
+  echo "Missing GitHub Token"
   exit 1
 fi
 
-
 echo "==> Publishing release $PACKAGE_VERSION"
-electron-release \
-    --token $GITHUBKEY \
-    --repo "sqlectron/sqlectron-gui" \
-    --app "installers/osx" \
-    --output ".tmp/publish/Sqlectron-darwin-x64" \
-    --app "installers/win/32" \
-    --output ".tmp/publish/Sqlectron-win32-ia32" \
-    --app "installers/win/64" \
-    --output ".tmp/publish/Sqlectron-win32-x64" \
-    --app "releases/Sqlectron-linux-ia32" \
-    --output ".tmp/publish/Sqlectron-linux-ia32" \
-    --app "releases/Sqlectron-linux-x64" \
-    --output ".tmp/publish/Sqlectron-linux-x64"
+rm -rf installers/compressed
+mkdir -p installers/compressed
+
+release_file "Sqlectron-darwin-x64" "osx/Sqlectron.dmg" "installer"
+release_file "Sqlectron-win32-ia32" "win/32/Sqlectron Setup.exe" "installer"
+release_file "Sqlectron-win32-x64" "win/64/Sqlectron Setup.exe" "installer"
+release_file "Sqlectron-linux-ia32" "Sqlectron-linux-ia32"
+release_file "Sqlectron-linux-x64" "Sqlectron-linux-x64"
