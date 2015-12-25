@@ -85,7 +85,7 @@ export default class ServerModalForm extends Component {
     const server = {
       name: state.name,
       client: state.client,
-      ssl: state.ssl,
+      ssl: !!state.ssl,
       host: state.host && state.host.length ? state.host : null,
       port: state.port,
       socketPath: state.socketPath && state.socketPath.length ? state.socketPath : null,
