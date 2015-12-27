@@ -1,0 +1,13 @@
+.query-result-table {
+  .pagination {
+    text-align: center !important;
+
+    ul, li {
+      display: inline-block;
+    }
+
+    li {
+      padding: 0 0.5em;
+    }
+  }
+}

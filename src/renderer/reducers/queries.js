@@ -65,6 +65,12 @@ export default function (state = INITIAL_STATE, action) {
     return {
       ...state,
       error: null,
+      copied: false,
+    };
+  }
+  case types.COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS: {
+    return {
+      ...state,
       copied: true,
     };
   }

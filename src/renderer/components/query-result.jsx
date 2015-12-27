@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import Loader from './loader.jsx';
 import Message from './message.jsx';
+import QueryResultTable from './query-result-table.jsx';
 
 
 export default class QueryResult extends Component {
@@ -22,23 +23,11 @@ export default class QueryResult extends Component {
     error: PropTypes.object,
   }
 
-  constructor(props, context) {
-    super(props, context);
-    this.state = {};
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.copied) {
-      // avoid race conditions
-      setImmediate(() => this.setState({ showCopied: true }));
-    }
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     return (
       (!nextProps.isExecuting && this.props.isExecuting) ||
       (nextProps.query !== this.props.query) ||
-      (nextState.showCopied !== this.state.showCopied)
+      (nextProps.copied && !this.props.copied)
     );
   }
 
@@ -50,16 +39,7 @@ export default class QueryResult extends Component {
     }
   }
 
-  componentDidUpdate() {
-    if (this.state.showCopied) {
-      /* eslint react/no-did-update-set-state: 0 */
-      setTimeout(() => this.setState({ showCopied: false }), 1000);
-    }
-  }
-
   renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries }) {
-    const { onCopyToClipboardClick } = this.props;
-
     const queryWithOutput = !!(fields && fields.length);
     if (!queryWithOutput && affectedRows !== undefined) {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
@@ -71,39 +51,14 @@ export default class QueryResult extends Component {
       );
     }
 
-    const styleCopied = {display: this.state.showCopied ? 'inline-block' : 'none'};
-    const styleButtons = {display: this.state.showCopied ? 'none' : 'inline-block'};
-
     const tableResult = (
-      <table key={queryIndex} className="ui selectable small celled table">
-        <thead>
-          <tr>
-            {fields.map(({ name }) => (
-              <th key={name}>{name}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {this.renderQueryResultRows({ fields, rows, rowCount })}
-        </tbody>
-        <tfoot>
-          <tr>
-            <th colSpan={fields.length}>
-              Rows: {rowCount}
-              <div className="ui small label" title="Copy as" style={{float: 'right'}}>
-                <i className="copy icon"></i>
-                <a className="detail" style={styleCopied}>Copied</a>
-                <a className="detail"
-                  style={styleButtons}
-                  onClick={() => onCopyToClipboardClick(rows, 'CSV')}>CSV</a>
-                <a className="detail"
-                  style={styleButtons}
-                  onClick={() => onCopyToClipboardClick(rows, 'JSON')}>JSON</a>
-              </div>
-            </th>
-          </tr>
-        </tfoot>
-      </table>
+      <QueryResultTable
+        copied={this.props.copied}
+        key={queryIndex}
+        fields={fields}
+        rows={rows}
+        rowCount={rowCount}
+        onCopyToClipboardClick={this.props.onCopyToClipboardClick} />
     );
 
     if (totalQueries === 1) {
@@ -118,27 +73,6 @@ export default class QueryResult extends Component {
         {tableResult}
       </div>
     );
-  }
-
-  renderQueryResultRows({ fields, rows, rowCount }) {
-    if (!rowCount) {
-      return (
-        <tr>
-          <td colSpan={fields.length}>No results found</td>
-        </tr>
-      );
-    }
-
-    return rows.map((row, index) => {
-      const columnNames = Object.keys(row);
-      return (
-        <tr key={index}>
-          {columnNames.map(name => {
-            return <td key={name}>{valueToString(row[name])}</td>;
-          })}
-        </tr>
-      );
-    });
   }
 
   render() {
@@ -184,16 +118,4 @@ export default class QueryResult extends Component {
       </div>
     );
   }
-}
-
-
-function valueToString(value) {
-  if (!value) { return value; }
-  if (value.toISOString) {
-    return value.toISOString();
-  }
-  if (typeof value === 'object') {
-    return JSON.stringify(value);
-  }
-  return value;
 }

@@ -44,6 +44,9 @@ export function copyToClipboard (rows, type) {
       if (type === 'CSV') {
         value = await stringifyResultToCSV(rows);
       } else {
+        // force the next dispatch be separately
+        // handled of the previous one
+        await wait(0);
         value = JSON.stringify(rows, null, 2);
       }
       clipboard.writeText(value);
@@ -69,7 +72,16 @@ function executeQuery (query, isDefaultSelect = false) {
   return async dispatch => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
-      const result = await sqlectron.db.executeQuery(query);
+      const remoteResult = await sqlectron.db.executeQuery(query);
+
+      // Remove any "reference" to the remote IPC object
+      const result = JSON.parse(JSON.stringify({
+        fields: remoteResult.fields,
+        rowCount: remoteResult.rowCount,
+        affectedRows: remoteResult.affectedRows,
+      }));
+      result.rows = convertAllValuesToString(remoteResult.rows);
+
       dispatch({ type: EXECUTE_QUERY_SUCCESS, query, result });
     } catch (error) {
       dispatch({ type: EXECUTE_QUERY_FAILURE, query, error });
@@ -80,6 +92,10 @@ function executeQuery (query, isDefaultSelect = false) {
 
 function convertAllValuesToString(rows) {
   return rows.map(row => {
+    if (Array.isArray(row)) {
+      return convertAllValuesToString(row);
+    }
+
     return Object.keys(row).reduce((_row, col) => {
       _row[col] = valueToString(row[col]);
       return _row;
@@ -121,4 +137,9 @@ function stringifyResultToCSV(rows) {
       resolve(csv);
     });
   });
+}
+
+
+function wait(time) {
+  return new Promise(resolve => setTimeout(resolve, time));
 }
