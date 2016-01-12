@@ -8,6 +8,14 @@
 
     li {
       padding: 0 0.5em;
+
+      &.active {
+        a {
+          color: #fff;
+          background: #1e70bf;
+          border-radius: 15px;
+        }
+      }
     }
   }
 }
