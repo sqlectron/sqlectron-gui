@@ -1,15 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import ReactPaginate from 'react-paginate';
 
+
 require('./query-result-table.scss');
-
-
-const perPage = 50;
 
 
 export default class QueryResultTable extends Component {
   static propTypes = {
     onCopyToClipboardClick: PropTypes.func.isRequired,
+    resultItemsPerPage: PropTypes.number.isRequired,
     copied: PropTypes.bool,
     query: PropTypes.string,
     fields: PropTypes.array,
@@ -64,12 +63,12 @@ export default class QueryResultTable extends Component {
   }
 
   render() {
-    const { rows, fields, rowCount, onCopyToClipboardClick } = this.props;
+    const { rows, fields, rowCount, resultItemsPerPage, onCopyToClipboardClick } = this.props;
     const { currentPage } = this.state;
-    const startAt = (currentPage - 1) * perPage;
-    const endAt = startAt + perPage;
+    const startAt = (currentPage - 1) * resultItemsPerPage;
+    const endAt = startAt + resultItemsPerPage;
     const rowsCurrentPage = rows.slice(startAt, endAt);
-    const numPages = Math.ceil(rows.length / perPage);
+    const numPages = Math.ceil(rows.length / resultItemsPerPage);
 
     const styleCopied = {display: this.state.showCopied ? 'inline-block' : 'none'};
     const styleButtons = {display: this.state.showCopied ? 'none' : 'inline-block'};
@@ -103,7 +102,7 @@ export default class QueryResultTable extends Component {
             </th>
           </tr>
           {
-            rows.length > perPage &&
+            rows.length > resultItemsPerPage &&
             <tr>
               <th colSpan={fields.length} className="pagination">
                 <ReactPaginate

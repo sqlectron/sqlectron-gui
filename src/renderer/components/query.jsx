@@ -69,6 +69,7 @@ export default class Query extends Component {
         </div>
         <QueryResult
           onCopyToClipboardClick={onCopyToClipboardClick}
+          resultItemsPerPage={query.resultItemsPerPage}
           copied={query.copied}
           query={query.queryHistory[query.queryHistory.length - 1]}
           fields={query.resultFields}

@@ -1,6 +1,7 @@
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/queries';
 
+
 const INITIAL_STATE = {
   isExecuting: false,
   isDefaultSelect: false,
@@ -11,13 +12,17 @@ const INITIAL_STATE = {
   resultRows: null,
   error: null,
   copied: null,
+  resultItemsPerPage: 100,
 };
 
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
   case connTypes.CONNECTION_SUCCESS: {
-    return INITIAL_STATE;
+    return {
+      ...INITIAL_STATE,
+      resultItemsPerPage: action.config.resultItemsPerPage || INITIAL_STATE.resultItemsPerPage,
+    };
   }
   case types.EXECUTE_QUERY_REQUEST: {
     return {

@@ -7,6 +7,7 @@ import QueryResultTable from './query-result-table.jsx';
 export default class QueryResult extends Component {
   static propTypes = {
     onCopyToClipboardClick: PropTypes.func.isRequired,
+    resultItemsPerPage: PropTypes.number.isRequired,
     copied: PropTypes.bool,
     query: PropTypes.string,
     fields: PropTypes.array,
@@ -53,8 +54,9 @@ export default class QueryResult extends Component {
 
     const tableResult = (
       <QueryResultTable
-        copied={this.props.copied}
         key={queryIndex}
+        resultItemsPerPage={this.props.resultItemsPerPage}
+        copied={this.props.copied}
         fields={fields}
         rows={rows}
         rowCount={rowCount}
