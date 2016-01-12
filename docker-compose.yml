@@ -1,5 +1,5 @@
 dist:
-  image: electron-distribution:0.12-onbuild
+  image: maxcnunes/electron-distribution:0.12-onbuild
   # Build all and pack only for Windows
   # because is not possible packing for OSX from Linux.
   # Use unsafe-perm to force npm respect the tmp path (http://git.io/vB2oR)

@@ -1,4 +1,4 @@
-FROM electron-distribution:0.12-onbuild
+FROM maxcnunes/electron-distribution:0.12-onbuild
 
 # Keep the tmp folder inside the project.
 # This way we dont lose some cache files between distribution tasks
