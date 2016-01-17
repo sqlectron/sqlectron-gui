@@ -4,7 +4,7 @@ import {
   bugs as issuesURL,
 } from '../../../package.json';
 
-export function buildTemplate(app, mainWindow, buildNewWindow) {
+export function buildTemplate(app, buildNewWindow) {
   return [
     {
       label: productName,
@@ -63,7 +63,7 @@ export function buildTemplate(app, mainWindow, buildNewWindow) {
         {
           label: 'Execute',
           accelerator: 'Cmd+Enter',
-          click: () => mainWindow.webContents.send('sqlectron:query-execute'),
+          click: (item, win) => win.webContents.send('sqlectron:query-execute'),
         },
       ],
     },
@@ -111,12 +111,12 @@ export function buildTemplate(app, mainWindow, buildNewWindow) {
         {
           label: 'Reload',
           accelerator: 'Cmd+R',
-          click: () => mainWindow.reloadIgnoringCache(),
+          click: (item, win) => win.reloadIgnoringCache(),
         },
         {
           label: 'Toggle DevTools',
           accelerator: 'Alt+Cmd+I',
-          click: () => mainWindow.toggleDevTools(),
+          click: (item, win) => win.toggleDevTools(),
         },
       ],
     },

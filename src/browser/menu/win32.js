@@ -6,7 +6,7 @@ import {
 } from '../../../package.json';
 
 
-export function buildTemplate(app, mainWindow, buildNewWindow) {
+export function buildTemplate(app, buildNewWindow) {
   return [
     {
       'label': 'File',
@@ -29,7 +29,7 @@ export function buildTemplate(app, mainWindow, buildNewWindow) {
         {
           label: 'Execute',
           accelerator: 'Ctrl+Enter',
-          click: () => mainWindow.webContents.send('sqlectron:query-execute'),
+          click: (item, win) => win.webContents.send('sqlectron:query-execute'),
         },
       ],
     },
@@ -77,12 +77,12 @@ export function buildTemplate(app, mainWindow, buildNewWindow) {
         {
           label: 'Reload',
           accelerator: 'Ctrl+R',
-          click: () => mainWindow.reloadIgnoringCache(),
+          click: (item, win) => win.reloadIgnoringCache(),
         },
         {
           label: 'Toggle DevTools',
           accelerator: 'Alt+Ctrl+I',
-          click: () => mainWindow.toggleDevTools(),
+          click: (item, win) => win.toggleDevTools(),
         },
       ],
     },

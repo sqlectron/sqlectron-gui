@@ -29,7 +29,7 @@ export function buildNewWindow(app) {
     minHeight: 350,
   });
 
-  attachMenuToWindow(app, mainWindow, buildNewWindow);
+  attachMenuToWindow(app, buildNewWindow);
 
   // and load the index.html of the app.
   const entryBasePath = devMode ? 'http://localhost:8080' : ('file://' + resolve(__dirname, '..'));
