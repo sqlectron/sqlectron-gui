@@ -34,6 +34,7 @@ export function connect (id, database) {
 
 
 export function disconnect () {
+  dbSession.disconnect();
   return { type: CLOSE_CONNECTION };
 }
 
