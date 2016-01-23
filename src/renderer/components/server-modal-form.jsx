@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 import { sqlectron } from '../../browser/remote';
 import ConfirmModal from './confim-modal.jsx';
+import Message from './message.jsx';
 
 
 require('react-select/dist/react-select.css');
@@ -20,8 +21,10 @@ export default class ServerModalForm extends Component {
     onSaveClick: PropTypes.func.isRequired,
     onCancelClick: PropTypes.func.isRequired,
     onRemoveClick: PropTypes.func.isRequired,
+    onTestConnectionClick: PropTypes.func.isRequired,
     server: PropTypes.object,
     error: PropTypes.object,
+    testConnection: PropTypes.object,
   }
 
   constructor(props, context) {
@@ -79,6 +82,10 @@ export default class ServerModalForm extends Component {
 
   onRemoveOpenClick() {
     this.setState({ confirmingRemove: true });
+  }
+
+  onTestConnectionClick() {
+    this.props.onTestConnectionClick(this.mapStateToServer(this.state));
   }
 
   mapStateToServer(state) {
@@ -142,9 +149,13 @@ export default class ServerModalForm extends Component {
   }
 
   render() {
+    const { testConnection } = this.props;
     const { confirmingRemove, isNew } = this.state;
     const isSSHChecked = !!this.state.ssh;
     const ssh = this.state.ssh || {};
+
+    const classStatusButtons = testConnection.connecting ? 'disabled' : '';
+    const classStatusTestButton = testConnection.connecting ? 'loading' : '';
 
     return (
       <div id="server-modal" className="ui modal" ref="serverModal">
@@ -152,6 +163,20 @@ export default class ServerModalForm extends Component {
           Server Information
         </div>
         <div className="content">
+          {
+            testConnection.error && <Message
+              closeable
+              title="Connection Error"
+              message={testConnection.error.message}
+              type="error" />
+          }
+          {
+            testConnection.connected && <Message
+              closeable
+              title="Connection Test"
+              message="Successfully connected"
+              type="success" />
+          }
           <form className="ui form">
             <div className="fields">
               <div className={`nine wide field ${this.highlightError('name')}`}>
@@ -338,18 +363,24 @@ export default class ServerModalForm extends Component {
           </form>
         </div>
         <div className="actions">
-          <div className="small ui black deny right labeled icon button"
+          <div className={`small ui blue right labeled icon button ${classStatusTestButton}`}
+            tabIndex="0"
+            onClick={::this.onTestConnectionClick}>
+            Test
+            <i className="plug icon"></i>
+          </div>
+          <div className={`small ui black deny right labeled icon button ${classStatusButtons}`}
             tabIndex="0">
             Cancel
             <i className="ban icon"></i>
           </div>
-          <div className="small ui green right labeled icon button"
+          <div className={`small ui green right labeled icon button ${classStatusButtons}`}
             tabIndex="0"
             onClick={::this.onSaveClick}>
             Save
             <i className="checkmark icon"></i>
           </div>
-          {isNew && <div className="small ui red right labeled icon button"
+          {isNew && <div className={`small ui red right labeled icon button ${classStatusButtons}`}
             tabIndex="0"
             onClick={::this.onRemoveOpenClick}>
             Remove

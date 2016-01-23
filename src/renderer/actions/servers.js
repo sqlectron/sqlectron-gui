@@ -10,6 +10,8 @@ export const SAVE_SERVER_FAILURE = 'SAVE_SERVER_FAILURE';
 export const REMOVE_SERVER_REQUEST = 'REMOVE_SERVER_REQUEST';
 export const REMOVE_SERVER_SUCCESS = 'REMOVE_SERVER_SUCCESS';
 export const REMOVE_SERVER_FAILURE = 'REMOVE_SERVER_FAILURE';
+export const START_EDITING_SERVER = 'START_EDITING_SERVER';
+export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
 
 
 export function loadServers() {
@@ -26,6 +28,16 @@ export function loadServers() {
       dispatch({ type: LOAD_SERVERS_FAILURE, error });
     }
   };
+}
+
+
+export function startEditing({ id }) {
+  return { type: START_EDITING_SERVER, id };
+}
+
+
+export function finisEditing() {
+  return { type: FINISH_EDITING_SERVER };
 }
 
 

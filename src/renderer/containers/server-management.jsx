@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import * as ServersActions from '../actions/servers.js';
+import * as ConnActions from '../actions/connections.js';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 import ServerList from '../components/server-list.jsx';
@@ -39,49 +40,45 @@ class ServerManagerment extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = { selectedId: null };
+    this.state = {};
   }
 
   componentDidMount() {
     this.props.dispatch(ServersActions.loadServers());
   }
 
-  componentWillReceiveProps(nextProps) {
-    const hasChangedToNotSaving = this.props.servers.isSaving && !nextProps.servers.isSaving;
-    if (hasChangedToNotSaving && this.state.modalVisible && !nextProps.servers.error) {
-      this.setState({
-        selectedId: null,
-        modalVisible: false,
-      });
-    }
-  }
-
   onConnectClick({ id, database }) {
     this.props.history.pushState(null, `/server/${id}/database/${database}`);
   }
 
+  onTestConnectionClick(server) {
+    const { dispatch } = this.props;
+    dispatch(ConnActions.test(server));
+  }
+
   onAddClick() {
-    this.setState({ modalVisible: true, selectedId: null });
+    const { dispatch } = this.props;
+    dispatch(ServersActions.startEditing());
   }
 
   onEditClick(server) {
-    this.setState({ modalVisible: true, selectedId: server.id });
+    const { dispatch } = this.props;
+    dispatch(ServersActions.startEditing({ id: server.id }));
   }
 
   onSaveClick(server) {
-    const { selectedId } = this.state;
-    const { dispatch } = this.props;
-    dispatch(ServersActions.saveServer({ id: selectedId, server }));
+    const { dispatch, servers } = this.props;
+    dispatch(ServersActions.saveServer({ id: servers.editingId, server }));
   }
 
   onCancelClick() {
-    this.setState({ modalVisible: false, selectedId: null });
+    const { dispatch } = this.props;
+    dispatch(ServersActions.finisEditing());
   }
 
   onRemoveClick() {
-    const { selectedId } = this.state;
-    const { dispatch } = this.props;
-    dispatch(ServersActions.removeServer({ id: selectedId }));
+    const { dispatch, servers } = this.props;
+    dispatch(ServersActions.removeServer({ id: servers.editingId }));
   }
 
   onFilterChange(event) {
@@ -94,10 +91,16 @@ class ServerManagerment extends Component {
   }
 
   render() {
-    const { modalVisible, selectedId, filter } = this.state;
+    const { filter } = this.state;
     const { connections, servers, status } = this.props;
-    const selected = selectedId !== null ? servers.items.find(srv => srv.id === selectedId) : {};
+    const selected = servers.editingId !== null ? servers.items.find(srv => srv.id === servers.editingId) : {};
     const filteredServers = this.filterServers(filter, servers.items);
+
+    const testConnection = {
+      connected: connections.testConnected,
+      connecting: connections.testConnecting,
+      error: connections.testError,
+    };
 
     return (
       <div style={STYLES.wrapper}>
@@ -122,9 +125,11 @@ class ServerManagerment extends Component {
                       onEditClick={::this.onEditClick}
                       onConnectClick={::this.onConnectClick} />
 
-          {modalVisible && <ServerModalForm
+          {servers.isEditing && <ServerModalForm
                  server={selected}
                  error={servers.error}
+                 testConnection={testConnection}
+                 onTestConnectionClick={::this.onTestConnectionClick}
                  onSaveClick={::this.onSaveClick}
                  onCancelClick={::this.onCancelClick}
                  onRemoveClick={::this.onRemoveClick} />}

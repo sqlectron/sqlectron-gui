@@ -3,7 +3,10 @@ import * as types from '../actions/servers';
 
 const INITIAL_STATE = {
   isSaving: false,
+  isEditing: false,
   items: [],
+  error: null,
+  editingId: null,
 };
 
 
@@ -14,6 +17,23 @@ export default function servers(state = INITIAL_STATE, action) {
       ...state,
       items: action.servers,
     };
+  case types.START_EDITING_SERVER: {
+    return {
+      ...state,
+      isSaving: false,
+      isEditing: true,
+      editingId: action.id || null,
+    };
+  }
+  case types.FINISH_EDITING_SERVER: {
+    return {
+      ...state,
+      isSaving: false,
+      isEditing: false,
+      editingId: null,
+      error: null,
+    };
+  }
   case types.SAVE_SERVER_REQUEST:
   case types.REMOVE_SERVER_REQUEST: {
     return {
@@ -27,6 +47,7 @@ export default function servers(state = INITIAL_STATE, action) {
       items: save(state.items, action.server),
       error: null,
       isSaving: false,
+      isEditing: false,
     };
   case types.REMOVE_SERVER_SUCCESS:
     return {
@@ -34,6 +55,7 @@ export default function servers(state = INITIAL_STATE, action) {
       items: remove(state.items, action.id),
       error: null,
       isSaving: false,
+      isEditing: false,
     };
   case types.SAVE_SERVER_FAILURE:
   case types.REMOVE_SERVER_FAILURE: {
