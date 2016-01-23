@@ -146,6 +146,11 @@ class QueryBrowserContainer extends Component {
     dispatch(ConnActions.disconnect());
   }
 
+  onReConnectionClick() {
+    const { dispatch, params } = this.props;
+    dispatch(ConnActions.reconnect(params.id, params.database));
+  }
+
   setMenus() {
     this.menuHandler.setMenus({
       'sqlectron:query-execute': () => {
@@ -197,7 +202,8 @@ class QueryBrowserContainer extends Component {
       <div style={STYLES.wrapper}>
         <div style={STYLES.header}>
           <Header items={breadcrumb}
-            onCloseConnectionClick={::this.onCloseConnectionClick} />
+            onCloseConnectionClick={::this.onCloseConnectionClick}
+            onReConnectionClick={::this.onReConnectionClick} />
         </div>
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>

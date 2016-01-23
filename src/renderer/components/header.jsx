@@ -31,21 +31,32 @@ function renderBreadcrumb(items) {
 }
 
 
-const Header = ({ items, onCloseConnectionClick }) => {
-  const visibilityLeaveButton = onCloseConnectionClick ? 'visible' : 'hidden';
+const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
+  const visibilityButtons = onCloseConnectionClick ? 'visible' : 'hidden';
+  const styleButton = { fontSize: '0.8em' };
+  const styleItem = { paddingLeft: 0 };
   return (
     <div className="ui top fixed menu borderless">
       <a href="#" className="item" onClick={onSiteClick}>
         <img src={LOGO_PATH} style={{width: '5.5em'}} />
       </a>
       <div style={{margin: '0 auto'}}>
-        <div className="item" style={{marginLeft: '-109px', marginRight: '-70px'}}>
+        <div className="item" style={{marginLeft: '-109px', marginRight: '-94px'}}>
           {renderBreadcrumb(items)}
         </div>
       </div>
-      <div className="right menu" style={{marginLeft: '0 !important', visibility: visibilityLeaveButton}}>
-        <div className="item borderless">
+      <div className="right menu" style={{marginLeft: '0 !important', visibility: visibilityButtons}}>
+        <div className="item borderless" style={styleItem}>
           <button className="ui icon button"
+            style={styleButton}
+            title="Reconnect. It will wipe the query box as well."
+            onClick={onReConnectionClick}>
+            <i className="plug icon"></i>
+          </button>
+        </div>
+        <div className="item borderless" style={styleItem}>
+          <button className="ui icon button"
+            style={styleButton}
             title="Close connection"
             onClick={onCloseConnectionClick}>
             <i className="ban icon"></i>
@@ -60,6 +71,7 @@ const Header = ({ items, onCloseConnectionClick }) => {
 Header.propTypes = {
   items: PropTypes.array.isRequired,
   onCloseConnectionClick: PropTypes.func,
+  onReConnectionClick: PropTypes.func,
 };
 
 

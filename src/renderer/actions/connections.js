@@ -39,6 +39,12 @@ export function disconnect () {
 }
 
 
+export function reconnect (id, database) {
+  dbSession.disconnect();
+  return connect(id, database);
+}
+
+
 export function test (server) {
   return async (dispatch) => {
     const testDBSession = sqlectron.db.createSession();
