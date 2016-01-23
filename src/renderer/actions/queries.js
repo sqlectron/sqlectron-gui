@@ -1,6 +1,6 @@
 import { clipboard } from 'electron';
 import csvStringify from 'csv-stringify';
-import { sqlectron } from '../../browser/remote';
+import { dbSession } from './connections';
 
 
 export const EXECUTE_QUERY_REQUEST = 'EXECUTE_QUERY_REQUEST';
@@ -23,7 +23,7 @@ export function executeQueryIfNeeded (query) {
 
 export function executeDefaultSelectQueryIfNeeded (table) {
   return async (dispatch, getState) => {
-    const query = await sqlectron.db.getQuerySelectTop(table);
+    const query = await dbSession.getQuerySelectTop(table);
     if (shouldExecuteQuery(query, getState())) {
       return dispatch(executeQuery(query, true));
     }
@@ -72,7 +72,7 @@ function executeQuery (query, isDefaultSelect = false) {
   return async dispatch => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
-      const remoteResult = await sqlectron.db.executeQuery(query);
+      const remoteResult = await dbSession.executeQuery(query);
 
       // Remove any "reference" to the remote IPC object
       const result = JSON.parse(JSON.stringify({

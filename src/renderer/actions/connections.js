@@ -6,6 +6,9 @@ export const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS';
 export const CONNECTION_FAILURE = 'CONNECTION_FAILURE';
 
 
+export const dbSession = sqlectron.db.createSession();
+
+
 export function connect (id, database) {
   return async (dispatch, getState) => {
     const { servers } = getState();
@@ -16,7 +19,7 @@ export function connect (id, database) {
 
     dispatch({ type: CONNECTION_REQUEST, server, database });
     try {
-      await sqlectron.db.connect(server, database);
+      await dbSession.connect(server, database);
       dispatch({ type: CONNECTION_SUCCESS, server, database, config });
     } catch (error) {
       dispatch({ type: CONNECTION_FAILURE, server, database, error });
