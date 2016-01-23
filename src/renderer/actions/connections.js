@@ -12,14 +12,14 @@ export const dbSession = sqlectron.db.createSession();
 export function connect (id, database) {
   return async (dispatch, getState) => {
     const { servers } = getState();
-    const [ server, config ] = await* [
-      servers.items.find(srv => srv.id === id),
-      sqlectron.config.get(),
-    ];
+    const server = servers.items.find(srv => srv.id === id);
 
     dispatch({ type: CONNECTION_REQUEST, server, database });
     try {
-      await dbSession.connect(server, database);
+      const [, config ] = await Promise.all([
+        dbSession.connect(server, database),
+        sqlectron.config.get(),
+      ]);
       dispatch({ type: CONNECTION_SUCCESS, server, database, config });
     } catch (error) {
       dispatch({ type: CONNECTION_FAILURE, server, database, error });
