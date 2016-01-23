@@ -22,6 +22,7 @@ export default class ServerModalForm extends Component {
     onCancelClick: PropTypes.func.isRequired,
     onRemoveClick: PropTypes.func.isRequired,
     onTestConnectionClick: PropTypes.func.isRequired,
+    onDuplicateClick: PropTypes.func.isRequired,
     server: PropTypes.object,
     error: PropTypes.object,
     testConnection: PropTypes.object,
@@ -86,6 +87,10 @@ export default class ServerModalForm extends Component {
 
   onTestConnectionClick() {
     this.props.onTestConnectionClick(this.mapStateToServer(this.state));
+  }
+
+  onDuplicateClick() {
+    this.props.onDuplicateClick(this.mapStateToServer(this.state));
   }
 
   mapStateToServer(state) {
@@ -369,6 +374,12 @@ export default class ServerModalForm extends Component {
             Test
             <i className="plug icon"></i>
           </div>
+          {!isNew && <div className={`small ui right labeled icon button ${classStatusButtons}`}
+            tabIndex="0"
+            onClick={::this.onDuplicateClick}>
+            Duplicate
+            <i className="copy icon"></i>
+          </div>}
           <div className={`small ui black deny right labeled icon button ${classStatusButtons}`}
             tabIndex="0">
             Cancel

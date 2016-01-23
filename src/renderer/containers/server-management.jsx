@@ -66,6 +66,11 @@ class ServerManagerment extends Component {
     dispatch(ServersActions.startEditing(server.id));
   }
 
+  onDuplicateClick(server) {
+    const { dispatch } = this.props;
+    dispatch(ServersActions.duplicateServer({ server }));
+  }
+
   onSaveClick(server) {
     const { dispatch, servers } = this.props;
     dispatch(ServersActions.saveServer({ id: servers.editingId, server }));
@@ -130,6 +135,7 @@ class ServerManagerment extends Component {
                  error={servers.error}
                  testConnection={testConnection}
                  onTestConnectionClick={::this.onTestConnectionClick}
+                 onDuplicateClick={::this.onDuplicateClick}
                  onSaveClick={::this.onSaveClick}
                  onCancelClick={::this.onCancelClick}
                  onRemoveClick={::this.onRemoveClick} />}

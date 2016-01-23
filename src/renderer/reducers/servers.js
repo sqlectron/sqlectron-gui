@@ -35,6 +35,7 @@ export default function servers(state = INITIAL_STATE, action) {
     };
   }
   case types.SAVE_SERVER_REQUEST:
+  case types.DUPLICATE_SERVER_REQUEST:
   case types.REMOVE_SERVER_REQUEST: {
     return {
       ...state,
@@ -42,6 +43,7 @@ export default function servers(state = INITIAL_STATE, action) {
     };
   }
   case types.SAVE_SERVER_SUCCESS:
+  case types.DUPLICATE_SERVER_SUCCESS: {
     return {
       ...state,
       items: save(state.items, action.server),
@@ -49,6 +51,7 @@ export default function servers(state = INITIAL_STATE, action) {
       isSaving: false,
       isEditing: false,
     };
+  }
   case types.REMOVE_SERVER_SUCCESS:
     return {
       ...state,
@@ -58,6 +61,7 @@ export default function servers(state = INITIAL_STATE, action) {
       isEditing: false,
     };
   case types.SAVE_SERVER_FAILURE:
+  case types.DUPLICATE_SERVER_FAILURE:
   case types.REMOVE_SERVER_FAILURE: {
     return {
       ...state,

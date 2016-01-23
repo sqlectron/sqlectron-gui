@@ -10,6 +10,9 @@ export const SAVE_SERVER_FAILURE = 'SAVE_SERVER_FAILURE';
 export const REMOVE_SERVER_REQUEST = 'REMOVE_SERVER_REQUEST';
 export const REMOVE_SERVER_SUCCESS = 'REMOVE_SERVER_SUCCESS';
 export const REMOVE_SERVER_FAILURE = 'REMOVE_SERVER_FAILURE';
+export const DUPLICATE_SERVER_REQUEST = 'DUPLICATE_SERVER_REQUEST';
+export const DUPLICATE_SERVER_SUCCESS = 'DUPLICATE_SERVER_SUCCESS';
+export const DUPLICATE_SERVER_FAILURE = 'DUPLICATE_SERVER_FAILURE';
 export const START_EDITING_SERVER = 'START_EDITING_SERVER';
 export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
 
@@ -72,6 +75,40 @@ export function removeServer ({ id }) {
       dispatch({ type: REMOVE_SERVER_FAILURE, error });
     }
   };
+}
+
+
+export function duplicateServer ({ server }) {
+  return async dispatch => {
+    dispatch({ type: DUPLICATE_SERVER_REQUEST, server });
+    try {
+      const newName = await getUniqueName(server);
+      const duplicated = { ...server, name: newName };
+      delete duplicated.id;
+
+      const data = await sqlectron.servers.addOrUpdate(duplicated);
+
+      dispatch({
+        type: DUPLICATE_SERVER_SUCCESS,
+        server: convertToPlainObject(data),
+      });
+    } catch (error) {
+      dispatch({ type: DUPLICATE_SERVER_FAILURE, error });
+    }
+  };
+}
+
+
+async function getUniqueName(server) {
+  const dataServers = await sqlectron.servers.getAll();
+  const duplicatedName = (name) => dataServers.some(srv => srv.name === name);
+  let currentName = server.name;
+  let num = 0;
+  while (duplicatedName(currentName)) {
+    num += 1;
+    currentName = `${server.name}-${num}`;
+  }
+  return currentName;
 }
 
 
