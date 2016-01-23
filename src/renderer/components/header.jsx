@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
 import shell from 'shell';
 
 
@@ -32,8 +31,8 @@ function renderBreadcrumb(items) {
 }
 
 
-const Header = ({ items, includeButtonCloseConn = false }) => {
-  const visibilityLeaveButton = includeButtonCloseConn ? 'visible' : 'hidden';
+const Header = ({ items, onCloseConnectionClick }) => {
+  const visibilityLeaveButton = onCloseConnectionClick ? 'visible' : 'hidden';
   return (
     <div className="ui top fixed menu borderless">
       <a href="#" className="item" onClick={onSiteClick}>
@@ -46,9 +45,11 @@ const Header = ({ items, includeButtonCloseConn = false }) => {
       </div>
       <div className="right menu" style={{marginLeft: '0 !important', visibility: visibilityLeaveButton}}>
         <div className="item borderless">
-          <Link to="/" className="ui icon button" title="Sign out server">
-            <i className="sign out icon"></i>
-          </Link>
+          <button className="ui icon button"
+            title="Close connection"
+            onClick={onCloseConnectionClick}>
+            <i className="ban icon"></i>
+          </button>
         </div>
       </div>
     </div>
@@ -58,7 +59,7 @@ const Header = ({ items, includeButtonCloseConn = false }) => {
 
 Header.propTypes = {
   items: PropTypes.array.isRequired,
-  includeButtonCloseConn: PropTypes.bool,
+  onCloseConnectionClick: PropTypes.func,
 };
 
 

@@ -1,6 +1,7 @@
 import { sqlectron } from '../../browser/remote';
 
 
+export const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
 export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
 export const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS';
 export const CONNECTION_FAILURE = 'CONNECTION_FAILURE';
@@ -29,6 +30,11 @@ export function connect (id, database) {
       dbSession.disconnect();
     }
   };
+}
+
+
+export function disconnect () {
+  return { type: CLOSE_CONNECTION };
 }
 
 

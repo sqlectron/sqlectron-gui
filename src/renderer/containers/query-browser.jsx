@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { sqlectron } from '../../browser/remote';
-import { connect as connectDatabase } from '../actions/connections';
+import * as ConnActions from '../actions/connections.js';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
 import DatabaseFilter from '../components/database-filter.jsx';
@@ -68,7 +68,7 @@ class QueryBrowserContainer extends Component {
 
   componentWillMount () {
     const { dispatch, params, isSameServer, error } = this.props;
-    if (error || !isSameServer) dispatch(connectDatabase(params.id, params.database));
+    if (error || !isSameServer) dispatch(ConnActions.connect(params.id, params.database));
   }
 
   componentDidMount() {
@@ -85,14 +85,15 @@ class QueryBrowserContainer extends Component {
       connecting,
       connected,
       error,
+      server,
     } = nextProps;
 
-    if (error) {
+    if (error || (!connecting && !server)) {
       history.pushState(null, '/');
       return;
     }
     if (!connecting && !isSameServer) {
-      dispatch(connectDatabase(params.id, params.database));
+      dispatch(ConnActions.connect(params.id, params.database));
       return;
     }
     if (!connected) { return; }
@@ -138,6 +139,11 @@ class QueryBrowserContainer extends Component {
 
   onFilterChange (value) {
     this.setState({ filter: value });
+  }
+
+  onCloseConnectionClick() {
+    const { dispatch } = this.props;
+    dispatch(ConnActions.disconnect());
   }
 
   setMenus() {
@@ -190,7 +196,8 @@ class QueryBrowserContainer extends Component {
     return (
       <div style={STYLES.wrapper}>
         <div style={STYLES.header}>
-          <Header items={breadcrumb} includeButtonCloseConn />
+          <Header items={breadcrumb}
+            onCloseConnectionClick={::this.onCloseConnectionClick} />
         </div>
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>
