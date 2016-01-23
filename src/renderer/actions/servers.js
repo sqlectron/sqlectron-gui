@@ -31,7 +31,7 @@ export function loadServers() {
 }
 
 
-export function startEditing({ id }) {
+export function startEditing(id) {
   return { type: START_EDITING_SERVER, id };
 }
 

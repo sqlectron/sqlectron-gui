@@ -63,7 +63,7 @@ class ServerManagerment extends Component {
 
   onEditClick(server) {
     const { dispatch } = this.props;
-    dispatch(ServersActions.startEditing({ id: server.id }));
+    dispatch(ServersActions.startEditing(server.id));
   }
 
   onSaveClick(server) {
