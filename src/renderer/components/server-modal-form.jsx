@@ -32,7 +32,7 @@ export default class ServerModalForm extends Component {
     const server = props.server || {};
     this.state = {
       ...server,
-      isNew: !!Object.keys(server).length,
+      isNew: !server.id,
     };
   }
 
@@ -380,7 +380,7 @@ export default class ServerModalForm extends Component {
             Save
             <i className="checkmark icon"></i>
           </div>
-          {isNew && <div className={`small ui red right labeled icon button ${classStatusButtons}`}
+          {!isNew && <div className={`small ui red right labeled icon button ${classStatusButtons}`}
             tabIndex="0"
             onClick={::this.onRemoveOpenClick}>
             Remove
