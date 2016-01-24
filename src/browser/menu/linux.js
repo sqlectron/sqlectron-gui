@@ -13,7 +13,7 @@ export function buildTemplate(app, buildNewWindow) {
       'submenu': [
         {
           label: 'New Window',
-          accelerator: 'Cmd+N',
+          accelerator: 'Ctrl+N',
           click: () => buildNewWindow(app),
         },
         {
