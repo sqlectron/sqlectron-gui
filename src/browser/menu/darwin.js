@@ -55,6 +55,11 @@ export function buildTemplate(app, buildNewWindow) {
           accelerator: 'Cmd+N',
           click: () => buildNewWindow(app),
         },
+        {
+          label: 'New Tab',
+          accelerator: 'Cmd+T',
+          click: (item, win) => win.webContents.send('sqlectron:new-tab'),
+        },
       ],
     },
     {

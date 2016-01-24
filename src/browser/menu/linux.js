@@ -17,6 +17,11 @@ export function buildTemplate(app, buildNewWindow) {
           click: () => buildNewWindow(app),
         },
         {
+          label: 'New Tab',
+          accelerator: 'Ctrl+T',
+          click: (item, win) => win.webContents.send('sqlectron:new-tab'),
+        },
+        {
           'label': 'Quit',
           'accelerator': 'Ctrl+Q',
           click: () => app.quit(),

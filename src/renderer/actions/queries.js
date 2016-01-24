@@ -3,6 +3,9 @@ import csvStringify from 'csv-stringify';
 import { dbSession } from './connections';
 
 
+export const NEW_QUERY = 'NEW_QUERY';
+export const SELECT_QUERY = 'SELECT_QUERY';
+export const REMOVE_QUERY = 'REMOVE_QUERY';
 export const EXECUTE_QUERY_REQUEST = 'EXECUTE_QUERY_REQUEST';
 export const EXECUTE_QUERY_SUCCESS = 'EXECUTE_QUERY_SUCCESS';
 export const EXECUTE_QUERY_FAILURE = 'EXECUTE_QUERY_FAILURE';
@@ -10,6 +13,21 @@ export const COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST = 'COPY_QUERY_RESULT_TO_CLIP
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS = 'COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE = 'COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE';
 export const UPDATE_QUERY = 'UPDATE_QUERY';
+
+
+export function newQuery () {
+  return { type: NEW_QUERY };
+}
+
+
+export function selectQuery (id) {
+  return { type: SELECT_QUERY, id };
+}
+
+
+export function removeQuery (id) {
+  return { type: REMOVE_QUERY, id };
+}
 
 
 export function executeQueryIfNeeded (query) {
@@ -59,12 +77,12 @@ export function copyToClipboard (rows, type) {
 
 
 function shouldExecuteQuery (query, state) {
-  const { queries } = state;
-  if (!queries) return true;
-  if (queries.isExecuting) return false;
-  const previousQuery = queries.queryHistory[queries.queryHistory.length - 1];
+  const currentQuery = state.queries.queriesById[state.queries.currentQueryId];
+  if (!currentQuery) return true;
+  if (currentQuery.isExecuting) return false;
+  const previousQuery = currentQuery.queryHistory[currentQuery.queryHistory.length - 1];
   if (previousQuery !== query) return true;
-  return state.queries.didInvalidate;
+  return currentQuery.didInvalidate;
 }
 
 

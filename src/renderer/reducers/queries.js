@@ -3,90 +3,152 @@ import * as types from '../actions/queries';
 
 
 const INITIAL_STATE = {
-  isExecuting: false,
-  isDefaultSelect: false,
-  didInvalidate: true,
-  query: '',
-  queryHistory: [],
-  resultFields: null,
-  resultRows: null,
-  error: null,
-  copied: null,
+  lastCreatedId: 0,
+  currentQueryId: null,
+  queryIds: [],
+  queriesById: {},
   resultItemsPerPage: 100,
 };
 
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
-  case connTypes.CONNECTION_SUCCESS: {
-    return {
-      ...INITIAL_STATE,
-      resultItemsPerPage: action.config.resultItemsPerPage || INITIAL_STATE.resultItemsPerPage,
-    };
+  case connTypes.CONNECTION_SUCCESS:
+  case types.NEW_QUERY: {
+    return addNewQuery(state, action);
   }
-  case types.EXECUTE_QUERY_REQUEST: {
+  case types.SELECT_QUERY: {
     return {
       ...state,
+      currentQueryId: action.id,
+    };
+  }
+  case types.REMOVE_QUERY: {
+    const newState = { ...state };
+
+    const index = state.queryIds.indexOf(state.currentQueryId);
+
+    if (state.length === 1) {
+      newState.currentQueryId = null;
+    } else if (index > 0) {
+      newState.currentQueryId = state.queryIds[index - 1];
+    } else {
+      newState.currentQueryId = state.queryIds[index + 1];
+    }
+
+    newState.queryIds.splice(index, 1);
+    delete newState.queriesById[state.currentQueryId];
+
+    if (newState.queryIds.length >= 1) {
+      return newState;
+    }
+
+    return addNewQuery(newState, action);
+  }
+  case types.EXECUTE_QUERY_REQUEST: {
+    return changeStateByCurrentQuery(state, {
       copied: false,
       isExecuting: true,
       isDefaultSelect: action.isDefaultSelect,
       didInvalidate: false,
       query: action.query,
       queryHistory: [
-        ...state.queryHistory,
+        ...state.queriesById[state.currentQueryId].queryHistory,
         action.query,
       ],
-    };
+    });
   }
   case types.EXECUTE_QUERY_SUCCESS: {
-    return {
-      ...state,
+    return changeStateByCurrentQuery(state, {
       error: null,
       isExecuting: false,
       resultFields: action.result.fields,
       resultRows: action.result.rows,
       resultRowCount: action.result.rowCount,
       resultAffectedRows: action.result.affectedRows,
-    };
+    });
   }
   case types.EXECUTE_QUERY_FAILURE: {
-    return {
-      ...state,
+    return changeStateByCurrentQuery(state, {
       resultFields: null,
       resultRows: null,
       isExecuting: false,
       query: action.query,
       error: action.error,
-    };
+    });
   }
   case types.UPDATE_QUERY: {
-    return {
-      ...state,
+    return changeStateByCurrentQuery(state, {
       query: action.query,
       copied: false,
-    };
+    });
   }
   case types.COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST: {
-    return {
-      ...state,
+    return changeStateByCurrentQuery(state, {
       error: null,
       copied: false,
-    };
+    });
   }
   case types.COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS: {
-    return {
-      ...state,
+    return changeStateByCurrentQuery(state, {
       copied: true,
-    };
+    });
   }
   case types.COPY_QUERY_RESULT_TO_CLIPBOARD_FAIL: {
-    return {
-      ...state,
+    return changeStateByCurrentQuery(state, {
       error: action.error,
       copied: false,
-    };
+    });
   }
 
   default : return state;
   }
+}
+
+
+function addNewQuery(state, action) {
+  const configItemsPerPage = action.config && action.config.resultItemsPerPage;
+  const itemsPerPage = configItemsPerPage || state.resultItemsPerPage || INITIAL_STATE.resultItemsPerPage;
+
+  const newId = state.lastCreatedId + 1;
+  const newQuery = {
+    id: newId,
+    name: `SQL File ${newId}`,
+    isExecuting: false,
+    isDefaultSelect: false,
+    didInvalidate: true,
+    query: '',
+    queryHistory: [],
+    resultFields: null,
+    resultRows: null,
+    error: null,
+    copied: null,
+    resultItemsPerPage: itemsPerPage,
+  };
+
+  return {
+    ...state,
+    lastCreatedId: newQuery.id,
+    currentQueryId: newQuery.id,
+    resultItemsPerPage: itemsPerPage,
+    queryIds: [ ...state.queryIds, newQuery.id ],
+    queriesById: {
+      ...state.queriesById,
+      [newQuery.id]: newQuery,
+    },
+  };
+}
+
+
+function changeStateByCurrentQuery(oldFullState, newCurrentQueryState) {
+  return {
+    ...oldFullState,
+    queriesById: {
+      ...oldFullState.queriesById,
+      [oldFullState.currentQueryId]: {
+        ...oldFullState.queriesById[oldFullState.currentQueryId],
+        ...newCurrentQueryState,
+      },
+    },
+  };
 }

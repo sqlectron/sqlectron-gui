@@ -1,7 +1,10 @@
+import { debounce } from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
+import * as QueryActions from '../actions/queries';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
 import DatabaseFilter from '../components/database-filter.jsx';
@@ -11,12 +14,6 @@ import Footer from '../components/footer.jsx';
 import Query from '../components/query.jsx';
 import Loader from '../components/loader.jsx';
 import MenuHandler from '../menu-handler';
-import {
-  executeQueryIfNeeded,
-  executeDefaultSelectQueryIfNeeded,
-  updateQuery,
-  copyToClipboard,
-} from '../actions/queries';
 
 
 import { ResizableBox } from 'react-resizable';
@@ -28,6 +25,7 @@ const STYLES = {
   container: { display: 'flex', padding: '10px 10px 50px 10px' },
   sidebar: {},
   content: { flex: 1, overflow: 'scroll' },
+  closeTab: { fontSize: '0.6em', margin: '0 -0.5em 0 1.5em', display: 'none' },
 };
 
 
@@ -103,7 +101,7 @@ class QueryBrowserContainer extends Component {
 
     const table = location.query && location.query.table;
     if (table) {
-      dispatch(executeDefaultSelectQueryIfNeeded(table));
+      dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(table));
     }
 
     this.setMenus();
@@ -130,11 +128,11 @@ class QueryBrowserContainer extends Component {
       return;
     }
 
-    this.props.dispatch(executeDefaultSelectQueryIfNeeded(table.name));
+    this.props.dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(table.name));
   }
 
   onSQLChange (sqlQuery) {
-    this.props.dispatch(updateQuery(sqlQuery));
+    this.props.dispatch(QueryActions.updateQuery(sqlQuery));
   }
 
   onFilterChange (value) {
@@ -154,22 +152,80 @@ class QueryBrowserContainer extends Component {
   setMenus() {
     this.menuHandler.setMenus({
       'sqlectron:query-execute': () => {
-        this.handleExecuteQuery(this.props.queries.query);
+        const { queries: { queriesById, currentQueryId } } = this.props;
+        this.handleExecuteQuery(queriesById[currentQueryId].query);
+      },
+      'sqlectron:new-tab': () => {
+        this.newTab();
       },
     });
   }
 
+  handleSelectTab(index) {
+    const queryId = this.props.queries.queryIds[index];
+    this.props.dispatch(QueryActions.selectQuery(queryId));
+  }
+
+  removeQuery(queryId) {
+    this.props.dispatch(QueryActions.removeQuery(queryId));
+  }
+
   copyToClipboard (rows, type) {
-    this.props.dispatch(copyToClipboard(rows, type));
+    this.props.dispatch(QueryActions.copyToClipboard(rows, type));
   }
 
   handleExecuteQuery (sqlQuery) {
-    this.props.dispatch(executeQueryIfNeeded(sqlQuery));
+    this.props.dispatch(QueryActions.executeQueryIfNeeded(sqlQuery));
   }
 
   filterDatabases(name, databases) {
     const regex = RegExp(name, 'i');
     return databases.filter(db => regex.test(db.name));
+  }
+
+  newTab() {
+    this.props.dispatch(QueryActions.newQuery());
+  }
+
+  renderTabQueries() {
+    const { queries } = this.props;
+
+    const menu = queries.queryIds.map(queryId => {
+      const styleCloseTab = { ...STYLES.closeTab };
+      if (queryId === queries.currentQueryId) {
+        styleCloseTab.display = 'block';
+      }
+      return (
+        <Tab key={queryId}>
+          {queries.queriesById[queryId].name}
+          <button className="right floated circular ui icon button mini"
+            style={styleCloseTab}
+            onClick={debounce(() => this.removeQuery(queryId), 200)}>
+            <i className="icon remove"></i>
+          </button>
+        </Tab>
+      );
+    });
+
+    const panels = queries.queryIds.map(queryId => {
+      const query = queries.queriesById[queryId];
+      return (
+        <TabPanel key={queryId}>
+          <Query query={query}
+            onExecQueryClick={::this.handleExecuteQuery}
+            onCopyToClipboardClick={::this.copyToClipboard}
+            onSQLChange={::this.onSQLChange} />
+        </TabPanel>
+      );
+    });
+
+    const selectedIndex = queries.queryIds.indexOf(queries.currentQueryId);
+    return (
+      <Tabs onSelect={::this.handleSelectTab} selectedIndex={selectedIndex}>
+        <TabList>{menu}</TabList>
+        {panels}
+      </Tabs>
+    );
   }
 
   render() {
@@ -182,7 +238,6 @@ class QueryBrowserContainer extends Component {
       isSameServer,
       databases,
       tables,
-      queries,
     } = this.props;
 
     const isLoading = (!connected || !isSameServer);
@@ -231,10 +286,7 @@ class QueryBrowserContainer extends Component {
             </ResizableBox>
           </div>
           <div style={STYLES.content}>
-            <Query query={queries}
-              onExecQueryClick={::this.handleExecuteQuery}
-              onCopyToClipboardClick={::this.copyToClipboard}
-              onSQLChange={::this.onSQLChange} />
+              {this.renderTabQueries()}
           </div>
         </div>
         <div style={STYLES.footer}>
