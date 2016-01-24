@@ -1,4 +1,5 @@
 import app from 'app';
+import { dialog } from 'electron';
 import { buildNewWindow } from './window';
 
 
@@ -19,3 +20,12 @@ app.on('window-all-closed', () => app.quit());
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
 app.on('ready', () => buildNewWindow(app));
+
+
+// Show only the error description to the user
+process.on('uncaughtException', error => {
+  if (error.stack) {
+    console.error('Sqlectron error:', error.stack);
+  }
+  return dialog.showErrorBox('An error occurred', error.name + ': ' + error.message);
+});
