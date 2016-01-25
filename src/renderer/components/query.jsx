@@ -48,7 +48,7 @@ export default class Query extends Component {
               value={query.query}
               showPrintMargin={false}
               editorProps={{$blockScrolling: Infinity}}
-              onChange={debounce(onSQLChange, 300)}
+              onChange={debounce(onSQLChange, 100)}
               />
           </ResizableBox>
           <div className="ui secondary menu" style={{marginTop: 0}}>
