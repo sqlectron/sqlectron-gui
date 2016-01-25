@@ -33,8 +33,7 @@ function renderBreadcrumb(items) {
 
 const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
   const visibilityButtons = onCloseConnectionClick ? 'visible' : 'hidden';
-  const styleButton = { fontSize: '0.8em' };
-  const styleItem = { paddingLeft: 0 };
+  const styleItem = { paddingLeft: 0, paddingTop: 0, paddingBottom: 0 };
   return (
     <div className="ui top fixed menu borderless">
       <a href="#" className="item" onClick={onSiteClick}>
@@ -47,20 +46,18 @@ const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
       </div>
       <div className="right menu" style={{marginLeft: '0 !important', visibility: visibilityButtons}}>
         <div className="item borderless" style={styleItem}>
-          <button className="ui icon button"
-            style={styleButton}
-            title="Reconnect. It will wipe the query box as well."
-            onClick={onReConnectionClick}>
-            <i className="plug icon"></i>
-          </button>
-        </div>
-        <div className="item borderless" style={styleItem}>
-          <button className="ui icon button"
-            style={styleButton}
-            title="Close connection"
-            onClick={onCloseConnectionClick}>
-            <i className="ban icon"></i>
-          </button>
+          <div className="ui mini basic icon buttons">
+            <button className="ui button"
+              title="Reconnect"
+              onClick={onReConnectionClick}>
+              <i className="plug icon"></i>
+            </button>
+            <button className="ui icon button"
+              title="Close connection"
+              onClick={onCloseConnectionClick}>
+              <i className="ban icon"></i>
+            </button>
+          </div>
         </div>
       </div>
     </div>
