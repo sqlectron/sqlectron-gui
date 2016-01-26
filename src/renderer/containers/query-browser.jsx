@@ -90,19 +90,23 @@ class QueryBrowserContainer extends Component {
       history.pushState(null, '/');
       return;
     }
+
     if (!connecting && !isSameServer) {
       dispatch(ConnActions.connect(params.id, params.database));
       return;
     }
+
     if (!connected) { return; }
 
     dispatch(fetchDatabasesIfNeeded());
     dispatch(fetchTablesIfNeeded(params.database));
 
     const table = location.query && location.query.table;
-    if (table) {
+    if (table && !this.state.initialLoadCompleted) {
       dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(table));
     }
+
+    this.setState({ initialLoadCompleted: true });
 
     this.setMenus();
   }
@@ -120,6 +124,7 @@ class QueryBrowserContainer extends Component {
     }
 
     history.pushState(null, newStateLocation);
+    this.setState({ initialLoadCompleted: false });
   }
 
   onSelectTable(database, table) {
