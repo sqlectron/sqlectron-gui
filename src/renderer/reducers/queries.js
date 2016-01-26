@@ -13,6 +13,9 @@ const INITIAL_STATE = {
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
+  case connTypes.CLOSE_CONNECTION: {
+    return INITIAL_STATE;
+  }
   case connTypes.CONNECTION_SUCCESS:
   case types.NEW_QUERY: {
     return addNewQuery(state, action);
@@ -26,6 +29,7 @@ export default function (state = INITIAL_STATE, action) {
   case types.REMOVE_QUERY: {
     const newState = { ...state };
 
+    const database = state.queriesById[state.currentQueryId].database;
     const index = state.queryIds.indexOf(state.currentQueryId);
 
     if (state.length === 1) {
@@ -43,7 +47,7 @@ export default function (state = INITIAL_STATE, action) {
       return newState;
     }
 
-    return addNewQuery(newState, action);
+    return addNewQuery(newState, { ...action, database });
   }
   case types.EXECUTE_QUERY_REQUEST: {
     return changeStateByCurrentQuery(state, {
@@ -107,12 +111,17 @@ export default function (state = INITIAL_STATE, action) {
 
 
 function addNewQuery(state, action) {
+  if (action.reconnecting) {
+    return state;
+  }
+
   const configItemsPerPage = action.config && action.config.resultItemsPerPage;
   const itemsPerPage = configItemsPerPage || state.resultItemsPerPage || INITIAL_STATE.resultItemsPerPage;
 
   const newId = state.lastCreatedId + 1;
   const newQuery = {
     id: newId,
+    database: action.database,
     name: `SQL File ${newId}`,
     isExecuting: false,
     isDefaultSelect: false,

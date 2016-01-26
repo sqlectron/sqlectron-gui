@@ -1,6 +1,6 @@
-import { clipboard } from 'electron';
 import csvStringify from 'csv-stringify';
-import { dbSession } from './connections';
+import { clipboard } from 'electron';
+import { getCurrentDBConn } from './connections';
 
 
 export const NEW_QUERY = 'NEW_QUERY';
@@ -15,8 +15,8 @@ export const COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE = 'COPY_QUERY_RESULT_TO_CLIP
 export const UPDATE_QUERY = 'UPDATE_QUERY';
 
 
-export function newQuery () {
-  return { type: NEW_QUERY };
+export function newQuery (database) {
+  return { type: NEW_QUERY, database };
 }
 
 
@@ -41,7 +41,8 @@ export function executeQueryIfNeeded (query) {
 
 export function executeDefaultSelectQueryIfNeeded (table) {
   return async (dispatch, getState) => {
-    const query = await dbSession.getQuerySelectTop(table);
+    const dbConn = getCurrentDBConn(getState());
+    const query = await dbConn.getQuerySelectTop(table);
     if (shouldExecuteQuery(query, getState())) {
       return dispatch(executeQuery(query, true));
     }
@@ -87,10 +88,11 @@ function shouldExecuteQuery (query, state) {
 
 
 function executeQuery (query, isDefaultSelect = false) {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
-      const remoteResult = await dbSession.executeQuery(query);
+      const dbConn = getCurrentDBConn(getState());
+      const remoteResult = await dbConn.executeQuery(query);
 
       // Remove any "reference" to the remote IPC object
       const result = JSON.parse(JSON.stringify({

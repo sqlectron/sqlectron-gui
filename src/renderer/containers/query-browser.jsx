@@ -25,7 +25,7 @@ const STYLES = {
   container: { display: 'flex', padding: '10px 10px 50px 10px' },
   sidebar: {},
   content: { flex: 1, overflow: 'scroll' },
-  closeTab: { fontSize: '0.6em', margin: '0 -0.5em 0 1.5em', display: 'none' },
+  closeTab: { fontSize: '0.5em', margin: '-0.5em -1em 0 1.5em', display: 'none' },
 };
 
 
@@ -189,7 +189,7 @@ class QueryBrowserContainer extends Component {
   }
 
   newTab() {
-    this.props.dispatch(QueryActions.newQuery());
+    this.props.dispatch(QueryActions.newQuery(this.props.params.database));
   }
 
   renderTabQueries() {
@@ -203,7 +203,7 @@ class QueryBrowserContainer extends Component {
       return (
         <Tab key={queryId}>
           {queries.queriesById[queryId].name}
-          <button className="right floated circular ui icon button mini"
+          <button className="right floated ui icon button mini"
             style={styleCloseTab}
             onClick={debounce(() => this.removeQuery(queryId), 200)}>
             <i className="icon remove"></i>
@@ -236,13 +236,13 @@ class QueryBrowserContainer extends Component {
   render() {
     const { filter } = this.state;
     const {
-      params: { database },
       status,
       connected,
       server,
       isSameServer,
       databases,
       tables,
+      queries,
     } = this.props;
 
     const isLoading = (!connected || !isSameServer);
@@ -250,6 +250,7 @@ class QueryBrowserContainer extends Component {
       return <Loader message={status} type="page" />;
     }
 
+    const { database } = queries.queriesById[queries.currentQueryId];
     const breadcrumb = server ? [
       { icon: 'server', label: server.name },
       { icon: 'database', label: database },

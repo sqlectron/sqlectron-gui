@@ -1,4 +1,4 @@
-import { dbSession } from './connections';
+import { getCurrentDBConn } from './connections';
 
 
 export const FETCH_DATABASES_REQUEST = 'FETCH_DATABASES_REQUEST';
@@ -30,10 +30,11 @@ function shouldFetchDatabases (state) {
 
 
 function fetchDatabases () {
-  return async dispatch => {
+  return async (dispatch, getState) => {
     dispatch({ type: FETCH_DATABASES_REQUEST });
     try {
-      const databases = await dbSession.listDatabases();
+      const dbConn = getCurrentDBConn(getState());
+      const databases = await dbConn.listDatabases();
       dispatch({ type: FETCH_DATABASES_SUCCESS, databases });
     } catch (error) {
       dispatch({ type: FETCH_DATABASES_FAILURE, error });
