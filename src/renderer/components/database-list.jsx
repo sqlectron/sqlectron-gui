@@ -50,6 +50,7 @@ export default class DatabaseList extends Component {
       return (
         <i className="plus square outline icon"
           style={STYLE.collapse}
+          title="Expand"
           onClick={() => this.toggleCollapse(database)} />
       );
     }
@@ -57,6 +58,7 @@ export default class DatabaseList extends Component {
     return (
       <i className="minus square outline icon"
         style={STYLE.collapse}
+        title="Collapse"
         onClick={() => this.toggleCollapse(database)} />
     );
   }
