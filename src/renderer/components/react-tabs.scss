@@ -1,0 +1,13 @@
+#content .react-tabs {
+  .item > .button {
+    opacity: 0;
+    transition: opacity .25s ease-in-out;
+    font-size: 0.5em;
+    margin: -0.5em -1em 0 1.5em;
+    display: 'none';
+  }
+
+  .item.active:hover > .button {
+    opacity: 1;
+  }
+}

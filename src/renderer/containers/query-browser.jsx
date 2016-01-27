@@ -18,6 +18,7 @@ import MenuHandler from '../menu-handler';
 
 import { ResizableBox } from 'react-resizable';
 require('../components/react-resizable.css');
+require('../components/react-tabs.scss');
 
 
 const STYLES = {
@@ -25,7 +26,6 @@ const STYLES = {
   container: { display: 'flex', padding: '10px 10px 50px 10px' },
   sidebar: {},
   content: { flex: 1, overflow: 'scroll' },
-  closeTab: { fontSize: '0.5em', margin: '-0.5em -1em 0 1.5em', display: 'none' },
 };
 
 
@@ -196,15 +196,11 @@ class QueryBrowserContainer extends Component {
     const { queries } = this.props;
 
     const menu = queries.queryIds.map(queryId => {
-      const styleCloseTab = { ...STYLES.closeTab };
-      if (queryId === queries.currentQueryId) {
-        styleCloseTab.display = 'block';
-      }
+      const isCurrentQuery = queryId === queries.currentQueryId;
       return (
-        <Tab key={queryId}>
+        <Tab key={queryId} className={`item ${isCurrentQuery ? 'active' : ''}`}>
           {queries.queriesById[queryId].name}
           <button className="right floated ui icon button mini"
-            style={styleCloseTab}
             onClick={debounce(() => this.removeQuery(queryId), 200)}>
             <i className="icon remove"></i>
           </button>
@@ -227,7 +223,7 @@ class QueryBrowserContainer extends Component {
     const selectedIndex = queries.queryIds.indexOf(queries.currentQueryId);
     return (
       <Tabs onSelect={::this.handleSelectTab} selectedIndex={selectedIndex}>
-        <TabList>{menu}</TabList>
+        <TabList className="ui pointing secondary menu">{menu}</TabList>
         {panels}
       </Tabs>
     );
