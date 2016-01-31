@@ -10,16 +10,14 @@ export default class QueryResult extends Component {
     resultItemsPerPage: PropTypes.number.isRequired,
     copied: PropTypes.bool,
     query: PropTypes.string,
-    fields: PropTypes.array,
-    rows: PropTypes.array,
-    rowCount: PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.number,
-    ]),
-    affectedRows: PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.number,
-    ]),
+    results: React.PropTypes.arrayOf(
+      React.PropTypes.shape({
+        fields: PropTypes.array,
+        rows: PropTypes.array,
+        rowCount: React.PropTypes.number,
+        affectedRows: React.PropTypes.number,
+      }),
+    ),
     isExecuting: PropTypes.bool,
     error: PropTypes.object,
   }
@@ -40,9 +38,8 @@ export default class QueryResult extends Component {
     }
   }
 
-  renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries }) {
-    const queryWithOutput = !!(fields && fields.length);
-    if (!queryWithOutput && affectedRows !== undefined) {
+  renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries, isSelect }) {
+    if (!isSelect) {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
         <Message
@@ -78,7 +75,7 @@ export default class QueryResult extends Component {
   }
 
   render() {
-    const { isExecuting, error, rows, fields, rowCount, affectedRows } = this.props;
+    const { isExecuting, error, results } = this.props;
     if (error) {
       if (error.message) {
         return <div className="ui negative message">{error.message}</div>;
@@ -94,26 +91,17 @@ export default class QueryResult extends Component {
       );
     }
 
-    if (!rows) {
+    if (!results) {
       return null;
     }
 
-    const isMultipleResult = fields && fields.length && Array.isArray(fields[0]);
-    const _fields = isMultipleResult ? fields : [fields];
-    const _rows = isMultipleResult ? rows : [rows];
-    const _rowsCount = isMultipleResult ? rowCount : [rowCount];
-    const _affectedRows = isMultipleResult ? affectedRows : [affectedRows];
-    const totalQueries = _fields.length;
-
+    const totalQueries = results.length;
     return (
       <div id="query-result">
         {
-          _fields.map((field, idx) => this.renderQueryResult({
+          results.map((result, idx) => this.renderQueryResult({
+            ...result,
             totalQueries,
-            fields: _fields[idx],
-            rows: _rows[idx],
-            rowCount: _rowsCount[idx],
-            affectedRows: _affectedRows[idx],
             queryIndex: idx,
           }))
         }

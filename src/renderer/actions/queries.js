@@ -95,14 +95,12 @@ function executeQuery (query, isDefaultSelect = false) {
       const remoteResult = await dbConn.executeQuery(query);
 
       // Remove any "reference" to the remote IPC object
-      const result = JSON.parse(JSON.stringify({
-        fields: remoteResult.fields,
-        rowCount: remoteResult.rowCount,
-        affectedRows: remoteResult.affectedRows,
-      }));
-      result.rows = convertAllValuesToString(remoteResult.rows);
+      const results = JSON.parse(JSON.stringify(remoteResult.map(result => ({
+        ...result,
+        rows: convertAllValuesToString(result.rows),
+      }))));
 
-      dispatch({ type: EXECUTE_QUERY_SUCCESS, query, result });
+      dispatch({ type: EXECUTE_QUERY_SUCCESS, query, results });
     } catch (error) {
       dispatch({ type: EXECUTE_QUERY_FAILURE, query, error });
     }

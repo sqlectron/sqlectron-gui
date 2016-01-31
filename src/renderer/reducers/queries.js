@@ -66,16 +66,12 @@ export default function (state = INITIAL_STATE, action) {
     return changeStateByCurrentQuery(state, {
       error: null,
       isExecuting: false,
-      resultFields: action.result.fields,
-      resultRows: action.result.rows,
-      resultRowCount: action.result.rowCount,
-      resultAffectedRows: action.result.affectedRows,
+      results: action.results,
     });
   }
   case types.EXECUTE_QUERY_FAILURE: {
     return changeStateByCurrentQuery(state, {
-      resultFields: null,
-      resultRows: null,
+      results: null,
       isExecuting: false,
       query: action.query,
       error: action.error,
@@ -128,8 +124,7 @@ function addNewQuery(state, action) {
     didInvalidate: true,
     query: '',
     queryHistory: [],
-    resultFields: null,
-    resultRows: null,
+    results: null,
     error: null,
     copied: null,
     resultItemsPerPage: itemsPerPage,

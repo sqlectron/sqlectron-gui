@@ -72,10 +72,7 @@ export default class Query extends Component {
           resultItemsPerPage={query.resultItemsPerPage}
           copied={query.copied}
           query={query.queryHistory[query.queryHistory.length - 1]}
-          fields={query.resultFields}
-          rows={query.resultRows}
-          rowCount={query.resultRowCount}
-          affectedRows={query.resultAffectedRows}
+          results={query.results}
           isExecuting={query.isExecuting}
           error={query.error} />
       </div>
