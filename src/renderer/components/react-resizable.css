@@ -19,15 +19,16 @@
 
 .react-resizable-ew-resize .react-resizable-handle {
   position: absolute;
-  width: 2px;
-  height: 80%;
-  top: 10%;
-  bottom: 10%;
+  width: 15px;
+  top: 7.5px;
   right: 7.5px;
-  background: rgba(0, 0, 0, 0.10);
-  box-sizing: border-box;
-  cursor: ew-resize;
   margin-top: 0;
+  cursor: -webkit-grabbing;
+}
+
+.react-resizable-ew-resize .react-resizable-handle:before {
+  content: "\f07e";
+  font-family: Icons;
 }
 
 
