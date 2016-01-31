@@ -193,7 +193,7 @@ class QueryBrowserContainer extends Component {
   }
 
   renderTabQueries() {
-    const { queries } = this.props;
+    const { server, queries } = this.props;
 
     const menu = queries.queryIds.map(queryId => {
       const isCurrentQuery = queryId === queries.currentQueryId;
@@ -212,7 +212,9 @@ class QueryBrowserContainer extends Component {
       const query = queries.queriesById[queryId];
       return (
         <TabPanel key={queryId}>
-          <Query query={query}
+          <Query
+            client={server.client}
+            query={query}
             onExecQueryClick={::this.handleExecuteQuery}
             onCopyToClipboardClick={::this.copyToClipboard}
             onSQLChange={::this.onSQLChange} />
