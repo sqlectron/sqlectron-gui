@@ -81,16 +81,20 @@ export function reconnect (id, database) {
 
 export function test (server) {
   return async (dispatch) => {
-    const testServerSession = sqlectron.db.createServer();
-    const dbClient = testServerSession.db[server.database];
     dispatch({ type: TEST_CONNECTION_REQUEST, server });
+    let testServerSession;
     try {
+      testServerSession = sqlectron.db.createServer(server);
+      const dbClient = testServerSession.createConnection(server.database);
+
       await dbClient.connect(server, server.database);
       dispatch({ type: TEST_CONNECTION_SUCCESS, server });
     } catch (error) {
       dispatch({ type: TEST_CONNECTION_FAILURE, server, error });
     } finally {
-      testServerSession.disconnect();
+      if (testServerSession) {
+        testServerSession.disconnect();
+      }
     }
   };
 }
