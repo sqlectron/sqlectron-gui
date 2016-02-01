@@ -1,6 +1,9 @@
+import { cloneDeep } from 'lodash';
 import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron';
 import { getCurrentDBConn } from './connections';
+import { rowsValuesToString } from '../utils/convert';
+import wait from '../utils/wait';
 
 
 export const NEW_QUERY = 'NEW_QUERY';
@@ -95,42 +98,13 @@ function executeQuery (query, isDefaultSelect = false) {
       const remoteResult = await dbConn.executeQuery(query);
 
       // Remove any "reference" to the remote IPC object
-      const results = JSON.parse(JSON.stringify(remoteResult.map(result => ({
-        ...result,
-        rows: convertAllValuesToString(result.rows),
-      }))));
+      const results = cloneDeep(remoteResult);
 
       dispatch({ type: EXECUTE_QUERY_SUCCESS, query, results });
     } catch (error) {
       dispatch({ type: EXECUTE_QUERY_FAILURE, query, error });
     }
   };
-}
-
-
-function convertAllValuesToString(rows) {
-  return rows.map(row => {
-    if (Array.isArray(row)) {
-      return convertAllValuesToString(row);
-    }
-
-    return Object.keys(row).reduce((_row, col) => {
-      _row[col] = valueToString(row[col]);
-      return _row;
-    }, {});
-  });
-}
-
-
-function valueToString(value) {
-  if (!value) { return value; }
-  if (value.toISOString) {
-    return value.toISOString();
-  }
-  if (typeof value === 'object') {
-    return JSON.stringify(value);
-  }
-  return value;
 }
 
 
@@ -146,7 +120,7 @@ function stringifyResultToCSV(rows) {
 
   const data = [
     header,
-    ...convertAllValuesToString(rows),
+    ...rowsValuesToString(rows),
   ];
 
   return new Promise((resolve, reject) => {
@@ -155,9 +129,4 @@ function stringifyResultToCSV(rows) {
       resolve(csv);
     });
   });
-}
-
-
-function wait(time) {
-  return new Promise(resolve => setTimeout(resolve, time));
 }

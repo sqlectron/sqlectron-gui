@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import ReactPaginate from 'react-paginate';
+import { rowsValuesToString } from '../utils/convert';
 
 
 require('./query-result-table.scss');
@@ -50,7 +51,7 @@ export default class QueryResultTable extends Component {
       );
     }
 
-    return rows.map((row, index) => {
+    return rowsValuesToString(rows).map((row, index) => {
       const columnNames = Object.keys(row);
       return (
         <tr key={index}>
