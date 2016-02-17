@@ -11,6 +11,7 @@
     https://github.com/STRML/react-resizable/issues/6
    */
   width: 100% !important;
+  max-width: 100%; /* removes scroll bar in windows version */
 }
 
 .react-resizable-ew-resize {
