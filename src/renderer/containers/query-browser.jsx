@@ -24,8 +24,8 @@ require('../components/react-tabs.scss');
 const STYLES = {
   wrapper: { paddingTop: '50px' },
   container: { display: 'flex', padding: '10px 10px 50px 10px' },
-  sidebar: { overflowY: 'auto', height: '100vh' },
-  content: { flex: 1, overflow: 'auto', height: '100vh' },
+  sidebar: { overflowY: 'auto' },
+  content: { flex: 1, overflow: 'auto', height: '100%' },
 };
 
 
