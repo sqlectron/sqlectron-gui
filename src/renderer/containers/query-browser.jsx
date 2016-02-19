@@ -22,7 +22,7 @@ require('../components/react-tabs.scss');
 
 
 const STYLES = {
-  // wrapper: { paddingTop: '50px' },
+  wrapper: {  },
   container: { display: 'flex', height: '100vh', box-sizing: 'border-box', padding: '50px 10px 40px 10px'  },
   sidebar: { overflowY: 'auto' },
   resizeable: { max-width: '100%', padding-right: '5px' },
