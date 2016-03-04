@@ -16,7 +16,12 @@ export function rowValuesToString(row) {
 
 
 export function valueToString(value) {
-  if (!value) { return value; }
+  if (typeof value === 'boolean') {
+    return value.toString();
+  }
+  if (!value) {
+    return value;
+  }
   if (value.toISOString) {
     return value.toISOString();
   }
