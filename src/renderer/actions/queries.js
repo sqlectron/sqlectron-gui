@@ -84,9 +84,7 @@ function shouldExecuteQuery (query, state) {
   const currentQuery = state.queries.queriesById[state.queries.currentQueryId];
   if (!currentQuery) return true;
   if (currentQuery.isExecuting) return false;
-  const previousQuery = currentQuery.queryHistory[currentQuery.queryHistory.length - 1];
-  if (previousQuery !== query) return true;
-  return currentQuery.didInvalidate;
+  return true;
 }
 
 
