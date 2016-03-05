@@ -22,11 +22,11 @@ require('../components/react-tabs.scss');
 
 
 const STYLES = {
-  wrapper: {  },
-  container: { display: 'flex', height: '100vh', box-sizing: 'border-box', padding: '50px 10px 40px 10px'  },
+  wrapper: {},
+  container: { display: 'flex', height: '100vh', boxSizing: 'border-box', padding: '50px 10px 40px 10px' },
   sidebar: { overflowY: 'auto' },
-  resizeable: { max-width: '100%', padding-right: '5px' },
-  content: { flex: 1, overflow: 'auto', padding-left: '5px' },
+  content: { flex: 1, overflow: 'auto', paddingLeft: '5px' },
+  resizeable: { width: 'auto', maxWidth: '100%' },
 };
 
 
@@ -270,8 +270,8 @@ class QueryBrowserContainer extends Component {
             <ResizableBox className="react-resizable react-resizable-ew-resize"
               width={235}
               minConstraints={[235, 300]}
-              maxConstraints={[750, 10000]} style={STYLES.resizeable}>
-              <div className="ui vertical menu" style={{width: 'auto'}}>
+              maxConstraints={[750, 10000]}>
+              <div className="ui vertical menu" style={STYLES.resizeable}>
                 <div className="item active" style={{textAlign: 'center'}}>
                   <b>{currentClient.title}</b>
                 </div>

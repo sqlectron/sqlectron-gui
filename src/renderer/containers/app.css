@@ -15,9 +15,14 @@ html {
 }
 
 body {
-  /* margin: 20px; */
   padding: 0;
   font-size: 14px;
   line-height: 30px;
   color: rgba(0,0,0,.87);
+}
+
+
+/* Override semantic ui style */
+.ui.secondary.menu {
+  max-width: 100%;
 }
