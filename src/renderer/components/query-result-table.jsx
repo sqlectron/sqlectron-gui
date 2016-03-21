@@ -56,7 +56,7 @@ export default class QueryResultTable extends Component {
       return (
         <tr key={index}>
           {columnNames.map(name => {
-            return <td key={name}>{row[name]}</td>;
+            return <td key={name}>{row[name].toString()}</td>;
           })}
         </tr>
       );
