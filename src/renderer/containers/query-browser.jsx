@@ -7,6 +7,7 @@ import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
+import { fetchViewsIfNeeded } from '../actions/views';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import Header from '../components/header.jsx';
@@ -41,6 +42,7 @@ class QueryBrowserContainer extends Component {
     status: PropTypes.string.isRequired,
     databases: PropTypes.object.isRequired,
     tables: PropTypes.object.isRequired,
+    views: PropTypes.object.isRequired,
     queries: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
@@ -101,6 +103,7 @@ class QueryBrowserContainer extends Component {
 
     dispatch(fetchDatabasesIfNeeded());
     dispatch(fetchTablesIfNeeded(params.database));
+    dispatch(fetchViewsIfNeeded(params.database));
 
     const table = location.query && location.query.table;
     if (table && !this.state.initialLoadCompleted) {
@@ -241,6 +244,7 @@ class QueryBrowserContainer extends Component {
       isSameServer,
       databases,
       tables,
+      views,
       queries,
     } = this.props;
 
@@ -285,6 +289,7 @@ class QueryBrowserContainer extends Component {
                   databases={filteredDatabases}
                   isFetching={databases.isFetching}
                   tablesByDatabase={tables.itemsByDatabase}
+                  viewsByDatabase={views.viewsByDatabase}
                   onSelectDatabase={::this.onSelectDatabase}
                   onSelectTable={::this.onSelectTable} />
               </div>
@@ -304,7 +309,7 @@ class QueryBrowserContainer extends Component {
 
 
 function mapStateToProps (state, props) {
-  const { connections, databases, tables, queries, status } = state;
+  const { connections, databases, tables, views, queries, status } = state;
 
   const isSameServer =
     connections
@@ -317,6 +322,7 @@ function mapStateToProps (state, props) {
     isSameServer: !!isSameServer,
     databases,
     tables,
+    views,
     queries,
     status,
   };
