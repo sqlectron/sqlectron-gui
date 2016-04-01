@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import TableList from './table-list.jsx';
 
 
 const STYLE = {
@@ -64,7 +65,7 @@ export default class DatabaseList extends Component {
   }
 
   renderDatabases(databases) {
-    const { onSelectDatabase } = this.props;
+    const { onSelectDatabase, onSelectTable } = this.props;
 
     return databases.map((database, idx) => {
       const tables = this.getTablesByDatabase(database);
@@ -76,26 +77,14 @@ export default class DatabaseList extends Component {
             onDoubleClick={() => onSelectDatabase(database)}>
             {database.name}
           </span>
-          <div className="menu">{this.renderTables(database, tables)}</div>
+          <div className="menu">
+            <TableList
+              tables={tables}
+              database={database}
+              dbIsToggled={!this.state[database.name]}
+              onSelectTable={onSelectTable} />
+          </div>
         </div>
-      );
-    });
-  }
-
-  renderTables(database, tables) {
-    const { onSelectTable } = this.props;
-    if (!tables.length || this.state[database.name]) {
-      return null;
-    }
-
-    return tables.map((table, idxChild) => {
-      return (
-        <span key={idxChild}
-          className="item"
-          style={STYLE.database}
-          onDoubleClick={() => onSelectTable(database, table)}>
-          {table.name}
-        </span>
       );
     });
   }
