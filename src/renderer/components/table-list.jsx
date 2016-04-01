@@ -1,16 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
 
-const STYLE = {
-    table: {
-      cursor: 'pointer',
-      wordBreak: 'break-all',
-    },
-    title: {
-      padding: '0.33em',
-    },
-};
-
 export default class TableList extends Component {
   static propTypes = {
     tables: PropTypes.array.isRequired,
@@ -26,7 +16,7 @@ export default class TableList extends Component {
     }
 
     return (
-      <span style={STYLE.title}>
+      <span className="list-title">
         Tables
       </span>
     );
@@ -41,8 +31,7 @@ export default class TableList extends Component {
     return tables.map((table, idxChild) => {
       return (
         <span key={idxChild}
-          className="item"
-          style={STYLE.table}
+          className="item list-item"
           onDoubleClick={() => onSelectTable(database, table)}>
           {table.name}
         </span>

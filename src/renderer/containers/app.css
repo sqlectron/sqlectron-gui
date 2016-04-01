@@ -26,3 +26,14 @@ body {
 .ui.secondary.menu {
   max-width: 100%;
 }
+
+/* Custom css for tables, views and routines lists */
+span.list-title {
+  cursor: pointer;
+  padding: 0.33em;
+}
+
+span.list-item {
+  cursor: pointer;
+  word-break: break-all;
+}

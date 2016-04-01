@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import TableList from './table-list.jsx';
+import ViewList from './view-list.jsx';
 
 
 const STYLE = {
@@ -18,6 +19,9 @@ export default class DatabaseList extends Component {
     databases: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
+    viewsByDatabase: PropTypes.object.isRequired,
+    functionsByDatabase: PropTypes.object.isRequired,
+    proceduresByDatabase: PropTypes.object.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
   }
@@ -30,6 +34,11 @@ export default class DatabaseList extends Component {
   getTablesByDatabase({ name }) {
     const { tablesByDatabase } = this.props;
     return tablesByDatabase[name] || [];
+  }
+
+  getViewsByDatabase({ name }) {
+    const { viewsByDatabase } = this.props;
+    return viewsByDatabase[name] || [];
   }
 
   toggleCollapse(database) {
@@ -69,6 +78,7 @@ export default class DatabaseList extends Component {
 
     return databases.map((database, idx) => {
       const tables = this.getTablesByDatabase(database);
+      const views = this.getViewsByDatabase(database);
       return (
         <div className="item" key={idx}>
           <i className="grid database icon"></i>
@@ -83,6 +93,12 @@ export default class DatabaseList extends Component {
               database={database}
               dbIsToggled={!this.state[database.name]}
               onSelectTable={onSelectTable} />
+            <ViewList
+              views={views}
+              database={database}
+              dbIsToggled={!this.state[database.name]}
+              hasNoTables={!tables.length}
+              onSelectView={onSelectTable} />
           </div>
         </div>
       );
