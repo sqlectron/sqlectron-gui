@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import TableList from './table-list.jsx';
 import ViewList from './view-list.jsx';
+import RoutineList from './routine-list.jsx';
 
 
 const STYLE = {
@@ -41,6 +42,16 @@ export default class DatabaseList extends Component {
     return viewsByDatabase[name] || [];
   }
 
+  getFunctionsByDatabase({ name }) {
+    const { functionsByDatabase } = this.props;
+    return functionsByDatabase[name] || [];
+  }
+
+  getProceduresByDatabase({ name }) {
+    const { proceduresByDatabase } = this.props;
+    return proceduresByDatabase[name] || [];
+  }
+
   toggleCollapse(database) {
     const state = { ...this.state };
     if (state[database.name]) {
@@ -79,6 +90,9 @@ export default class DatabaseList extends Component {
     return databases.map((database, idx) => {
       const tables = this.getTablesByDatabase(database);
       const views = this.getViewsByDatabase(database);
+      const functions = this.getFunctionsByDatabase(database);
+      const procedures = this.getProceduresByDatabase(database);
+      const shouldShow = !this.state[database.name] && !!tables.length;
       return (
         <div className="item" key={idx}>
           <i className="grid database icon"></i>
@@ -99,6 +113,10 @@ export default class DatabaseList extends Component {
               dbIsToggled={!this.state[database.name]}
               hasNoTables={!tables.length}
               onSelectView={onSelectTable} />
+            <RoutineList
+              functions={functions}
+              procedures={procedures}
+              shouldShow={shouldShow} />
           </div>
         </div>
       );
