@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, trim } from 'lodash';
 import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron';
 import { getCurrentDBConn } from './connections';
@@ -44,11 +44,20 @@ export function executeQueryIfNeeded (query) {
 
 export function executeDefaultSelectQueryIfNeeded (table) {
   return async (dispatch, getState) => {
-    const dbConn = getCurrentDBConn(getState());
-    const query = await dbConn.getQuerySelectTop(table);
-    if (shouldExecuteQuery(query, getState())) {
-      return dispatch(executeQuery(query, true));
+    const currentState = getState();
+    const dbConn = getCurrentDBConn(currentState);
+    const queryDefaultSelect = await dbConn.getQuerySelectTop(table);
+
+    if (!shouldExecuteQuery(queryDefaultSelect, currentState)) {
+      return;
     }
+
+    const currentQuery = getCurrentQuery(currentState);
+    if (currentQuery && currentQuery.query !== queryDefaultSelect && trim(currentQuery.query) !== '') {
+      dispatch({ type: NEW_QUERY, database: currentQuery.database });
+    }
+
+    dispatch(executeQuery(queryDefaultSelect, true));
   };
 }
 
@@ -81,7 +90,7 @@ export function copyToClipboard (rows, type) {
 
 
 function shouldExecuteQuery (query, state) {
-  const currentQuery = state.queries.queriesById[state.queries.currentQueryId];
+  const currentQuery = getCurrentQuery(state);
   if (!currentQuery) return true;
   if (currentQuery.isExecuting) return false;
   return true;
@@ -127,4 +136,9 @@ function stringifyResultToCSV(rows) {
       resolve(csv);
     });
   });
+}
+
+
+function getCurrentQuery(state) {
+  return state.queries.queriesById[state.queries.currentQueryId];
 }
