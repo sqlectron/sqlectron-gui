@@ -22,6 +22,17 @@ export function buildTemplate(app, buildNewWindow) {
           click: (item, win) => win.webContents.send('sqlectron:new-tab'),
         },
         {
+          type: 'separator',
+        },
+        {
+          label: 'Save Query',
+          accelerator: 'Ctrl+S',
+          click: (item, win) => win.webContents.send('sqlectron:save-query'),
+        },
+        {
+          type: 'separator',
+        },
+        {
           'label': 'Quit',
           'accelerator': 'Ctrl+Q',
           click: () => app.quit(),

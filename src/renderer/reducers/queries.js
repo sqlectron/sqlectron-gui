@@ -100,6 +100,17 @@ export default function (state = INITIAL_STATE, action) {
       copied: false,
     });
   }
+  case types.SAVE_QUERY_SUCCESS: {
+    return changeStateByCurrentQuery(state, {
+      name: action.name,
+      filename: action.filename,
+    });
+  }
+  case types.SAVE_QUERY_FAILURE: {
+    return changeStateByCurrentQuery(state, {
+      error: action.error,
+    });
+  }
 
   default : return state;
   }
@@ -119,6 +130,7 @@ function addNewQuery(state, action) {
     id: newId,
     database: action.database,
     name: `SQL File ${newId}`,
+    filename: null,
     isExecuting: false,
     isDefaultSelect: false,
     didInvalidate: true,

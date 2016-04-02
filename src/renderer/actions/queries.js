@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+import { remote } from 'electron';
 import { cloneDeep, trim } from 'lodash';
 import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron';
@@ -15,6 +18,9 @@ export const EXECUTE_QUERY_FAILURE = 'EXECUTE_QUERY_FAILURE';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST = 'COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS = 'COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE = 'COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE';
+export const SAVE_QUERY_REQUEST = 'SAVE_QUERY_REQUEST';
+export const SAVE_QUERY_SUCCESS = 'SAVE_QUERY_SUCCESS';
+export const SAVE_QUERY_FAILURE = 'SAVE_QUERY_FAILURE';
 export const UPDATE_QUERY = 'UPDATE_QUERY';
 
 
@@ -89,6 +95,28 @@ export function copyToClipboard (rows, type) {
 }
 
 
+export function saveQuery () {
+  return async (dispatch, getState) => {
+    dispatch({ type: SAVE_QUERY_REQUEST });
+    try {
+      const currentQuery = getCurrentQuery(getState());
+
+      let filename = (currentQuery.filename || await showSaveDialog());
+      if (path.extname(filename) !== '.sql') {
+        filename += '.sql';
+      }
+
+      await saveFile(filename, currentQuery.query);
+      const name = path.basename(filename, '.sql');
+
+      dispatch({ type: SAVE_QUERY_SUCCESS, name, filename });
+    } catch (error) {
+      dispatch({ type: SAVE_QUERY_FAILURE, error });
+    }
+  };
+}
+
+
 function shouldExecuteQuery (query, state) {
   const currentQuery = getCurrentQuery(state);
   if (!currentQuery) return true;
@@ -142,3 +170,25 @@ function stringifyResultToCSV(rows) {
 function getCurrentQuery(state) {
   return state.queries.queriesById[state.queries.currentQueryId];
 }
+
+function showSaveDialog() {
+  return new Promise(resolve => {
+    remote.dialog.showSaveDialog({
+      filters: [
+        { name: 'SQL', extensions: ['sql'] },
+        { name: 'All Files', extensions: ['*'] },
+      ],
+    }, resolve);
+  });
+}
+
+
+function saveFile(filename, data) {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(filename, data, 'utf8', (err) => {
+      if (err) { return reject(err); }
+      resolve();
+    });
+  });
+}
+

@@ -161,9 +161,8 @@ class QueryBrowserContainer extends Component {
         const { queries: { queriesById, currentQueryId } } = this.props;
         this.handleExecuteQuery(queriesById[currentQueryId].query);
       },
-      'sqlectron:new-tab': () => {
-        this.newTab();
-      },
+      'sqlectron:new-tab': () => this.newTab(),
+      'sqlectron:save-query': () => this.saveQuery(),
     });
   }
 
@@ -174,6 +173,10 @@ class QueryBrowserContainer extends Component {
 
   removeQuery(queryId) {
     this.props.dispatch(QueryActions.removeQuery(queryId));
+  }
+
+  saveQuery() {
+    this.props.dispatch(QueryActions.saveQuery());
   }
 
   copyToClipboard (rows, type) {

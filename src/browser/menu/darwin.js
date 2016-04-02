@@ -60,6 +60,14 @@ export function buildTemplate(app, buildNewWindow) {
           accelerator: 'Cmd+T',
           click: (item, win) => win.webContents.send('sqlectron:new-tab'),
         },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Save Query',
+          accelerator: 'Cmd+S',
+          click: (item, win) => win.webContents.send('sqlectron:save-query'),
+        },
       ],
     },
     {

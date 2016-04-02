@@ -16,6 +16,12 @@ export default function (state = INITIAL_STATE, action) {
     return 'Loading list of tables...';
   case queriesTypes.EXECUTE_QUERY_REQUEST:
     return 'Executing query...';
+  case queriesTypes.SAVE_QUERY_REQUEST:
+    return 'Saving query...';
+  case queriesTypes.SAVE_QUERY_SUCCESS:
+    return 'Query saved successfully';
+  case queriesTypes.SAVE_QUERY_FAILURE:
+    return 'Error saving query. ' + action.error.message;
   default:
     return INITIAL_STATE;
   }
