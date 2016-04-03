@@ -51,13 +51,7 @@ export default class DatabaseList extends Component {
   }
 
   toggleCollapse(database) {
-    const state = { ...this.state };
-    if (state[database.name]) {
-      state[database.name] = false;
-    } else {
-      state[database.name] = true;
-    }
-    this.setState(state);
+    this.setState({ [database.name]: !this.state[database.name] });
   }
 
   renderCollapseButton(database, tables) {
