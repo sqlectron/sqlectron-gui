@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import DbMetadataList from './db-metadata-list.jsx';
 
 
 const STYLE = {
@@ -17,6 +18,9 @@ export default class DatabaseList extends Component {
     databases: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
+    viewsByDatabase: PropTypes.object.isRequired,
+    functionsByDatabase: PropTypes.object.isRequired,
+    proceduresByDatabase: PropTypes.object.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
   }
@@ -29,6 +33,21 @@ export default class DatabaseList extends Component {
   getTablesByDatabase({ name }) {
     const { tablesByDatabase } = this.props;
     return tablesByDatabase[name] || [];
+  }
+
+  getViewsByDatabase({ name }) {
+    const { viewsByDatabase } = this.props;
+    return viewsByDatabase[name] || [];
+  }
+
+  getFunctionsByDatabase({ name }) {
+    const { functionsByDatabase } = this.props;
+    return functionsByDatabase[name] || [];
+  }
+
+  getProceduresByDatabase({ name }) {
+    const { proceduresByDatabase } = this.props;
+    return proceduresByDatabase[name] || [];
   }
 
   toggleCollapse(database) {
@@ -64,10 +83,14 @@ export default class DatabaseList extends Component {
   }
 
   renderDatabases(databases) {
-    const { onSelectDatabase } = this.props;
+    const { onSelectDatabase, onSelectTable } = this.props;
 
     return databases.map((database, idx) => {
       const tables = this.getTablesByDatabase(database);
+      const views = this.getViewsByDatabase(database);
+      const functions = this.getFunctionsByDatabase(database);
+      const procedures = this.getProceduresByDatabase(database);
+      const shouldShow = !this.state[database.name] && !!tables.length;
       return (
         <div className="item" key={idx}>
           <i className="grid database icon"></i>
@@ -76,26 +99,17 @@ export default class DatabaseList extends Component {
             onDoubleClick={() => onSelectDatabase(database)}>
             {database.name}
           </span>
-          <div className="menu">{this.renderTables(database, tables)}</div>
+          <div className="menu">
+            <DbMetadataList
+              tables={tables}
+              views={views}
+              functions={functions}
+              procedures={procedures}
+              database={database}
+              shouldShow={shouldShow}
+              onSelectTable={onSelectTable} />
+          </div>
         </div>
-      );
-    });
-  }
-
-  renderTables(database, tables) {
-    const { onSelectTable } = this.props;
-    if (!tables.length || this.state[database.name]) {
-      return null;
-    }
-
-    return tables.map((table, idxChild) => {
-      return (
-        <span key={idxChild}
-          className="item"
-          style={STYLE.database}
-          onDoubleClick={() => onSelectTable(database, table)}>
-          {table.name}
-        </span>
       );
     });
   }
