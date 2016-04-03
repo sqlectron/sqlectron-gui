@@ -45,7 +45,7 @@ export default class DbMetadataList extends Component {
     }
 
     return listItems.map((item, idxChild) => {
-      if(listName === 'Tables' || listName === 'Views') {
+      if (listName === 'Tables' || listName === 'Views') {
         return (
           <span key={idxChild}
             className="item list-item clickable"
@@ -54,6 +54,7 @@ export default class DbMetadataList extends Component {
           </span>
         );
       }
+
       return (
         <span key={idxChild}
           className="item list-item">
@@ -65,7 +66,7 @@ export default class DbMetadataList extends Component {
 
   render() {
     const { tables, views, functions, procedures, database, shouldShow } = this.props;
-    if(!shouldShow) {
+    if (!shouldShow) {
       return null;
     }
 
