@@ -18,13 +18,7 @@ export default class DbMetadataList extends Component {
   }
 
   toggleListCollapse(toggledList) {
-    const state = { ...this.state };
-    if (!state[toggledList]) {
-      state[toggledList] = true;
-    } else {
-      state[toggledList] = false;
-    }
-    this.setState(state);
+    this.setState({ [toggledList]: !this.state[toggledList] });
   }
 
   renderListName(listName) {
@@ -59,14 +53,13 @@ export default class DbMetadataList extends Component {
             {item.name}
           </span>
         );
-      } else {
-        return (
-          <span key={idxChild}
-            className="item list-item">
-            {item.name}
-          </span>
-        );
       }
+      return (
+        <span key={idxChild}
+          className="item list-item">
+          {item.name}
+        </span>
+      );
     });
   }
 
