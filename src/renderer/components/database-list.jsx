@@ -1,7 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import TableList from './table-list.jsx';
-import ViewList from './view-list.jsx';
-import RoutineList from './routine-list.jsx';
+import DbMetadataList from './db-metadata-list.jsx';
 
 
 const STYLE = {
@@ -102,21 +100,14 @@ export default class DatabaseList extends Component {
             {database.name}
           </span>
           <div className="menu">
-            <TableList
+            <DbMetadataList
               tables={tables}
-              database={database}
-              dbIsToggled={!this.state[database.name]}
-              onSelectTable={onSelectTable} />
-            <ViewList
               views={views}
-              database={database}
-              dbIsToggled={!this.state[database.name]}
-              hasNoTables={!tables.length}
-              onSelectView={onSelectTable} />
-            <RoutineList
               functions={functions}
               procedures={procedures}
-              shouldShow={shouldShow} />
+              database={database}
+              shouldShow={shouldShow}
+              onSelectTable={onSelectTable} />
           </div>
         </div>
       );
