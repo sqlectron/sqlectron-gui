@@ -34,7 +34,7 @@ export default class DbMetadataList extends Component {
     const { onSelectTable } = this.props;
     const state = { ...this.state };
 
-    if (state[listName] !== true) {
+    if (!state[listName]) {
       return null;
     }
 
