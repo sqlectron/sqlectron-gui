@@ -48,7 +48,7 @@
     "csv-stringify": "0.0.8",
     "debug": "^2.2.0",
     "react-paginate": "^0.5.0",
-    "sqlectron-core": "^3.0.0"
+    "sqlectron-core": "^3.1.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
