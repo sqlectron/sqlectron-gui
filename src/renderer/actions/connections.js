@@ -79,6 +79,7 @@ export function connect (id, databaseName, reconnecting = false) {
       if (dbConn) {
         dbConn.disconnect();
       }
+      this.disconnect();
     }
   };
 }
