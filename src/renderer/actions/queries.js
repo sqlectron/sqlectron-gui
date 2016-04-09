@@ -4,7 +4,7 @@ import { remote } from 'electron';
 import { cloneDeep, trim } from 'lodash';
 import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron';
-import { getCurrentDBConn } from './connections';
+import { getCurrentDBConn, getDBConnByName } from './connections';
 import { rowsValuesToString } from '../utils/convert';
 import wait from '../utils/wait';
 
@@ -48,10 +48,10 @@ export function executeQueryIfNeeded (query) {
 }
 
 
-export function executeDefaultSelectQueryIfNeeded (table) {
+export function executeDefaultSelectQueryIfNeeded (database, table) {
   return async (dispatch, getState) => {
     const currentState = getState();
-    const dbConn = getCurrentDBConn(currentState);
+    const dbConn = getDBConnByName(database);
     const queryDefaultSelect = await dbConn.getQuerySelectTop(table);
 
     if (!shouldExecuteQuery(queryDefaultSelect, currentState)) {
@@ -60,10 +60,10 @@ export function executeDefaultSelectQueryIfNeeded (table) {
 
     const currentQuery = getCurrentQuery(currentState);
     if (currentQuery && currentQuery.query !== queryDefaultSelect && trim(currentQuery.query) !== '') {
-      dispatch({ type: NEW_QUERY, database: currentQuery.database });
+      dispatch({ type: NEW_QUERY, database });
     }
 
-    dispatch(executeQuery(queryDefaultSelect, true));
+    dispatch(executeQuery(queryDefaultSelect, true, dbConn));
   };
 }
 
@@ -125,11 +125,11 @@ function shouldExecuteQuery (query, state) {
 }
 
 
-function executeQuery (query, isDefaultSelect = false) {
+function executeQuery (query, isDefaultSelect = false, dbConnection) {
   return async (dispatch, getState) => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
-      const dbConn = getCurrentDBConn(getState());
+      const dbConn = dbConnection || getCurrentDBConn(getState());
       const remoteResult = await dbConn.executeQuery(query);
 
       // Remove any "reference" to the remote IPC object

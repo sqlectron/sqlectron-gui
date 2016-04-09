@@ -6,19 +6,20 @@ export const FETCH_TABLES_SUCCESS = 'FETCH_TABLES_SUCCESS';
 export const FETCH_TABLES_FAILURE = 'FETCH_TABLES_FAILURE';
 
 
-export function fetchTablesIfNeeded (databse) {
+export function fetchTablesIfNeeded (database) {
   return (dispatch, getState) => {
-    if (shouldFetchTables(getState())) {
-      return dispatch(fetchTables(databse));
+    if (shouldFetchTables(getState(), database)) {
+      return dispatch(fetchTables(database));
     }
   };
 }
 
 
-function shouldFetchTables (state) {
+function shouldFetchTables (state, database) {
   const tables = state.tables;
   if (!tables) return true;
   if (tables.isFetching) return false;
+  if (!tables.itemsByDatabase[database]) return true;
   return tables.didInvalidate;
 }
 

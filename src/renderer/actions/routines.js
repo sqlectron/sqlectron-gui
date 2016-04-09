@@ -8,16 +8,18 @@ export const FETCH_ROUTINES_FAILURE = 'FETCH_ROUTINES_FAILURE';
 
 export function fetchRoutinesIfNeeded (database) {
   return (dispatch, getState) => {
-    if (shouldFetchRoutines(getState())) {
+    if (shouldFetchRoutines(getState(), database)) {
       return dispatch(fetchRoutines(database));
     }
   };
 }
 
-function shouldFetchRoutines (state) {
+function shouldFetchRoutines (state, database) {
   const routines = state.routines;
   if (!routines) return true;
   if (routines.isFetching) return false;
+  if (!routines.functionsByDatabase[database]) return true;
+  if (!routines.proceduresByDatabase[database]) return true;
   return routines.didInvalidate;
 }
 

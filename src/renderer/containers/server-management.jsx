@@ -47,8 +47,8 @@ class ServerManagerment extends Component {
     this.props.dispatch(ServersActions.loadServers());
   }
 
-  onConnectClick({ id, database }) {
-    this.props.history.pushState(null, `/server/${id}/database/${database}`);
+  onConnectClick({ id }) {
+    this.props.history.pushState(null, `/server/${id}`);
   }
 
   onTestConnectionClick(server) {

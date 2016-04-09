@@ -40,6 +40,7 @@ const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
 
 class QueryBrowserContainer extends Component {
   static propTypes = {
+    connections: PropTypes.object.isRequired,
     status: PropTypes.string.isRequired,
     databases: PropTypes.object.isRequired,
     tables: PropTypes.object.isRequired,
@@ -52,11 +53,6 @@ class QueryBrowserContainer extends Component {
     params: PropTypes.object.isRequired,
     location: PropTypes.shape({ query: PropTypes.object }),
     children: PropTypes.node,
-    connected: PropTypes.bool,
-    server: PropTypes.object,
-    connecting: PropTypes.bool,
-    error: PropTypes.any,
-    isSameServer: PropTypes.bool.isRequired,
   };
 
   static contextTypes = {
@@ -70,8 +66,8 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillMount () {
-    const { dispatch, params, isSameServer, error } = this.props;
-    if (error || !isSameServer) dispatch(ConnActions.connect(params.id, params.database));
+    const { dispatch, params } = this.props;
+    dispatch(ConnActions.connect(params.id));
   }
 
   componentDidMount() {
@@ -79,41 +75,23 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const {
-      dispatch,
-      params,
-      location,
-      history,
-      isSameServer,
-      connecting,
-      connected,
-      error,
-      server,
-    } = nextProps;
+    const { dispatch, history, connections } = nextProps;
 
-    if (error || (!connecting && !server)) {
+    if (connections.error || (!connections.connecting && !connections.server)) {
       history.pushState(null, '/');
       return;
     }
 
-    if (!connecting && !isSameServer) {
-      dispatch(ConnActions.connect(params.id, params.database));
+    if (!connections.connected) {
       return;
     }
 
-    if (!connected) { return; }
+    const lastConnectedDB = connections.databases[connections.databases.length - 1];
 
     dispatch(fetchDatabasesIfNeeded());
-    dispatch(fetchTablesIfNeeded(params.database));
-    dispatch(fetchViewsIfNeeded(params.database));
-    dispatch(fetchRoutinesIfNeeded(params.database));
-
-    const table = location.query && location.query.table;
-    if (table && !this.state.initialLoadCompleted) {
-      dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(table));
-    }
-
-    this.setState({ initialLoadCompleted: true });
+    dispatch(fetchTablesIfNeeded(lastConnectedDB));
+    dispatch(fetchViewsIfNeeded(lastConnectedDB));
+    dispatch(fetchRoutinesIfNeeded(lastConnectedDB));
 
     this.setMenus();
   }
@@ -122,25 +100,14 @@ class QueryBrowserContainer extends Component {
     this.menuHandler.removeAllMenus();
   }
 
-  onSelectDatabase(database, table) {
-    const { params, history } = this.props;
+  onSelectDatabase(database) {
+    const { dispatch, params } = this.props;
 
-    let newStateLocation = `/server/${params.id}/database/${database.name}`;
-    if (table) {
-      newStateLocation += `?table=${table.name}`;
-    }
-
-    history.pushState(null, newStateLocation);
-    this.setState({ initialLoadCompleted: false });
+    dispatch(ConnActions.connect(params.id, database.name));
   }
 
   onSelectTable(database, table) {
-    if (database.name !== this.props.params.database) {
-      this.onSelectDatabase(database, table);
-      return;
-    }
-
-    this.props.dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(table.name));
+    this.props.dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name));
   }
 
   onSQLChange (sqlQuery) {
@@ -158,7 +125,11 @@ class QueryBrowserContainer extends Component {
 
   onReConnectionClick() {
     const { dispatch, params } = this.props;
-    dispatch(ConnActions.reconnect(params.id, params.database));
+    dispatch(ConnActions.reconnect(params.id, this.getCurrentQuery().database));
+  }
+
+  getCurrentQuery() {
+    return this.props.queries.queriesById[this.props.queries.currentQueryId];
   }
 
   setMenus() {
@@ -199,11 +170,11 @@ class QueryBrowserContainer extends Component {
   }
 
   newTab() {
-    this.props.dispatch(QueryActions.newQuery(this.props.params.database));
+    this.props.dispatch(QueryActions.newQuery(this.getCurrentQuery().database));
   }
 
   renderTabQueries() {
-    const { server, queries } = this.props;
+    const { connections, queries } = this.props;
 
     const menu = queries.queryIds.map(queryId => {
       const isCurrentQuery = queryId === queries.currentQueryId;
@@ -223,7 +194,7 @@ class QueryBrowserContainer extends Component {
       return (
         <TabPanel key={queryId}>
           <Query
-            client={server.client}
+            client={connections.server.client}
             query={query}
             onExecQueryClick={::this.handleExecuteQuery}
             onCopyToClipboardClick={::this.copyToClipboard}
@@ -245,28 +216,24 @@ class QueryBrowserContainer extends Component {
     const { filter } = this.state;
     const {
       status,
-      connected,
-      server,
-      isSameServer,
+      connections,
       databases,
       tables,
       views,
       routines,
-      queries,
     } = this.props;
 
-    const isLoading = (!connected || !isSameServer);
+    const isLoading = (!connections.connected);
     if (isLoading) {
       return <Loader message={status} type="page" />;
     }
 
-    const { database } = queries.queriesById[queries.currentQueryId];
-    const breadcrumb = server ? [
-      { icon: 'server', label: server.name },
-      { icon: 'database', label: database },
+    const breadcrumb = connections.server ? [
+      { icon: 'server', label: connections.server.name },
+      { icon: 'database', label: this.getCurrentQuery().database },
     ] : [];
 
-    const currentClient = CLIENTS[server.client];
+    const currentClient = CLIENTS[connections.server.client];
     const filteredDatabases = this.filterDatabases(filter, databases.items);
 
     return (
@@ -317,18 +284,11 @@ class QueryBrowserContainer extends Component {
 }
 
 
-function mapStateToProps (state, props) {
+function mapStateToProps (state) {
   const { connections, databases, tables, views, routines, queries, status } = state;
 
-  const isSameServer =
-    connections
-    && connections.server
-    && props.params.id === connections.server.id
-    && props.params.database === connections.database;
-
   return {
-    ...connections,
-    isSameServer: !!isSameServer,
+    connections,
     databases,
     tables,
     views,

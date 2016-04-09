@@ -21,7 +21,16 @@ export function getCurrentDBConn ({ queries } = {}) {
     return null;
   }
 
-  const dbConn = serverSession.db(currentQuery.database);
+  return getDBConnByName(currentQuery.database);
+}
+
+
+export function getDBConnByName(database) {
+  if (!serverSession) {
+    throw new Error('There is no server available');
+  }
+
+  const dbConn = serverSession.db(database);
   if (!dbConn) {
     throw new Error('This database is not available');
   }
@@ -30,21 +39,31 @@ export function getCurrentDBConn ({ queries } = {}) {
 }
 
 
-export function connect (id, database, reconnecting = false) {
+export function connect (id, databaseName, reconnecting = false) {
   return async (dispatch, getState) => {
-    const state = getState();
-    const serverConfig = state.servers.items.find(srv => srv.id === id);
-
-    dispatch({ type: CONNECTION_REQUEST, server: serverConfig, database, reconnecting });
+    let server;
     let dbConn;
+    let database;
+
     try {
+      const state = getState();
+
+      server = state.servers.items.find(srv => srv.id === id);
+      if (!server) {
+        throw new Error('Server configuration not found');
+      }
+
+      database = databaseName || server.database;
+
+      dispatch({ type: CONNECTION_REQUEST, server, database, reconnecting });
+
       if (!serverSession) {
-        serverSession = sqlectron.db.createServer(serverConfig);
+        serverSession = sqlectron.db.createServer(server);
       }
 
       dbConn = serverSession.db(database);
       if (dbConn) {
-        dispatch({ type: CONNECTION_SUCCESS, server: serverConfig, database, config, reconnecting });
+        dispatch({ type: CONNECTION_SUCCESS, server, database, config, reconnecting });
         return;
       }
 
@@ -54,9 +73,9 @@ export function connect (id, database, reconnecting = false) {
         sqlectron.config.get(),
       ]);
 
-      dispatch({ type: CONNECTION_SUCCESS, server: serverConfig, database, config, reconnecting });
+      dispatch({ type: CONNECTION_SUCCESS, server, database, config, reconnecting });
     } catch (error) {
-      dispatch({ type: CONNECTION_FAILURE, server: serverConfig, database, error });
+      dispatch({ type: CONNECTION_FAILURE, server, database, error });
       if (dbConn) {
         dbConn.disconnect();
       }
