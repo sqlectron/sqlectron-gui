@@ -58,8 +58,7 @@ export function executeDefaultSelectQueryIfNeeded (database, table) {
       return;
     }
 
-    const currentQuery = getCurrentQuery(currentState);
-    if (currentQuery && currentQuery.query !== queryDefaultSelect && trim(currentQuery.query) !== '') {
+    if (needNewQuery(currentState, database, queryDefaultSelect)) {
       dispatch({ type: NEW_QUERY, database });
     }
 
@@ -192,3 +191,16 @@ function saveFile(filename, data) {
   });
 }
 
+
+function needNewQuery(currentState, database, queryDefaultSelect) {
+  const currentQuery = getCurrentQuery(currentState);
+  if (!currentQuery) {
+    return false;
+  }
+
+  const queryIsDifferentDB = currentQuery.database !== database;
+  const queryIsNotDefault = currentQuery.query !== queryDefaultSelect;
+  const queryIsNotEmpty = !!trim(currentQuery.query);
+
+  return queryIsDifferentDB || (queryIsNotDefault && queryIsNotEmpty);
+}
