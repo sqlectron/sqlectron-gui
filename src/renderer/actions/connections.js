@@ -79,6 +79,10 @@ export function connect (id, databaseName, reconnecting = false) {
       if (dbConn) {
         dbConn.disconnect();
       }
+      const currentConn = getState().connections;
+      if (!currentConn.databases.length) {
+        this.disconnect();
+      }
     }
   };
 }
