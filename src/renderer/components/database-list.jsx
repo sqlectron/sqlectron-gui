@@ -1,16 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import DbMetadataList from './db-metadata-list.jsx';
-
-
-const STYLE = {
-  database: {
-    cursor: 'pointer',
-    wordBreak: 'break-all',
-  },
-  collapse: {
-    cursor: 'pointer',
-  },
-};
+import DatabaseListItem from './database-list-item.jsx';
 
 
 export default class DatabaseList extends Component {
@@ -30,86 +19,18 @@ export default class DatabaseList extends Component {
     this.state = {};
   }
 
-  getTablesByDatabase({ name }) {
-    const { tablesByDatabase } = this.props;
-    return tablesByDatabase[name] || [];
-  }
-
-  getViewsByDatabase({ name }) {
-    const { viewsByDatabase } = this.props;
-    return viewsByDatabase[name] || [];
-  }
-
-  getFunctionsByDatabase({ name }) {
-    const { functionsByDatabase } = this.props;
-    return functionsByDatabase[name] || [];
-  }
-
-  getProceduresByDatabase({ name }) {
-    const { proceduresByDatabase } = this.props;
-    return proceduresByDatabase[name] || [];
-  }
-
-  toggleCollapse(database) {
-    this.setState({ [database.name]: !this.state[database.name] });
-  }
-
-  renderCollapseButton(database, tables) {
-    if (!tables.length) {
-      return null;
-    }
-
-    if (this.state[database.name]) {
-      return (
-        <i className="plus square outline icon"
-          style={STYLE.collapse}
-          title="Expand"
-          onClick={() => this.toggleCollapse(database)} />
-      );
-    }
-
-    return (
-      <i className="minus square outline icon"
-        style={STYLE.collapse}
-        title="Collapse"
-        onClick={() => this.toggleCollapse(database)} />
-    );
-  }
-
-  renderDatabases(databases) {
-    const { onSelectDatabase, onSelectTable } = this.props;
-
-    return databases.map((database, idx) => {
-      const tables = this.getTablesByDatabase(database);
-      const views = this.getViewsByDatabase(database);
-      const functions = this.getFunctionsByDatabase(database);
-      const procedures = this.getProceduresByDatabase(database);
-      const shouldShow = !this.state[database.name] && !!tables.length;
-      return (
-        <div className="item" key={idx}>
-          <i className="grid database icon"></i>
-          {this.renderCollapseButton(database, tables)}
-          <span style={STYLE.database}
-            onDoubleClick={() => onSelectDatabase(database)}>
-            {database.name}
-          </span>
-          <div className="menu">
-            <DbMetadataList
-              tables={tables}
-              views={views}
-              functions={functions}
-              procedures={procedures}
-              database={database}
-              shouldShow={shouldShow}
-              onSelectTable={onSelectTable} />
-          </div>
-        </div>
-      );
-    });
-  }
-
   render() {
-    const { databases, isFetching } = this.props;
+    const {
+      databases,
+      isFetching,
+      tablesByDatabase,
+      viewsByDatabase,
+      functionsByDatabase,
+      proceduresByDatabase,
+      onSelectTable,
+      onSelectDatabase,
+    } = this.props;
+
     if (isFetching) {
       return (
         <div className="ui grey item">Loading...</div>
@@ -124,7 +45,19 @@ export default class DatabaseList extends Component {
 
     return (
       <div className="item" style={{padding: 0}}>
-        {this.renderDatabases(databases)}
+      {
+        databases.map(database => (
+          <DatabaseListItem
+            key={database.name}
+            database={database}
+            tables={tablesByDatabase[database.name]}
+            views={viewsByDatabase[database.name]}
+            functions={functionsByDatabase[database.name]}
+            procedures={proceduresByDatabase[database.name]}
+            onSelectTable={onSelectTable}
+            onSelectDatabase={onSelectDatabase} />
+        ))
+      }
       </div>
     );
   }

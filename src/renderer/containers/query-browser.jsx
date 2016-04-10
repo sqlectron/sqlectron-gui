@@ -224,7 +224,7 @@ class QueryBrowserContainer extends Component {
     } = this.props;
 
     const isLoading = (!connections.connected);
-    if (isLoading) {
+    if (isLoading && (!connections.server || !this.getCurrentQuery())) {
       return <Loader message={status} type="page" />;
     }
 
@@ -238,6 +238,7 @@ class QueryBrowserContainer extends Component {
 
     return (
       <div style={STYLES.wrapper}>
+        { isLoading && <Loader message={status} type="page" />}
         <div style={STYLES.header}>
           <Header items={breadcrumb}
             onCloseConnectionClick={::this.onCloseConnectionClick}

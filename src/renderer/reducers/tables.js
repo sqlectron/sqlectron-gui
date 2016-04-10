@@ -11,8 +11,10 @@ const INITIAL_STATE = {
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
-  case connTypes.CONNECTION_SUCCESS: {
-    return { ...state, didInvalidate: true };
+  case connTypes.CONNECTION_REQUEST: {
+    return action.isServerConnection
+      ? { ...INITIAL_STATE, didInvalidate: true }
+      : state;
   }
   case types.FETCH_TABLES_REQUEST: {
     return { ...state, isFetching: true, didInvalidate: false, error: null };

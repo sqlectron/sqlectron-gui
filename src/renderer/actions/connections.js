@@ -55,7 +55,7 @@ export function connect (id, databaseName, reconnecting = false) {
 
       database = databaseName || server.database;
 
-      dispatch({ type: CONNECTION_REQUEST, server, database, reconnecting });
+      dispatch({ type: CONNECTION_REQUEST, server, database, reconnecting, isServerConnection: !databaseName });
 
       if (!serverSession) {
         serverSession = sqlectron.db.createServer(server);
