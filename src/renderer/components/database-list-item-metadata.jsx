@@ -52,7 +52,7 @@ export default class DbMetadataList extends Component {
         <span
           key={item.name}
           style={cssStyle}
-          className={`item list-item ${isClickable ? 'clickable' : ''}`}
+          className={`item ${isClickable ? 'clickable' : ''}`}
           onDoubleClick={onDoubleClick}>
           {item.name}
         </span>
@@ -63,10 +63,12 @@ export default class DbMetadataList extends Component {
   render() {
     return (
       <div className="item">
-        <span className="list-title" onClick={::this.toggleCollapse}>
+        <span className="header clickable" onClick={::this.toggleCollapse} style={{fontSize: '0.9em'}}>
           {this.props.title}
         </span>
-        {this.renderItems()}
+        <div className="menu">
+          {this.renderItems()}
+        </div>
       </div>
     );
   }
