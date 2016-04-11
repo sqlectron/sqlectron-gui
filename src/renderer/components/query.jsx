@@ -50,6 +50,10 @@ export default class Query extends Component {
     this.setState({ infoModalVisible: true });
   }
 
+  onQueryBoxResize(width, height) {
+    this.refs.queryBoxTextarea.editor.resize();
+  }
+
   render() {
     const { client, query, onCopyToClipboardClick, onSQLChange } = this.props;
     const infos = INFOS[client];
@@ -57,7 +61,11 @@ export default class Query extends Component {
     return (
       <div>
         <div>
-          <ResizableBox className="react-resizable react-resizable-se-resize ui segment" height={200} width={500}>
+          <ResizableBox
+            className="react-resizable react-resizable-se-resize ui segment"
+            height={200}
+            width={500}
+            onResize={::this.onQueryBoxResize}>
             <AceEditor
               mode="sql"
               theme="github"
