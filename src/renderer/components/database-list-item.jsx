@@ -63,37 +63,35 @@ export default class DatabaseListItem extends Component {
     }
 
     return (
-      <div className="item" style={{padding: 0}}>
-        <div className="item">
-          <i className="grid database icon"></i>
-          {this.renderCollapseButton()}
-          <span style={STYLE.database}
-            onDoubleClick={() => onSelectDatabase(database)}>
-            {database.name}
-          </span>
-          <div className="menu" style={cssStyleItems}>
-            <DatabaseListItemMetatada
-              title="Tables"
-              items={tables}
-              database={database}
-              onSelectItem={onSelectTable} />
-            <DatabaseListItemMetatada
-              collapsed
-              title="Views"
-              items={views}
-              database={database}
-              onSelectItem={onSelectTable} />
-            <DatabaseListItemMetatada
-              collapsed
-              title="Functions"
-              items={functions}
-              database={database} />
-            <DatabaseListItemMetatada
-              collapsed
-              title="Procedures"
-              items={procedures}
-              database={database} />
-          </div>
+      <div className="item">
+        <i className="grid database icon"></i>
+        {this.renderCollapseButton()}
+        <span style={STYLE.database}
+          onDoubleClick={() => onSelectDatabase(database)}>
+          {database.name}
+        </span>
+        <div className="ui list" style={cssStyleItems}>
+          <DatabaseListItemMetatada
+            title="Tables"
+            items={tables}
+            database={database}
+            onSelectItem={onSelectTable} />
+          <DatabaseListItemMetatada
+            collapsed
+            title="Views"
+            items={views}
+            database={database}
+            onSelectItem={onSelectTable} />
+          <DatabaseListItemMetatada
+            collapsed
+            title="Functions"
+            items={functions}
+            database={database} />
+          <DatabaseListItemMetatada
+            collapsed
+            title="Procedures"
+            items={procedures}
+            database={database} />
         </div>
       </div>
     );
