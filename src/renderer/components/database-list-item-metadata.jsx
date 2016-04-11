@@ -1,6 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 
 
+const STYLE = {
+  header: { fontSize: '0.85em', color: '#636363' },
+  menu: { marginLeft: '5px' },
+  item: { wordBreak: 'break-all' },
+};
+
+
 export default class DbMetadataList extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -25,6 +32,22 @@ export default class DbMetadataList extends Component {
     this.setState({ collapsed: !this.state.collapsed });
   }
 
+  renderHeader() {
+    const title = this.state.collapsed ? 'Expand' : 'Collapse';
+    const cssClass = this.state.collapsed ? 'right' : 'down';
+
+    return (
+      <span
+        title={title}
+        className="header clickable"
+        onClick={::this.toggleCollapse}
+        style={STYLE.header}>
+        <i className={`${cssClass} triangle icon`}></i>
+        {this.props.title}
+      </span>
+    );
+  }
+
   renderItems() {
     const { onSelectItem, items, database } = this.props;
 
@@ -44,7 +67,7 @@ export default class DbMetadataList extends Component {
         ? onSelectItem.bind(this, database, item)
         : () => {};
 
-      const cssStyle = {};
+      const cssStyle = {...STYLE.item};
       if (this.state.collapsed) {
         cssStyle.display = 'none';
       }
@@ -63,10 +86,8 @@ export default class DbMetadataList extends Component {
   render() {
     return (
       <div className="item">
-        <span className="header clickable" onClick={::this.toggleCollapse} style={{fontSize: '0.9em'}}>
-          {this.props.title}
-        </span>
-        <div className="menu">
+        {this.renderHeader()}
+        <div className="menu" style={STYLE.menu}>
           {this.renderItems()}
         </div>
       </div>
