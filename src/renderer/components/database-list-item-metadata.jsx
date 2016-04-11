@@ -4,7 +4,7 @@ import React, { Component, PropTypes } from 'react';
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
   menu: { marginLeft: '5px' },
-  item: { wordBreak: 'break-all' },
+  item: { wordBreak: 'break-all', cursor: 'default' },
 };
 
 
@@ -63,6 +63,7 @@ export default class DbMetadataList extends Component {
 
     return items.map(item => {
       const isClickable = !!onSelectItem;
+      const title = isClickable ? 'Click twice to select default query' : '';
       const onDoubleClick = isClickable
         ? onSelectItem.bind(this, database, item)
         : () => {};
@@ -74,6 +75,7 @@ export default class DbMetadataList extends Component {
       return (
         <span
           key={item.name}
+          title={title}
           style={cssStyle}
           className="item"
           onDoubleClick={onDoubleClick}>
