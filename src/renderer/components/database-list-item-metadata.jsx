@@ -52,7 +52,7 @@ export default class DbMetadataList extends Component {
         <span
           key={item.name}
           style={cssStyle}
-          className={`item ${isClickable ? 'clickable' : ''}`}
+          className="item"
           onDoubleClick={onDoubleClick}>
           {item.name}
         </span>

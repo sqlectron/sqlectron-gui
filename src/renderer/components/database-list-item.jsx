@@ -4,11 +4,7 @@ import DatabaseListItemMetatada from './database-list-item-metadata.jsx';
 
 const STYLE = {
   database: {
-    cursor: 'pointer',
     wordBreak: 'break-all',
-  },
-  collapse: {
-    cursor: 'pointer',
   },
 };
 
@@ -47,8 +43,7 @@ export default class DatabaseListItem extends Component {
     const cssClass = this.state.collapsed ? 'plus' : 'minus';
 
     return (
-      <i className={`${cssClass} square outline icon`}
-        style={STYLE.collapse}
+      <i className={`${cssClass} square outline icon clickable`}
         title={title}
         onClick={::this.toggleCollapse} />
     );
