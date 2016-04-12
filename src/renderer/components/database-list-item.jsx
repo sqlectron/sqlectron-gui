@@ -63,7 +63,7 @@ export default class DatabaseListItem extends Component {
         <i className="grid database icon"></i>
         {this.renderCollapseButton()}
         <span style={STYLE.database}
-          title="Click twich to connect or open new query"
+          title="Click twice to connect or open new query"
           onDoubleClick={() => onSelectDatabase(database)}>
           {database.name}
         </span>
