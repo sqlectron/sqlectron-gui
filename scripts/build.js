@@ -91,7 +91,7 @@ const TASKS = [
 /**
  * Build browser code with babel
  */
-async function buildBrowserCode () {
+async function buildBrowserCode() {
   const browserBuildPath = join(BUILD_PATH, 'browser');
   return denodeify(exec).call(exec, `babel ./src/browser -d ${browserBuildPath}`, { cwd: ROOT_PATH });
 }
