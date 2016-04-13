@@ -44,6 +44,7 @@ export function connect (id, databaseName, reconnecting = false) {
     let server;
     let dbConn;
     let database;
+    let defaultDatabase;
 
     try {
       const state = getState();
@@ -53,7 +54,8 @@ export function connect (id, databaseName, reconnecting = false) {
         throw new Error('Server configuration not found');
       }
 
-      database = databaseName || server.database;
+      defaultDatabase = sqlectron.db.CLIENTS.find(c => c.key === server.client).defaultDatabase;
+      database = databaseName || server.database || defaultDatabase;
 
       dispatch({ type: CONNECTION_REQUEST, server, database, reconnecting, isServerConnection: !databaseName });
 
