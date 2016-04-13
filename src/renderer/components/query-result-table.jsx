@@ -52,10 +52,9 @@ export default class QueryResultTable extends Component {
     }
 
     return rowsValuesToString(rows).map((row, index) => {
-      const columnNames = Object.keys(row);
       return (
         <tr key={index}>
-          {columnNames.map(name => {
+          {fields.map(({ name }) => {
             return <td key={name}>{row[name]}</td>;
           })}
         </tr>
