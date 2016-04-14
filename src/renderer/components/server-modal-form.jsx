@@ -13,6 +13,7 @@ const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
   value: dbClient.key,
   logo: require(`./server-db-client-${dbClient.key}.png`),
   label: dbClient.name,
+  defaultPort: dbClient.defaultPort,
 }));
 
 
@@ -70,7 +71,16 @@ export default class ServerModalForm extends Component {
   }
 
   onSaveClick() {
-    this.props.onSaveClick(this.mapStateToServer(this.state));
+    const data = {...this.state};
+    if (data.defaultPort) {
+      if (data.port === undefined) {
+        data.port = data.defaultPort;
+      }
+
+      delete data.defaultPort;
+    }
+
+    this.props.onSaveClick(this.mapStateToServer(data));
   }
 
   onRemoveCancelClick() {
@@ -128,6 +138,15 @@ export default class ServerModalForm extends Component {
       hasError = !!~Object.keys(sshErrors).indexOf(lastName);
     }
     return hasError ? 'error' : '';
+  }
+
+  handleOnClientChange(client) {
+    this.setState({ client });
+
+    const clientConfig = CLIENTS.find(entry => entry.value === client);
+    if (clientConfig && clientConfig.defaultPort) {
+      this.setState({ defaultPort: clientConfig.defaultPort });
+    }
   }
 
   handleChange(event) {
@@ -199,7 +218,7 @@ export default class ServerModalForm extends Component {
                   name="client"
                   placeholder="Select"
                   options={CLIENTS}
-                  onChange={client => this.setState({ client })}
+                  onChange={::this.handleOnClientChange}
                   optionRenderer={this.renderClientItem}
                   valueRenderer={this.renderClientItem}
                   value={this.state.client} />
@@ -232,7 +251,7 @@ export default class ServerModalForm extends Component {
                     name="port"
                     maxLength="5"
                     placeholder="Port"
-                    value={this.state.port}
+                    value={this.state.port || this.state.defaultPort}
                     onChange={::this.handleChange}
                     disabled={this.state.socketPath} />
                 </div>
