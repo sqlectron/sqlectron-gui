@@ -13,6 +13,7 @@ const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
   value: dbClient.key,
   logo: require(`./server-db-client-${dbClient.key}.png`),
   label: dbClient.name,
+  defaultPort: dbClient.defaultPort,
 }));
 
 
@@ -130,6 +131,15 @@ export default class ServerModalForm extends Component {
     return hasError ? 'error' : '';
   }
 
+  handleOnClientChange(client) {
+    this.setState({ client });
+
+    const clientConfig = CLIENTS.find(entry => entry.value === client);
+    if (clientConfig && clientConfig.defaultPort) {
+      this.setState({ port: clientConfig.defaultPort });
+    }
+  }
+
   handleChange(event) {
     const newState = {};
     const { target } = event;
@@ -199,7 +209,7 @@ export default class ServerModalForm extends Component {
                   name="client"
                   placeholder="Select"
                   options={CLIENTS}
-                  onChange={client => this.setState({ client })}
+                  onChange={::this.handleOnClientChange}
                   optionRenderer={this.renderClientItem}
                   valueRenderer={this.renderClientItem}
                   value={this.state.client} />
