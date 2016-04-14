@@ -71,7 +71,16 @@ export default class ServerModalForm extends Component {
   }
 
   onSaveClick() {
-    this.props.onSaveClick(this.mapStateToServer(this.state));
+    const data = {...this.state};
+    if (data.defaultPort) {
+      if (data.port === undefined) {
+        data.port = data.defaultPort;
+      }
+
+      delete data.defaultPort;
+    }
+
+    this.props.onSaveClick(this.mapStateToServer(data));
   }
 
   onRemoveCancelClick() {
@@ -136,7 +145,7 @@ export default class ServerModalForm extends Component {
 
     const clientConfig = CLIENTS.find(entry => entry.value === client);
     if (clientConfig && clientConfig.defaultPort) {
-      this.setState({ port: clientConfig.defaultPort });
+      this.setState({ defaultPort: clientConfig.defaultPort });
     }
   }
 
@@ -242,7 +251,7 @@ export default class ServerModalForm extends Component {
                     name="port"
                     maxLength="5"
                     placeholder="Port"
-                    value={this.state.port}
+                    value={this.state.port || this.state.defaultPort}
                     onChange={::this.handleChange}
                     disabled={this.state.socketPath} />
                 </div>
