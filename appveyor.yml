@@ -1,0 +1,31 @@
+version: '1.0.{build}'
+
+platform:
+  - x64
+
+cache:
+  - node_modules
+  - app\node_modules
+  - '%APPDATA%\npm-cache'
+  - '%USERPROFILE%\.electron'
+
+environment:
+  GH_TOKEN:
+    secure: b2OJ5cBogX2ABZkue3un76SwbmFuJmy0zTC8WMW9eaUARWQCGBQSoQzP6ilwbm2r
+
+init:
+  - git config --global core.autocrlf input
+
+install:
+  - ps: Install-Product node 5 x64
+  - git reset --hard HEAD
+  - npm install npm -g
+  - npm prune
+  - npm update
+
+build_script:
+  - node --version
+  - npm --version
+  - npm run dist
+
+test: off

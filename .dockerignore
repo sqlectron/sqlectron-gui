@@ -6,3 +6,6 @@ npm-debug.log
 .DS_Store
 .tmp
 .git
+node_modules/
+.tmp/
+dist/
