@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import DatabaseListItemMetatada from './database-list-item-metadata.jsx';
+import DatabaseFilter from './database-filter.jsx';
 
 
 const STYLE = {
@@ -35,6 +36,15 @@ export default class DatabaseListItem extends Component {
     this.setState({ collapsed: !this.state.collapsed });
   }
 
+  onFilterChange(value) {
+    this.setState({ filter: value });
+  }
+
+  filterItems(filterInput, items) {
+    const regex = RegExp(filterInput, 'i');
+    return items.filter(item => regex.test(item.name));
+  }
+
   renderCollapseButton() {
     if (!this.isMetadataLoaded()) {
       return null;
@@ -51,11 +61,19 @@ export default class DatabaseListItem extends Component {
   }
 
   render() {
+    const { filter } = this.state;
     const { tables, views, functions, procedures, database, onSelectTable, onSelectDatabase } = this.props;
+    let filteredTables, filteredViews, filteredFunctions, filteredProcedures;
 
     const cssStyleItems = {};
-    if (this.state.collapsed || !this.isMetadataLoaded()) {
+    const isMetadataLoaded = this.isMetadataLoaded();
+    if (this.state.collapsed || !isMetadataLoaded) {
       cssStyleItems.display = 'none';
+    } else {
+      filteredTables = this.filterItems(filter, tables);
+      filteredViews = this.filterItems(filter, views);
+      filteredFunctions = this.filterItems(filter, functions);
+      filteredProcedures = this.filterItems(filter, procedures);
     }
 
     return (
@@ -68,26 +86,32 @@ export default class DatabaseListItem extends Component {
           {database.name}
         </span>
         <div className="ui list" style={cssStyleItems}>
+          <div className="item" style={cssStyleItems}>
+            <DatabaseFilter
+              value={filter}
+              isFetching={!isMetadataLoaded}
+              onFilterChange={::this.onFilterChange} />
+          </div>
           <DatabaseListItemMetatada
             title="Tables"
-            items={tables}
+            items={filteredTables || tables}
             database={database}
             onSelectItem={onSelectTable} />
           <DatabaseListItemMetatada
             collapsed
             title="Views"
-            items={views}
+            items={filteredViews || views}
             database={database}
             onSelectItem={onSelectTable} />
           <DatabaseListItemMetatada
             collapsed
             title="Functions"
-            items={functions}
+            items={filteredFunctions || functions}
             database={database} />
           <DatabaseListItemMetatada
             collapsed
             title="Procedures"
-            items={procedures}
+            items={filteredProcedures || procedures}
             database={database} />
         </div>
       </div>
