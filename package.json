@@ -17,6 +17,25 @@
     "dist:osx": "npm run compile && npm run build:osx",
     "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win"
   },
+  "build": {
+    "app-bundle-id": "org.sqlectron.gui",
+    "app-category-type": "public.app-category.developer-tools",
+    "osx": {
+      "contents": [
+        {
+          "x": 438,
+          "y": 275,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 192,
+          "y": 275,
+          "type": "file"
+        }
+      ]
+    }
+  },
   "devDependencies": {
     "autoprefixer-loader": "^3.1.0",
     "babel": "^5.8.29",
