@@ -1,8 +1,8 @@
 import shell from 'shell';
 import {
-  productName,
+  name as productName,
   bugs as issuesURL,
-} from '../../../package.json';
+} from '../../../app/package.json';
 
 export function buildTemplate(app, buildNewWindow) {
   return [

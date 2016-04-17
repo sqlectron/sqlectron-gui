@@ -2,7 +2,7 @@ import { resolve } from 'path';
 import BrowserWindow from 'browser-window';
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
-import { productName } from '../../package.json';
+import { name as productName } from '../../app/package.json';
 
 
 const devMode = (process.argv || []).indexOf('--dev') !== -1;

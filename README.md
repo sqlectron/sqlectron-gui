@@ -28,6 +28,8 @@ See the available configuration at [here](https://github.com/sqlectron/sqlectron
 
 ## Development
 
+* Required node 4 or higher.
+
 Running the application:
 
 ```shell

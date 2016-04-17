@@ -1,5 +1,5 @@
 import axios from 'axios';
-import packageJSON from '../../package.json';
+import packageJSON from '../../app/package.json';
 
 
 const debug = require('./debug')('gh-update-checker');

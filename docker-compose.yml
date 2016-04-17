@@ -1,9 +1,9 @@
 dist:
-  image: maxcnunes/electron-distribution:4.3-onbuild
+  image: maxcnunes/electron-distribution:eb3node4-onbuild
   # Build all and pack only for Windows
   # because is not possible packing for OSX from Linux.
   # Use unsafe-perm to force npm respect the tmp path (http://git.io/vB2oR)
-  command: npm run --unsafe-perm build-pack-from-linux
+  command: npm run --unsafe-perm dist:winlinux
   environment:
     # Keep the tmp folder inside the project.
     # This way we dont lose some cache files between distribution tasks

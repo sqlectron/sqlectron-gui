@@ -26,7 +26,7 @@ release_file() {
 }
 
 # Version key/value should be on his own line
-PACKAGE_VERSION=$(cat package.json \
+PACKAGE_VERSION=$(cat app/package.json \
   | grep version \
   | head -1 \
   | awk -F: '{ print $2 }' \
