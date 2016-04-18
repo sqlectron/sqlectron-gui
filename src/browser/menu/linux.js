@@ -1,12 +1,7 @@
 import shell from 'shell';
-import {
-  name as productName,
-  bugs as issuesURL,
-  homepage as homepageURL,
-} from '../../../app/package.json';
 
 
-export function buildTemplate(app, buildNewWindow) {
+export function buildTemplate(app, buildNewWindow, appConfig) {
   return [
     {
       'label': 'File',
@@ -107,11 +102,11 @@ export function buildTemplate(app, buildNewWindow) {
       submenu: [
         {
           label: 'Report Issue',
-          click: () => shell.openExternal(issuesURL),
+          click: () => shell.openExternal(appConfig.bugs),
         },
         {
-          'label': `About ${productName}`,
-          click: () => shell.openExternal(homepageURL),
+          'label': `About ${appConfig.name}`,
+          click: () => shell.openExternal(appConfig.homepage),
         },
       ],
     },

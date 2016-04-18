@@ -2,7 +2,7 @@ import { resolve } from 'path';
 import BrowserWindow from 'browser-window';
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
-import { name as productName } from '../../app/package.json';
+import { get as getConfig } from './config';
 
 
 const devMode = (process.argv || []).indexOf('--dev') !== -1;
@@ -19,9 +19,11 @@ let windowsNumber = 0;
 
 
 export function buildNewWindow(app) {
+  const appConfig = getConfig();
+
   windowsNumber += 1;
   const mainWindow = new BrowserWindow({
-    title: productName,
+    title: appConfig.name,
     icon: resolve(__dirname, '..', '..', 'resources', 'app.png'),
     width: 1024,
     height: 700,
@@ -29,7 +31,7 @@ export function buildNewWindow(app) {
     minHeight: 350,
   });
 
-  attachMenuToWindow(app, buildNewWindow);
+  attachMenuToWindow(app, buildNewWindow, appConfig);
 
   // and load the index.html of the app.
   const entryBasePath = devMode ? 'http://localhost:8080' : ('file://' + resolve(__dirname, '..'));
@@ -42,6 +44,6 @@ export function buildNewWindow(app) {
     mainWindow.openDevTools();
   }
 
-  checkUpdate(mainWindow)
+  checkUpdate(mainWindow, appConfig)
     .catch(err => console.error('Unable to check for updates', err));
 }

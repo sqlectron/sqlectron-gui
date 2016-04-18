@@ -1,16 +1,12 @@
 import shell from 'shell';
-import {
-  name as productName,
-  bugs as issuesURL,
-} from '../../../app/package.json';
 
-export function buildTemplate(app, buildNewWindow) {
+export function buildTemplate(app, buildNewWindow, appConfig) {
   return [
     {
-      label: productName,
+      label: appConfig.name,
       submenu: [
         {
-          label: `About ${productName}`,
+          label: `About ${appConfig.name}`,
           selector: 'orderFrontStandardAboutPanel:',
         },
         {
@@ -24,7 +20,7 @@ export function buildTemplate(app, buildNewWindow) {
           type: 'separator',
         },
         {
-          label: `Hide ${productName}`,
+          label: `Hide ${appConfig.name}`,
           accelerator: 'Cmd+H',
           selector: 'hide:',
         },
@@ -160,7 +156,7 @@ export function buildTemplate(app, buildNewWindow) {
       submenu: [
         {
           label: 'Report Issue',
-          click: () => shell.openExternal(issuesURL),
+          click: () => shell.openExternal(appConfig.bugs),
         },
       ],
     },

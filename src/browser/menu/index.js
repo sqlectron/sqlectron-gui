@@ -8,8 +8,8 @@ const menus = {
 };
 
 
-export function attachMenuToWindow(app, buildNewWindow) {
-  const template = menus[process.platform].buildTemplate(app, buildNewWindow);
+export function attachMenuToWindow(app, buildNewWindow, appConfig) {
+  const template = menus[process.platform].buildTemplate(app, buildNewWindow, appConfig);
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
 }

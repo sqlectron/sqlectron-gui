@@ -1,16 +1,15 @@
 import axios from 'axios';
-import packageJSON from '../../app/package.json';
 
 
 const debug = require('./debug')('gh-update-checker');
 const WAIT_2_SECS = 2000;
 
 
-export async function check(mainWindow) {
-  const currentVersion = `v${packageJSON.version}`;
+export async function check(mainWindow, appConfig) {
+  const currentVersion = `v${appConfig.version}`;
   debug('current version %s', currentVersion);
 
-  const repo = packageJSON.repository.url.replace('https://github.com/', '');
+  const repo = appConfig.repository.url.replace('https://github.com/', '');
   const latestReleaseURL = `https://api.github.com/repos/${repo}/releases/latest`;
   const response = await axios.get(latestReleaseURL);
 
