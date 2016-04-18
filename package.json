@@ -88,7 +88,7 @@
     "spawn-auto-restart": "^2.0.1",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
-    "webpack": "git+https://github.com/maxcnunes/webpack.git#v1.12.8-electron",
+    "webpack": "1.12.14",
     "webpack-dev-middleware": "^1.2.0",
     "webpack-dev-server": "^1.14.1"
   }
