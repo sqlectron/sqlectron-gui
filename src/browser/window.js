@@ -24,7 +24,7 @@ export function buildNewWindow(app) {
   windowsNumber += 1;
   const mainWindow = new BrowserWindow({
     title: appConfig.name,
-    icon: resolve(__dirname, '..', '..', 'resources', 'app.png'),
+    icon: resolve(__dirname, '..', '..', 'build', 'app.png'),
     width: 1024,
     height: 700,
     minWidth: 512,
