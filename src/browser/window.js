@@ -29,6 +29,9 @@ export function buildNewWindow(app) {
     height: 700,
     minWidth: 512,
     minHeight: 350,
+    webPreferences: {
+      preload: resolve(__dirname, 'preload.js'),
+    },
   });
 
   attachMenuToWindow(app, buildNewWindow, appConfig);

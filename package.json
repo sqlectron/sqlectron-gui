@@ -1,5 +1,4 @@
 {
-  "version": "1.6.2",
   "license": "MIT",
   "scripts": {
     "postinstall": "install-app-deps",

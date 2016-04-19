@@ -4,8 +4,7 @@ import React, {Component} from 'react';
 
 
 const EVENT_KEY = 'sqlectron:update-available';
-const PACKAGE_JSON = require('remote').require('../../package.json');
-const repo = PACKAGE_JSON.repository.url.replace('https://github.com/', '');
+const repo = global.SQLECTRON_CONFIG.repository.url.replace('https://github.com/', '');
 const LATEST_RELEASE_URL = `https://github.com/${repo}/releases/latest`;
 
 

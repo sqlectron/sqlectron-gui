@@ -53,8 +53,7 @@
       <script src="/webpack-dev-server.js"></script>
       {% } %}
       <script>
-        var appVersion = 'v' + require('remote').require('../../package.json').version;
-        document.getElementById('software-version').innerText = appVersion;
+        document.getElementById('software-version').innerText = 'v' + global.SQLECTRON_CONFIG.version;
       </script>
     </body>
 </html>
