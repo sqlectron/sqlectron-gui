@@ -21,7 +21,7 @@ install:
   - git reset --hard HEAD
   - npm install npm -g
   - npm prune
-  - npm update
+  - npm install
 
 build_script:
   - node --version
