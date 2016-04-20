@@ -18,6 +18,7 @@ export default class DatabaseListItem extends Component {
     functions: PropTypes.array,
     procedures: PropTypes.array,
     database: PropTypes.object.isRequired,
+    onDoubleClickTable: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
   }
@@ -62,7 +63,16 @@ export default class DatabaseListItem extends Component {
 
   render() {
     const { filter } = this.state;
-    const { tables, views, functions, procedures, database, onSelectTable, onSelectDatabase } = this.props;
+    const {
+      tables,
+      views,
+      functions,
+      procedures,
+      database,
+      onDoubleClickTable,
+      onSelectTable,
+      onSelectDatabase
+    } = this.props;
     let filteredTables, filteredViews, filteredFunctions, filteredProcedures;
 
     const cssStyleItems = {};
@@ -96,13 +106,14 @@ export default class DatabaseListItem extends Component {
             title="Tables"
             items={filteredTables || tables}
             database={database}
+            onDoubleClickItem={onDoubleClickTable}
             onSelectItem={onSelectTable} />
           <DatabaseListItemMetatada
             collapsed
             title="Views"
             items={filteredViews || views}
             database={database}
-            onSelectItem={onSelectTable} />
+            onDoubleClickItem={onDoubleClickTable} />
           <DatabaseListItemMetatada
             collapsed
             title="Functions"

@@ -6,7 +6,7 @@ import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
-import { fetchTablesIfNeeded } from '../actions/tables';
+import { fetchTablesIfNeeded, fetchTableColumns } from '../actions/tables';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import DatabaseFilter from '../components/database-filter.jsx';
@@ -106,8 +106,12 @@ class QueryBrowserContainer extends Component {
     dispatch(ConnActions.connect(params.id, database.name));
   }
 
-  onSelectTable(database, table) {
+  onDoubleClickTable(database, table) {
     this.props.dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name));
+  }
+
+  onSelectTable(database, table) {
+    this.props.dispatch(fetchTableColumns(database.name, table.name));
   }
 
   onSQLChange (sqlQuery) {
@@ -268,6 +272,7 @@ class QueryBrowserContainer extends Component {
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
                   onSelectDatabase={::this.onSelectDatabase}
+                  onDoubleClickTable={::this.onDoubleClickTable}
                   onSelectTable={::this.onSelectTable} />
               </div>
             </ResizableBox>

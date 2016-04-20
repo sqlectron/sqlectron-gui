@@ -6,6 +6,8 @@ const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
   itemsByDatabase: {},
+  isFetchingColumns: false,
+  columnsByTable: {},
 };
 
 
@@ -32,6 +34,32 @@ export default function (state = INITIAL_STATE, action) {
     };
   }
   case types.FETCH_TABLES_FAILURE: {
+    return {
+      ...state,
+      isFetching: false,
+      didInvalidate: true,
+      error: action.error,
+    };
+  }
+  case types.FETCH_COLUMNS_REQUEST: {
+    return { ...state, isFetchingColumns: true, didInvalidate: false, rror: null};
+  }
+  case types.FETCH_COLUMNS_SUCCESS: {
+    return {
+      ...state,
+      isFetchingColumns: false,
+      didInvalidate: false,
+      columnsByTable: {
+        ...state.columnsByTable,
+        [action.database]: {
+          ...state.columnsByTable[action.database],
+          [action.table]: action.columns.map(name => ({name})),
+        },
+      },
+      error: null,
+    };
+  }
+  case types.FETCH_COLUMNS_FAILURE: {
     return {
       ...state,
       isFetching: false,

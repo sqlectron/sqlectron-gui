@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 
-
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
   menu: { marginLeft: '5px' },
@@ -14,6 +13,7 @@ export default class DbMetadataList extends Component {
     items: PropTypes.array,
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
+    onDoubleClickItem: PropTypes.func,
     onSelectItem: PropTypes.func,
   }
 
@@ -49,7 +49,7 @@ export default class DbMetadataList extends Component {
   }
 
   renderItems() {
-    const { onSelectItem, items, database } = this.props;
+    const { onDoubleClickItem, onSelectItem, items, database } = this.props;
 
     if (!items || this.state.collapsed) {
       return null;
@@ -62,9 +62,13 @@ export default class DbMetadataList extends Component {
     }
 
     return items.map(item => {
-      const isClickable = !!onSelectItem;
+      const isClickable = !!onDoubleClickItem;
+      const hasChildElements = !!onSelectItem;
       const title = isClickable ? 'Click twice to select default query' : '';
       const onDoubleClick = isClickable
+        ? onDoubleClickItem.bind(this, database, item)
+        : () => {};
+      const onSingleClick = hasChildElements
         ? onSelectItem.bind(this, database, item)
         : () => {};
 
@@ -72,13 +76,15 @@ export default class DbMetadataList extends Component {
       if (this.state.collapsed) {
         cssStyle.display = 'none';
       }
+
       return (
         <span
           key={item.name}
           title={title}
           style={cssStyle}
           className="item"
-          onDoubleClick={onDoubleClick}>
+          onDoubleClick={onDoubleClick}
+          onClick={onSingleClick}>
           {item.name}
         </span>
       );
@@ -96,4 +102,3 @@ export default class DbMetadataList extends Component {
     );
   }
 }
-
