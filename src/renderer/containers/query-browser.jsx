@@ -6,7 +6,8 @@ import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
-import { fetchTablesIfNeeded, fetchTableColumns } from '../actions/tables';
+import { fetchTablesIfNeeded } from '../actions/tables';
+import { fetchTableColumns } from '../actions/columns';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import DatabaseFilter from '../components/database-filter.jsx';
@@ -44,6 +45,7 @@ class QueryBrowserContainer extends Component {
     status: PropTypes.string.isRequired,
     databases: PropTypes.object.isRequired,
     tables: PropTypes.object.isRequired,
+    columns: PropTypes.object.isRequired,
     views: PropTypes.object.isRequired,
     routines: PropTypes.object.isRequired,
     queries: PropTypes.object.isRequired,
@@ -223,6 +225,7 @@ class QueryBrowserContainer extends Component {
       connections,
       databases,
       tables,
+      columns,
       views,
       routines,
     } = this.props;
@@ -268,6 +271,7 @@ class QueryBrowserContainer extends Component {
                   databases={filteredDatabases}
                   isFetching={databases.isFetching}
                   tablesByDatabase={tables.itemsByDatabase}
+                  columnsByTable={columns.columnsByTable}
                   viewsByDatabase={views.viewsByDatabase}
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
@@ -291,12 +295,13 @@ class QueryBrowserContainer extends Component {
 
 
 function mapStateToProps (state) {
-  const { connections, databases, tables, views, routines, queries, status } = state;
+  const { connections, databases, tables, columns, views, routines, queries, status } = state;
 
   return {
     connections,
     databases,
     tables,
+    columns,
     views,
     routines,
     queries,

@@ -7,6 +7,7 @@ import tables from './tables';
 import status from './status';
 import views from './views';
 import routines from './routines';
+import columns from './columns';
 
 
 const rootReducer = combineReducers({
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   status,
   views,
   routines,
+  columns,
 });
 
 
