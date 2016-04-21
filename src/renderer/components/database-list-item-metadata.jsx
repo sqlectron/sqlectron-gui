@@ -11,6 +11,7 @@ export default class DbMetadataList extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     items: PropTypes.array,
+    columnsByTable: PropTypes.object,
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
     onDoubleClickItem: PropTypes.func,
@@ -86,6 +87,27 @@ export default class DbMetadataList extends Component {
           onDoubleClick={onDoubleClick}
           onClick={onSingleClick}>
           {item.name}
+          <div className="menu" style={STYLE.menu}>
+            {this.renderSubItems(item.name)}
+          </div>
+        </span>
+      );
+    });
+  }
+
+  renderSubItems(_table) {
+    const { columnsByTable } = this.props;
+
+    if (!columnsByTable || !columnsByTable[_table]) {
+      return null;
+    }
+
+    return columnsByTable[_table].map(column => {
+      return (
+        <span
+          key={column.name}
+          className="item">
+          {column.name}
         </span>
       );
     });

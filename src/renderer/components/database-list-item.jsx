@@ -14,6 +14,7 @@ const STYLE = {
 export default class DatabaseListItem extends Component {
   static propTypes = {
     tables: PropTypes.array,
+    columnsByTable: PropTypes.object,
     views: PropTypes.array,
     functions: PropTypes.array,
     procedures: PropTypes.array,
@@ -65,6 +66,7 @@ export default class DatabaseListItem extends Component {
     const { filter } = this.state;
     const {
       tables,
+      columnsByTable,
       views,
       functions,
       procedures,
@@ -105,6 +107,7 @@ export default class DatabaseListItem extends Component {
           <DatabaseListItemMetatada
             title="Tables"
             items={filteredTables || tables}
+            columnsByTable={columnsByTable}
             database={database}
             onDoubleClickItem={onDoubleClickTable}
             onSelectItem={onSelectTable} />

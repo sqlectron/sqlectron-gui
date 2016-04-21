@@ -26,6 +26,7 @@ export default class DatabaseList extends Component {
       databases,
       isFetching,
       tablesByDatabase,
+      columnsByTable,
       viewsByDatabase,
       functionsByDatabase,
       proceduresByDatabase,
@@ -54,6 +55,7 @@ export default class DatabaseList extends Component {
             key={database.name}
             database={database}
             tables={tablesByDatabase[database.name]}
+            columnsByTable={columnsByTable[database.name]}
             views={viewsByDatabase[database.name]}
             functions={functionsByDatabase[database.name]}
             procedures={proceduresByDatabase[database.name]}
