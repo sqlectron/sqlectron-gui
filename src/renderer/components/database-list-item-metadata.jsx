@@ -95,22 +95,21 @@ export default class DbMetadataList extends Component {
     });
   }
 
-  renderSubItems(_table) {
+  renderSubItems(table) {
     const { columnsByTable } = this.props;
 
-    if (!columnsByTable || !columnsByTable[_table]) {
+    if (!columnsByTable || !columnsByTable[table]) {
       return null;
     }
 
-    return columnsByTable[_table].map(column => {
-      return (
-        <span
-          key={column.name}
-          className="item">
-          {column.name}
-        </span>
-      );
-    });
+    return columnsByTable[table].map(column => (
+      <span
+        key={column.name}
+        title=""
+        className="item">
+        {column.name}
+      </span>
+    ));
   }
 
   render() {

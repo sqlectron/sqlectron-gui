@@ -7,7 +7,7 @@ import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
-import { fetchTableColumns } from '../actions/columns';
+import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import DatabaseFilter from '../components/database-filter.jsx';
@@ -113,7 +113,7 @@ class QueryBrowserContainer extends Component {
   }
 
   onSelectTable(database, table) {
-    this.props.dispatch(fetchTableColumns(database.name, table.name));
+    this.props.dispatch(fetchTableColumnsIfNeeded(database.name, table.name));
   }
 
   onSQLChange (sqlQuery) {
