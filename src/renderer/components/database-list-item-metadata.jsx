@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import TableSubmenu from './table-submenu.jsx';
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
@@ -49,6 +50,9 @@ export default class DbMetadataList extends Component {
     );
   }
 
+  /*
+    TODO: Make each table collapseable
+   */
   renderItems() {
     const { onDoubleClickItem, onSelectItem, items, database } = this.props;
 
@@ -77,44 +81,53 @@ export default class DbMetadataList extends Component {
       if (this.state.collapsed) {
         cssStyle.display = 'none';
       }
+      cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
       const tableIcon = (
         <i className="table icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
       );
 
+      /*
+        TODO: Move standard table query to context menu
+       */
       return (
-        <span
-          key={item.name}
-          title={title}
-          style={cssStyle}
-          className="item"
-          onDoubleClick={onDoubleClick}
-          onClick={onSingleClick}>
-          { this.props.title === 'Tables' ? tableIcon : null }
-          {item.name}
-          <div className="menu" style={STYLE.menu}>
-            {this.renderSubItems(item.name)}
-          </div>
-        </span>
+        <div key={item.name}>
+          <span
+            title={title}
+            style={cssStyle}
+            className="item"
+            onDoubleClick={onDoubleClick}
+            onClick={onSingleClick}>
+            { this.props.title === 'Tables' ? tableIcon : null }
+            {item.name}
+          </span>
+          {this.renderSubItems(item.name)}
+        </div>
       );
     });
   }
 
   renderSubItems(table) {
-    const { columnsByTable } = this.props;
+    const { columnsByTable, database } = this.props;
 
     if (!columnsByTable || !columnsByTable[table]) {
       return null;
     }
 
-    return columnsByTable[table].map(column => (
-      <span
-        key={column.name}
-        title=""
-        className="item">
-        <i className="columns icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
-        {column.name}
-      </span>
-    ));
+    return (
+      <TableSubmenu
+        title="Columns"
+        table={table}
+        itemsByTable={columnsByTable}
+        database={database}/>
+      /*
+      TODO:
+      <TableSubmenu
+        title="Triggers"
+        table={table}
+        itemsByTable={triggersByTable}
+        database={database}/>
+       */
+    );
   }
 
   render() {
