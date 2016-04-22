@@ -77,6 +77,9 @@ export default class DbMetadataList extends Component {
       if (this.state.collapsed) {
         cssStyle.display = 'none';
       }
+      const tableIcon = (
+        <i className="table icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
+      );
 
       return (
         <span
@@ -86,7 +89,7 @@ export default class DbMetadataList extends Component {
           className="item"
           onDoubleClick={onDoubleClick}
           onClick={onSingleClick}>
-          <i className="table icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
+          { this.props.title === 'Tables' ? tableIcon : null }
           {item.name}
           <div className="menu" style={STYLE.menu}>
             {this.renderSubItems(item.name)}
