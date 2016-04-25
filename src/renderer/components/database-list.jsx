@@ -8,6 +8,7 @@ export default class DatabaseList extends Component {
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
     columnsByTable: PropTypes.object.isRequired,
+    triggersByTable: PropTypes.object.isRequired,
     viewsByDatabase: PropTypes.object.isRequired,
     functionsByDatabase: PropTypes.object.isRequired,
     proceduresByDatabase: PropTypes.object.isRequired,
@@ -27,6 +28,7 @@ export default class DatabaseList extends Component {
       isFetching,
       tablesByDatabase,
       columnsByTable,
+      triggersByTable,
       viewsByDatabase,
       functionsByDatabase,
       proceduresByDatabase,
@@ -56,6 +58,7 @@ export default class DatabaseList extends Component {
             database={database}
             tables={tablesByDatabase[database.name]}
             columnsByTable={columnsByTable[database.name]}
+            triggersByTable={triggersByTable[database.name]}
             views={viewsByDatabase[database.name]}
             functions={functionsByDatabase[database.name]}
             procedures={proceduresByDatabase[database.name]}

@@ -15,6 +15,7 @@ export default class DatabaseListItem extends Component {
   static propTypes = {
     tables: PropTypes.array,
     columnsByTable: PropTypes.object,
+    triggersByTable: PropTypes.object,
     views: PropTypes.array,
     functions: PropTypes.array,
     procedures: PropTypes.array,
@@ -67,6 +68,7 @@ export default class DatabaseListItem extends Component {
     const {
       tables,
       columnsByTable,
+      triggersByTable,
       views,
       functions,
       procedures,
@@ -108,6 +110,7 @@ export default class DatabaseListItem extends Component {
             title="Tables"
             items={filteredTables || tables}
             columnsByTable={columnsByTable}
+            triggersByTable={triggersByTable}
             database={database}
             onDoubleClickItem={onDoubleClickTable}
             onSelectItem={onSelectTable} />

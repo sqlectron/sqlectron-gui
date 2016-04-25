@@ -13,6 +13,7 @@ export default class DbMetadataList extends Component {
     title: PropTypes.string.isRequired,
     items: PropTypes.array,
     columnsByTable: PropTypes.object,
+    triggersByTable: PropTypes.object,
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
     onDoubleClickItem: PropTypes.func,
@@ -107,26 +108,26 @@ export default class DbMetadataList extends Component {
   }
 
   renderSubItems(table) {
-    const { columnsByTable, database } = this.props;
+    const { columnsByTable, triggersByTable, database } = this.props;
 
     if (!columnsByTable || !columnsByTable[table]) {
       return null;
     }
 
     return (
-      <TableSubmenu
-        title="Columns"
-        table={table}
-        itemsByTable={columnsByTable}
-        database={database}/>
-      /*
-      TODO:
-      <TableSubmenu
-        title="Triggers"
-        table={table}
-        itemsByTable={triggersByTable}
-        database={database}/>
-       */
+      <div>
+        <TableSubmenu
+          title="Columns"
+          table={table}
+          itemsByTable={columnsByTable}
+          database={database}/>
+        <TableSubmenu
+          collapsed
+          title="Triggers"
+          table={table}
+          itemsByTable={triggersByTable}
+          database={database}/>
+      </div>
     );
   }
 

@@ -55,20 +55,31 @@ export default class TableSubmenu extends Component {
       return null;
     }
 
+    if (!itemsByTable[table].length) {
+      return (
+        <span className="ui grey item"><i> No results found</i></span>
+      );
+    }
+
     const cssStyle = {...STYLE.item};
     if (this.state.collapsed) {
       cssStyle.display = 'none';
     }
+    const columnsIcon = (
+      <i className="columns icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
+    );
 
     return itemsByTable[table].map(item => (
       <span
         key={item.name}
-        title=""
+        title={item.name}
         style={cssStyle}
         className="item">
-        <i className="columns icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
+        {this.props.title === 'Columns' ? columnsIcon : null}
         {item.name}
-        <span style={{float:'right', padding: '0 0.5em 0 0.5em', textTransform: 'uppercase'}}>{item.dataType}</span>
+        {this.props.title === 'Columns' ?
+          <span style={{float:'right', padding: '0 0.5em 0 0.5em', textTransform: 'uppercase'}}>{item.dataType}</span>
+          : null}
       </span>
     ));
   }
