@@ -7,10 +7,13 @@ export default class DatabaseList extends Component {
     databases: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
+    columnsByTable: PropTypes.object.isRequired,
+    triggersByTable: PropTypes.object.isRequired,
     viewsByDatabase: PropTypes.object.isRequired,
     functionsByDatabase: PropTypes.object.isRequired,
     proceduresByDatabase: PropTypes.object.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
+    onDoubleClickTable: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
   }
 
@@ -24,9 +27,12 @@ export default class DatabaseList extends Component {
       databases,
       isFetching,
       tablesByDatabase,
+      columnsByTable,
+      triggersByTable,
       viewsByDatabase,
       functionsByDatabase,
       proceduresByDatabase,
+      onDoubleClickTable,
       onSelectTable,
       onSelectDatabase,
     } = this.props;
@@ -51,9 +57,12 @@ export default class DatabaseList extends Component {
             key={database.name}
             database={database}
             tables={tablesByDatabase[database.name]}
+            columnsByTable={columnsByTable[database.name]}
+            triggersByTable={triggersByTable[database.name]}
             views={viewsByDatabase[database.name]}
             functions={functionsByDatabase[database.name]}
             procedures={proceduresByDatabase[database.name]}
+            onDoubleClickTable={onDoubleClickTable}
             onSelectTable={onSelectTable}
             onSelectDatabase={onSelectDatabase} />
         ))

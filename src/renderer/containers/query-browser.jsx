@@ -7,6 +7,8 @@ import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
 import { fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
+import { fetchTableColumnsIfNeeded } from '../actions/columns';
+import { fetchTableTriggersIfNeeded } from '../actions/triggers';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import DatabaseFilter from '../components/database-filter.jsx';
@@ -44,6 +46,8 @@ class QueryBrowserContainer extends Component {
     status: PropTypes.string.isRequired,
     databases: PropTypes.object.isRequired,
     tables: PropTypes.object.isRequired,
+    columns: PropTypes.object.isRequired,
+    triggers: PropTypes.object.isRequired,
     views: PropTypes.object.isRequired,
     routines: PropTypes.object.isRequired,
     queries: PropTypes.object.isRequired,
@@ -106,8 +110,13 @@ class QueryBrowserContainer extends Component {
     dispatch(ConnActions.connect(params.id, database.name));
   }
 
-  onSelectTable(database, table) {
+  onDoubleClickTable(database, table) {
     this.props.dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name));
+  }
+
+  onSelectTable(database, table) {
+    this.props.dispatch(fetchTableColumnsIfNeeded(database.name, table.name));
+    this.props.dispatch(fetchTableTriggersIfNeeded(database.name, table.name));
   }
 
   onSQLChange (sqlQuery) {
@@ -219,6 +228,8 @@ class QueryBrowserContainer extends Component {
       connections,
       databases,
       tables,
+      columns,
+      triggers,
       views,
       routines,
     } = this.props;
@@ -264,10 +275,13 @@ class QueryBrowserContainer extends Component {
                   databases={filteredDatabases}
                   isFetching={databases.isFetching}
                   tablesByDatabase={tables.itemsByDatabase}
+                  columnsByTable={columns.columnsByTable}
+                  triggersByTable={triggers.triggersByTable}
                   viewsByDatabase={views.viewsByDatabase}
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
                   onSelectDatabase={::this.onSelectDatabase}
+                  onDoubleClickTable={::this.onDoubleClickTable}
                   onSelectTable={::this.onSelectTable} />
               </div>
             </ResizableBox>
@@ -286,12 +300,14 @@ class QueryBrowserContainer extends Component {
 
 
 function mapStateToProps (state) {
-  const { connections, databases, tables, views, routines, queries, status } = state;
+  const { connections, databases, tables, columns, triggers, views, routines, queries, status } = state;
 
   return {
     connections,
     databases,
     tables,
+    columns,
+    triggers,
     views,
     routines,
     queries,
