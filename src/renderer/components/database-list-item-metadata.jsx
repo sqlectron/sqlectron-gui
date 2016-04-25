@@ -35,6 +35,10 @@ export default class DbMetadataList extends Component {
     this.setState({ collapsed: !this.state.collapsed });
   }
 
+  toggleTableCollapse(tableName) {
+    this.setState({ [tableName]: !this.state[tableName] });
+  }
+
   renderHeader() {
     const title = this.state.collapsed ? 'Expand' : 'Collapse';
     const cssClass = this.state.collapsed ? 'right' : 'down';
@@ -51,9 +55,6 @@ export default class DbMetadataList extends Component {
     );
   }
 
-  /*
-    TODO: Make each table collapseable
-   */
   renderItems() {
     const { onDoubleClickItem, onSelectItem, items, database } = this.props;
 
@@ -75,7 +76,7 @@ export default class DbMetadataList extends Component {
         ? onDoubleClickItem.bind(this, database, item)
         : () => {};
       const onSingleClick = hasChildElements
-        ? onSelectItem.bind(this, database, item)
+        ? () => {onSelectItem(database, item); this.toggleTableCollapse(item.name);}
         : () => {};
 
       const cssStyle = {...STYLE.item};
@@ -83,6 +84,10 @@ export default class DbMetadataList extends Component {
         cssStyle.display = 'none';
       }
       cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
+      const collapseCssClass = this.state[item.name] ? 'down' : 'right';
+      const collapseIcon = (
+        <i className={`${collapseCssClass} triangle icon`} style={{float: 'left', margin: '0 0.15em 0 -1em'}}></i>
+      );
       const tableIcon = (
         <i className="table icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
       );
@@ -98,6 +103,7 @@ export default class DbMetadataList extends Component {
             className="item"
             onDoubleClick={onDoubleClick}
             onClick={onSingleClick}>
+            { this.props.title === 'Tables' ? collapseIcon : null }
             { this.props.title === 'Tables' ? tableIcon : null }
             {item.name}
           </span>
@@ -114,8 +120,13 @@ export default class DbMetadataList extends Component {
       return null;
     }
 
+    const displayStyle = {};
+    if (!this.state[table]) {
+      displayStyle.display = 'none';
+    }
+
     return (
-      <div>
+      <div style={displayStyle}>
         <TableSubmenu
           title="Columns"
           table={table}
