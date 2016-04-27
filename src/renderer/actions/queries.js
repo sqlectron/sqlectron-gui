@@ -66,9 +66,24 @@ export function executeDefaultSelectQueryIfNeeded (database, table) {
   };
 }
 
+export function updateQueryIfNeeded (query) {
+  return (dispatch, getState) => {
+    if (shouldUpdateQuery(query, getState())) {
+      return dispatch(updateQuery(query));
+    }
+  };
+}
 
-export function updateQuery (query) {
+function updateQuery (query) {
   return { type: UPDATE_QUERY, query };
+}
+
+function shouldUpdateQuery (query, state) {
+  const currentQuery = getCurrentQuery(state);
+  if (!currentQuery) return true;
+  if (currentQuery.isExecuting) return false;
+  if (query === currentQuery.query) return false;
+  return true;
 }
 
 

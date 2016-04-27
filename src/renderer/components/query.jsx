@@ -3,6 +3,7 @@ import { debounce } from 'lodash';
 import AceEditor from 'react-ace';
 import 'brace/mode/sql';
 import 'brace/theme/github';
+import 'brace/ext/language_tools';
 import QueryResult from './query-result.jsx';
 import ServerDBClientInfoModal from './server-db-client-info-modal.jsx';
 
@@ -77,6 +78,8 @@ export default class Query extends Component {
               showPrintMargin={false}
               editorProps={{$blockScrolling: Infinity}}
               onChange={debounce(onSQLChange, 100)}
+              enableBasicAutocompletion={true}
+              enableLiveAutocompletion={true}
               />
           </ResizableBox>
           <div className="ui secondary menu" style={{marginTop: 0}}>

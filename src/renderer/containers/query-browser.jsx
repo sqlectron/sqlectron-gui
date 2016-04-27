@@ -120,7 +120,7 @@ class QueryBrowserContainer extends Component {
   }
 
   onSQLChange (sqlQuery) {
-    this.props.dispatch(QueryActions.updateQuery(sqlQuery));
+    this.props.dispatch(QueryActions.updateQueryIfNeeded(sqlQuery));
   }
 
   onFilterChange (value) {
