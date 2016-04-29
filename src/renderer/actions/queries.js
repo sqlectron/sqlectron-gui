@@ -62,6 +62,7 @@ export function executeDefaultSelectQueryIfNeeded (database, table) {
       dispatch({ type: NEW_QUERY, database });
     }
 
+    dispatch({ type: UPDATE_QUERY, query: queryDefaultSelect });
     dispatch(executeQuery(queryDefaultSelect, true, dbConn));
   };
 }
