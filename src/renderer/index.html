@@ -49,9 +49,6 @@
           <h3 id="software-version"></h3>
         </div>
       </div>
-      {% if (o.htmlWebpackPlugin.options.hot) { %}
-      <script src="/webpack-dev-server.js"></script>
-      {% } %}
       <script>
         document.getElementById('software-version').innerText = 'v' + global.SQLECTRON_CONFIG.version;
       </script>

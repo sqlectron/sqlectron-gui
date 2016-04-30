@@ -1,6 +1,4 @@
 {
-  "stage": 0,
-  "optional": ["runtime"],
   "env": {
     "development": {
       "plugins": ["react-transform"],
@@ -15,4 +13,5 @@
       }
     }
   }
+  "presets": ["es2015-loose", "stage-0", "react"],
 }
