@@ -52,7 +52,7 @@ export default class Query extends Component {
     this.setState({ infoModalVisible: true });
   }
 
-  onQueryBoxResize(width, height) {
+  onQueryBoxResize() {
     this.refs.queryBoxTextarea.editor.resize();
   }
 
@@ -79,8 +79,8 @@ export default class Query extends Component {
               showPrintMargin={false}
               editorProps={{$blockScrolling: Infinity}}
               onChange={debounce(onSQLChange, 100)}
-              enableBasicAutocompletion={true}
-              enableLiveAutocompletion={true}
+              enableBasicAutocompletion
+              enableLiveAutocompletion
               />
           </ResizableBox>
           <div className="ui secondary menu" style={{marginTop: 0}}>
