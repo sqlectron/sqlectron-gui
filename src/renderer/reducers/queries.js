@@ -55,7 +55,6 @@ export default function (state = INITIAL_STATE, action) {
       isExecuting: true,
       isDefaultSelect: action.isDefaultSelect,
       didInvalidate: false,
-      query: action.query,
       queryHistory: [
         ...state.queriesById[state.currentQueryId].queryHistory,
         action.query,

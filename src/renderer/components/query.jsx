@@ -40,7 +40,8 @@ export default class Query extends Component {
   }
 
   onExecQueryClick() {
-    this.props.onExecQueryClick(this.props.query.query);
+    const selectedQuery = this.refs.queryBoxTextarea.editor.getCopyText();
+    this.props.onExecQueryClick(selectedQuery || this.props.query.query);
   }
 
   onDiscQueryClick() {
