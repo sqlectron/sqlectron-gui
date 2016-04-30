@@ -5,7 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 require('babel-polyfill');
 
 module.exports = {
-  devtool: 'eval-source-map',
+  devtool: 'eval',
   target: 'electron',
   resolve: {
     extensions: ['', '.js'],

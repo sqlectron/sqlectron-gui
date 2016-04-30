@@ -1,17 +1,4 @@
 {
-  "env": {
-    "development": {
-      "plugins": ["react-transform"],
-      "extra": {
-        "react-transform": {
-          "transforms": [{
-            "transform": "react-transform-hmr",
-            "imports": ["react"],
-            "locals": ["module"]
-          }]
-        }
-      }
-    }
-  }
   "presets": ["es2015-loose", "stage-0", "react"],
+  "plugins": ["react-hot-loader/babel"]
 }

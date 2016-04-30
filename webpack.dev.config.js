@@ -14,7 +14,10 @@ module.exports = {
   },
   entry: {
     app: [
-      'webpack/hot/dev-server',
+      // 'webpack/hot/dev-server',
+      'webpack-dev-server/client?http://localhost:3000',
+      'webpack/hot/only-dev-server',
+      'react-hot-loader/patch',
       './src/renderer/entry.jsx',
     ],
   },
