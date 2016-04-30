@@ -79,6 +79,7 @@ export default function (state = INITIAL_STATE, action) {
   case types.UPDATE_QUERY: {
     return changeStateByCurrentQuery(state, {
       query: action.query,
+      selectedQuery: action.selectedQuery,
       copied: false,
     });
   }
@@ -134,6 +135,7 @@ function addNewQuery(state, action) {
     isDefaultSelect: false,
     didInvalidate: true,
     query: '',
+    selectedQuery: '',
     queryHistory: [],
     results: null,
     error: null,

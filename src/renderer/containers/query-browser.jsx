@@ -123,6 +123,10 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(QueryActions.updateQueryIfNeeded(sqlQuery));
   }
 
+  onQuerySelectionChange (sqlQuery, selectedQuery) {
+    this.props.dispatch(QueryActions.updateQueryIfNeeded(sqlQuery, selectedQuery));
+  }
+
   onFilterChange (value) {
     this.setState({ filter: value });
   }
@@ -145,7 +149,8 @@ class QueryBrowserContainer extends Component {
     this.menuHandler.setMenus({
       'sqlectron:query-execute': () => {
         const { queries: { queriesById, currentQueryId } } = this.props;
-        this.handleExecuteQuery(queriesById[currentQueryId].query);
+        const currentQuery = queriesById[currentQueryId];
+        this.handleExecuteQuery(currentQuery.selectedQuery || currentQuery.query);
       },
       'sqlectron:new-tab': () => this.newTab(),
       'sqlectron:save-query': () => this.saveQuery(),
@@ -207,7 +212,8 @@ class QueryBrowserContainer extends Component {
             query={query}
             onExecQueryClick={::this.handleExecuteQuery}
             onCopyToClipboardClick={::this.copyToClipboard}
-            onSQLChange={::this.onSQLChange} />
+            onSQLChange={::this.onSQLChange}
+            onSelectionChange={::this.onQuerySelectionChange} />
         </TabPanel>
       );
     });

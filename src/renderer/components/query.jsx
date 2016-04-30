@@ -23,6 +23,11 @@ const INFOS = {
 };
 
 
+const EVENT_KEYS = {
+  onSelectionChange: 'changeSelection',
+};
+
+
 export default class Query extends Component {
   static propTypes = {
     client: PropTypes.string.isRequired,
@@ -30,6 +35,14 @@ export default class Query extends Component {
     onExecQueryClick: PropTypes.func.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
     onSQLChange: PropTypes.func.isRequired,
+    onSelectionChange: PropTypes.func.isRequired,
+  }
+
+  componentDidMount() {
+    this.refs.queryBoxTextarea.editor.on(
+      EVENT_KEYS.onSelectionChange,
+      debounce(::this.onSelectionChange, 100),
+    );
   }
 
   componentDidUpdate() {
@@ -39,9 +52,23 @@ export default class Query extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.refs.queryBoxTextarea.editor.removeListener(
+      EVENT_KEYS.onSelectionChange,
+      ::this.onSelectionChange,
+    );
+  }
+
+  onSelectionChange() {
+    this.props.onSelectionChange(
+      this.props.query.query,
+      this.refs.queryBoxTextarea.editor.getCopyText(),
+    );
+  }
+
   onExecQueryClick() {
-    const selectedQuery = this.refs.queryBoxTextarea.editor.getCopyText();
-    this.props.onExecQueryClick(selectedQuery || this.props.query.query);
+    const query = this.refs.queryBoxTextarea.editor.getCopyText() || this.props.query.query;
+    this.props.onExecQueryClick(query);
   }
 
   onDiscQueryClick() {
