@@ -188,7 +188,18 @@ class QueryBrowserContainer extends Component {
   }
 
   renderTabQueries() {
-    const { connections, queries } = this.props;
+    const {
+      connections,
+      queries,
+      databases,
+      tables,
+      columns,
+      triggers,
+      views,
+      routines,
+    } = this.props;
+
+    const currentDB = this.getCurrentQuery().database;
 
     const menu = queries.queryIds.map(queryId => {
       const isCurrentQuery = queryId === queries.currentQueryId;
@@ -205,11 +216,20 @@ class QueryBrowserContainer extends Component {
 
     const panels = queries.queryIds.map(queryId => {
       const query = queries.queriesById[queryId];
+
       return (
         <TabPanel key={queryId}>
           <Query
             client={connections.server.client}
             query={query}
+            database={currentDB}
+            databases={databases.items}
+            tables={tables.itemsByDatabase[query.database]}
+            columnsByTable={columns.columnsByTable[query.database]}
+            triggersByTable={triggers.triggersByTable[query.database]}
+            views={views.viewsByDatabase[query.database]}
+            functions={routines.functionsByDatabase[query.database]}
+            procedures={routines.proceduresByDatabase[query.database]}
             onExecQueryClick={::this.handleExecuteQuery}
             onCopyToClipboardClick={::this.copyToClipboard}
             onSQLChange={::this.onSQLChange}

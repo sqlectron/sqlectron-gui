@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { debounce } from 'lodash';
 import AceEditor from 'react-ace';
+import ace from 'brace';
 import 'brace/mode/sql';
 import 'brace/theme/github';
 import 'brace/ext/language_tools';
@@ -32,6 +33,14 @@ export default class Query extends Component {
   static propTypes = {
     client: PropTypes.string.isRequired,
     query: PropTypes.object.isRequired,
+    database: PropTypes.string.isRequired,
+    databases: PropTypes.array,
+    tables: PropTypes.array,
+    columnsByTable: PropTypes.object,
+    triggersByTable: PropTypes.object,
+    views: PropTypes.array,
+    functions: PropTypes.array,
+    procedures: PropTypes.array,
     onExecQueryClick: PropTypes.func.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
     onSQLChange: PropTypes.func.isRequired,
@@ -43,6 +52,32 @@ export default class Query extends Component {
       EVENT_KEYS.onSelectionChange,
       debounce(::this.onSelectionChange, 100),
     );
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const isMetadataChanged = (
+      ((nextProps.tables || []).length !== (this.props.tables || []).length)
+      || ((nextProps.views || []).length !== (this.props.views || []).length)
+      || ((nextProps.functions || []).length !== (this.props.functions || []).length)
+      || ((nextProps.procedures || []).length !== (this.props.procedures || []).length)
+      || (Object.keys(nextProps.columnsByTable || {}).length !== Object.keys(this.props.columnsByTable || []).length)
+      || (Object.keys(nextProps.triggersByTable || {}).length !== Object.keys(this.props.triggersByTable || []).length)
+    );
+
+    if (!isMetadataChanged) {
+      return;
+    }
+
+    const completions = this.getQueryCompletions(nextProps);
+
+    const langTools = ace.acequire('ace/ext/language_tools');
+    langTools.addCompleter({
+      getCompletions: function(editor, session, pos, prefix, callback) {
+        callback(null, completions);
+      },
+    });
+
+    this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', true);
   }
 
   componentDidUpdate() {
@@ -81,6 +116,40 @@ export default class Query extends Component {
 
   onQueryBoxResize() {
     this.refs.queryBoxTextarea.editor.resize();
+  }
+
+  getQueryCompletions(props) {
+    const {
+      databases,
+      tables,
+      columnsByTable,
+      triggersByTable,
+      views,
+      functions,
+      procedures,
+    } = props;
+
+    const mapCompletionTypes = (items, type) => {
+      let result = items;
+      if (!Array.isArray(items)) {
+        result = Object.keys(items || {})
+          .reduce((all, name) => all.concat(items[name]), []);
+      }
+
+      return (result || []).map(({ name }) => ({ name, type }));
+    };
+
+    return [
+      ...mapCompletionTypes(databases, 'database'),
+      ...mapCompletionTypes(tables, 'table'),
+      ...mapCompletionTypes(columnsByTable, 'column'),
+      ...mapCompletionTypes(triggersByTable, 'trigger'),
+      ...mapCompletionTypes(views, 'view'),
+      ...mapCompletionTypes(functions, 'function'),
+      ...mapCompletionTypes(procedures, 'procedure'),
+    ].map(({ name, type }) => {
+      return { name: name, value: name, score: 1, meta: type };
+    });
   }
 
   render() {
