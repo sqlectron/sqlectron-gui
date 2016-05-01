@@ -8,6 +8,7 @@ const INITIAL_STATE = {
   queryIds: [],
   queriesById: {},
   resultItemsPerPage: 100,
+  enabledAutoComplete: true,
 };
 
 
@@ -125,6 +126,11 @@ function addNewQuery(state, action) {
   const configItemsPerPage = action.config && action.config.resultItemsPerPage;
   const itemsPerPage = configItemsPerPage || state.resultItemsPerPage || INITIAL_STATE.resultItemsPerPage;
 
+  let enabledAutoComplete = INITIAL_STATE.enabledAutoComplete;
+  if (action.config && action.config.enabledAutoComplete !== undefined) {
+    enabledAutoComplete = action.config.enabledAutoComplete;
+  }
+
   const newId = state.lastCreatedId + 1;
   const newQuery = {
     id: newId,
@@ -148,6 +154,7 @@ function addNewQuery(state, action) {
     lastCreatedId: newQuery.id,
     currentQueryId: newQuery.id,
     resultItemsPerPage: itemsPerPage,
+    enabledAutoComplete: enabledAutoComplete,
     queryIds: [ ...state.queryIds, newQuery.id ],
     queriesById: {
       ...state.queriesById,

@@ -33,6 +33,7 @@ export default class Query extends Component {
   static propTypes = {
     client: PropTypes.string.isRequired,
     query: PropTypes.object.isRequired,
+    enabledAutoComplete: PropTypes.bool.isRequired,
     database: PropTypes.string.isRequired,
     databases: PropTypes.array,
     tables: PropTypes.array,
@@ -55,6 +56,10 @@ export default class Query extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!nextProps.enabledAutoComplete) {
+      return;
+    }
+
     const isMetadataChanged = (
       ((nextProps.tables || []).length !== (this.props.tables || []).length)
       || ((nextProps.views || []).length !== (this.props.views || []).length)
