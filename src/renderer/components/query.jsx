@@ -174,7 +174,7 @@ export default class Query extends Component {
               value={query.query}
               showPrintMargin={false}
               editorProps={{$blockScrolling: Infinity}}
-              onChange={debounce(onSQLChange, 100)}
+              onChange={debounce(onSQLChange, 50)}
               enableBasicAutocompletion
               enableLiveAutocompletion
               />
