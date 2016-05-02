@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import shell from 'shell';
 
+require('./header.css');
 
 const LOGO_PATH = require('./logo-128px.png');
 
@@ -35,7 +36,7 @@ const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
   const visibilityButtons = onCloseConnectionClick ? 'visible' : 'hidden';
   const styleItem = { paddingLeft: 0, paddingTop: 0, paddingBottom: 0 };
   return (
-    <div className="ui top fixed menu borderless">
+    <div id="header" className="ui top fixed menu borderless">
       <a href="#" className="item" onClick={onSiteClick}>
         <img src={LOGO_PATH} style={{width: '5.5em'}} />
       </a>
@@ -44,7 +45,7 @@ const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
           {renderBreadcrumb(items)}
         </div>
       </div>
-      <div className="right menu" style={{marginLeft: '0 !important', visibility: visibilityButtons}}>
+      <div className="right menu" style={{visibility: visibilityButtons}}>
         <div className="item borderless" style={styleItem}>
           <div className="ui mini basic icon buttons">
             <button className="ui button"
