@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import TableSubmenu from './table-submenu.jsx';
+import DatabaseItem from './database-item.jsx';
+
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
@@ -33,10 +34,6 @@ export default class DbMetadataList extends Component {
 
   toggleCollapse() {
     this.setState({ collapsed: !this.state.collapsed });
-  }
-
-  toggleTableCollapse(tableName) {
-    this.setState({ [tableName]: !this.state[tableName] });
   }
 
   renderHeader() {
@@ -75,71 +72,27 @@ export default class DbMetadataList extends Component {
       const onDoubleClick = isClickable
         ? onDoubleClickItem.bind(this, database, item)
         : () => {};
-      const onSingleClick = hasChildElements
-        ? () => {onSelectItem(database, item); this.toggleTableCollapse(item.name);}
-        : () => {};
 
       const cssStyle = {...STYLE.item};
       if (this.state.collapsed) {
         cssStyle.display = 'none';
       }
       cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
-      const collapseCssClass = this.state[item.name] ? 'down' : 'right';
-      const collapseIcon = (
-        <i className={`${collapseCssClass} triangle icon`} style={{float: 'left', margin: '0 0.15em 0 -1em'}}></i>
-      );
-      const tableIcon = (
-        <i className="table icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
-      );
 
-      /*
-        TODO: Move standard table query to context menu
-       */
       return (
-        <div key={item.name}>
-          <span
-            title={title}
-            style={cssStyle}
-            className="item"
-            onDoubleClick={onDoubleClick}
-            onClick={onSingleClick}>
-            { this.props.title === 'Tables' ? collapseIcon : null }
-            { this.props.title === 'Tables' ? tableIcon : null }
-            {item.name}
-          </span>
-          {this.renderSubItems(item.name)}
-        </div>
+        <DatabaseItem
+          key={item.name}
+          database={database}
+          item={item}
+          dbObjectType = {this.props.title}
+          title={title}
+          style={cssStyle}
+          columnsByTable={this.props.columnsByTable}
+          triggersByTable={this.props.triggersByTable}
+          onSelectItem={onSelectItem}
+          onDoubleClick={onDoubleClick}/>
       );
     });
-  }
-
-  renderSubItems(table) {
-    const { columnsByTable, triggersByTable, database } = this.props;
-
-    if (!columnsByTable || !columnsByTable[table]) {
-      return null;
-    }
-
-    const displayStyle = {};
-    if (!this.state[table]) {
-      displayStyle.display = 'none';
-    }
-
-    return (
-      <div style={displayStyle}>
-        <TableSubmenu
-          title="Columns"
-          table={table}
-          itemsByTable={columnsByTable}
-          database={database}/>
-        <TableSubmenu
-          collapsed
-          title="Triggers"
-          table={table}
-          itemsByTable={triggersByTable}
-          database={database}/>
-      </div>
-    );
   }
 
   render() {
