@@ -12,6 +12,9 @@ import { ResizableBox } from 'react-resizable';
 require('./react-resizable.css');
 
 
+const langTools = ace.acequire('ace/ext/language_tools');
+
+
 const INFOS = {
   mysql: [
     'MySQL treats commented query as a non select query. So you may see "affected rows" for a commented query.',
@@ -75,12 +78,20 @@ export default class Query extends Component {
 
     const completions = this.getQueryCompletions(nextProps);
 
-    const langTools = ace.acequire('ace/ext/language_tools');
-    langTools.addCompleter({
-      getCompletions: function(editor, session, pos, prefix, callback) {
+    const customCompleter = {
+      getCompletions(editor, session, pos, prefix, callback) {
         callback(null, completions);
       },
-    });
+    };
+
+    // force load only the current available completers
+    // discarding any previous existing completers
+    this.refs.queryBoxTextarea.editor.completers = [
+      langTools.snippetCompleter,
+      langTools.textCompleter,
+      langTools.keyWordCompleter,
+      customCompleter,
+    ];
 
     this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', true);
   }
