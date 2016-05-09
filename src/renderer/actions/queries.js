@@ -191,13 +191,19 @@ function getCurrentQuery(state) {
 }
 
 function showSaveDialog() {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     remote.dialog.showSaveDialog({
       filters: [
         { name: 'SQL', extensions: ['sql'] },
         { name: 'All Files', extensions: ['*'] },
       ],
-    }, resolve);
+    }, function (filename) {
+      if (filename) {
+        return resolve(filename);
+      }
+
+      return reject();
+    });
   });
 }
 
