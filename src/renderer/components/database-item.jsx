@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import TableSubmenu from './table-submenu.jsx';
+import { Menu, MenuItem } from 'remote';
 
 
 const STYLE = {
@@ -23,7 +24,29 @@ export default class DatabaseItem extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {};
-    //this.contextMenu;
+    this.contextMenu;
+  }
+
+  // Context menu is built dinamically on click (if it does not exist), because building
+  // menu onComponentDidMount or onComponentWillMount slows table listing when database
+  // has a loads of tables, because menu will be created (unnecessarily) for every table shown
+  onContextMenu(e){
+    e.preventDefault();
+    if (!this.contextMenu){
+      this.buildContextMenu();
+    }
+    this.contextMenu.popup(e.clientX, e.clientY);
+  }
+
+  buildContextMenu(){
+    const { dbObjectType, onDoubleClick } = this.props;
+    this.contextMenu = new Menu();
+    if (dbObjectType === 'Tables' || dbObjectType === 'Views') {
+      this.contextMenu.append(new MenuItem({
+        label: `Execute default query ${dbObjectType}`,
+        click: onDoubleClick
+      }));
+    }
   }
 
   toggleTableCollapse() {
@@ -60,7 +83,7 @@ export default class DatabaseItem extends Component {
   }
 
   render() {
-    const { database, item, title, style, onDoubleClick, onSelectItem, dbObjectType } = this.props;
+    const { database, item, title, style, onSelectItem, dbObjectType } = this.props;
     const hasChildElements = !!onSelectItem;
     const onSingleClick = hasChildElements
       ? () => {onSelectItem(database, item); this.toggleTableCollapse();}
@@ -81,7 +104,7 @@ export default class DatabaseItem extends Component {
           style={style}
           className="item"
           onClick={onSingleClick}
-          onDoubleClick={onDoubleClick}>
+          onContextMenu={::this.onContextMenu}>
           { dbObjectType === 'Tables' ? collapseIcon : null }
           { dbObjectType === 'Tables' ? tableIcon : null }
           {item.name}
