@@ -122,7 +122,6 @@ class QueryBrowserContainer extends Component {
   }
 
   onGetTableCreateScript(database, table) {
-    console.log('baza: ' + database.name + ' ,tablica: ' + table.name);
     this.props.dispatch(ScriptsActions.getTableCreateScriptIfNeeded(database.name, table.name));
   }
 
