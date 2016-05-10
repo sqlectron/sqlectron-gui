@@ -23,6 +23,12 @@ export default class DatabaseListItem extends Component {
     onDoubleClickTable: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
+    onGetTableCreateScript: PropTypes.func.isRequired,
+    onGetTableSelectScript: PropTypes.func.isRequired,
+    onGetTableInsertScript: PropTypes.func.isRequired,
+    onGetTableUpdateScript: PropTypes.func.isRequired,
+    onGetTableDeleteScript: PropTypes.func.isRequired,
+    onGetViewCreateScript: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -75,7 +81,13 @@ export default class DatabaseListItem extends Component {
       database,
       onDoubleClickTable,
       onSelectTable,
-      onSelectDatabase
+      onSelectDatabase,
+      onGetTableCreateScript,
+      onGetTableSelectScript,
+      onGetTableInsertScript,
+      onGetTableUpdateScript,
+      onGetTableDeleteScript,
+      onGetViewCreateScript,
     } = this.props;
     let filteredTables, filteredViews, filteredFunctions, filteredProcedures;
 
@@ -113,13 +125,19 @@ export default class DatabaseListItem extends Component {
             triggersByTable={triggersByTable}
             database={database}
             onDoubleClickItem={onDoubleClickTable}
-            onSelectItem={onSelectTable} />
+            onSelectItem={onSelectTable}
+            onGetTableCreateScript={onGetTableCreateScript}
+            onGetTableSelectScript={onGetTableSelectScript}
+            onGetTableInsertScript={onGetTableInsertScript}
+            onGetTableUpdateScript={onGetTableUpdateScript}
+            onGetTableDeleteScript={onGetTableDeleteScript} />
           <DatabaseListItemMetatada
             collapsed
             title="Views"
             items={filteredViews || views}
             database={database}
-            onDoubleClickItem={onDoubleClickTable} />
+            onDoubleClickItem={onDoubleClickTable}
+            onGetViewCreateScript={onGetViewCreateScript} />
           <DatabaseListItemMetatada
             collapsed
             title="Functions"

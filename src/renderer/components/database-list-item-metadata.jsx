@@ -19,6 +19,12 @@ export default class DbMetadataList extends Component {
     database: PropTypes.object.isRequired,
     onDoubleClickItem: PropTypes.func,
     onSelectItem: PropTypes.func,
+    onGetTableCreateScript: PropTypes.func,
+    onGetTableSelectScript: PropTypes.func,
+    onGetTableInsertScript: PropTypes.func,
+    onGetTableUpdateScript: PropTypes.func,
+    onGetTableDeleteScript: PropTypes.func,
+    onGetViewCreateScript: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -53,7 +59,18 @@ export default class DbMetadataList extends Component {
   }
 
   renderItems() {
-    const { onDoubleClickItem, onSelectItem, items, database } = this.props;
+    const {
+      onDoubleClickItem,
+      onSelectItem,
+      items,
+      database,
+      onGetTableCreateScript,
+      onGetTableSelectScript,
+      onGetTableInsertScript,
+      onGetTableUpdateScript,
+      onGetTableDeleteScript,
+      onGetViewCreateScript,
+    } = this.props;
 
     if (!items || this.state.collapsed) {
       return null;
@@ -90,7 +107,13 @@ export default class DbMetadataList extends Component {
           columnsByTable={this.props.columnsByTable}
           triggersByTable={this.props.triggersByTable}
           onSelectItem={onSelectItem}
-          onDoubleClick={onDoubleClick}/>
+          onDoubleClick={onDoubleClick}
+          onGetTableCreateScript={onGetTableCreateScript}
+          onGetTableSelectScript={onGetTableSelectScript}
+          onGetTableInsertScript={onGetTableInsertScript}
+          onGetTableUpdateScript={onGetTableUpdateScript}
+          onGetTableDeleteScript={onGetTableDeleteScript}
+          onGetViewCreateScript={onGetViewCreateScript} />
       );
     });
   }

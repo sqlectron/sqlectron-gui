@@ -19,6 +19,12 @@ export default class DatabaseItem extends Component {
     triggersByTable: PropTypes.object,
     onSelectItem: PropTypes.func,
     onDoubleClick: PropTypes.func,
+    onGetTableCreateScript: PropTypes.func,
+    onGetTableSelectScript: PropTypes.func,
+    onGetTableInsertScript: PropTypes.func,
+    onGetTableUpdateScript: PropTypes.func,
+    onGetTableDeleteScript: PropTypes.func,
+    onGetViewCreateScript: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -39,13 +45,40 @@ export default class DatabaseItem extends Component {
   }
 
   buildContextMenu(){
-    const { dbObjectType, onDoubleClick } = this.props;
+    const {
+      database,
+      item,
+      dbObjectType,
+      onDoubleClick,
+      onGetTableCreateScript,
+      onGetTableSelectScript,
+      onGetTableInsertScript,
+      onGetTableUpdateScript,
+      onGetTableDeleteScript,
+      onGetViewCreateScript,
+    } = this.props;
+    const scriptFuncs = [onGetTableCreateScript, onGetTableSelectScript, onGetTableInsertScript, onGetTableUpdateScript, onGetTableDeleteScript];
+    const scriptsNames = ['CREATE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE'];
+
     this.contextMenu = new Menu();
     if (dbObjectType === 'Tables' || dbObjectType === 'Views') {
       this.contextMenu.append(new MenuItem({
-        label: `Execute default query ${dbObjectType}`,
+        label: `Execute default query`,
         click: onDoubleClick
       }));
+      if (dbObjectType === 'Tables') {
+        scriptFuncs.map((currentValue, index) => {
+          this.contextMenu.append(new MenuItem({
+            label: `${scriptsNames[index]} script`,
+            click: currentValue.bind(this, database, item)
+          }));
+        });
+      } else {
+        this.contextMenu.append(new MenuItem({
+          label: `CREATE script`,
+          click: onGetViewCreateScript.bind(this, database, item)
+        }));
+      }
     }
   }
 
