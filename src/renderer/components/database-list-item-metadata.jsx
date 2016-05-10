@@ -17,7 +17,7 @@ export default class DbMetadataList extends Component {
     triggersByTable: PropTypes.object,
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
-    onDoubleClickItem: PropTypes.func,
+    onExecuteDefaultQuery: PropTypes.func,
     onSelectItem: PropTypes.func,
     onGetTableCreateScript: PropTypes.func,
     onGetTableSelectScript: PropTypes.func,
@@ -60,7 +60,7 @@ export default class DbMetadataList extends Component {
 
   renderItems() {
     const {
-      onDoubleClickItem,
+      onExecuteDefaultQuery,
       onSelectItem,
       items,
       database,
@@ -83,12 +83,7 @@ export default class DbMetadataList extends Component {
     }
 
     return items.map(item => {
-      const isClickable = !!onDoubleClickItem;
       const hasChildElements = !!onSelectItem;
-      const title = isClickable ? 'Click twice to select default query' : '';
-      const onDoubleClick = isClickable
-        ? onDoubleClickItem.bind(this, database, item)
-        : () => {};
 
       const cssStyle = {...STYLE.item};
       if (this.state.collapsed) {
@@ -101,13 +96,12 @@ export default class DbMetadataList extends Component {
           key={item.name}
           database={database}
           item={item}
-          dbObjectType = {this.props.title}
-          title={title}
+          dbObjectType={this.props.title}
           style={cssStyle}
           columnsByTable={this.props.columnsByTable}
           triggersByTable={this.props.triggersByTable}
           onSelectItem={onSelectItem}
-          onDoubleClick={onDoubleClick}
+          onExecuteDefaultQuery={onExecuteDefaultQuery}
           onGetTableCreateScript={onGetTableCreateScript}
           onGetTableSelectScript={onGetTableSelectScript}
           onGetTableInsertScript={onGetTableInsertScript}

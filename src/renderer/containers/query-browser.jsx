@@ -112,7 +112,7 @@ class QueryBrowserContainer extends Component {
     dispatch(ConnActions.connect(params.id, database.name));
   }
 
-  onDoubleClickTable(database, table) {
+  onExecuteDefaultQuery(database, table) {
     this.props.dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name));
   }
 
@@ -335,7 +335,7 @@ class QueryBrowserContainer extends Component {
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
                   onSelectDatabase={::this.onSelectDatabase}
-                  onDoubleClickTable={::this.onDoubleClickTable}
+                  onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
                   onSelectTable={::this.onSelectTable}
                   onGetTableCreateScript={::this.onGetTableCreateScript}
                   onGetTableSelectScript={::this.onGetTableSelectScript}

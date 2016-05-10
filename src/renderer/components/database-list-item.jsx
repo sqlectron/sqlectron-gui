@@ -20,7 +20,7 @@ export default class DatabaseListItem extends Component {
     functions: PropTypes.array,
     procedures: PropTypes.array,
     database: PropTypes.object.isRequired,
-    onDoubleClickTable: PropTypes.func.isRequired,
+    onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
     onGetTableCreateScript: PropTypes.func.isRequired,
@@ -79,7 +79,7 @@ export default class DatabaseListItem extends Component {
       functions,
       procedures,
       database,
-      onDoubleClickTable,
+      onExecuteDefaultQuery,
       onSelectTable,
       onSelectDatabase,
       onGetTableCreateScript,
@@ -124,7 +124,7 @@ export default class DatabaseListItem extends Component {
             columnsByTable={columnsByTable}
             triggersByTable={triggersByTable}
             database={database}
-            onDoubleClickItem={onDoubleClickTable}
+            onExecuteDefaultQuery={onExecuteDefaultQuery}
             onSelectItem={onSelectTable}
             onGetTableCreateScript={onGetTableCreateScript}
             onGetTableSelectScript={onGetTableSelectScript}
@@ -136,7 +136,7 @@ export default class DatabaseListItem extends Component {
             title="Views"
             items={filteredViews || views}
             database={database}
-            onDoubleClickItem={onDoubleClickTable}
+            onExecuteDefaultQuery={onExecuteDefaultQuery}
             onGetViewCreateScript={onGetViewCreateScript} />
           <DatabaseListItemMetatada
             collapsed

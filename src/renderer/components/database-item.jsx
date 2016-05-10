@@ -13,12 +13,11 @@ export default class DatabaseItem extends Component {
     database: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
     dbObjectType: PropTypes.string.isRequired,
-    title: PropTypes.string,
     style: PropTypes.object,
     columnsByTable: PropTypes.object,
     triggersByTable: PropTypes.object,
     onSelectItem: PropTypes.func,
-    onDoubleClick: PropTypes.func,
+    onExecuteDefaultQuery: PropTypes.func,
     onGetTableCreateScript: PropTypes.func,
     onGetTableSelectScript: PropTypes.func,
     onGetTableInsertScript: PropTypes.func,
@@ -49,7 +48,7 @@ export default class DatabaseItem extends Component {
       database,
       item,
       dbObjectType,
-      onDoubleClick,
+      onExecuteDefaultQuery,
       onGetTableCreateScript,
       onGetTableSelectScript,
       onGetTableInsertScript,
@@ -64,7 +63,7 @@ export default class DatabaseItem extends Component {
     if (dbObjectType === 'Tables' || dbObjectType === 'Views') {
       this.contextMenu.append(new MenuItem({
         label: `Execute default query`,
-        click: onDoubleClick
+        click: onExecuteDefaultQuery.bind(this, database, item)
       }));
       if (dbObjectType === 'Tables') {
         scriptFuncs.map((currentValue, index) => {
@@ -116,7 +115,7 @@ export default class DatabaseItem extends Component {
   }
 
   render() {
-    const { database, item, title, style, onSelectItem, dbObjectType } = this.props;
+    const { database, item, style, onSelectItem, dbObjectType } = this.props;
     const hasChildElements = !!onSelectItem;
     const onSingleClick = hasChildElements
       ? () => {onSelectItem(database, item); this.toggleTableCollapse();}
@@ -133,7 +132,6 @@ export default class DatabaseItem extends Component {
     return (
       <div>
         <span
-          title={title}
           style={style}
           className="item"
           onClick={onSingleClick}
