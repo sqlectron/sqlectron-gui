@@ -9,20 +9,36 @@ export const GET_SCRIPT_FAILURE = 'GET_SCRIPT_FAILURE';
 
 export function getSQLScriptIfNeeded(database, table, actionType, objectType) {
   return (dispatch, getState) => {
-    if (shouldFetchScript(getState(), database, table, actionType)) {
+    const state = getState();
+    if (shouldFetchScript(state, database, table, actionType)) {
       return dispatch(getSQLScript(database, table, actionType, objectType));
+    } else if (isScriptAlreadyFetched(state, database, table, actionType)) {
+      const script = getAlreadyFetchedScript(state, database, table, actionType);
+      return dispatch(updateQueryIfNeeded(script));
     }
   };
 }
 
-function shouldFetchScript (state, database, table, scriptType) {
+function shouldFetchScript (state, database, table, actionType) {
   const scripts = state.sqlscripts;
   if (!scripts) return true;
   if (scripts.isFetching) return false;
   if (!scripts.scriptsByObject[database]) return true;
   if (!scripts.scriptsByObject[database][table]) return true;
-  if (!scripts.scriptsByObject[database][table][scriptType]) return true;
+  if (!scripts.scriptsByObject[database][table][actionType]) return true;
   return scripts.didInvalidate;
+}
+
+function isScriptAlreadyFetched (state, database, table, actionType) {
+  const scripts = state.sqlscripts;
+  if (!scripts.scriptsByObject[database]) return false;
+  if (!scripts.scriptsByObject[database][table]) return false;
+  if (scripts.scriptsByObject[database][table][actionType]) return true;
+  return false;
+}
+
+function getAlreadyFetchedScript (state, database, table, actionType) {
+  return state.sqlscripts.scriptsByObject[database][table][actionType];
 }
 
 
