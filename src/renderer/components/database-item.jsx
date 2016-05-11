@@ -60,25 +60,26 @@ export default class DatabaseItem extends Component {
     const scriptsNames = ['CREATE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE'];
 
     this.contextMenu = new Menu();
-    if (dbObjectType === 'Tables' || dbObjectType === 'Views') {
-      this.contextMenu.append(new MenuItem({
-        label: `Execute default query`,
-        click: onExecuteDefaultQuery.bind(this, database, item)
-      }));
-      if (dbObjectType === 'Tables') {
-        scriptFuncs.map((currentValue, index) => {
-          this.contextMenu.append(new MenuItem({
-            label: `${scriptsNames[index]} script`,
-            click: currentValue.bind(this, database, item)
-          }));
-        });
-      } else {
-        this.contextMenu.append(new MenuItem({
-          label: `CREATE script`,
-          click: onGetViewCreateScript.bind(this, database, item)
-        }));
-      }
+    if (dbObjectType !== 'Tables' && dbObjectType !== 'Views') {
+      return;
     }
+    this.contextMenu.append(new MenuItem({
+      label: `Execute default query`,
+      click: onExecuteDefaultQuery.bind(this, database, item)
+    }));
+    if (dbObjectType === 'Tables') {
+      scriptFuncs.map((currentValue, index) => {
+        this.contextMenu.append(new MenuItem({
+          label: `${scriptsNames[index]} script`,
+          click: currentValue.bind(this, database, item)
+        }));
+      });
+      return;
+    }
+    this.contextMenu.append(new MenuItem({
+      label: `CREATE script`,
+      click: onGetViewCreateScript.bind(this, database, item)
+    }));
   }
 
   toggleTableCollapse() {
