@@ -88,7 +88,7 @@ export default class DbMetadataList extends Component {
           key={item.name}
           database={database}
           item={item}
-          dbObjectType={this.props.title}
+          dbObjectType={this.props.title.slice(0, -1)}
           style={cssStyle}
           columnsByTable={this.props.columnsByTable}
           triggersByTable={this.props.triggersByTable}

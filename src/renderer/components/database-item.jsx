@@ -51,10 +51,10 @@ export default class DatabaseItem extends Component {
     const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
 
     this.contextMenu = new Menu();
-    if (dbObjectType !== 'Tables' && dbObjectType !== 'Views') {
+    if (dbObjectType !== 'Table' && dbObjectType !== 'View') {
       this.contextMenu.append(new MenuItem({
         label: `${dbObjectType} SQL definition`,
-        click: onGetRoutineSQL.bind(this, database, item, dbObjectType.slice(0, -1))
+        click: onGetRoutineSQL.bind(this, database, item, dbObjectType)
       }));
       return;
     }
@@ -64,13 +64,13 @@ export default class DatabaseItem extends Component {
     }));
     this.contextMenu.append(new MenuItem({
       label: `CREATE script`,
-      click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType.slice(0, -1))
+      click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType)
     }));
-    if (dbObjectType === 'Tables') {
+    if (dbObjectType === 'Table') {
       actionTypes.map((actionType, index) => {
         this.contextMenu.append(new MenuItem({
           label: `${actionType} script`,
-          click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType.slice(0, -1))
+          click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType)
         }));
       });
     }
@@ -131,8 +131,8 @@ export default class DatabaseItem extends Component {
           className="item"
           onClick={onSingleClick}
           onContextMenu={::this.onContextMenu}>
-          { dbObjectType === 'Tables' ? collapseIcon : null }
-          { dbObjectType === 'Tables' ? tableIcon : null }
+          { dbObjectType === 'Table' ? collapseIcon : null }
+          { dbObjectType === 'Table' ? tableIcon : null }
           {item.name}
         </span>
         {this.renderSubItems(item.name)}
