@@ -16,6 +16,7 @@ export default class DatabaseList extends Component {
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
     onGetSQLScript: PropTypes.func.isRequired,
+    onGetRoutineSQL: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -37,6 +38,7 @@ export default class DatabaseList extends Component {
       onSelectTable,
       onSelectDatabase,
       onGetSQLScript,
+      onGetRoutineSQL,
     } = this.props;
 
     if (isFetching) {
@@ -67,7 +69,8 @@ export default class DatabaseList extends Component {
             onExecuteDefaultQuery={onExecuteDefaultQuery}
             onSelectTable={onSelectTable}
             onSelectDatabase={onSelectDatabase}
-            onGetSQLScript={onGetSQLScript} />
+            onGetSQLScript={onGetSQLScript}
+            onGetRoutineSQL={onGetRoutineSQL} />
         ))
       }
       </div>

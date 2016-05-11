@@ -20,6 +20,7 @@ export default class DbMetadataList extends Component {
     onExecuteDefaultQuery: PropTypes.func,
     onSelectItem: PropTypes.func,
     onGetSQLScript: PropTypes.func,
+    onGetRoutineSQL: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -60,6 +61,7 @@ export default class DbMetadataList extends Component {
       items,
       database,
       onGetSQLScript,
+      onGetRoutineSQL,
     } = this.props;
 
     if (!items || this.state.collapsed) {
@@ -92,7 +94,8 @@ export default class DbMetadataList extends Component {
           triggersByTable={this.props.triggersByTable}
           onSelectItem={onSelectItem}
           onExecuteDefaultQuery={onExecuteDefaultQuery}
-          onGetSQLScript={onGetSQLScript} />
+          onGetSQLScript={onGetSQLScript}
+          onGetRoutineSQL={onGetRoutineSQL} />
       );
     });
   }

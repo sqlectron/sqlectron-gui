@@ -24,6 +24,7 @@ export default class DatabaseListItem extends Component {
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
     onGetSQLScript: PropTypes.func.isRequired,
+    onGetRoutineSQL: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -78,6 +79,7 @@ export default class DatabaseListItem extends Component {
       onSelectTable,
       onSelectDatabase,
       onGetSQLScript,
+      onGetRoutineSQL,
     } = this.props;
     let filteredTables, filteredViews, filteredFunctions, filteredProcedures;
 
@@ -128,12 +130,14 @@ export default class DatabaseListItem extends Component {
             collapsed
             title="Functions"
             items={filteredFunctions || functions}
-            database={database} />
+            database={database}
+            onGetRoutineSQL={onGetRoutineSQL} />
           <DatabaseListItemMetatada
             collapsed
             title="Procedures"
             items={filteredProcedures || procedures}
-            database={database} />
+            database={database}
+            onGetRoutineSQL={onGetRoutineSQL} />
         </div>
       </div>
     );
