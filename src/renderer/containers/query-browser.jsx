@@ -11,7 +11,7 @@ import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
-import * as ScriptsActions from '../actions/sqlscripts';
+import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import Header from '../components/header.jsx';
@@ -121,28 +121,8 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(fetchTableTriggersIfNeeded(database.name, table.name));
   }
 
-  onGetTableCreateScript(database, table) {
-    this.props.dispatch(ScriptsActions.getTableCreateScriptIfNeeded(database.name, table.name));
-  }
-
-  onGetTableSelectScript(database, table) {
-    this.props.dispatch(ScriptsActions.getTableSelectScriptIfNeeded(database.name, table.name));
-  }
-
-  onGetTableInsertScript(database, table) {
-    this.props.dispatch(ScriptsActions.getTableInsertScriptIfNeeded(database.name, table.name));
-  }
-
-  onGetTableUpdateScript(database, table) {
-    this.props.dispatch(ScriptsActions.getTableUpdateScriptIfNeeded(database.name, table.name));
-  }
-
-  onGetTableDeleteScript(database, table) {
-    this.props.dispatch(ScriptsActions.getTableDeleteScriptIfNeeded(database.name, table.name));
-  }
-
-  onGetViewCreateScript(database, view) {
-    this.props.dispatch(ScriptsActions.getViewCreateScriptIfNeeded(database.name, view.name));
+  onGetSQLScript(database, table, actionType, objectType) {
+    this.props.dispatch(getSQLScriptIfNeeded(database.name, table.name, actionType, objectType));
   }
 
   onSQLChange (sqlQuery) {
@@ -336,12 +316,7 @@ class QueryBrowserContainer extends Component {
                   onSelectDatabase={::this.onSelectDatabase}
                   onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
                   onSelectTable={::this.onSelectTable}
-                  onGetTableCreateScript={::this.onGetTableCreateScript}
-                  onGetTableSelectScript={::this.onGetTableSelectScript}
-                  onGetTableInsertScript={::this.onGetTableInsertScript}
-                  onGetTableUpdateScript={::this.onGetTableUpdateScript}
-                  onGetTableDeleteScript={::this.onGetTableDeleteScript}
-                  onGetViewCreateScript={::this.onGetViewCreateScript} />
+                  onGetSQLScript={::this.onGetSQLScript} />
               </div>
             </ResizableBox>
           </div>

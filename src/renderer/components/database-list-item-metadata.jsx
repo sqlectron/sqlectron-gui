@@ -19,12 +19,7 @@ export default class DbMetadataList extends Component {
     database: PropTypes.object.isRequired,
     onExecuteDefaultQuery: PropTypes.func,
     onSelectItem: PropTypes.func,
-    onGetTableCreateScript: PropTypes.func,
-    onGetTableSelectScript: PropTypes.func,
-    onGetTableInsertScript: PropTypes.func,
-    onGetTableUpdateScript: PropTypes.func,
-    onGetTableDeleteScript: PropTypes.func,
-    onGetViewCreateScript: PropTypes.func,
+    onGetSQLScript: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -64,12 +59,7 @@ export default class DbMetadataList extends Component {
       onSelectItem,
       items,
       database,
-      onGetTableCreateScript,
-      onGetTableSelectScript,
-      onGetTableInsertScript,
-      onGetTableUpdateScript,
-      onGetTableDeleteScript,
-      onGetViewCreateScript,
+      onGetSQLScript,
     } = this.props;
 
     if (!items || this.state.collapsed) {
@@ -102,12 +92,7 @@ export default class DbMetadataList extends Component {
           triggersByTable={this.props.triggersByTable}
           onSelectItem={onSelectItem}
           onExecuteDefaultQuery={onExecuteDefaultQuery}
-          onGetTableCreateScript={onGetTableCreateScript}
-          onGetTableSelectScript={onGetTableSelectScript}
-          onGetTableInsertScript={onGetTableInsertScript}
-          onGetTableUpdateScript={onGetTableUpdateScript}
-          onGetTableDeleteScript={onGetTableDeleteScript}
-          onGetViewCreateScript={onGetViewCreateScript} />
+          onGetSQLScript={onGetSQLScript} />
       );
     });
   }

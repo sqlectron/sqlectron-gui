@@ -18,12 +18,7 @@ export default class DatabaseItem extends Component {
     triggersByTable: PropTypes.object,
     onSelectItem: PropTypes.func,
     onExecuteDefaultQuery: PropTypes.func,
-    onGetTableCreateScript: PropTypes.func,
-    onGetTableSelectScript: PropTypes.func,
-    onGetTableInsertScript: PropTypes.func,
-    onGetTableUpdateScript: PropTypes.func,
-    onGetTableDeleteScript: PropTypes.func,
-    onGetViewCreateScript: PropTypes.func,
+    onGetSQLScript: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -49,15 +44,9 @@ export default class DatabaseItem extends Component {
       item,
       dbObjectType,
       onExecuteDefaultQuery,
-      onGetTableCreateScript,
-      onGetTableSelectScript,
-      onGetTableInsertScript,
-      onGetTableUpdateScript,
-      onGetTableDeleteScript,
-      onGetViewCreateScript,
+      onGetSQLScript,
     } = this.props;
-    const scriptFuncs = [onGetTableCreateScript, onGetTableSelectScript, onGetTableInsertScript, onGetTableUpdateScript, onGetTableDeleteScript];
-    const scriptsNames = ['CREATE', 'SELECT', 'INSERT', 'UPDATE', 'DELETE'];
+    const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
 
     this.contextMenu = new Menu();
     if (dbObjectType !== 'Tables' && dbObjectType !== 'Views') {
@@ -67,19 +56,18 @@ export default class DatabaseItem extends Component {
       label: `Execute default query`,
       click: onExecuteDefaultQuery.bind(this, database, item)
     }));
-    if (dbObjectType === 'Tables') {
-      scriptFuncs.map((currentValue, index) => {
-        this.contextMenu.append(new MenuItem({
-          label: `${scriptsNames[index]} script`,
-          click: currentValue.bind(this, database, item)
-        }));
-      });
-      return;
-    }
     this.contextMenu.append(new MenuItem({
       label: `CREATE script`,
-      click: onGetViewCreateScript.bind(this, database, item)
+      click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType.slice(0, -1))
     }));
+    if (dbObjectType === 'Tables') {
+      actionTypes.map((actionType, index) => {
+        this.contextMenu.append(new MenuItem({
+          label: `${actionType} script`,
+          click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType.slice(0, -1))
+        }));
+      });
+    }
   }
 
   toggleTableCollapse() {

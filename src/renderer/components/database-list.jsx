@@ -15,12 +15,7 @@ export default class DatabaseList extends Component {
     onSelectDatabase: PropTypes.func.isRequired,
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
-    onGetTableCreateScript: PropTypes.func.isRequired,
-    onGetTableSelectScript: PropTypes.func.isRequired,
-    onGetTableInsertScript: PropTypes.func.isRequired,
-    onGetTableUpdateScript: PropTypes.func.isRequired,
-    onGetTableDeleteScript: PropTypes.func.isRequired,
-    onGetViewCreateScript: PropTypes.func.isRequired,
+    onGetSQLScript: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -41,12 +36,7 @@ export default class DatabaseList extends Component {
       onExecuteDefaultQuery,
       onSelectTable,
       onSelectDatabase,
-      onGetTableCreateScript,
-      onGetTableSelectScript,
-      onGetTableInsertScript,
-      onGetTableUpdateScript,
-      onGetTableDeleteScript,
-      onGetViewCreateScript,
+      onGetSQLScript,
     } = this.props;
 
     if (isFetching) {
@@ -77,12 +67,7 @@ export default class DatabaseList extends Component {
             onExecuteDefaultQuery={onExecuteDefaultQuery}
             onSelectTable={onSelectTable}
             onSelectDatabase={onSelectDatabase}
-            onGetTableCreateScript={onGetTableCreateScript}
-            onGetTableSelectScript={onGetTableSelectScript}
-            onGetTableInsertScript={onGetTableInsertScript}
-            onGetTableUpdateScript={onGetTableUpdateScript}
-            onGetTableDeleteScript={onGetTableDeleteScript}
-            onGetViewCreateScript={onGetViewCreateScript} />
+            onGetSQLScript={onGetSQLScript} />
         ))
       }
       </div>

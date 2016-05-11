@@ -40,7 +40,8 @@ export default function (state = INITIAL_STATE, action) {
           ...state.scriptsByObject[action.database],
           [action.table]: {
             ...scriptsByTable,
-            [action.scriptType]: action.script,
+            objectType: action.objectType,
+            [action.actionType]: action.script,
           },
         },
       },
