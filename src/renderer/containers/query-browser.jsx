@@ -11,6 +11,7 @@ import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
+import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import Header from '../components/header.jsx';
@@ -51,6 +52,7 @@ class QueryBrowserContainer extends Component {
     views: PropTypes.object.isRequired,
     routines: PropTypes.object.isRequired,
     queries: PropTypes.object.isRequired,
+    sqlscripts: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -110,13 +112,17 @@ class QueryBrowserContainer extends Component {
     dispatch(ConnActions.connect(params.id, database.name));
   }
 
-  onDoubleClickTable(database, table) {
+  onExecuteDefaultQuery(database, table) {
     this.props.dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name));
   }
 
   onSelectTable(database, table) {
     this.props.dispatch(fetchTableColumnsIfNeeded(database.name, table.name));
     this.props.dispatch(fetchTableTriggersIfNeeded(database.name, table.name));
+  }
+
+  onGetSQLScript(database, item, actionType, objectType) {
+    this.props.dispatch(getSQLScriptIfNeeded(database.name, item.name, actionType, objectType));
   }
 
   onSQLChange (sqlQuery) {
@@ -308,8 +314,9 @@ class QueryBrowserContainer extends Component {
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
                   onSelectDatabase={::this.onSelectDatabase}
-                  onDoubleClickTable={::this.onDoubleClickTable}
-                  onSelectTable={::this.onSelectTable} />
+                  onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
+                  onSelectTable={::this.onSelectTable}
+                  onGetSQLScript={::this.onGetSQLScript} />
               </div>
             </ResizableBox>
           </div>
@@ -327,7 +334,7 @@ class QueryBrowserContainer extends Component {
 
 
 function mapStateToProps (state) {
-  const { connections, databases, tables, columns, triggers, views, routines, queries, status } = state;
+  const { connections, databases, tables, columns, triggers, views, routines, queries, sqlscripts, status } = state;
 
   return {
     connections,
@@ -338,6 +345,7 @@ function mapStateToProps (state) {
     views,
     routines,
     queries,
+    sqlscripts,
     status,
   };
 }

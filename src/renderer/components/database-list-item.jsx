@@ -20,9 +20,10 @@ export default class DatabaseListItem extends Component {
     functions: PropTypes.array,
     procedures: PropTypes.array,
     database: PropTypes.object.isRequired,
-    onDoubleClickTable: PropTypes.func.isRequired,
+    onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
+    onGetSQLScript: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -73,9 +74,10 @@ export default class DatabaseListItem extends Component {
       functions,
       procedures,
       database,
-      onDoubleClickTable,
+      onExecuteDefaultQuery,
       onSelectTable,
-      onSelectDatabase
+      onSelectDatabase,
+      onGetSQLScript,
     } = this.props;
     let filteredTables, filteredViews, filteredFunctions, filteredProcedures;
 
@@ -112,24 +114,28 @@ export default class DatabaseListItem extends Component {
             columnsByTable={columnsByTable}
             triggersByTable={triggersByTable}
             database={database}
-            onDoubleClickItem={onDoubleClickTable}
-            onSelectItem={onSelectTable} />
+            onExecuteDefaultQuery={onExecuteDefaultQuery}
+            onSelectItem={onSelectTable}
+            onGetSQLScript={onGetSQLScript} />
           <DatabaseListItemMetatada
             collapsed
             title="Views"
             items={filteredViews || views}
             database={database}
-            onDoubleClickItem={onDoubleClickTable} />
+            onExecuteDefaultQuery={onExecuteDefaultQuery}
+            onGetSQLScript={onGetSQLScript} />
           <DatabaseListItemMetatada
             collapsed
             title="Functions"
             items={filteredFunctions || functions}
-            database={database} />
+            database={database}
+            onGetSQLScript={onGetSQLScript} />
           <DatabaseListItemMetatada
             collapsed
             title="Procedures"
             items={filteredProcedures || procedures}
-            database={database} />
+            database={database}
+            onGetSQLScript={onGetSQLScript} />
         </div>
       </div>
     );

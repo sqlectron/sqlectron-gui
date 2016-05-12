@@ -13,8 +13,9 @@ export default class DatabaseList extends Component {
     functionsByDatabase: PropTypes.object.isRequired,
     proceduresByDatabase: PropTypes.object.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
-    onDoubleClickTable: PropTypes.func.isRequired,
+    onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
+    onGetSQLScript: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -32,9 +33,10 @@ export default class DatabaseList extends Component {
       viewsByDatabase,
       functionsByDatabase,
       proceduresByDatabase,
-      onDoubleClickTable,
+      onExecuteDefaultQuery,
       onSelectTable,
       onSelectDatabase,
+      onGetSQLScript,
     } = this.props;
 
     if (isFetching) {
@@ -62,9 +64,10 @@ export default class DatabaseList extends Component {
             views={viewsByDatabase[database.name]}
             functions={functionsByDatabase[database.name]}
             procedures={proceduresByDatabase[database.name]}
-            onDoubleClickTable={onDoubleClickTable}
+            onExecuteDefaultQuery={onExecuteDefaultQuery}
             onSelectTable={onSelectTable}
-            onSelectDatabase={onSelectDatabase} />
+            onSelectDatabase={onSelectDatabase}
+            onGetSQLScript={onGetSQLScript} />
         ))
       }
       </div>

@@ -9,6 +9,7 @@ import views from './views';
 import routines from './routines';
 import columns from './columns';
 import triggers from './triggers';
+import sqlscripts from './sqlscripts';
 
 
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   routines,
   columns,
   triggers,
+  sqlscripts,
 });
 
 

@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import TableSubmenu from './table-submenu.jsx';
+import DatabaseItem from './database-item.jsx';
+
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
@@ -16,8 +17,9 @@ export default class DbMetadataList extends Component {
     triggersByTable: PropTypes.object,
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
-    onDoubleClickItem: PropTypes.func,
+    onExecuteDefaultQuery: PropTypes.func,
     onSelectItem: PropTypes.func,
+    onGetSQLScript: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -33,10 +35,6 @@ export default class DbMetadataList extends Component {
 
   toggleCollapse() {
     this.setState({ collapsed: !this.state.collapsed });
-  }
-
-  toggleTableCollapse(tableName) {
-    this.setState({ [tableName]: !this.state[tableName] });
   }
 
   renderHeader() {
@@ -56,7 +54,13 @@ export default class DbMetadataList extends Component {
   }
 
   renderItems() {
-    const { onDoubleClickItem, onSelectItem, items, database } = this.props;
+    const {
+      onExecuteDefaultQuery,
+      onSelectItem,
+      items,
+      database,
+      onGetSQLScript,
+    } = this.props;
 
     if (!items || this.state.collapsed) {
       return null;
@@ -69,77 +73,28 @@ export default class DbMetadataList extends Component {
     }
 
     return items.map(item => {
-      const isClickable = !!onDoubleClickItem;
       const hasChildElements = !!onSelectItem;
-      const title = isClickable ? 'Click twice to select default query' : '';
-      const onDoubleClick = isClickable
-        ? onDoubleClickItem.bind(this, database, item)
-        : () => {};
-      const onSingleClick = hasChildElements
-        ? () => {onSelectItem(database, item); this.toggleTableCollapse(item.name);}
-        : () => {};
 
       const cssStyle = {...STYLE.item};
       if (this.state.collapsed) {
         cssStyle.display = 'none';
       }
       cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
-      const collapseCssClass = this.state[item.name] ? 'down' : 'right';
-      const collapseIcon = (
-        <i className={`${collapseCssClass} triangle icon`} style={{float: 'left', margin: '0 0.15em 0 -1em'}}></i>
-      );
-      const tableIcon = (
-        <i className="table icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
-      );
 
-      /*
-        TODO: Move standard table query to context menu
-       */
       return (
-        <div key={item.name}>
-          <span
-            title={title}
-            style={cssStyle}
-            className="item"
-            onDoubleClick={onDoubleClick}
-            onClick={onSingleClick}>
-            { this.props.title === 'Tables' ? collapseIcon : null }
-            { this.props.title === 'Tables' ? tableIcon : null }
-            {item.name}
-          </span>
-          {this.renderSubItems(item.name)}
-        </div>
+        <DatabaseItem
+          key={item.name}
+          database={database}
+          item={item}
+          dbObjectType={this.props.title.slice(0, -1)}
+          style={cssStyle}
+          columnsByTable={this.props.columnsByTable}
+          triggersByTable={this.props.triggersByTable}
+          onSelectItem={onSelectItem}
+          onExecuteDefaultQuery={onExecuteDefaultQuery}
+          onGetSQLScript={onGetSQLScript} />
       );
     });
-  }
-
-  renderSubItems(table) {
-    const { columnsByTable, triggersByTable, database } = this.props;
-
-    if (!columnsByTable || !columnsByTable[table]) {
-      return null;
-    }
-
-    const displayStyle = {};
-    if (!this.state[table]) {
-      displayStyle.display = 'none';
-    }
-
-    return (
-      <div style={displayStyle}>
-        <TableSubmenu
-          title="Columns"
-          table={table}
-          itemsByTable={columnsByTable}
-          database={database}/>
-        <TableSubmenu
-          collapsed
-          title="Triggers"
-          table={table}
-          itemsByTable={triggersByTable}
-          database={database}/>
-      </div>
-    );
   }
 
   render() {
