@@ -121,15 +121,8 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(fetchTableTriggersIfNeeded(database.name, table.name));
   }
 
-  onGetSQLScript(database, table, actionType, objectType) {
-    this.props.dispatch(getSQLScriptIfNeeded(database.name, table.name, actionType, objectType));
-  }
-
-  onGetRoutineSQL(database, item, objectType) {
-    const [routine] = objectType === 'Function'
-      ? this.props.routines.functionsByDatabase[database.name].filter(func => func.name === item.name)
-      : this.props.routines.proceduresByDatabase[database.name].filter(proc => proc.name === item.name);
-    this.props.dispatch(QueryActions.updateQueryIfNeeded(routine.routineDefinition));
+  onGetSQLScript(database, item, actionType, objectType) {
+    this.props.dispatch(getSQLScriptIfNeeded(database.name, item.name, actionType, objectType));
   }
 
   onSQLChange (sqlQuery) {
@@ -323,8 +316,7 @@ class QueryBrowserContainer extends Component {
                   onSelectDatabase={::this.onSelectDatabase}
                   onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
                   onSelectTable={::this.onSelectTable}
-                  onGetSQLScript={::this.onGetSQLScript}
-                  onGetRoutineSQL={::this.onGetRoutineSQL} />
+                  onGetSQLScript={::this.onGetSQLScript} />
               </div>
             </ResizableBox>
           </div>

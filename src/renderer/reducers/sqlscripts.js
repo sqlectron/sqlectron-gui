@@ -26,9 +26,9 @@ export default function (state = INITIAL_STATE, action) {
     };
   }
   case types.GET_SCRIPT_SUCCESS: {
-    const scriptsByTable = !state.scriptsByObject[action.database]
+    const scriptsByItem = !state.scriptsByObject[action.database]
       ? null
-      : state.scriptsByObject[action.database][action.table];
+      : state.scriptsByObject[action.database][action.item];
     return {
       ...state,
       isFetching: false,
@@ -38,8 +38,8 @@ export default function (state = INITIAL_STATE, action) {
         ...state.scriptsByObject,
         [action.database]: {
           ...state.scriptsByObject[action.database],
-          [action.table]: {
-            ...scriptsByTable,
+          [action.item]: {
+            ...scriptsByItem,
             objectType: action.objectType,
             [action.actionType]: action.script,
           },

@@ -7,61 +7,63 @@ export const GET_SCRIPT_SUCCESS = 'GET_SCRIPT_SUCCESS';
 export const GET_SCRIPT_FAILURE = 'GET_SCRIPT_FAILURE';
 
 
-export function getSQLScriptIfNeeded(database, table, actionType, objectType) {
+export function getSQLScriptIfNeeded(database, item, actionType, objectType) {
   return (dispatch, getState) => {
     const state = getState();
-    if (shouldFetchScript(state, database, table, actionType)) {
-      return dispatch(getSQLScript(database, table, actionType, objectType));
-    } else if (isScriptAlreadyFetched(state, database, table, actionType)) {
-      const script = getAlreadyFetchedScript(state, database, table, actionType);
+    if (shouldFetchScript(state, database, item, actionType)) {
+      return dispatch(getSQLScript(database, item, actionType, objectType));
+    } else if (isScriptAlreadyFetched(state, database, item, actionType)) {
+      const script = getAlreadyFetchedScript(state, database, item, actionType);
       return dispatch(updateQueryIfNeeded(script));
     }
   };
 }
 
-function shouldFetchScript (state, database, table, actionType) {
+function shouldFetchScript (state, database, item, actionType) {
   const scripts = state.sqlscripts;
   if (!scripts) return true;
   if (scripts.isFetching) return false;
   if (!scripts.scriptsByObject[database]) return true;
-  if (!scripts.scriptsByObject[database][table]) return true;
-  if (!scripts.scriptsByObject[database][table][actionType]) return true;
+  if (!scripts.scriptsByObject[database][item]) return true;
+  if (!scripts.scriptsByObject[database][item][actionType]) return true;
   return scripts.didInvalidate;
 }
 
-function isScriptAlreadyFetched (state, database, table, actionType) {
+function isScriptAlreadyFetched (state, database, item, actionType) {
   const scripts = state.sqlscripts;
   if (!scripts.scriptsByObject[database]) return false;
-  if (!scripts.scriptsByObject[database][table]) return false;
-  if (scripts.scriptsByObject[database][table][actionType]) return true;
+  if (!scripts.scriptsByObject[database][item]) return false;
+  if (scripts.scriptsByObject[database][item][actionType]) return true;
   return false;
 }
 
-function getAlreadyFetchedScript (state, database, table, actionType) {
-  return state.sqlscripts.scriptsByObject[database][table][actionType];
+function getAlreadyFetchedScript (state, database, item, actionType) {
+  return state.sqlscripts.scriptsByObject[database][item][actionType];
 }
 
 
-function getSQLScript (database, table, actionType, objectType) {
+function getSQLScript (database, item, actionType, objectType) {
   return async (dispatch) => {
-    dispatch({ type: GET_SCRIPT_REQUEST, database, table, actionType, objectType });
+    dispatch({ type: GET_SCRIPT_REQUEST, database, item, actionType, objectType });
     try {
       const dbConn = getDBConnByName(database);
       let script;
       if (actionType === 'CREATE') {
         [script] = objectType === 'Table'
-          ? await dbConn.getTableCreateScript(table)
-          : await dbConn.getViewCreateScript(table);
+          ? await dbConn.getTableCreateScript(item)
+          : (objectType === 'View')
+          ? await dbConn.getViewCreateScript(item)
+          : await dbConn.getRoutineCreateScript(item, objectType);
       } else if (actionType === 'SELECT') {
-        script = await dbConn.getTableSelectScript(table);
+        script = await dbConn.getTableSelectScript(item);
       } else if (actionType === 'INSERT') {
-        script = await dbConn.getTableInsertScript(table);
+        script = await dbConn.getTableInsertScript(item);
       } else if (actionType === 'UPDATE') {
-        script = await dbConn.getTableUpdateScript(table);
+        script = await dbConn.getTableUpdateScript(item);
       } else if (actionType === 'DELETE') {
-        script = await dbConn.getTableDeleteScript(table);
+        script = await dbConn.getTableDeleteScript(item);
       }
-      dispatch({ type: GET_SCRIPT_SUCCESS, database, table, script, actionType, objectType });
+      dispatch({ type: GET_SCRIPT_SUCCESS, database, item, script, actionType, objectType });
       dispatch(updateQueryIfNeeded(script));
     } catch (error) {
       dispatch({ type: GET_SCRIPT_FAILURE, error });

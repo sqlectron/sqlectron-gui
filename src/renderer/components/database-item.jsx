@@ -19,7 +19,6 @@ export default class DatabaseItem extends Component {
     onSelectItem: PropTypes.func,
     onExecuteDefaultQuery: PropTypes.func,
     onGetSQLScript: PropTypes.func,
-    onGetRoutineSQL: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -46,24 +45,18 @@ export default class DatabaseItem extends Component {
       dbObjectType,
       onExecuteDefaultQuery,
       onGetSQLScript,
-      onGetRoutineSQL,
     } = this.props;
     const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
 
     this.contextMenu = new Menu();
-    if (dbObjectType !== 'Table' && dbObjectType !== 'View') {
+    if (dbObjectType === 'Table' || dbObjectType === 'View') {
       this.contextMenu.append(new MenuItem({
-        label: `${dbObjectType} SQL definition`,
-        click: onGetRoutineSQL.bind(this, database, item, dbObjectType)
+        label: 'Execute default query',
+        click: onExecuteDefaultQuery.bind(this, database, item)
       }));
-      return;
     }
     this.contextMenu.append(new MenuItem({
-      label: `Execute default query`,
-      click: onExecuteDefaultQuery.bind(this, database, item)
-    }));
-    this.contextMenu.append(new MenuItem({
-      label: `CREATE script`,
+      label: 'CREATE script',
       click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType)
     }));
     if (dbObjectType === 'Table') {
