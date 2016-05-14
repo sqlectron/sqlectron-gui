@@ -91,6 +91,17 @@ function shouldUpdateQuery (query, selectedQuery, state) {
   return true;
 }
 
+export function appendQuery (query) {
+  return (dispatch, getState) => {
+    const currentQuery = getCurrentQuery(getState()).query;
+    const newLine = !currentQuery ? '' : '\n';
+    const appendedQuery = `${currentQuery}${newLine}${query}`;
+    if (!currentQuery.isExecuting){
+      return dispatch(updateQuery(appendedQuery));
+    }
+  };
+}
+
 
 export function copyToClipboard (rows, type) {
   return async dispatch => {

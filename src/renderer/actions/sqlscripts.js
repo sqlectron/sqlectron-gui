@@ -1,5 +1,5 @@
 import { getDBConnByName } from './connections';
-import { updateQueryIfNeeded } from './queries';
+import { appendQuery } from './queries';
 
 
 export const GET_SCRIPT_REQUEST = 'GET_SCRIPT_REQUEST';
@@ -14,7 +14,7 @@ export function getSQLScriptIfNeeded(database, item, actionType, objectType) {
       return dispatch(getSQLScript(database, item, actionType, objectType));
     } else if (isScriptAlreadyFetched(state, database, item, actionType)) {
       const script = getAlreadyFetchedScript(state, database, item, actionType);
-      return dispatch(updateQueryIfNeeded(script));
+      return dispatch(appendQuery(script));
     }
   };
 }
@@ -64,7 +64,7 @@ function getSQLScript (database, item, actionType, objectType) {
         script = await dbConn.getTableDeleteScript(item);
       }
       dispatch({ type: GET_SCRIPT_SUCCESS, database, item, script, actionType, objectType });
-      dispatch(updateQueryIfNeeded(script));
+      dispatch(appendQuery(script));
     } catch (error) {
       dispatch({ type: GET_SCRIPT_FAILURE, error });
     }
