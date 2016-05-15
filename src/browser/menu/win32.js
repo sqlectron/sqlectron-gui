@@ -17,6 +17,11 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
           click: (item, win) => win.webContents.send('sqlectron:new-tab'),
         },
         {
+          label: 'Close Tab',
+          accelerator: 'Ctrl+W',
+          click: (item, win) => win.webContents.send('sqlectron:close-tab'),
+        },
+        {
           type: 'separator',
         },
         {

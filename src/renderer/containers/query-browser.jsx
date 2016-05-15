@@ -159,6 +159,7 @@ class QueryBrowserContainer extends Component {
         this.handleExecuteQuery(currentQuery.selectedQuery || currentQuery.query);
       },
       'sqlectron:new-tab': () => this.newTab(),
+      'sqlectron:close-tab': () => this.closeTab(),
       'sqlectron:save-query': () => this.saveQuery(),
     });
   }
@@ -191,6 +192,10 @@ class QueryBrowserContainer extends Component {
 
   newTab() {
     this.props.dispatch(QueryActions.newQuery(this.getCurrentQuery().database));
+  }
+
+  closeTab() {
+    this.removeQuery(this.props.queries.currentQueryId);
   }
 
   renderTabQueries() {
