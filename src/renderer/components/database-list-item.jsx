@@ -5,6 +5,8 @@ import DatabaseFilter from './database-filter.jsx';
 
 const STYLE = {
   database: {
+    fontSize: '0.85em',
+    color: '#636363',
     wordBreak: 'break-all',
     cursor: 'default',
   },
@@ -44,23 +46,32 @@ export default class DatabaseListItem extends Component {
     this.setState({ filter: value });
   }
 
+  onHeaderDoubleClick(database) {
+    if (!this.isMetadataLoaded()) {
+      this.props.onSelectDatabase(database);
+      return;
+    }
+
+    this.toggleCollapse();
+  }
+
   filterItems(filterInput, items) {
     const regex = RegExp(filterInput, 'i');
     return items.filter(item => regex.test(item.name));
   }
 
-  renderCollapseButton() {
-    if (!this.isMetadataLoaded()) {
-      return null;
-    }
-
-    const title = this.state.collapsed ? 'Expand' : 'Collapse';
-    const cssClass = this.state.collapsed ? 'plus' : 'minus';
+  renderHeader(database) {
+    const collapseCssClass = !this.isMetadataLoaded() || this.state.collapsed ? 'right' : 'down';
 
     return (
-      <i className={`${cssClass} square outline icon clickable`}
-        title={title}
-        onClick={::this.toggleCollapse} />
+      <span
+        className="header"
+        onDoubleClick={() => this.onHeaderDoubleClick(database)}
+        style={STYLE.database}>
+        <i className={`${collapseCssClass} triangle icon`}></i>
+        <i className="database icon"></i>
+        {database.name}
+      </span>
     );
   }
 
@@ -76,7 +87,6 @@ export default class DatabaseListItem extends Component {
       database,
       onExecuteDefaultQuery,
       onSelectTable,
-      onSelectDatabase,
       onGetSQLScript,
     } = this.props;
     let filteredTables, filteredViews, filteredFunctions, filteredProcedures;
@@ -94,13 +104,7 @@ export default class DatabaseListItem extends Component {
 
     return (
       <div className="item">
-        <i className="grid database icon"></i>
-        {this.renderCollapseButton()}
-        <span style={STYLE.database}
-          title="Click twice to connect or open new query"
-          onDoubleClick={() => onSelectDatabase(database)}>
-          {database.name}
-        </span>
+        {this.renderHeader(database)}
         <div className="ui list" style={cssStyleItems}>
           <div className="item" style={cssStyleItems}>
             <DatabaseFilter
