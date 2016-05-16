@@ -193,6 +193,18 @@ export default class Query extends Component {
           editor.setFontSize(12);
         },
       },
+      {
+        name: 'selectCurrentLine',
+        bindKey: { win: 'Ctrl-L', mac: 'Command-L' },
+        exec: function(editor) {
+          const { row } = editor.selection.getCursor();
+          const endColumn = editor.session.getLine(row).length;
+          editor.selection.setSelectionRange({
+            start: { column: 0, row },
+            end: { column: endColumn, row },
+          });
+        },
+      },
     ];
   }
 
