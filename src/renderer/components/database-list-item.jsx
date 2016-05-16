@@ -33,15 +33,6 @@ export default class DatabaseListItem extends Component {
     this.state = {};
   }
 
-  isMetadataLoaded() {
-    const { tables, views, functions, procedures } = this.props;
-    return tables && views && functions && procedures;
-  }
-
-  toggleCollapse() {
-    this.setState({ collapsed: !this.state.collapsed });
-  }
-
   onFilterChange(value) {
     this.setState({ filter: value });
   }
@@ -58,6 +49,15 @@ export default class DatabaseListItem extends Component {
   filterItems(filterInput, items) {
     const regex = RegExp(filterInput, 'i');
     return items.filter(item => regex.test(item.name));
+  }
+
+  isMetadataLoaded() {
+    const { tables, views, functions, procedures } = this.props;
+    return tables && views && functions && procedures;
+  }
+
+  toggleCollapse() {
+    this.setState({ collapsed: !this.state.collapsed });
   }
 
   renderHeader(database) {
@@ -89,7 +89,11 @@ export default class DatabaseListItem extends Component {
       onSelectTable,
       onGetSQLScript,
     } = this.props;
-    let filteredTables, filteredViews, filteredFunctions, filteredProcedures;
+
+    let filteredTables;
+    let filteredViews;
+    let filteredFunctions;
+    let filteredProcedures;
 
     const cssStyleItems = {};
     const isMetadataLoaded = this.isMetadataLoaded();
