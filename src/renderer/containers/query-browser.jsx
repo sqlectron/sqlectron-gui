@@ -234,6 +234,7 @@ class QueryBrowserContainer extends Component {
             client={connections.server.client}
             query={query}
             enabledAutoComplete={queries.enabledAutoComplete}
+            enabledLiveAutoComplete={queries.enabledLiveAutoComplete}
             database={currentDB}
             databases={databases.items}
             tables={tables.itemsByDatabase[query.database]}

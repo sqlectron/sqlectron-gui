@@ -37,6 +37,7 @@ export default class Query extends Component {
     client: PropTypes.string.isRequired,
     query: PropTypes.object.isRequired,
     enabledAutoComplete: PropTypes.bool.isRequired,
+    enabledLiveAutoComplete: PropTypes.bool.isRequired,
     database: PropTypes.string.isRequired,
     databases: PropTypes.array,
     tables: PropTypes.array,
@@ -94,6 +95,7 @@ export default class Query extends Component {
     ];
 
     this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', true);
+    this.refs.queryBoxTextarea.editor.setOption('enableLiveAutocompletion', nextProps.enabledLiveAutoComplete);
   }
 
   componentDidUpdate() {
