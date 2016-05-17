@@ -28,8 +28,10 @@ const Footer = ({ status }) => {
         <div className="item">
           <UpdateChecker />
         </div>
-        <a href="#" className="item" onClick={onShortcutsClick}>Keyboard Shortcuts</a>
         <a href="#" className="item" onClick={onGithubClick}>Github</a>
+        <a href="#" className="item" title="Keyboard Shortcuts" onClick={onShortcutsClick}>
+          <i className="keyboard icon" />
+        </a>
       </div>
     </div>
   );
