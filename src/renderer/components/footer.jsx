@@ -14,6 +14,11 @@ function onGithubClick(event) {
   shell.openExternal('https://github.com/sqlectron/sqlectron-gui');
 }
 
+function onShortcutsClick(event) {
+  event.preventDefault();
+  shell.openExternal('https://github.com/sqlectron/sqlectron-gui/wiki/Keyboard-Shortcuts');
+}
+
 
 const Footer = ({ status }) => {
   return (
@@ -23,6 +28,7 @@ const Footer = ({ status }) => {
         <div className="item">
           <UpdateChecker />
         </div>
+        <a href="#" className="item" onClick={onShortcutsClick}>Keyboard Shortcuts</a>
         <a href="#" className="item" onClick={onGithubClick}>Github</a>
       </div>
     </div>
