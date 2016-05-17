@@ -9,7 +9,7 @@ const INITIAL_STATE = {
   queriesById: {},
   resultItemsPerPage: 100,
   enabledAutoComplete: true,
-  enabledLiveAutoComplete: false,
+  enabledLiveAutoComplete: true,
 };
 
 
