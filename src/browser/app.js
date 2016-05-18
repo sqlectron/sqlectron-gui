@@ -1,5 +1,4 @@
-import app from 'app';
-import { dialog } from 'electron';
+import { app, dialog } from 'electron';
 import { buildNewWindow } from './window';
 
 

@@ -1,5 +1,5 @@
 import { ipcRenderer } from 'electron';
-import shell from 'shell';
+import { shell } from 'electron';
 import React, {Component} from 'react';
 
 

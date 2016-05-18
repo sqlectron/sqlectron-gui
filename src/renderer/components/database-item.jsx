@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import TableSubmenu from './table-submenu.jsx';
-import { Menu, MenuItem } from 'remote';
+import { remote } from 'electron';
+
+const Menu = remote.Menu;
+const MenuItem = remote.MenuItem;
 
 
 const STYLE = {

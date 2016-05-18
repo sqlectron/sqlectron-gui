@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import BrowserWindow from 'browser-window';
+import { BrowserWindow } from 'electron';
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
 import { get as getConfig } from './config';

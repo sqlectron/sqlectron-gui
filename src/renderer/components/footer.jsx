@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import shell from 'shell';
+import { shell } from 'electron';
 import UpdateChecker from './update-checker.jsx';
 
 
