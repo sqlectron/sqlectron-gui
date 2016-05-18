@@ -3,8 +3,8 @@
   "version": "1.9.0",
   "description": "A simple and lightweight SQL client with cross database and platform support",
   "author": {
-    "name" : "The Sqlectron Team",
-    "email" : "maxcnunes@gmail.com"
+    "name": "The Sqlectron Team",
+    "email": "maxcnunes@gmail.com"
   },
   "main": "./out/browser/main.js",
   "license": "MIT",
@@ -20,6 +20,6 @@
     "babel-core": "^5.8.29",
     "babel-runtime": "^5.8.29",
     "debug": "^2.2.0",
-    "sqlectron-core": "^3.6.0"
+    "sqlectron-core": "^4.0.0"
   }
 }

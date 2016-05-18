@@ -38,8 +38,8 @@ export default class QueryResult extends Component {
     }
   }
 
-  renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries, isSelect }) {
-    if (!isSelect) {
+  renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries, command }) {
+    if (command !== 'SELECT') {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
         <Message
