@@ -74,7 +74,9 @@ export default class DatabaseListItem extends Component {
         className="header"
         onDoubleClick={() => this.onHeaderDoubleClick(database)}
         style={STYLE.database}>
-        <i className={`${collapseCssClass} triangle icon`}></i>
+        <i className={`${collapseCssClass} triangle icon`}
+          style={{cursor: 'pointer'}}
+          onClick={() => this.onHeaderDoubleClick(database)}></i>
         <i className="database icon"></i>
         {database.name}
       </span>
