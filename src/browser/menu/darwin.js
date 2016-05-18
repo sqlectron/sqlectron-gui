@@ -1,4 +1,4 @@
-import shell from 'shell';
+import { shell } from 'electron';
 
 export function buildTemplate(app, buildNewWindow, appConfig) {
   return [
