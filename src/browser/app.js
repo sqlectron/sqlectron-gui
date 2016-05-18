@@ -14,7 +14,11 @@ import { buildNewWindow } from './window';
 
 
 // Quit when all windows are closed.
-app.on('window-all-closed', () => app.quit());
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
 
 
 // This method will be called when Electron has done everything
