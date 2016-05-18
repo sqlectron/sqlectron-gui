@@ -9,6 +9,12 @@ const STYLE = {
     color: '#636363',
     wordBreak: 'break-all',
     cursor: 'default',
+    // force menu item go over the parent padding
+    // this way allows the whole line be clickable
+    position: 'abosolute',
+    margin: '-0.92857143em -1.14285714em',
+    padding: '0.92857143em 1.14285714em',
+    display: 'block',
   },
 };
 
