@@ -32,7 +32,6 @@ export default class DatabaseListItem extends Component {
     functions: PropTypes.array,
     procedures: PropTypes.array,
     database: PropTypes.object.isRequired,
-    focusSearch: PropTypes.bool,
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
@@ -65,15 +64,6 @@ export default class DatabaseListItem extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    // If search is toggled for certain database that is collapsed then toggle collapse.
-    if (this.state.collapsed &&
-      this.props.focusSearch !== nextProps.focusSearch){
-
-      this.toggleCollapse();
-    }
-  }
-
   onFilterChange(value) {
     this.setState({ filter: value });
   }
@@ -90,6 +80,15 @@ export default class DatabaseListItem extends Component {
   filterItems(filterInput, items) {
     const regex = RegExp(filterInput, 'i');
     return items.filter(item => regex.test(item.name));
+  }
+
+  focus() {
+    // If search is toggled for certain database that is collapsed then toggle collapse.
+    if (this.state.collapsed) {
+      this.toggleCollapse();
+    }
+
+    this.refs.filter.focus();
   }
 
   isMetadataLoaded(props) {
@@ -129,7 +128,6 @@ export default class DatabaseListItem extends Component {
       functions,
       procedures,
       database,
-      focusSearch,
       onExecuteDefaultQuery,
       onSelectTable,
       onGetSQLScript,
@@ -157,8 +155,8 @@ export default class DatabaseListItem extends Component {
         <div className="ui list" style={cssStyleItems}>
           <div className="item" style={cssStyleItems}>
             <DatabaseFilter
+              ref="filter"
               value={filter}
-              focusSearch={focusSearch}
               isFetching={!isMetadataLoaded}
               onFilterChange={::this.onFilterChange} />
           </div>

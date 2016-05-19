@@ -198,18 +198,16 @@ class QueryBrowserContainer extends Component {
   }
 
   toggleDatabaseSearch() {
-    this.setState({ toggleDatabaseSearch: !this.state.toggleDatabaseSearch });
+    this.refs.databaseFilter.focus();
   }
 
   toggleDatabaseObjectsSearch() {
-    const state = { ...this.state };
     const currentDB = this.getCurrentQuery().database;
-    if (!currentDB) return;
-    if (!state.toggleSearch) {
-      state.toggleSearch = {};
+    if (!currentDB) {
+      return;
     }
-    state.toggleSearch[currentDB] = !state.toggleSearch[currentDB];
-    this.setState(state);
+
+    this.refs.databaseList.focus(currentDB);
   }
 
   newTab() {
@@ -283,7 +281,7 @@ class QueryBrowserContainer extends Component {
   }
 
   render() {
-    const { filter, toggleDatabaseSearch, toggleSearch } = this.state;
+    const { filter } = this.state;
     const {
       status,
       connections,
@@ -329,12 +327,13 @@ class QueryBrowserContainer extends Component {
                 </div>
                 <div className="item">
                   <DatabaseFilter
+                    ref="databaseFilter"
                     value={filter}
                     isFetching={databases.isFetching}
-                    focusSearch={toggleDatabaseSearch}
                     onFilterChange={::this.onFilterChange} />
                 </div>
                 <DatabaseList
+                  ref="databaseList"
                   databases={filteredDatabases}
                   isFetching={databases.isFetching}
                   tablesByDatabase={tables.itemsByDatabase}
@@ -343,7 +342,6 @@ class QueryBrowserContainer extends Component {
                   viewsByDatabase={views.viewsByDatabase}
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
-                  toggleSearch={toggleSearch}
                   onSelectDatabase={::this.onSelectDatabase}
                   onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
                   onSelectTable={::this.onSelectTable}

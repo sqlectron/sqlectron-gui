@@ -4,6 +4,7 @@ import DatabaseListItem from './database-list-item.jsx';
 
 export default class DatabaseList extends Component {
   static propTypes = {
+    currentDatabase: PropTypes.string.isRequired,
     databases: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
@@ -12,7 +13,6 @@ export default class DatabaseList extends Component {
     viewsByDatabase: PropTypes.object.isRequired,
     functionsByDatabase: PropTypes.object.isRequired,
     proceduresByDatabase: PropTypes.object.isRequired,
-    toggleSearch: PropTypes.object,
     onSelectDatabase: PropTypes.func.isRequired,
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
@@ -25,6 +25,10 @@ export default class DatabaseList extends Component {
     this.state = {};
   }
 
+  focus(database) {
+    this.refs[database].focus();
+  }
+
   render() {
     const {
       databases,
@@ -35,7 +39,6 @@ export default class DatabaseList extends Component {
       viewsByDatabase,
       functionsByDatabase,
       proceduresByDatabase,
-      toggleSearch,
       onExecuteDefaultQuery,
       onSelectTable,
       onSelectDatabase,
@@ -60,6 +63,7 @@ export default class DatabaseList extends Component {
       {
         databases.map(database => (
           <DatabaseListItem
+            ref={database.name}
             key={database.name}
             database={database}
             tables={tablesByDatabase[database.name]}
@@ -68,7 +72,6 @@ export default class DatabaseList extends Component {
             views={viewsByDatabase[database.name]}
             functions={functionsByDatabase[database.name]}
             procedures={proceduresByDatabase[database.name]}
-            focusSearch={toggleSearch ? toggleSearch[database.name] : undefined}
             onExecuteDefaultQuery={onExecuteDefaultQuery}
             onSelectTable={onSelectTable}
             onSelectDatabase={onSelectDatabase}
