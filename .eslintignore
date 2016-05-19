@@ -1,5 +1,5 @@
 build/
-releases/
-installers/
-.tmp/
+dist/
 src/renderer/vendor/
+app/out/
+app/node_modules/
