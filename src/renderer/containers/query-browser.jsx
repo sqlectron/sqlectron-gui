@@ -161,6 +161,8 @@ class QueryBrowserContainer extends Component {
       'sqlectron:new-tab': () => this.newTab(),
       'sqlectron:close-tab': () => this.closeTab(),
       'sqlectron:save-query': () => this.saveQuery(),
+      'sqlectron:toggle-database-search': () => this.toggleDatabaseSearch(),
+      'sqlectron:toggle-database-objects-search': () => this.toggleDatabaseObjectsSearch(),
     });
   }
 
@@ -188,6 +190,21 @@ class QueryBrowserContainer extends Component {
   filterDatabases(name, databases) {
     const regex = RegExp(name, 'i');
     return databases.filter(db => regex.test(db.name));
+  }
+
+  toggleDatabaseSearch() {
+    this.setState({ toggleDatabaseSearch: !this.state.toggleDatabaseSearch });
+  }
+
+  toggleDatabaseObjectsSearch() {
+    const state = { ...this.state };
+    const currentDB = this.getCurrentQuery().database;
+    if (!currentDB) return;
+    if (!state.toggleSearch) {
+      state.toggleSearch = {};
+    }
+    state.toggleSearch[currentDB] = !state.toggleSearch[currentDB];
+    this.setState(state);
   }
 
   newTab() {
@@ -261,7 +278,7 @@ class QueryBrowserContainer extends Component {
   }
 
   render() {
-    const { filter } = this.state;
+    const { filter, toggleDatabaseSearch, toggleSearch } = this.state;
     const {
       status,
       connections,
@@ -308,6 +325,7 @@ class QueryBrowserContainer extends Component {
                   <DatabaseFilter
                     value={filter}
                     isFetching={databases.isFetching}
+                    focusSearch={toggleDatabaseSearch}
                     onFilterChange={::this.onFilterChange} />
                 </div>
                 <DatabaseList
@@ -319,6 +337,7 @@ class QueryBrowserContainer extends Component {
                   viewsByDatabase={views.viewsByDatabase}
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
+                  toggleSearch={toggleSearch}
                   onSelectDatabase={::this.onSelectDatabase}
                   onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
                   onSelectTable={::this.onSelectTable}
