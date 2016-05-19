@@ -65,6 +65,15 @@ export default class DatabaseListItem extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    // If search is toggled for certain database that is collapsed then toggle collapse.
+    if (this.state.collapsed &&
+      this.props.focusSearch !== nextProps.focusSearch){
+
+      this.toggleCollapse();
+    }
+  }
+
   onFilterChange(value) {
     this.setState({ filter: value });
   }
