@@ -38,7 +38,6 @@ export default class Query extends Component {
     query: PropTypes.object.isRequired,
     enabledAutoComplete: PropTypes.bool.isRequired,
     enabledLiveAutoComplete: PropTypes.bool.isRequired,
-    database: PropTypes.string.isRequired,
     databases: PropTypes.array,
     tables: PropTypes.array,
     columnsByTable: PropTypes.object,
