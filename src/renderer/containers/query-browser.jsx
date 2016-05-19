@@ -298,6 +298,7 @@ class QueryBrowserContainer extends Component {
           <div style={STYLES.sidebar}>
             <ResizableBox className="react-resizable react-resizable-ew-resize"
               width={235}
+              height={NaN}
               minConstraints={[235, 300]}
               maxConstraints={[750, 10000]}>
               <div className="ui vertical menu" style={STYLES.resizeable}>
