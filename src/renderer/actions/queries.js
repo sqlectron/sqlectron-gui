@@ -96,7 +96,7 @@ export function appendQuery (query) {
     const currentQuery = getCurrentQuery(getState()).query;
     const newLine = !currentQuery ? '' : '\n';
     const appendedQuery = `${currentQuery}${newLine}${query}`;
-    if (!currentQuery.isExecuting){
+    if (!currentQuery.isExecuting) {
       return dispatch(updateQuery(appendedQuery));
     }
   };

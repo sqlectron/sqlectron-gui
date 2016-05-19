@@ -48,12 +48,12 @@ function getSQLScript (database, item, actionType, objectType) {
     try {
       const dbConn = getDBConnByName(database);
       let script;
-      if (actionType === 'CREATE') {
-        [script] = objectType === 'Table'
-          ? await dbConn.getTableCreateScript(item)
-          : (objectType === 'View')
-          ? await dbConn.getViewCreateScript(item)
-          : await dbConn.getRoutineCreateScript(item, objectType);
+      if (actionType === 'CREATE' && objectType === 'Table') {
+        [script] = await dbConn.getTableCreateScript(item);
+      } else if (actionType === 'CREATE' && objectType === 'View') {
+        [script] = await dbConn.getViewCreateScript(item);
+      } else if (actionType === 'CREATE') {
+        [script] = await dbConn.getRoutineCreateScript(item, objectType);
       } else if (actionType === 'SELECT') {
         script = await dbConn.getTableSelectScript(item);
       } else if (actionType === 'INSERT') {

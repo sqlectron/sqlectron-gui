@@ -26,7 +26,7 @@ function shouldFetchTableTriggers (state, database, table) {
 
 
 function fetchTableTriggers (database, table) {
-  return async (dispatch, getState) => {
+  return async dispatch => {
     dispatch({ type: FETCH_TRIGGERS_REQUEST, database, table });
     try {
       const dbConn = getDBConnByName(database);

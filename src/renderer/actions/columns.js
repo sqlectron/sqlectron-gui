@@ -26,7 +26,7 @@ function shouldFetchTableColumns (state, database, table) {
 
 
 function fetchTableColumns (database, table) {
-  return async (dispatch, getState) => {
+  return async dispatch => {
     dispatch({ type: FETCH_COLUMNS_REQUEST, database, table });
     try {
       const dbConn = getDBConnByName(database);
