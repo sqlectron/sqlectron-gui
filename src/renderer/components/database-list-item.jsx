@@ -32,6 +32,7 @@ export default class DatabaseListItem extends Component {
     functions: PropTypes.array,
     procedures: PropTypes.array,
     database: PropTypes.object.isRequired,
+    focusSearch: PropTypes.bool,
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
@@ -119,6 +120,7 @@ export default class DatabaseListItem extends Component {
       functions,
       procedures,
       database,
+      focusSearch,
       onExecuteDefaultQuery,
       onSelectTable,
       onGetSQLScript,
@@ -147,6 +149,7 @@ export default class DatabaseListItem extends Component {
           <div className="item" style={cssStyleItems}>
             <DatabaseFilter
               value={filter}
+              focusSearch={focusSearch}
               isFetching={!isMetadataLoaded}
               onFilterChange={::this.onFilterChange} />
           </div>
