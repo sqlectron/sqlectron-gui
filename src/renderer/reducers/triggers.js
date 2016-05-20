@@ -1,4 +1,5 @@
 import * as connTypes from '../actions/connections';
+import * as dbTypes from '../actions/databases';
 import * as types from '../actions/triggers';
 
 
@@ -40,6 +41,12 @@ export default function (state = INITIAL_STATE, action) {
       isFetching: false,
       didInvalidate: true,
       error: action.error,
+    };
+  }
+  case dbTypes.REFRESH_DATABASES: {
+    return {
+      ...state,
+      didInvalidate: true,
     };
   }
   default : return state;

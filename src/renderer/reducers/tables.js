@@ -1,4 +1,5 @@
 import * as connTypes from '../actions/connections';
+import * as dbTypes from '../actions/databases';
 import * as queryTypes from '../actions/queries';
 import * as types from '../actions/tables';
 
@@ -48,6 +49,12 @@ export default function (state = INITIAL_STATE, action) {
       ...state,
       didInvalidate: action.results
         .some(({ command }) => COMMANDS_TRIGER_REFRESH.includes(command)),
+    };
+  }
+  case dbTypes.REFRESH_DATABASES: {
+    return {
+      ...state,
+      didInvalidate: true,
     };
   }
   default : return state;

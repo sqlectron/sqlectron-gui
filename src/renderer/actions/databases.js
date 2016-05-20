@@ -1,6 +1,7 @@
 import { getCurrentDBConn } from './connections';
 
 
+export const REFRESH_DATABASES = 'REFRESH_DATABASES';
 export const FETCH_DATABASES_REQUEST = 'FETCH_DATABASES_REQUEST';
 export const FETCH_DATABASES_SUCCESS = 'FETCH_DATABASES_SUCCESS';
 export const FETCH_DATABASES_FAILURE = 'FETCH_DATABASES_FAILURE';
@@ -9,6 +10,11 @@ export const FILTER_DATABASES = 'FILTER_DATABASES';
 
 export function filterDatabases(name) {
   return { type: FILTER_DATABASES, name };
+}
+
+
+export function refreshDatabase(name) {
+  return { type: REFRESH_DATABASES, name };
 }
 
 

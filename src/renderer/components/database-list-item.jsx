@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import DatabaseListItemMetatada from './database-list-item-metadata.jsx';
 import DatabaseFilter from './database-filter.jsx';
+import { remote } from 'electron';
+
+
+const { Menu, MenuItem } = remote;
 
 
 const STYLE = {
@@ -32,11 +36,32 @@ export default class DatabaseListItem extends Component {
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
     onGetSQLScript: PropTypes.func.isRequired,
+    onRefreshDatabase: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
     super(props, context);
     this.state = {};
+    this.contextMenu = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.contextMenu || !this.isMetadataLoaded(nextProps)) {
+      return;
+    }
+
+    this.contextMenu = new Menu();
+    this.contextMenu.append(new MenuItem({
+      label: 'Refresh Database',
+      click: this.props.onRefreshDatabase.bind(this, nextProps.database),
+    }));
+  }
+
+  onContextMenu(event) {
+    event.preventDefault();
+    if (this.contextMenu) {
+      this.contextMenu.popup(event.clientX, event.clientY);
+    }
   }
 
   onFilterChange(value) {
@@ -57,8 +82,8 @@ export default class DatabaseListItem extends Component {
     return items.filter(item => regex.test(item.name));
   }
 
-  isMetadataLoaded() {
-    const { tables, views, functions, procedures } = this.props;
+  isMetadataLoaded(props) {
+    const { tables, views, functions, procedures } = (props || this.props);
     return tables && views && functions && procedures;
   }
 
@@ -73,6 +98,7 @@ export default class DatabaseListItem extends Component {
       <span
         className="header"
         onDoubleClick={() => this.onHeaderDoubleClick(database)}
+        onContextMenu={::this.onContextMenu}
         style={STYLE.database}>
         <i className={`${collapseCssClass} triangle icon`}
           style={{cursor: 'pointer'}}
