@@ -12,6 +12,7 @@ export default class DatabaseList extends Component {
     viewsByDatabase: PropTypes.object.isRequired,
     functionsByDatabase: PropTypes.object.isRequired,
     proceduresByDatabase: PropTypes.object.isRequired,
+    toggleSearch: PropTypes.object,
     onSelectDatabase: PropTypes.func.isRequired,
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
@@ -34,6 +35,7 @@ export default class DatabaseList extends Component {
       viewsByDatabase,
       functionsByDatabase,
       proceduresByDatabase,
+      toggleSearch,
       onExecuteDefaultQuery,
       onSelectTable,
       onSelectDatabase,
@@ -66,6 +68,7 @@ export default class DatabaseList extends Component {
             views={viewsByDatabase[database.name]}
             functions={functionsByDatabase[database.name]}
             procedures={proceduresByDatabase[database.name]}
+            focusSearch={toggleSearch ? toggleSearch[database.name] : undefined}
             onExecuteDefaultQuery={onExecuteDefaultQuery}
             onSelectTable={onSelectTable}
             onSelectDatabase={onSelectDatabase}

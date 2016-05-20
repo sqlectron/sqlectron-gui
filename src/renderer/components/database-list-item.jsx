@@ -32,6 +32,7 @@ export default class DatabaseListItem extends Component {
     functions: PropTypes.array,
     procedures: PropTypes.array,
     database: PropTypes.object.isRequired,
+    focusSearch: PropTypes.bool,
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
     onSelectDatabase: PropTypes.func.isRequired,
@@ -61,6 +62,15 @@ export default class DatabaseListItem extends Component {
     event.preventDefault();
     if (this.contextMenu) {
       this.contextMenu.popup(event.clientX, event.clientY);
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // If search is toggled for certain database that is collapsed then toggle collapse.
+    if (this.state.collapsed &&
+      this.props.focusSearch !== nextProps.focusSearch){
+
+      this.toggleCollapse();
     }
   }
 
@@ -119,6 +129,7 @@ export default class DatabaseListItem extends Component {
       functions,
       procedures,
       database,
+      focusSearch,
       onExecuteDefaultQuery,
       onSelectTable,
       onGetSQLScript,
@@ -147,6 +158,7 @@ export default class DatabaseListItem extends Component {
           <div className="item" style={cssStyleItems}>
             <DatabaseFilter
               value={filter}
+              focusSearch={focusSearch}
               isFetching={!isMetadataLoaded}
               onFilterChange={::this.onFilterChange} />
           </div>
