@@ -135,6 +135,21 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
       ],
     },
     {
+      label: 'Find',
+      submenu: [
+        {
+          label: 'Search databases',
+          accelerator: 'Cmd+.',
+          click: (item, win) => win.webContents.send('sqlectron:toggle-database-search'),
+        },
+        {
+          label: 'Search database objects',
+          accelerator: 'Shift+Cmd+.',
+          click: (item, win) => win.webContents.send('sqlectron:toggle-database-objects-search'),
+        },
+      ],
+    },
+    {
       label: 'Window',
       submenu: [
         {
@@ -174,4 +189,3 @@ export function buildTemplateDockMenu(app, buildNewWindow) {
     { label: 'New Window', click: () => buildNewWindow(app) },
   ];
 }
-

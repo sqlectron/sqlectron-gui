@@ -12,6 +12,10 @@ export default class DatabaseFilter extends Component {
     this.props.onFilterChange(event.target.value);
   }
 
+  focus() {
+    this.refs.searchInput.focus();
+  }
+
   render() {
     const { value, isFetching } = this.props;
     return (
@@ -19,6 +23,7 @@ export default class DatabaseFilter extends Component {
         <input type="text"
           placeholder="Search..."
           value={value}
+          ref="searchInput"
           onChange={::this.onFilterChange} />
         <i className="search icon"></i>
       </div>

@@ -82,6 +82,15 @@ export default class DatabaseListItem extends Component {
     return items.filter(item => regex.test(item.name));
   }
 
+  focus() {
+    // If search is toggled for certain database that is collapsed then toggle collapse.
+    if (this.state.collapsed) {
+      this.toggleCollapse();
+    }
+
+    this.refs.filter.focus();
+  }
+
   isMetadataLoaded(props) {
     const { tables, views, functions, procedures } = (props || this.props);
     return tables && views && functions && procedures;
@@ -146,6 +155,7 @@ export default class DatabaseListItem extends Component {
         <div className="ui list" style={cssStyleItems}>
           <div className="item" style={cssStyleItems}>
             <DatabaseFilter
+              ref="filter"
               value={filter}
               isFetching={!isMetadataLoaded}
               onFilterChange={::this.onFilterChange} />

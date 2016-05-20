@@ -24,6 +24,10 @@ export default class DatabaseList extends Component {
     this.state = {};
   }
 
+  focus(database) {
+    this.refs[database].focus();
+  }
+
   render() {
     const {
       databases,
@@ -58,6 +62,7 @@ export default class DatabaseList extends Component {
       {
         databases.map(database => (
           <DatabaseListItem
+            ref={database.name}
             key={database.name}
             database={database}
             tables={tablesByDatabase[database.name]}

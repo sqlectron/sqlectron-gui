@@ -166,6 +166,8 @@ class QueryBrowserContainer extends Component {
       'sqlectron:new-tab': () => this.newTab(),
       'sqlectron:close-tab': () => this.closeTab(),
       'sqlectron:save-query': () => this.saveQuery(),
+      'sqlectron:toggle-database-search': () => this.toggleDatabaseSearch(),
+      'sqlectron:toggle-database-objects-search': () => this.toggleDatabaseObjectsSearch(),
     });
   }
 
@@ -193,6 +195,19 @@ class QueryBrowserContainer extends Component {
   filterDatabases(name, databases) {
     const regex = RegExp(name, 'i');
     return databases.filter(db => regex.test(db.name));
+  }
+
+  toggleDatabaseSearch() {
+    this.refs.databaseFilter.focus();
+  }
+
+  toggleDatabaseObjectsSearch() {
+    const currentDB = this.getCurrentQuery().database;
+    if (!currentDB) {
+      return;
+    }
+
+    this.refs.databaseList.focus(currentDB);
   }
 
   newTab() {
@@ -312,11 +327,13 @@ class QueryBrowserContainer extends Component {
                 </div>
                 <div className="item">
                   <DatabaseFilter
+                    ref="databaseFilter"
                     value={filter}
                     isFetching={databases.isFetching}
                     onFilterChange={::this.onFilterChange} />
                 </div>
                 <DatabaseList
+                  ref="databaseList"
                   databases={filteredDatabases}
                   isFetching={databases.isFetching}
                   tablesByDatabase={tables.itemsByDatabase}

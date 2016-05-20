@@ -103,6 +103,21 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
       ],
     },
     {
+      label: 'Find',
+      submenu: [
+        {
+          label: 'Search databases',
+          accelerator: 'Ctrl+.',
+          click: (item, win) => win.webContents.send('sqlectron:toggle-database-search'),
+        },
+        {
+          label: 'Search database objects',
+          accelerator: 'Shift+Ctrl+.',
+          click: (item, win) => win.webContents.send('sqlectron:toggle-database-objects-search'),
+        },
+      ],
+    },
+    {
       label: 'Help',
       submenu: [
         {
