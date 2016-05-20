@@ -6,11 +6,6 @@ const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
 
 
-const STYLE = {
-  item: { wordBreak: 'break-all', cursor: 'default' },
-};
-
-
 export default class DatabaseItem extends Component {
   static propTypes = {
     database: PropTypes.object.isRequired,
@@ -27,21 +22,23 @@ export default class DatabaseItem extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {};
-    this.contextMenu;
+    this.contextMenu = null;
   }
 
   // Context menu is built dinamically on click (if it does not exist), because building
   // menu onComponentDidMount or onComponentWillMount slows table listing when database
   // has a loads of tables, because menu will be created (unnecessarily) for every table shown
-  onContextMenu(e){
-    e.preventDefault();
-    if (!this.contextMenu){
+  onContextMenu(event) {
+    event.preventDefault();
+
+    if (!this.contextMenu) {
       this.buildContextMenu();
     }
-    this.contextMenu.popup(e.clientX, e.clientY);
+
+    this.contextMenu.popup(event.clientX, event.clientY);
   }
 
-  buildContextMenu(){
+  buildContextMenu() {
     const {
       database,
       item,
@@ -49,24 +46,27 @@ export default class DatabaseItem extends Component {
       onExecuteDefaultQuery,
       onGetSQLScript,
     } = this.props;
+
     const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
 
     this.contextMenu = new Menu();
     if (dbObjectType === 'Table' || dbObjectType === 'View') {
       this.contextMenu.append(new MenuItem({
         label: 'Execute default query',
-        click: onExecuteDefaultQuery.bind(this, database, item)
+        click: onExecuteDefaultQuery.bind(this, database, item),
       }));
     }
+
     this.contextMenu.append(new MenuItem({
       label: 'CREATE script',
-      click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType)
+      click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
     }));
+
     if (dbObjectType === 'Table') {
-      actionTypes.map((actionType, index) => {
+      actionTypes.map(actionType => {
         this.contextMenu.append(new MenuItem({
           label: `${actionType} script`,
-          click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType)
+          click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
         }));
       });
     }
