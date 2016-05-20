@@ -47,25 +47,33 @@ export default class DatabaseItem extends Component {
       onGetSQLScript,
     } = this.props;
 
-    const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
-
     this.contextMenu = new Menu();
     if (dbObjectType === 'Table' || dbObjectType === 'View') {
       this.contextMenu.append(new MenuItem({
-        label: 'Execute default query',
+        label: 'Select Rows (with limit)',
         click: onExecuteDefaultQuery.bind(this, database, item),
       }));
     }
 
+    this.contextMenu.append(new MenuItem({ type: 'separator' }));
+
     this.contextMenu.append(new MenuItem({
-      label: 'CREATE script',
+      label: 'Create Statement',
       click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
     }));
 
     if (dbObjectType === 'Table') {
+      const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
+      const labelsByTypes = {
+        SELECT: 'Select Statement',
+        INSERT: 'Insert Statement',
+        UPDATE: 'Update Statement',
+        DELETE: 'Delete Statement',
+      };
+
       actionTypes.map(actionType => {
         this.contextMenu.append(new MenuItem({
-          label: `${actionType} script`,
+          label: labelsByTypes[actionType],
           click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
         }));
       });
