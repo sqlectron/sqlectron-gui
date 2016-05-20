@@ -4,7 +4,6 @@ import DatabaseListItem from './database-list-item.jsx';
 
 export default class DatabaseList extends Component {
   static propTypes = {
-    currentDatabase: PropTypes.string.isRequired,
     databases: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
