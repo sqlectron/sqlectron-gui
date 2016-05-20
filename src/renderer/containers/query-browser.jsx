@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
-import { fetchDatabasesIfNeeded } from '../actions/databases';
+import { refreshDatabase, fetchDatabasesIfNeeded } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
@@ -145,6 +145,11 @@ class QueryBrowserContainer extends Component {
   onReConnectionClick() {
     const { dispatch, params } = this.props;
     dispatch(ConnActions.reconnect(params.id, this.getCurrentQuery().database));
+  }
+
+  onRefreshDatabase(database) {
+    const { dispatch } = this.props;
+    dispatch(refreshDatabase(database));
   }
 
   getCurrentQuery() {
@@ -323,7 +328,8 @@ class QueryBrowserContainer extends Component {
                   onSelectDatabase={::this.onSelectDatabase}
                   onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
                   onSelectTable={::this.onSelectTable}
-                  onGetSQLScript={::this.onGetSQLScript} />
+                  onGetSQLScript={::this.onGetSQLScript}
+                  onRefreshDatabase={::this.onRefreshDatabase} />
               </div>
             </ResizableBox>
           </div>
