@@ -54,8 +54,8 @@ export default class QueryResultTable extends Component {
     return rowsValuesToString(rows).map((row, index) => {
       return (
         <tr key={index}>
-          {fields.map(({ name }) => {
-            return <td key={name}>{row[name]}</td>;
+          {fields.map(({ name }, idx) => {
+            return <td key={`${name}_${idx}`}>{row[name]}</td>;
           })}
         </tr>
       );
@@ -77,8 +77,8 @@ export default class QueryResultTable extends Component {
       <table className="query-result-table ui selectable small celled table">
         <thead>
           <tr>
-            {fields.map(({ name }) => (
-              <th key={name}>{name}</th>
+            {fields.map(({ name }, index) => (
+              <th key={`${name}_${index}`}>{name}</th>
             ))}
           </tr>
         </thead>
