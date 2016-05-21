@@ -166,6 +166,7 @@ class QueryBrowserContainer extends Component {
       'sqlectron:new-tab': () => this.newTab(),
       'sqlectron:close-tab': () => this.closeTab(),
       'sqlectron:save-query': () => this.saveQuery(),
+      'sqlectron:query-focus': () => this.focusQuery(),
       'sqlectron:toggle-database-search': () => this.toggleDatabaseSearch(),
       'sqlectron:toggle-database-objects-search': () => this.toggleDatabaseObjectsSearch(),
     });
@@ -195,6 +196,15 @@ class QueryBrowserContainer extends Component {
   filterDatabases(name, databases) {
     const regex = RegExp(name, 'i');
     return databases.filter(db => regex.test(db.name));
+  }
+
+  focusQuery() {
+    const currentQuery = this.getCurrentQuery();
+    if (!currentQuery) {
+      return;
+    }
+
+    this.refs[`queryBox_${currentQuery.id}`].focus();
   }
 
   toggleDatabaseSearch() {
@@ -251,6 +261,7 @@ class QueryBrowserContainer extends Component {
       return (
         <TabPanel key={queryId}>
           <Query
+            ref={`queryBox_${queryId}`}
             client={connections.server.client}
             query={query}
             enabledAutoComplete={queries.enabledAutoComplete}

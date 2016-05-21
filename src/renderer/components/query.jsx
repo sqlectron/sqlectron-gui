@@ -210,6 +210,10 @@ export default class Query extends Component {
     ];
   }
 
+  focus() {
+    this.refs.queryBoxTextarea.editor.focus();
+  }
+
   render() {
     const { client, query, onCopyToClipboardClick, onSQLChange } = this.props;
     const infos = INFOS[client];
