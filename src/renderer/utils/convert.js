@@ -20,7 +20,7 @@ export function valueToString(value) {
     return value.toString();
   }
   if (!value) {
-    return value;
+    return String(value);
   }
   if (value.toISOString) {
     return value.toISOString();
@@ -28,5 +28,5 @@ export function valueToString(value) {
   if (typeof value === 'object') {
     return JSON.stringify(value);
   }
-  return value;
+  return String(value);
 }
