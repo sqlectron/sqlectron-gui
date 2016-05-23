@@ -13,6 +13,7 @@ import { ResizableBox } from 'react-resizable';
 require('./react-resizable.css');
 
 
+const QUERY_EDITOR_HEIGTH = 200;
 const langTools = ace.acequire('ace/ext/language_tools');
 
 
@@ -35,6 +36,7 @@ const EVENT_KEYS = {
 
 export default class Query extends Component {
   static propTypes = {
+    widthOffset: PropTypes.number.isRequired,
     client: PropTypes.string.isRequired,
     query: PropTypes.object.isRequired,
     enabledAutoComplete: PropTypes.bool.isRequired,
@@ -50,6 +52,11 @@ export default class Query extends Component {
     onCopyToClipboardClick: PropTypes.func.isRequired,
     onSQLChange: PropTypes.func.isRequired,
     onSelectionChange: PropTypes.func.isRequired,
+  }
+
+  constructor(props, context) {
+    super(props, context);
+    this.state = {};
   }
 
   componentDidMount() {
@@ -215,7 +222,7 @@ export default class Query extends Component {
   }
 
   render() {
-    const { client, query, onCopyToClipboardClick, onSQLChange } = this.props;
+    const { widthOffset, client, query, onCopyToClipboardClick, onSQLChange } = this.props;
     const infos = INFOS[client];
 
     return (
@@ -223,7 +230,7 @@ export default class Query extends Component {
         <div>
           <ResizableBox
             className="react-resizable react-resizable-se-resize ui segment"
-            height={200}
+            height={QUERY_EDITOR_HEIGTH}
             width={500}
             onResize={::this.onQueryBoxResize}>
             <AceEditor
@@ -270,6 +277,8 @@ export default class Query extends Component {
           </div>
         </div>
         <QueryResult
+          widthOffset={widthOffset}
+          heigthOffset={QUERY_EDITOR_HEIGTH}
           onCopyToClipboardClick={onCopyToClipboardClick}
           resultItemsPerPage={query.resultItemsPerPage}
           copied={query.copied}
