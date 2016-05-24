@@ -25,7 +25,7 @@ import { ResizableBox } from 'react-resizable';
 require('../components/react-resizable.css');
 require('../components/react-tabs.scss');
 
-
+const SIDEBAR_WIDTH = 235;
 const STYLES = {
   wrapper: {},
   container: { display: 'flex', height: '100vh', boxSizing: 'border-box', padding: '50px 10px 40px 10px' },
@@ -67,7 +67,9 @@ class QueryBrowserContainer extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {};
+    this.state = {
+      sideBarWidth: SIDEBAR_WIDTH,
+    };
     this.menuHandler = new MenuHandler();
   }
 
@@ -274,6 +276,7 @@ class QueryBrowserContainer extends Component {
             views={views.viewsByDatabase[query.database]}
             functions={routines.functionsByDatabase[query.database]}
             procedures={routines.proceduresByDatabase[query.database]}
+            widthOffset={this.state.sideBarWidth}
             onExecQueryClick={::this.handleExecuteQuery}
             onCopyToClipboardClick={::this.copyToClipboard}
             onSQLChange={::this.onSQLChange}
@@ -328,9 +331,10 @@ class QueryBrowserContainer extends Component {
         <div style={STYLES.container}>
           <div style={STYLES.sidebar}>
             <ResizableBox className="react-resizable react-resizable-ew-resize"
-              width={235}
+              onResizeStop={(event, { size }) => this.setState({ sideBarWidth: size.width })}
+              width={SIDEBAR_WIDTH}
               height={NaN}
-              minConstraints={[235, 300]}
+              minConstraints={[SIDEBAR_WIDTH, 300]}
               maxConstraints={[750, 10000]}>
               <div className="ui vertical menu" style={STYLES.resizeable}>
                 <div className="item active" style={{textAlign: 'center'}}>

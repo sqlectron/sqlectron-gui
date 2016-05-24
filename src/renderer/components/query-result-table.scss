@@ -1,29 +1,9 @@
-.query-result-table {
-  .pagination {
-    text-align: center !important;
+.public_fixedDataTableCell_cellContent {
+  line-height: 15px;
+  overflow: hidden;
+  white-space: nowrap;
+}
 
-    ul, li {
-      display: inline-block;
-    }
-
-    li {
-      padding: 0 0.5em;
-
-      &.active {
-        a {
-          color: #fff;
-          background: #1e70bf;
-          border-radius: 15px;
-          padding: 0.5em 0.80em;
-        }
-      }
-    }
-  }
-
-  td {
-    max-width: 220px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+.fixedDataTableCellGroupLayout_cellGroup .public_fixedDataTableCell_cellContent {
+  line-height: 20px;
 }

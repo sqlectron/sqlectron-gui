@@ -6,6 +6,8 @@ import QueryResultTable from './query-result-table.jsx';
 
 export default class QueryResult extends Component {
   static propTypes = {
+    widthOffset: PropTypes.number.isRequired,
+    heigthOffset: PropTypes.number.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
     resultItemsPerPage: PropTypes.number.isRequired,
     copied: PropTypes.bool,
@@ -38,7 +40,7 @@ export default class QueryResult extends Component {
     }
   }
 
-  renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries, command }) {
+  renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries, command, isMultipleResults }) {
     if (command !== 'SELECT') {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
@@ -49,9 +51,16 @@ export default class QueryResult extends Component {
       );
     }
 
+    let widthOffset = this.props.widthOffset;
+    if (isMultipleResults) {
+      widthOffset += 30; // padding of the query result box
+    }
+
     const tableResult = (
       <QueryResultTable
         key={queryIndex}
+        widthOffset={widthOffset}
+        heigthOffset={this.props.heigthOffset}
         resultItemsPerPage={this.props.resultItemsPerPage}
         copied={this.props.copied}
         fields={fields}
@@ -103,6 +112,7 @@ export default class QueryResult extends Component {
             ...result,
             totalQueries,
             queryIndex: idx,
+            isMultipleResults: results.length > 1,
           }))
         }
       </div>
