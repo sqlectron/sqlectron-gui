@@ -60,6 +60,19 @@ export default class ServerModalForm extends Component {
       onChecked: () => this.setState({ ssl: true }),
       onUnchecked: () => this.setState({ ssl: false }),
     });
+
+    $(this.refs.privateKeyWithPassphrase).checkbox({
+      onChecked: () => {
+        const ssh = this.state.ssh ? { ...this.state.ssh } : {};
+        ssh.privateKeyWithPassphrase = true;
+        this.setState({ ssh });
+      },
+      onUnchecked: () => {
+        const ssh = this.state.ssh ? { ...this.state.ssh } : {};
+        ssh.privateKeyWithPassphrase = false;
+        this.setState({ ssh });
+      },
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -124,6 +137,7 @@ export default class ServerModalForm extends Component {
       user: ssh.user,
       password: ssh.password && ssh.password.length ? ssh.password : null,
       privateKey: ssh.privateKey && ssh.privateKey.length ? ssh.privateKey : null,
+      privateKeyWithPassphrase: !!ssh.privateKeyWithPassphrase,
     };
 
     return server;
@@ -341,7 +355,7 @@ export default class ServerModalForm extends Component {
                 </div>
               </div>
               <div className="fields">
-                <div className={`five wide field ${this.highlightError('ssh.user')}`}>
+                <div className={`four wide field ${this.highlightError('ssh.user')}`}>
                   <label>User</label>
                   <input type="text"
                     name="ssh.user"
@@ -351,7 +365,7 @@ export default class ServerModalForm extends Component {
                     value={ssh.user}
                     onChange={::this.handleChange} />
                 </div>
-                <div className={`five wide field ${this.highlightError('ssh.password')}`}>
+                <div className={`four wide field ${this.highlightError('ssh.password')}`}>
                   <label>Password</label>
                   <input type="password"
                     name="ssh.password"
@@ -361,7 +375,7 @@ export default class ServerModalForm extends Component {
                     value={ssh.password}
                     onChange={::this.handleChange} />
                 </div>
-                <div className={`six wide field ${this.highlightError('ssh.privateKey')}`}>
+                <div className={`five wide field ${this.highlightError('ssh.privateKey')}`}>
                   <label>Private Key</label>
                   <div className="ui action input">
                     <input type="text"
@@ -380,6 +394,17 @@ export default class ServerModalForm extends Component {
                          onChange={::this.handleChange}
                          style={{display: 'none'}} />
                     </label>
+                  </div>
+                </div>
+                <div className="three wide field" style={{paddingTop: '2em'}}>
+                  <div className="ui toggle checkbox" ref="privateKeyWithPassphrase">
+                    <input type="checkbox"
+                      name="privateKeyWithPassphrase"
+                      tabIndex="0"
+                      className="hidden"
+                      disabled={(!isSSHChecked || ssh.password)}
+                      defaultChecked={this.state.ssh && this.state.ssh.privateKeyWithPassphrase} />
+                    <label>Passphrase</label>
                   </div>
                 </div>
               </div>
