@@ -18,6 +18,7 @@ import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 import Query from '../components/query.jsx';
 import Loader from '../components/loader.jsx';
+import PromptModal from '../components/prompt-modal.jsx';
 import MenuHandler from '../menu-handler';
 
 
@@ -85,7 +86,7 @@ class QueryBrowserContainer extends Component {
   componentWillReceiveProps (nextProps) {
     const { dispatch, history, connections } = nextProps;
 
-    if (connections.error || (!connections.connecting && !connections.server)) {
+    if (connections.error || (!connections.connecting && !connections.server && !connections.waitingSSHPassword)) {
       history.pushState(null, '/');
       return;
     }
@@ -116,6 +117,16 @@ class QueryBrowserContainer extends Component {
 
   onExecuteDefaultQuery(database, table) {
     this.props.dispatch(QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name));
+  }
+
+  onPromptCancelClick() {
+    const { dispatch } = this.props;
+    dispatch(ConnActions.disconnect());
+  }
+
+  onPromptOKClick(password) {
+    const { dispatch, params } = this.props;
+    dispatch(ConnActions.connect(params.id, null, false, password));
   }
 
   onSelectTable(database, table) {
@@ -306,6 +317,17 @@ class QueryBrowserContainer extends Component {
       views,
       routines,
     } = this.props;
+
+    if (connections.waitingPrivateKeyPassphrase) {
+      return (
+        <PromptModal
+          type="password"
+          title={`SSH Private Key Passphrase`}
+          message="Enter the private key passphrase:"
+          onCancelClick={::this.onPromptCancelClick}
+          onOKClick={::this.onPromptOKClick} />
+      );
+    }
 
     const isLoading = (!connections.connected);
     if (isLoading && (!connections.server || !this.getCurrentQuery())) {

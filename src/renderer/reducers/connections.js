@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   connected: false,
   connecting: false,
   server: null,
+  waitingPrivateKeyPassphrase: false,
   databases: [], // connected databases
 };
 
@@ -15,11 +16,15 @@ export default function(state = INITIAL_STATE, action) {
   case types.CONNECTION_REQUEST: {
     return { ...INITIAL_STATE, server: action.server };
   }
+  case types.CONNECTION_REQUIRE_SSH_PASSWORD: {
+    return { ...state, waitingPrivateKeyPassphrase: true };
+  }
   case types.CONNECTION_SUCCESS: {
     return {
       ...state,
       connected: true,
       connecting: false,
+      waitingPrivateKeyPassphrase: false,
       databases: [
         ...state.databases,
         action.database,
@@ -27,7 +32,13 @@ export default function(state = INITIAL_STATE, action) {
     };
   }
   case types.CONNECTION_FAILURE: {
-    return { ...state, connected: false, connecting: false, error: action.error };
+    return {
+      ...state,
+      connected: false,
+      connecting: false,
+      waitingPrivateKeyPassphrase: false,
+      error: action.error,
+    };
   }
   case types.TEST_CONNECTION_REQUEST: {
     const { server } = action;
