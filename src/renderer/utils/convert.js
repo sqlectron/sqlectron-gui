@@ -16,6 +16,9 @@ export function rowValuesToString(row) {
 
 
 export function valueToString(value) {
+  if (value === null) {
+    return 'NULL';
+  }
   if (typeof value === 'boolean') {
     return value.toString();
   }
