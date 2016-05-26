@@ -1,4 +1,5 @@
 import { debounce } from 'lodash';
+import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { Table, ColumnGroup, Column, Cell } from 'fixed-data-table';
@@ -10,11 +11,21 @@ require('./query-result-table.scss');
 
 
 /* eslint react/no-multi-comp:0 */
-const TextCell = ({rowIndex, data, col, ...props}) => (
-  <Cell {...props}>
-    {valueToString(data[rowIndex][col])}
-  </Cell>
-);
+const TextCell = ({rowIndex, data, col, ...props}) => {
+  const value = data[rowIndex][col];
+  const className = classNames({
+    'table-cell-type-null': value === null,
+  });
+
+  return (
+    <Cell {...props}>
+      <span className={className}>
+        {valueToString(value)}
+      </span>
+    </Cell>
+  );
+};
+
 
 export default class QueryResultTable extends Component {
   static propTypes = {

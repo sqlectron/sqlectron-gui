@@ -46,7 +46,7 @@
     "babel-runtime": "^5.8.29",
     "brace": "^0.7.0",
     "breakpoint-sass": "^2.6.1",
-    "classnames": "^2.2.3",
+    "classnames": "^2.2.5",
     "cross-env": "^1.0.7",
     "css-loader": "^0.23.1",
     "csv-stringify": "0.0.8",
