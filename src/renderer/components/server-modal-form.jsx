@@ -84,16 +84,7 @@ export default class ServerModalForm extends Component {
   }
 
   onSaveClick() {
-    const data = {...this.state};
-    if (data.defaultPort) {
-      if (data.port === undefined) {
-        data.port = data.defaultPort;
-      }
-
-      delete data.defaultPort;
-    }
-
-    this.props.onSaveClick(this.mapStateToServer(data));
+    this.props.onSaveClick(this.mapStateToServer(this.state));
   }
 
   onRemoveCancelClick() {
@@ -122,7 +113,7 @@ export default class ServerModalForm extends Component {
       client: state.client,
       ssl: !!state.ssl,
       host: state.host && state.host.length ? state.host : null,
-      port: state.port,
+      port: state.port || state.defaultPort,
       socketPath: state.socketPath && state.socketPath.length ? state.socketPath : null,
       user: state.user,
       password: state.password,
