@@ -50,16 +50,14 @@ You can test it using your own database or use a [docker-compose](https://github
 
 ## Build
 
-Package the application using [electron-packager](https://github.com/maxogden/electron-packager) and [webpack](https://webpack.github.io/).
-
-```shell
-npm run build
-```
+1. `npm install`
+1. `npm run dist`
+1. The installer will be placed at `dist` folder.
 
 ### Building windows apps from non-windows platforms
 
 You will need follow [it](https://github.com/maxogden/electron-packager#building-windows-apps-from-non-windows-platforms) or build through the docker:
 
 ```shell
-docker-compose dist
+docker-compose run dist
 ```
