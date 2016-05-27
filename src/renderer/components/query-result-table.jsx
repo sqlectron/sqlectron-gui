@@ -120,7 +120,7 @@ export default class QueryResultTable extends Component {
   resolveCellWidth(fieldName, fields, rows) {
     const font = '14px \'Lato\', \'Helvetica Neue\', Arial, Helvetica, sans-serif';
     const numRowsToFindAverage = rows.length > 30 ? 30 : rows.length;
-    const maxLetters = 220;
+    const maxWidth = 220;
 
     const headerWidth = this.getTextWidth(fieldName, `bold ${font}`);
 
@@ -128,13 +128,16 @@ export default class QueryResultTable extends Component {
       .slice(0, numRowsToFindAverage)
       .map(row => {
         const value = valueToString(row[fieldName]);
-        const cellText = value.slice(0, maxLetters);
-        return this.getTextWidth(cellText, font);
+        return this.getTextWidth(value, font);
       })
       .reduce((prev, curr) => prev + curr, 0)
       / numRowsToFindAverage;
 
-    return headerWidth > averageRowsCellWidth ? headerWidth : averageRowsCellWidth;
+    if (headerWidth > averageRowsCellWidth) {
+      return headerWidth > maxWidth ? maxWidth : headerWidth;
+    }
+
+    return averageRowsCellWidth > maxWidth ? maxWidth : averageRowsCellWidth;
   }
 
   resize(nextProps) {
