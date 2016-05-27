@@ -14,7 +14,7 @@ require('./query-result-table.scss');
 const TextCell = ({rowIndex, data, col, ...props}) => {
   const value = data[rowIndex][col];
   const className = classNames({
-    'table-cell-type-null': value === null,
+    'ui mini grey label table-cell-type-null': value === null,
   });
 
   return (
