@@ -4,7 +4,7 @@ import * as types from '../actions/columns';
 
 
 const INITIAL_STATE = {
-  isFetching: false,
+  isFetching: {},
   didInvalidate: false,
   columnsByTable: {},
 };
@@ -18,12 +18,29 @@ export default function (state = INITIAL_STATE, action) {
       : state;
   }
   case types.FETCH_COLUMNS_REQUEST: {
-    return { ...state, isFetching: true, didInvalidate: false, error: null};
+    return {
+      ...state,
+      isFetching: {
+        ...state.isFetching,
+        [action.database]: {
+          ...state.isFetching[action.database],
+          [action.table]: true,
+        },
+      },
+      didInvalidate: false,
+      error: null,
+    };
   }
   case types.FETCH_COLUMNS_SUCCESS: {
     return {
       ...state,
-      isFetching: false,
+      isFetching: {
+        ...state.isFetching,
+        [action.database]: {
+          ...state.isFetching[action.database],
+          [action.table]: false,
+        },
+      },
       didInvalidate: false,
       columnsByTable: {
         ...state.columnsByTable,
@@ -41,7 +58,13 @@ export default function (state = INITIAL_STATE, action) {
   case types.FETCH_COLUMNS_FAILURE: {
     return {
       ...state,
-      isFetching: false,
+      isFetching: {
+        ...state.isFetching,
+        [action.database]: {
+          ...state.isFetching[action.database],
+          [action.table]: false,
+        },
+      },
       didInvalidate: true,
       error: action.error,
     };
