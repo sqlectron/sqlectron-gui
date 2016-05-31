@@ -35,15 +35,16 @@ export default class DatabaseDiagramModal extends Component {
     this.showDiagramIfNeeded(nextProps);
   }
 
-  areColumnsLoaded(tables, columnsByTable) {
-    return (tables
+  areColumnsLoaded(tables, views, columnsByTable) {
+    const tablesAndViews = tables.concat(views);
+    return (tablesAndViews
       && columnsByTable
-      && tables.length === Object.keys(columnsByTable).length
+      && tablesAndViews.length === Object.keys(columnsByTable).length
     );
   }
 
   showDiagramIfNeeded(props) {
-    if (this.areColumnsLoaded(props.tables, props.columnsByTable)) {
+    if (this.areColumnsLoaded(props.tables, props.views, props.columnsByTable)) {
       this.setState({ showDiagramModal: true });
       $(this.refs.diagramModal).modal('show');
     }

@@ -156,9 +156,10 @@ class QueryBrowserContainer extends Component {
   }
 
   onShowDatabaseDiagram(database) {
-    const { dispatch, tables } = this.props;
-    tables.itemsByDatabase[database.name].map((table) => {
-      dispatch(fetchTableColumnsIfNeeded(database.name, table.name));
+    const { dispatch, tables, views } = this.props;
+    const tablesAndViews = tables.itemsByDatabase[database.name].concat(views.viewsByDatabase[database.name]);
+    tablesAndViews.map((item) => {
+      dispatch(fetchTableColumnsIfNeeded(database.name, item.name));
     });
     dispatch(showDatabaseDiagram(database.name));
   }
