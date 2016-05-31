@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
-import { refreshDatabase, fetchDatabasesIfNeeded } from '../actions/databases';
+import { refreshDatabase, fetchDatabasesIfNeeded, showDatabaseDiagram, closeDatabaseDiagram } from '../actions/databases';
 import { fetchTablesIfNeeded } from '../actions/tables';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
@@ -14,6 +14,7 @@ import { fetchRoutinesIfNeeded } from '../actions/routines';
 import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
+import DatabaseDiagramModal from '../components/database-diagram-modal.jsx';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 import Query from '../components/query.jsx';
@@ -154,6 +155,14 @@ class QueryBrowserContainer extends Component {
     dispatch(refreshDatabase(database));
   }
 
+  onShowDatabaseDiagram(database) {
+    const { dispatch, tables } = this.props;
+    tables.itemsByDatabase[database.name].map((table) => {
+      dispatch(fetchTableColumnsIfNeeded(database.name, table.name));
+    });
+    dispatch(showDatabaseDiagram(database.name));
+  }
+
   getCurrentQuery() {
     return this.props.queries.queriesById[this.props.queries.currentQueryId];
   }
@@ -228,6 +237,29 @@ class QueryBrowserContainer extends Component {
 
   closeTab() {
     this.removeQuery(this.props.queries.currentQueryId);
+  }
+
+  onCloseDiagramModal(database){
+    this.props.dispatch(closeDatabaseDiagram());
+  }
+
+  renderDatabaseDiagramModal() {
+    const {
+      databases,
+      tables,
+      columns,
+      views,
+    } = this.props;
+
+    const selectedDB = databases.diagramDatabase;
+
+    return (
+      <DatabaseDiagramModal
+        tables={tables.itemsByDatabase[selectedDB]}
+        views={views.viewsByDatabase[selectedDB]}
+        columnsByTable={columns.columnsByTable[selectedDB]}
+        onClose={::this.onCloseDiagramModal} />
+    );
   }
 
   renderTabQueries() {
@@ -361,13 +393,15 @@ class QueryBrowserContainer extends Component {
                   onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
                   onSelectTable={::this.onSelectTable}
                   onGetSQLScript={::this.onGetSQLScript}
-                  onRefreshDatabase={::this.onRefreshDatabase} />
+                  onRefreshDatabase={::this.onRefreshDatabase}
+                  onShowDatabaseDiagram={::this.onShowDatabaseDiagram} />
               </div>
             </ResizableBox>
           </div>
           <div style={STYLES.content}>
               {this.renderTabQueries()}
           </div>
+          {this.props.databases.showingDiagram && this.renderDatabaseDiagramModal()}
         </div>
         <div style={STYLES.footer}>
           <Footer status={status} />
