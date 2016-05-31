@@ -49,7 +49,7 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         },
         {
           label: 'Focus Query Editor',
-          accelerator: 'Shift+Ctrl+,',
+          accelerator: 'Shift+Ctrl+0',
           click: (item, win) => win.webContents.send('sqlectron:query-focus'),
         },
       ],
@@ -112,12 +112,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
       submenu: [
         {
           label: 'Search databases',
-          accelerator: 'Ctrl+.',
+          accelerator: 'Shift+Ctrl+9',
           click: (item, win) => win.webContents.send('sqlectron:toggle-database-search'),
         },
         {
           label: 'Search database objects',
-          accelerator: 'Shift+Ctrl+.',
+          accelerator: 'Ctrl+9',
           click: (item, win) => win.webContents.send('sqlectron:toggle-database-objects-search'),
         },
       ],
