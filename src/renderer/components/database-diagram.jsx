@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import joint from 'jointjs';
-import debounce from 'lodash';
 
 require('./jointjs-diagram-table.js');
 require('./jointjs-diagram-table-cell.js');
@@ -12,6 +11,7 @@ export default class DatabaseDiagram extends Component {
     tables: PropTypes.array,
     views: PropTypes.array,
     columnsByTable: PropTypes.object,
+    links: PropTypes.object,
   }
 
   constructor(props) {
@@ -20,7 +20,7 @@ export default class DatabaseDiagram extends Component {
   }
 
   componentDidMount() {
-    const { tables, views, columnsByTable } = this.props;
+    const { tables, views, columnsByTable, links } = this.props;
 
     this.paper = new joint.dia.Paper({
       el: $(this.refs.diagram),
@@ -30,33 +30,37 @@ export default class DatabaseDiagram extends Component {
       gridSize: 1,
     });
 
-    let tableShapes = [],
-        tableCells = [],
-        tableLinks = [];
+    const tableShapes = [];
+    const tableCells = [];
+    const tableLinks = [];
 
-    /* Tables & views */
     const inTables = tables.concat(views);
+
     try {
+      let currentTable;
+      let newTabCell;
+      let newLink;
+
+      /* Tables & views */
       inTables.map((table, index) => {
         tableShapes.push(new joint.shapes.sqlectron.table({
-            position: {
-              x: 100 + (index % 6) * 100,
-              y: 30 + (index % 4) * 100,
-            },
-            size: {
-              width: 120,
-              height: (columnsByTable[table.name].length + 1.5) * 20,
-            },
-            name: `${table.name}`,
+          position: {
+            x: 100 + (index % 6) * 100,
+            y: 30 + (index % 4) * 100,
+          },
+          size: {
+            width: 120,
+            height: (columnsByTable[table.name].length + 1.5) * 20,
+          },
+          name: `${table.name}`,
         }));
-        let currentTable = tableShapes[index];
-        let newTabCell;
+        currentTable = tableShapes[index];
 
-        columnsByTable[table.name].map((column, index) => {
+        columnsByTable[table.name].map((column, idx) => {
           newTabCell = new joint.shapes.sqlectron.tableCell({
             position: {
               x: (currentTable.position().x),
-              y: (currentTable.position().y + (index + 1) * 20)
+              y: (currentTable.position().y + (idx + 1) * 20),
             },
             size: {
               width: 60,
@@ -68,29 +72,26 @@ export default class DatabaseDiagram extends Component {
           tableCells.push(newTabCell);
         });
       });
+
+      /* Links */
+      let targetIndex;
+
+      tables.map((table, index) => {
+        currentTable = tableShapes[index];
+
+        links[table.name].map((target) => {
+          targetIndex = inTables.findIndex((t) => t.name === target.linksTo);
+          newLink = new joint.dia.Link({
+            source: { id: currentTable.id },
+            target: { id: tableShapes[targetIndex].id },
+          });
+          newLink.attr({'.marker-target': { fill: 'yellow', d: 'M 10 0 L 0 5 L 10 10 z' }});
+          tableLinks.push(newLink);
+        });
+      });
     } catch (e) {
       console.log(e);
     }
-
-    /* TODO: Links
-
-    Ex:
-
-    inTables.map((table, index) => {
-      if (!table.linksTo){
-        return;
-      }
-
-      let targetIndex;
-      table.linksTo.map(target => {
-        targetIndex = inTables.findIndex((table) => table.name === target);
-        tableLinks.push(new joint.dia.Link({
-          source: { id: tableShapes[index].id },
-          target: { id: tableShapes[targetIndex].id }
-        }));
-      });
-    });
-    */
 
     /* Put everything on graph */
     this.graph.addCells(tableShapes.concat(tableCells, tableLinks));

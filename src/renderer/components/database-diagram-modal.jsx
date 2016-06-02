@@ -7,6 +7,7 @@ export default class DatabaseDiagramModal extends Component {
     tables: PropTypes.array,
     views: PropTypes.array,
     columnsByTable: PropTypes.object,
+    references: PropTypes.object,
     onClose: PropTypes.func.isRequired,
   }
 
@@ -35,29 +36,34 @@ export default class DatabaseDiagramModal extends Component {
     this.showDiagramIfNeeded(nextProps);
   }
 
-  areColumnsLoaded(tables, views, columnsByTable) {
+  isDataLoaded(props) {
+    const { tables, views, columnsByTable, references } = props;
     const tablesAndViews = tables.concat(views);
+
     return (tablesAndViews
       && columnsByTable
+      && references
       && tablesAndViews.length === Object.keys(columnsByTable).length
+      && tables.length === Object.keys(references).length
     );
   }
 
   showDiagramIfNeeded(props) {
-    if (this.areColumnsLoaded(props.tables, props.views, props.columnsByTable)) {
+    if (this.isDataLoaded(props)) {
       this.setState({ showDiagramModal: true });
       $(this.refs.diagramModal).modal('show');
     }
   }
 
   renderDiagram() {
-    const { tables, views, columnsByTable } = this.props;
+    const { tables, views, columnsByTable, references } = this.props;
 
     return (
       <DatabaseDiagram
         tables={tables}
         views={views}
-        columnsByTable={columnsByTable} />
+        columnsByTable={columnsByTable}
+        links={references} />
     );
   }
 

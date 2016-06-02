@@ -12,6 +12,7 @@ import { fetchTableTriggersIfNeeded } from '../actions/triggers';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
+import { fetchTableReferencesIfNeeded } from '../actions/references';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import DatabaseDiagramModal from '../components/database-diagram-modal.jsx';
@@ -54,6 +55,7 @@ class QueryBrowserContainer extends Component {
     routines: PropTypes.object.isRequired,
     queries: PropTypes.object.isRequired,
     sqlscripts: PropTypes.object.isRequired,
+    references: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -161,7 +163,14 @@ class QueryBrowserContainer extends Component {
     tablesAndViews.map((item) => {
       dispatch(fetchTableColumnsIfNeeded(database.name, item.name));
     });
+    tables.itemsByDatabase[database.name].map((table) => {
+      dispatch(fetchTableReferencesIfNeeded(database.name, table.name));
+    });
     dispatch(showDatabaseDiagram(database.name));
+  }
+
+  onCloseDiagramModal() {
+    this.props.dispatch(closeDatabaseDiagram());
   }
 
   getCurrentQuery() {
@@ -240,16 +249,13 @@ class QueryBrowserContainer extends Component {
     this.removeQuery(this.props.queries.currentQueryId);
   }
 
-  onCloseDiagramModal(database){
-    this.props.dispatch(closeDatabaseDiagram());
-  }
-
   renderDatabaseDiagramModal() {
     const {
       databases,
       tables,
       columns,
       views,
+      references,
     } = this.props;
 
     const selectedDB = databases.diagramDatabase;
@@ -259,6 +265,7 @@ class QueryBrowserContainer extends Component {
         tables={tables.itemsByDatabase[selectedDB]}
         views={views.viewsByDatabase[selectedDB]}
         columnsByTable={columns.columnsByTable[selectedDB]}
+        references={references.referencesByTable[selectedDB]}
         onClose={::this.onCloseDiagramModal} />
     );
   }
@@ -414,7 +421,19 @@ class QueryBrowserContainer extends Component {
 
 
 function mapStateToProps (state) {
-  const { connections, databases, tables, columns, triggers, views, routines, queries, sqlscripts, status } = state;
+  const {
+    connections,
+    databases,
+    tables,
+    columns,
+    triggers,
+    views,
+    routines,
+    queries,
+    sqlscripts,
+    references,
+    status,
+  } = state;
 
   return {
     connections,
@@ -426,6 +445,7 @@ function mapStateToProps (state) {
     routines,
     queries,
     sqlscripts,
+    references,
     status,
   };
 }
