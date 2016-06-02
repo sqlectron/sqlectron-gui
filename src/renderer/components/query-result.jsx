@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Loader from './loader.jsx';
 import Message from './message.jsx';
 import QueryResultTable from './query-result-table.jsx';
-
+import QueryResultTableVirtualized from './query-result-table-virtualized.jsx';
 
 export default class QueryResult extends Component {
   static propTypes = {
@@ -55,9 +55,9 @@ export default class QueryResult extends Component {
     if (isMultipleResults) {
       widthOffset += 30; // padding of the query result box
     }
-
+    
     const tableResult = (
-      <QueryResultTable
+      <QueryResultTableVirtualized
         key={queryIndex}
         widthOffset={widthOffset}
         heigthOffset={this.props.heigthOffset}

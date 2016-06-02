@@ -40,3 +40,25 @@ span.list-item {
 span.clickable {
   cursor: pointer;
 }
+
+.Grid__cell {
+  overflow: hidden;
+}
+
+.Grid__cell > .item {
+  border: 1px solid #eee;
+  padding-left: 3px;
+}
+
+.Grid.grid-header-row {
+  overflow: hidden;
+}
+
+.grid-header-row .Grid__cell > .item {
+  background-color: #e8e8e8;
+  border: 1px solid #dadada;
+}
+
+.Grid .table-cell-type-null {
+  vertical-align: text-bottom;
+}

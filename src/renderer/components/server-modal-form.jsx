@@ -61,7 +61,7 @@ export default class ServerModalForm extends Component {
       onUnchecked: () => this.setState({ ssl: false }),
     });
 
-    $(this.refs.privateKeyWithPassphrase).checkbox({
+    $(this.refs && this.refs.privateKeyWithPassphrase).checkbox({
       onChecked: () => {
         const ssh = this.state.ssh ? { ...this.state.ssh } : {};
         ssh.privateKeyWithPassphrase = true;

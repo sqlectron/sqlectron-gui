@@ -84,7 +84,7 @@ function shouldUpdateQuery (query, selectedQuery, state) {
   if (!currentQuery) return true;
   if (currentQuery.isExecuting) return false;
   if (query === currentQuery.query
-      && selectedQuery === currentQuery.selectedQuery) {
+      && ( selectedQuery !== undefined && selectedQuery === currentQuery.selectedQuery ) ) {
     return false;
   }
 
