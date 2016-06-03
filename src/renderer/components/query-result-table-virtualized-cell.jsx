@@ -55,7 +55,9 @@ export default class TableCell extends Component {
       'ui mini grey label table-cell-type-null': value === null,
     });
 
-    return (<div className="item" onContextMenu={::this.onContextMenu}>{value===null?<span className={className}>NULL</span>:valueToString(value)}</div>);
+    return (<div className="item" onContextMenu={::this.onContextMenu}>
+          {value===null?<span className={className}>NULL</span>:valueToString(value)}
+        </div>);
 
   }
 }
