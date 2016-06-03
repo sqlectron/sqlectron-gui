@@ -61,12 +61,12 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       dispatch({ type: CONNECTION_REQUEST, server, database, reconnecting, isServerConnection: !databaseName });
 
       if (!serverSession) {
-        if (server.ssh && server.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
+        if (server.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
           dispatch({ type: CONNECTION_REQUIRE_SSH_PASSWORD });
           return;
         }
 
-        if (server.ssh && server.ssh.privateKeyWithPassphrase) {
+        if (server.ssh.privateKeyWithPassphrase) {
           server.ssh.passphrase = sshPassphrase;
         }
 
