@@ -85,8 +85,8 @@
     "spawn-auto-restart": "^2.0.1",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
-    "webpack": "1.12.14",
-    "webpack-dev-middleware": "^1.2.0",
+    "webpack": "^1.13.1",
+    "webpack-dev-middleware": "^1.6.1",
     "webpack-dev-server": "^1.14.1"
   }
 }
