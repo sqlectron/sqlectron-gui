@@ -98,7 +98,7 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Reload',
           accelerator: 'Ctrl+R',
-          click: (item, win) => win.reloadIgnoringCache(),
+          click: (item, win) => win.webContents.reloadIgnoringCache(),
         },
         {
           label: 'Toggle DevTools',
