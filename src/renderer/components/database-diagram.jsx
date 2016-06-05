@@ -9,7 +9,6 @@ require('jointjs/dist/joint.min.css');
 export default class DatabaseDiagram extends Component {
   static propTypes = {
     tables: PropTypes.array,
-    views: PropTypes.array,
     columnsByTable: PropTypes.object,
     links: PropTypes.object,
   }
@@ -20,7 +19,7 @@ export default class DatabaseDiagram extends Component {
   }
 
   componentDidMount() {
-    const { tables, views, columnsByTable, links } = this.props;
+    const { tables, columnsByTable, links } = this.props;
 
     this.paper = new joint.dia.Paper({
       el: $(this.refs.diagram),
@@ -34,15 +33,13 @@ export default class DatabaseDiagram extends Component {
     const tableCells = [];
     const tableLinks = [];
 
-    const inTables = tables.concat(views);
-
     try {
       let currentTable;
       let newTabCell;
       let newLink;
 
       /* Tables & views */
-      inTables.map((table, index) => {
+      tables.map((table, index) => {
         tableShapes.push(new joint.shapes.sqlectron.table({
           position: {
             x: 100 + (index % 6) * 100,
@@ -50,13 +47,13 @@ export default class DatabaseDiagram extends Component {
           },
           size: {
             width: 120,
-            height: (columnsByTable[table.name].length + 1.5) * 20,
+            height: (columnsByTable[table].length + 1.5) * 20,
           },
-          name: `${table.name}`,
+          name: `${table}`,
         }));
         currentTable = tableShapes[index];
 
-        columnsByTable[table.name].map((column, idx) => {
+        columnsByTable[table].map((column, idx) => {
           newTabCell = new joint.shapes.sqlectron.tableCell({
             position: {
               x: (currentTable.position().x),
@@ -79,14 +76,16 @@ export default class DatabaseDiagram extends Component {
       tables.map((table, index) => {
         currentTable = tableShapes[index];
 
-        links[table.name].map((target) => {
-          targetIndex = inTables.findIndex((t) => t.name === target.linksTo);
-          newLink = new joint.dia.Link({
-            source: { id: currentTable.id },
-            target: { id: tableShapes[targetIndex].id },
-          });
-          newLink.attr({'.marker-target': { fill: 'yellow', d: 'M 10 0 L 0 5 L 10 10 z' }});
-          tableLinks.push(newLink);
+        links[table].map((target) => {
+          targetIndex = tables.findIndex((t) => t === target.linksTo);
+          if (targetIndex !== -1) {
+            newLink = new joint.dia.Link({
+              source: { id: currentTable.id },
+              target: { id: tableShapes[targetIndex].id },
+            });
+            newLink.attr({'.marker-target': { fill: 'yellow', d: 'M 10 0 L 0 5 L 10 10 z' }});
+            tableLinks.push(newLink);
+          }
         });
       });
     } catch (e) {

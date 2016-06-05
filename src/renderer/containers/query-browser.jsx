@@ -6,7 +6,7 @@ import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
 import { refreshDatabase, fetchDatabasesIfNeeded, showDatabaseDiagram, closeDatabaseDiagram } from '../actions/databases';
-import { fetchTablesIfNeeded } from '../actions/tables';
+import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
 import { fetchViewsIfNeeded } from '../actions/views';
@@ -157,16 +157,25 @@ class QueryBrowserContainer extends Component {
     dispatch(refreshDatabase(database));
   }
 
-  onShowDatabaseDiagram(database) {
-    const { dispatch, tables, views } = this.props;
-    const tablesAndViews = tables.itemsByDatabase[database.name].concat(views.viewsByDatabase[database.name]);
-    tablesAndViews.map((item) => {
-      dispatch(fetchTableColumnsIfNeeded(database.name, item.name));
-    });
-    tables.itemsByDatabase[database.name].map((table) => {
-      dispatch(fetchTableReferencesIfNeeded(database.name, table.name));
-    });
+  onShowDiagramModal(database) {
+    const { dispatch } = this.props;
     dispatch(showDatabaseDiagram(database.name));
+  }
+
+  onShowDatabaseDiagram(database) {
+    const { dispatch } = this.props;
+    const selectedTables = [];
+
+    $(':checkbox:checked', 'div.ui.list').map((index, checkbox) => {
+      selectedTables.push(checkbox.id);
+    });
+
+    dispatch(selectTablesForDiagram(selectedTables));
+
+    selectedTables.map((item) => {
+      dispatch(fetchTableColumnsIfNeeded(database, item));
+      dispatch(fetchTableReferencesIfNeeded(database, item));
+    });
   }
 
   onCloseDiagramModal() {
@@ -262,10 +271,13 @@ class QueryBrowserContainer extends Component {
 
     return (
       <DatabaseDiagramModal
+        database={selectedDB}
         tables={tables.itemsByDatabase[selectedDB]}
+        selectedTables={tables.selectedTablesForDiagram}
         views={views.viewsByDatabase[selectedDB]}
         columnsByTable={columns.columnsByTable[selectedDB]}
         references={references.referencesByTable[selectedDB]}
+        onShowDatabaseDiagram={::this.onShowDatabaseDiagram}
         onClose={::this.onCloseDiagramModal} />
     );
   }
@@ -402,7 +414,7 @@ class QueryBrowserContainer extends Component {
                   onSelectTable={::this.onSelectTable}
                   onGetSQLScript={::this.onGetSQLScript}
                   onRefreshDatabase={::this.onRefreshDatabase}
-                  onShowDatabaseDiagram={::this.onShowDatabaseDiagram} />
+                  onShowDiagramModal={::this.onShowDiagramModal} />
               </div>
             </ResizableBox>
           </div>

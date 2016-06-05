@@ -17,7 +17,7 @@ export default class DatabaseList extends Component {
     onSelectTable: PropTypes.func.isRequired,
     onGetSQLScript: PropTypes.func.isRequired,
     onRefreshDatabase: PropTypes.func.isRequired,
-    onShowDatabaseDiagram: PropTypes.func.isRequired,
+    onShowDiagramModal: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -44,7 +44,7 @@ export default class DatabaseList extends Component {
       onSelectDatabase,
       onGetSQLScript,
       onRefreshDatabase,
-      onShowDatabaseDiagram,
+      onShowDiagramModal,
     } = this.props;
 
     if (isFetching) {
@@ -78,7 +78,7 @@ export default class DatabaseList extends Component {
             onSelectDatabase={onSelectDatabase}
             onGetSQLScript={onGetSQLScript}
             onRefreshDatabase={onRefreshDatabase}
-            onShowDatabaseDiagram={onShowDatabaseDiagram} />
+            onShowDiagramModal={onShowDiagramModal} />
         ))
       }
       </div>
