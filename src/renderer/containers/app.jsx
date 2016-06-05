@@ -22,11 +22,6 @@ export default class AppContainer extends Component {
     history: PropTypes.object.isRequired,
   };
 
-  componentDidMount() {
-    // wait a bit more until remove the splash screen
-    setTimeout(() => document.getElementById('loading').remove(), 2000);
-  }
-
   render() {
     const { children } = this.props;
 
