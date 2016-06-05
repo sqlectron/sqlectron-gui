@@ -4,8 +4,8 @@ platform:
   - x64
 
 cache:
-  - node_modules
-  - app\node_modules
+  - node_modules -> package.json
+  - app\node_modules -> package.json
   - '%APPDATA%\npm-cache'
   - '%USERPROFILE%\.electron'
 

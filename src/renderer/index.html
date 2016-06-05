@@ -121,8 +121,8 @@
       <div id="content"></div>
       <div id="loading-signal"></div>
       <div id="loading"></div>
-      {% if (o.htmlWebpackPlugin.options.hot) { %}
+      <% if (htmlWebpackPlugin.options.hot) { %>
       <script src="/webpack-dev-server.js"></script>
-      {% } %}
+      <% } %>
     </body>
 </html>

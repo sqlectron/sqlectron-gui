@@ -27,15 +27,18 @@ addons:
   apt:
     sources:
       - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.7
+      #- llvm-toolchain-precise-3.8
     packages:
       - libgnome-keyring-dev
       - icnsutils
-      - clang-3.7
+      #- clang-3.8
+      - clang
+      - graphicsmagick
 
 install:
+- clang --version
 - nvm install 6
-- npm install npm -g
+# - npm install npm -g
 - npm prune
 - npm install
 
