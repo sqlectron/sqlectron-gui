@@ -27,7 +27,11 @@
                 loadingInner.style.display = 'block';
 
                 setTimeout(function () {
-                  document.getElementById('loading').className = 'loading-hidden';
+                  loadingWrapper.className = 'loading-hidden';
+
+                  setTimeout(function () {
+                    loadingWrapper.remove();
+                  }, 500);
                 }, 4500);
 
                 document.getElementById('loading-signal').remove();
