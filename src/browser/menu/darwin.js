@@ -130,7 +130,7 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Reload',
           accelerator: 'Cmd+R',
-          click: (item, win) => win.reloadIgnoringCache(),
+          click: (item, win) => win.webContents.reloadIgnoringCache(),
         },
         {
           label: 'Toggle DevTools',

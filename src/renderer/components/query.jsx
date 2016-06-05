@@ -64,6 +64,10 @@ export default class Query extends Component {
       EVENT_KEYS.onSelectionChange,
       debounce(::this.onSelectionChange, 100),
     );
+
+    // init with the auto complete disabled
+    this.refs.queryBoxTextarea.editor.completers = [];
+    this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', false);
   }
 
   componentWillReceiveProps(nextProps) {

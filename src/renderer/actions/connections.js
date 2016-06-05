@@ -61,15 +61,16 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       dispatch({ type: CONNECTION_REQUEST, server, database, reconnecting, isServerConnection: !databaseName });
 
       if (!serverSession) {
-        if (server.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
-          dispatch({ type: CONNECTION_REQUIRE_SSH_PASSWORD });
-          return;
-        }
+        if (server.ssh) {
+          if (server.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
+            dispatch({ type: CONNECTION_REQUIRE_SSH_PASSWORD });
+            return;
+          }
 
-        if (server.ssh.privateKeyWithPassphrase) {
-          server.ssh.passphrase = sshPassphrase;
+          if (server.ssh.privateKeyWithPassphrase) {
+            server.ssh.passphrase = sshPassphrase;
+          }
         }
-
         serverSession = sqlectron.db.createServer(server);
       }
 
