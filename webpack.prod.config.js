@@ -87,7 +87,6 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/renderer/index.html',
-      inject: 'body',
     }),
     new webpack.ProvidePlugin({
       Radium: 'radium',
