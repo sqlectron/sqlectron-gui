@@ -1,12 +1,12 @@
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
-import * as types from '../actions/columns';
+import * as types from '../actions/references';
 
 
 const INITIAL_STATE = {
   isFetching: {},
   didInvalidate: false,
-  columnsByTable: {},
+  referencesByTable: {},
 };
 
 
@@ -17,7 +17,7 @@ export default function (state = INITIAL_STATE, action) {
       ? { ...INITIAL_STATE, didInvalidate: true }
       : state;
   }
-  case types.FETCH_COLUMNS_REQUEST: {
+  case types.FETCH_REFERENCES_REQUEST: {
     return {
       ...state,
       isFetching: {
@@ -31,7 +31,7 @@ export default function (state = INITIAL_STATE, action) {
       error: null,
     };
   }
-  case types.FETCH_COLUMNS_SUCCESS: {
+  case types.FETCH_REFERENCES_SUCCESS: {
     return {
       ...state,
       isFetching: {
@@ -42,20 +42,17 @@ export default function (state = INITIAL_STATE, action) {
         },
       },
       didInvalidate: false,
-      columnsByTable: {
-        ...state.columnsByTable,
+      referencesByTable: {
+        ...state.referencesByTable,
         [action.database]: {
-          ...state.columnsByTable[action.database],
-          [action.table]: action.columns.map(column => ({
-            name: column.columnName,
-            dataType: column.dataType,
-          })),
+          ...state.referencesByTable[action.database],
+          [action.table]: action.references.map(linksTo => ({ linksTo })),
         },
       },
       error: null,
     };
   }
-  case types.FETCH_COLUMNS_FAILURE: {
+  case types.FETCH_REFERENCES_FAILURE: {
     return {
       ...state,
       isFetching: {

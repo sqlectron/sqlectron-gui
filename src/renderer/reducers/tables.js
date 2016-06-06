@@ -8,6 +8,7 @@ const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
   itemsByDatabase: {},
+  selectedTablesForDiagram: [],
 };
 
 
@@ -20,6 +21,12 @@ export default function (state = INITIAL_STATE, action) {
     return action.isServerConnection
       ? { ...INITIAL_STATE, didInvalidate: true }
       : state;
+  }
+  case types.SELECT_TABLES_FOR_DIAGRAM: {
+    return {
+      ...state,
+      selectedTablesForDiagram: action.tables,
+    };
   }
   case types.FETCH_TABLES_REQUEST: {
     return { ...state, isFetching: true, didInvalidate: false, error: null };

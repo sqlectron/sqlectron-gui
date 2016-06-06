@@ -6,6 +6,8 @@ export const FETCH_DATABASES_REQUEST = 'FETCH_DATABASES_REQUEST';
 export const FETCH_DATABASES_SUCCESS = 'FETCH_DATABASES_SUCCESS';
 export const FETCH_DATABASES_FAILURE = 'FETCH_DATABASES_FAILURE';
 export const FILTER_DATABASES = 'FILTER_DATABASES';
+export const SHOW_DATABASE_DIAGRAM = 'SHOW_DATABASE_DIAGRAM';
+export const CLOSE_DATABASE_DIAGRAM = 'CLOSE_DATABASE_DIAGRAM';
 
 
 export function filterDatabases(name) {
@@ -15,6 +17,14 @@ export function filterDatabases(name) {
 
 export function refreshDatabase(name) {
   return { type: REFRESH_DATABASES, name };
+}
+
+export function showDatabaseDiagram(name) {
+  return { type: SHOW_DATABASE_DIAGRAM, name };
+}
+
+export function closeDatabaseDiagram() {
+  return { type: CLOSE_DATABASE_DIAGRAM };
 }
 
 

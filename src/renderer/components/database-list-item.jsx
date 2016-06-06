@@ -37,6 +37,7 @@ export default class DatabaseListItem extends Component {
     onSelectDatabase: PropTypes.func.isRequired,
     onGetSQLScript: PropTypes.func.isRequired,
     onRefreshDatabase: PropTypes.func.isRequired,
+    onShowDiagramModal: PropTypes.func.isRequired,
   }
 
   constructor(props, context) {
@@ -54,6 +55,10 @@ export default class DatabaseListItem extends Component {
     this.contextMenu.append(new MenuItem({
       label: 'Refresh Database',
       click: this.props.onRefreshDatabase.bind(this, nextProps.database),
+    }));
+    this.contextMenu.append(new MenuItem({
+      label: 'Show Database Diagram',
+      click: this.props.onShowDiagramModal.bind(this, nextProps.database),
     }));
   }
 

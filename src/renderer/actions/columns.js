@@ -18,7 +18,7 @@ export function fetchTableColumnsIfNeeded (database, table) {
 function shouldFetchTableColumns (state, database, table) {
   const columns = state.columns;
   if (!columns) return true;
-  if (columns.isFetching) return false;
+  if (columns.isFetching[database] && columns.isFetching[database][table]) return false;
   if (!columns.columnsByTable[database]) return true;
   if (!columns.columnsByTable[database][table]) return true;
   return columns.didInvalidate;

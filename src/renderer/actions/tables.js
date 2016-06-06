@@ -4,6 +4,12 @@ import { getCurrentDBConn } from './connections';
 export const FETCH_TABLES_REQUEST = 'FETCH_TABLES_REQUEST';
 export const FETCH_TABLES_SUCCESS = 'FETCH_TABLES_SUCCESS';
 export const FETCH_TABLES_FAILURE = 'FETCH_TABLES_FAILURE';
+export const SELECT_TABLES_FOR_DIAGRAM = 'SELECT_TABLES_FOR_DIAGRAM';
+
+
+export function selectTablesForDiagram(tables) {
+  return { type: SELECT_TABLES_FOR_DIAGRAM, tables };
+}
 
 
 export function fetchTablesIfNeeded (database) {

@@ -7,6 +7,8 @@ const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
   items: [],
+  showingDiagram: false,
+  diagramDatabase: null,
 };
 
 
@@ -38,6 +40,20 @@ export default function (state = INITIAL_STATE, action) {
       isFetching: false,
       didInvalidate: true,
       error: action.error,
+    };
+  }
+  case types.SHOW_DATABASE_DIAGRAM: {
+    return {
+      ...state,
+      showingDiagram: true,
+      diagramDatabase: action.name,
+    };
+  }
+  case types.CLOSE_DATABASE_DIAGRAM: {
+    return {
+      ...state,
+      showingDiagram: false,
+      diagramDatabase: null,
     };
   }
   case queryTypes.EXECUTE_QUERY_SUCCESS: {
