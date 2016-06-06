@@ -27,6 +27,7 @@ export default class DatabaseDiagram extends Component {
       height: 600,
       model: this.graph,
       gridSize: 1,
+      restrictTranslate: true,
     });
 
     const tableShapes = [];
