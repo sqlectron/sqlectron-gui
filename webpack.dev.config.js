@@ -2,7 +2,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-require('babel/polyfill');
+require('babel-polyfill');
 
 module.exports = {
   debug: true,
@@ -58,7 +58,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       hot: true,
       template: 'src/renderer/index.html',
-      inject: 'body',
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development'),

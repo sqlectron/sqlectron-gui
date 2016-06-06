@@ -2,19 +2,14 @@ import { debounce } from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { Table, ColumnGroup, Column, Cell } from 'fixed-data-table';
+import TableCell from './query-result-table-cell.jsx';
+import PreviewModal from './preview-modal.jsx';
 import { valueToString } from '../utils/convert';
 
 
 require('fixed-data-table/dist/fixed-data-table.css');
 require('./query-result-table.scss');
 
-
-/* eslint react/no-multi-comp:0 */
-const TextCell = ({rowIndex, data, col, ...props}) => (
-  <Cell {...props}>
-    {valueToString(data[rowIndex][col])}
-  </Cell>
-);
 
 export default class QueryResultTable extends Component {
   static propTypes = {
@@ -48,9 +43,9 @@ export default class QueryResultTable extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.resize(nextProps);
+
     if (nextProps.copied) {
       this.setState({ showCopied: true });
-      return;
     }
   }
 
@@ -73,6 +68,14 @@ export default class QueryResultTable extends Component {
         [columnKey]: newColumnWidth,
       },
     }));
+  }
+
+  onOpenPreviewClick(value) {
+    this.setState({ showPreview: true, valuePreview: value });
+  }
+
+  onClosePreviewClick() {
+    this.setState({ showPreview: false, valuePreview: null });
   }
 
   onResize() {
@@ -109,7 +112,7 @@ export default class QueryResultTable extends Component {
   resolveCellWidth(fieldName, fields, rows) {
     const font = '14px \'Lato\', \'Helvetica Neue\', Arial, Helvetica, sans-serif';
     const numRowsToFindAverage = rows.length > 30 ? 30 : rows.length;
-    const maxLetters = 220;
+    const maxWidth = 220;
 
     const headerWidth = this.getTextWidth(fieldName, `bold ${font}`);
 
@@ -117,13 +120,16 @@ export default class QueryResultTable extends Component {
       .slice(0, numRowsToFindAverage)
       .map(row => {
         const value = valueToString(row[fieldName]);
-        const cellText = value.slice(0, maxLetters);
-        return this.getTextWidth(cellText, font);
+        return this.getTextWidth(value, font);
       })
       .reduce((prev, curr) => prev + curr, 0)
       / numRowsToFindAverage;
 
-    return headerWidth > averageRowsCellWidth ? headerWidth : averageRowsCellWidth;
+    if (headerWidth > averageRowsCellWidth) {
+      return headerWidth > maxWidth ? maxWidth : headerWidth;
+    }
+
+    return averageRowsCellWidth > maxWidth ? maxWidth : averageRowsCellWidth;
   }
 
   resize(nextProps) {
@@ -195,7 +201,14 @@ export default class QueryResultTable extends Component {
           key={`${name}_${index}`}
           columnKey={name}
           header={<Cell>{name}</Cell>}
-          cell={<TextCell data={rows} col={name} />}
+          cell={
+            <TableCell
+              rowIndex={index}
+              data={rows}
+              col={name}
+              onOpenPreviewClick={::this.onOpenPreviewClick}
+            />
+          }
           width={columnWidths[name] || autoColumnWidths[index]}
           isResizable
         />
@@ -212,22 +225,35 @@ export default class QueryResultTable extends Component {
       return null;
     }
 
+    let previewModal = null;
+    if (this.state.showPreview) {
+      previewModal = (
+        <PreviewModal
+          value={this.state.valuePreview}
+          onCloseClick={::this.onClosePreviewClick}
+        />
+      );
+    }
+
     return (
-      <Table
-        ref="table"
-        rowHeight={30}
-        headerHeight={30}
-        groupHeaderHeight={40}
-        rowsCount={rowCount}
-        width={tableWidth}
-        height={tableHeight}
-        isColumnResizing={false}
-        onColumnResizeEndCallback={::this.onColumnResizeEndCallback}
-      >
-        <ColumnGroup header={this.renderHeaderColumns()}>
-          {this.renderColumns()}
-        </ColumnGroup>
-      </Table>
+      <div>
+        {previewModal}
+        <Table
+          ref="table"
+          rowHeight={30}
+          headerHeight={30}
+          groupHeaderHeight={40}
+          rowsCount={rowCount}
+          width={tableWidth}
+          height={tableHeight}
+          isColumnResizing={false}
+          onColumnResizeEndCallback={::this.onColumnResizeEndCallback}
+        >
+          <ColumnGroup header={this.renderHeaderColumns()}>
+            {this.renderColumns()}
+          </ColumnGroup>
+        </Table>
+    </div>
     );
   }
 }

@@ -2,7 +2,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
-require('babel/polyfill');
+require('babel-polyfill');
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -87,7 +87,6 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/renderer/index.html',
-      inject: 'body',
     }),
     new webpack.ProvidePlugin({
       Radium: 'radium',

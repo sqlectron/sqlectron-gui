@@ -1,7 +1,7 @@
 import axios from 'axios';
+import createDebug from './debug';
 
-
-const debug = require('./debug')('gh-update-checker');
+const debug = createDebug('gh-update-checker');
 const WAIT_2_SECS = 2000;
 
 

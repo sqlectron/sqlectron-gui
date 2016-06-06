@@ -5,6 +5,7 @@ export const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
 export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
 export const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS';
 export const CONNECTION_FAILURE = 'CONNECTION_FAILURE';
+export const CONNECTION_REQUIRE_SSH_PASSWORD = 'CONNECTION_REQUIRE_SSH_PASSWORD';
 export const TEST_CONNECTION_REQUEST = 'TEST_CONNECTION_REQUEST';
 export const TEST_CONNECTION_SUCCESS = 'TEST_CONNECTION_SUCCESS';
 export const TEST_CONNECTION_FAILURE = 'TEST_CONNECTION_FAILURE';
@@ -39,7 +40,7 @@ export function getDBConnByName(database) {
 }
 
 
-export function connect (id, databaseName, reconnecting = false) {
+export function connect (id, databaseName, reconnecting = false, sshPassphrase) {
   return async (dispatch, getState) => {
     let server;
     let dbConn;
@@ -60,6 +61,16 @@ export function connect (id, databaseName, reconnecting = false) {
       dispatch({ type: CONNECTION_REQUEST, server, database, reconnecting, isServerConnection: !databaseName });
 
       if (!serverSession) {
+        if (server.ssh) {
+          if (server.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
+            dispatch({ type: CONNECTION_REQUIRE_SSH_PASSWORD });
+            return;
+          }
+
+          if (server.ssh.privateKeyWithPassphrase) {
+            server.ssh.passphrase = sshPassphrase;
+          }
+        }
         serverSession = sqlectron.db.createServer(server);
       }
 
@@ -91,8 +102,12 @@ export function connect (id, databaseName, reconnecting = false) {
 
 
 export function disconnect () {
-  serverSession.end();
+  if (serverSession) {
+    serverSession.end();
+  }
+
   serverSession = null;
+
   return { type: CLOSE_CONNECTION };
 }
 
