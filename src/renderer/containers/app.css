@@ -64,6 +64,7 @@ span.clickable {
   font-size: 14px;
   font-weight: bold;
   text-align: center;
+  background-color: rgba(34, 36, 38, 0.15);
 }
 
 .sqlectron-table-cell {

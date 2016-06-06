@@ -60,10 +60,11 @@ export default class DatabaseDiagram extends Component {
               y: (currentTable.position().y + (idx + 1) * 20),
             },
             size: {
-              width: 60,
+              width: 100,
               height: 20,
             },
             name: `${column.name}`,
+            tableName: `${table}`,
           });
           currentTable.embed(newTabCell);
           tableCells.push(newTabCell);
@@ -94,6 +95,27 @@ export default class DatabaseDiagram extends Component {
 
     /* Put everything on graph */
     this.graph.addCells(tableShapes.concat(tableCells, tableLinks));
+    this.resizeTableElements(tableShapes);
+  }
+
+
+  // Resize table elements based on attributes text length
+  resizeTableElements(tableShapes) {
+    const { tables, columnsByTable } = this.props;
+
+    tables.map((table) => {
+      let biggestCellSize = $('span', `.sqlectron-table.${table} > p`).width();
+      $('span', `.sqlectron-table-cell.${table}`).each(function() {
+        if ( $(this).width() > biggestCellSize ) {
+          biggestCellSize = $(this).width();
+        }
+      });
+
+      if (biggestCellSize > 110) {
+        tableShapes.find((shape) =>
+          shape.attributes.name === table).resize(biggestCellSize + 20, (columnsByTable[table].length + 1.5) * 20);
+      }
+    });
   }
 
   render() {
