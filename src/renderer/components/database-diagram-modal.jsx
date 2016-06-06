@@ -31,7 +31,6 @@ export default class DatabaseDiagramModal extends Component {
       // Updates modal position on loading diagram in modal DOM
       observeChanges: true,
       onHidden: () => {
-        this.setState({ showDatabaseDiagram: false });
         this.props.onClose();
       },
     }).modal('show');
@@ -53,7 +52,7 @@ export default class DatabaseDiagramModal extends Component {
 
   onCheckBoxesChange() {
     // Disable generate diagram button if there are no tables selected
-    $(':checkbox:checked', 'div.ui.list').length
+    return $(':checkbox:checked', 'div.ui.list').length
       ? $(this.refs.generateButton).removeClass('disabled')
       : $(this.refs.generateButton).addClass('disabled');
   }

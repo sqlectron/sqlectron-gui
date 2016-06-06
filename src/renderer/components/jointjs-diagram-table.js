@@ -1,24 +1,25 @@
 import joint from 'jointjs';
+import { bindAll, template } from 'lodash';
 
 
 // Custom joint shape representing table/view object
 joint.shapes.sqlectron = {};
-joint.shapes.sqlectron.table = joint.shapes.basic.Rect.extend({
+joint.shapes.sqlectron.Table = joint.shapes.basic.Rect.extend({
   defaults: joint.util.deepSupplement({
-    type: 'sqlectron.table',
+    type: 'sqlectron.Table',
     attrs: {
-            rect: { stroke: 'none', 'fill-opacity': 0 }
-        }
-  }, joint.shapes.basic.Rect.prototype.defaults)
+      rect: { stroke: 'none', 'fill-opacity': 0 },
+    },
+  }, joint.shapes.basic.Rect.prototype.defaults),
 });
 
-joint.shapes.sqlectron.tableView = joint.dia.ElementView.extend({
+joint.shapes.sqlectron.TableView = joint.dia.ElementView.extend({
   template: `<div class="sqlectron-table"><p><span></span></p></div>`,
 
   initialize: function() {
-    _.bindAll(this, 'updateBox');
+    bindAll(this, 'updateBox');
     joint.dia.ElementView.prototype.initialize.apply(this, arguments);
-    this.$box = $(_.template(this.template)());
+    this.$box = $(template(this.template)());
     // Update the box position whenever the underlying model changes.
     this.model.on('change', this.updateBox, this);
 
@@ -31,9 +32,9 @@ joint.shapes.sqlectron.tableView = joint.dia.ElementView.extend({
   },
   updateBox: function() {
     // Set the position and dimension of the box so that it covers the JointJS element.
-    var bbox = this.model.getBBox();
+    const bbox = this.model.getBBox();
     this.$box.css({ width: bbox.width, height: bbox.height, left: bbox.x, top: bbox.y, transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)' });
     this.$box.find('span').text(this.model.get('name'));
     this.$box.addClass(this.model.get('name'));
-  }
+  },
 });

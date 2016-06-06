@@ -41,7 +41,7 @@ export default class DatabaseDiagram extends Component {
 
       /* Tables & views */
       tables.map((table, index) => {
-        tableShapes.push(new joint.shapes.sqlectron.table({
+        tableShapes.push(new joint.shapes.sqlectron.Table({
           position: {
             x: 100 + (index % 6) * 100,
             y: 30 + (index % 4) * 100,
@@ -55,7 +55,7 @@ export default class DatabaseDiagram extends Component {
         currentTable = tableShapes[index];
 
         columnsByTable[table].map((column, idx) => {
-          newTabCell = new joint.shapes.sqlectron.tableCell({
+          newTabCell = new joint.shapes.sqlectron.TableCell({
             position: {
               x: (currentTable.position().x),
               y: (currentTable.position().y + (idx + 1) * 20),
