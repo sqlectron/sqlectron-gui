@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import joint from 'jointjs';
 
+require('jointjs/dist/joint.min.css');
 require('./jointjs-diagram-table.js');
 require('./jointjs-diagram-table-cell.js');
-require('jointjs/dist/joint.min.css');
+require('./database-diagram.css');
 
 
 export default class DatabaseDiagram extends Component {
@@ -15,12 +16,24 @@ export default class DatabaseDiagram extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {};
     this.graph = new joint.dia.Graph();
   }
 
   componentDidMount() {
-    const { tables, columnsByTable, links } = this.props;
+    const tableShapes = [];
+    const tableCells = [];
+    const tableLinks = [];
 
+    this.addGraphPaper();
+
+    this.generateTableElements(tableShapes, tableCells);
+    this.generateLinks(tableShapes, tableLinks);
+
+    this.putEverythingOnGraph(tableShapes, tableCells, tableLinks);
+  }
+
+  addGraphPaper() {
     this.paper = new joint.dia.Paper({
       el: $(this.refs.diagram),
       width: $(this.refs.diagram).parent().width(),
@@ -29,17 +42,14 @@ export default class DatabaseDiagram extends Component {
       gridSize: 1,
       restrictTranslate: true,
     });
+  }
 
-    const tableShapes = [];
-    const tableCells = [];
-    const tableLinks = [];
+  generateTableElements(tableShapes, tableCells) {
+    const { tables, columnsByTable } = this.props;
+    let currentTable;
+    let newTabCell;
 
     try {
-      let currentTable;
-      let newTabCell;
-      let newLink;
-
-      /* Tables & views */
       tables.map((table, index) => {
         tableShapes.push(new joint.shapes.sqlectron.Table({
           position: {
@@ -50,7 +60,7 @@ export default class DatabaseDiagram extends Component {
             width: 120,
             height: (columnsByTable[table].length + 1.5) * 20,
           },
-          name: `${table}`,
+          name: table,
         }));
         currentTable = tableShapes[index];
 
@@ -64,17 +74,25 @@ export default class DatabaseDiagram extends Component {
               width: 100,
               height: 20,
             },
-            name: `${column.name}`,
-            tableName: `${table}`,
+            name: column.name,
+            tableName: table,
           });
           currentTable.embed(newTabCell);
           tableCells.push(newTabCell);
         });
       });
+    } catch (error) {
+      this.setState({ error: `Error while generating table elements: ${error.message}` });
+    }
+  }
 
-      /* Links */
-      let targetIndex;
+  generateLinks(tableShapes, tableLinks) {
+    const { tables, links } = this.props;
+    let currentTable;
+    let newLink;
+    let targetIndex;
 
+    try {
       tables.map((table, index) => {
         currentTable = tableShapes[index];
 
@@ -90,11 +108,12 @@ export default class DatabaseDiagram extends Component {
           }
         });
       });
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      this.setState({ error: `Error while generating links: ${error.message}` });
     }
+  }
 
-    /* Put everything on graph */
+  putEverythingOnGraph(tableShapes, tableCells, tableLinks) {
     this.graph.addCells(tableShapes.concat(tableCells, tableLinks));
     this.resizeTableElements(tableShapes);
   }
@@ -120,6 +139,10 @@ export default class DatabaseDiagram extends Component {
   }
 
   render() {
+    if (!!this.state.error) {
+      return <div className="ui negative message" style={{textAlign: 'center'}}>{this.state.error}</div>;
+    }
+
     return <div ref="diagram"></div>;
   }
 }
