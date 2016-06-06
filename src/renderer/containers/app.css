@@ -70,3 +70,7 @@ span.clickable {
 .sqlectron-table-cell {
   margin: 0 7px 0 7px;
 }
+
+.marker-arrowheads {
+  display: none
+}
