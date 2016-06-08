@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
-import { refreshDatabase, fetchDatabasesIfNeeded, showDatabaseDiagram, closeDatabaseDiagram, saveDatabaseDiagram } from '../actions/databases';
+import * as DbAction from '../actions/databases';
 import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
@@ -100,7 +100,7 @@ class QueryBrowserContainer extends Component {
 
     const lastConnectedDB = connections.databases[connections.databases.length - 1];
 
-    dispatch(fetchDatabasesIfNeeded());
+    dispatch(DbAction.fetchDatabasesIfNeeded());
     dispatch(fetchTablesIfNeeded(lastConnectedDB));
     dispatch(fetchViewsIfNeeded(lastConnectedDB));
     dispatch(fetchRoutinesIfNeeded(lastConnectedDB));
@@ -165,12 +165,12 @@ class QueryBrowserContainer extends Component {
 
   onRefreshDatabase(database) {
     const { dispatch } = this.props;
-    dispatch(refreshDatabase(database));
+    dispatch(DbAction.refreshDatabase(database));
   }
 
   onShowDiagramModal(database) {
     const { dispatch } = this.props;
-    dispatch(showDatabaseDiagram(database.name));
+    dispatch(DbAction.showDatabaseDiagram(database.name));
   }
 
   onShowDatabaseDiagram(database) {
@@ -190,11 +190,11 @@ class QueryBrowserContainer extends Component {
   }
 
   onSaveDatabaseDiagram(bla) {
-    this.props.dispatch(saveDatabaseDiagram(bla));
+    this.props.dispatch(DbAction.saveDatabaseDiagram(bla));
   }
 
   onCloseDiagramModal() {
-    this.props.dispatch(closeDatabaseDiagram());
+    this.props.dispatch(DbAction.closeDatabaseDiagram());
   }
 
   getCurrentQuery() {
