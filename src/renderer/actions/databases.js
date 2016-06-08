@@ -1,6 +1,6 @@
 import path from 'path';
 import { getCurrentDBConn } from './connections';
-import { showSaveDialog, saveFile } from '../utils/save-file';
+import * as FileHandler from '../utils/file-handler';
 
 
 export const REFRESH_DATABASES = 'REFRESH_DATABASES';
@@ -38,12 +38,12 @@ export function saveDatabaseDiagram(diagramJSON) {
     try {
       const filters = [ { name: 'JSON', extensions: ['json'] }];
 
-      let fileName = (getState().databases.fileName || await showSaveDialog(filters));
+      let fileName = (getState().databases.fileName || await FileHandler.showSaveDialog(filters));
       if (path.extname(fileName) !== '.json') {
         fileName += '.json';
       }
 
-      await saveFile(fileName, JSON.stringify(diagramJSON));
+      await FileHandler.saveFile(fileName, JSON.stringify(diagramJSON));
 
       dispatch({ type: SAVE_DIAGRAM_SUCCESS, fileName });
     } catch (error) {

@@ -4,7 +4,7 @@ import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron';
 import { getCurrentDBConn, getDBConnByName } from './connections';
 import { rowsValuesToString } from '../utils/convert';
-import { showSaveDialog, saveFile } from '../utils/save-file';
+import { showSaveDialog, saveFile } from '../utils/file-handler';
 import wait from '../utils/wait';
 
 
