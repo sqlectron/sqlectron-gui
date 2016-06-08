@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
-import { refreshDatabase, fetchDatabasesIfNeeded, showDatabaseDiagram, closeDatabaseDiagram } from '../actions/databases';
+import { refreshDatabase, fetchDatabasesIfNeeded, showDatabaseDiagram, closeDatabaseDiagram, saveDatabaseDiagram } from '../actions/databases';
 import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
@@ -189,6 +189,10 @@ class QueryBrowserContainer extends Component {
     });
   }
 
+  onSaveDatabaseDiagram(bla) {
+    this.props.dispatch(saveDatabaseDiagram(bla));
+  }
+
   onCloseDiagramModal() {
     this.props.dispatch(closeDatabaseDiagram());
   }
@@ -289,6 +293,7 @@ class QueryBrowserContainer extends Component {
         columnsByTable={columns.columnsByTable[selectedDB]}
         references={references.referencesByTable[selectedDB]}
         onShowDatabaseDiagram={::this.onShowDatabaseDiagram}
+        onSaveDatabaseDiagram={::this.onSaveDatabaseDiagram}
         onClose={::this.onCloseDiagramModal} />
     );
   }

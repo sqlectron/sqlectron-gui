@@ -56,6 +56,18 @@ export default function (state = INITIAL_STATE, action) {
       diagramDatabase: null,
     };
   }
+  case types.SAVE_DIAGRAM_SUCCESS: {
+    return {
+      ...state,
+      fileName: action.fileName,
+    };
+  }
+  case types.SAVE_DIAGRAM_FAILURE: {
+    return {
+      ...state,
+      error: action.error,
+    };
+  }
   case queryTypes.EXECUTE_QUERY_SUCCESS: {
     return {
       ...state,

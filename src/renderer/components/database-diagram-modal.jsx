@@ -16,6 +16,7 @@ export default class DatabaseDiagramModal extends Component {
     columnsByTable: PropTypes.object,
     references: PropTypes.object,
     onShowDatabaseDiagram: PropTypes.func.isRequired,
+    onSaveDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
   }
 
@@ -33,6 +34,7 @@ export default class DatabaseDiagramModal extends Component {
       onHidden: () => {
         this.props.onClose();
       },
+      onApprove: () => false,
     }).modal('show');
   }
 
@@ -134,9 +136,24 @@ export default class DatabaseDiagramModal extends Component {
 
     return (
       <DatabaseDiagram
+        ref="databaseDiagram"
         tables={selectedTables}
         columnsByTable={columnsByTable}
         links={references} />
+    );
+  }
+
+  renderActionButtons() {
+    const { onSaveDatabaseDiagram } = this.props;
+
+    return (
+      <div className="actions">
+        <div className="ui small positive button"
+          tabIndex="0"
+          onClick={() => onSaveDatabaseDiagram(this.refs.databaseDiagram.graph.toJSON())}>
+          Save
+        </div>
+      </div>
     );
   }
 
@@ -150,6 +167,7 @@ export default class DatabaseDiagramModal extends Component {
         {!this.state.showDatabaseDiagram && !this.state.showLoader && this.renderSelectTablesMenu()}
         {!this.state.showDatabaseDiagram && !!this.state.showLoader && this.renderLoader()}
         {!!this.state.showDatabaseDiagram && this.renderDiagram()}
+        {!!this.state.showDatabaseDiagram && this.renderActionButtons()}
       </div>
     );
   }
