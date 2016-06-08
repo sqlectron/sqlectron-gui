@@ -177,6 +177,8 @@ class QueryBrowserContainer extends Component {
     const { dispatch } = this.props;
     const selectedTables = [];
 
+    dispatch(DbAction.generateDatabaseDiagram());
+    
     $(':checkbox:checked', 'div.ui.list').map((index, checkbox) => {
       selectedTables.push(checkbox.id);
     });

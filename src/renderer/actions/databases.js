@@ -10,6 +10,7 @@ export const FETCH_DATABASES_FAILURE = 'FETCH_DATABASES_FAILURE';
 export const FILTER_DATABASES = 'FILTER_DATABASES';
 export const SHOW_DATABASE_DIAGRAM = 'SHOW_DATABASE_DIAGRAM';
 export const CLOSE_DATABASE_DIAGRAM = 'CLOSE_DATABASE_DIAGRAM';
+export const GENERATE_DATABASE_DIAGRAM = 'GENERATE_DATABASE_DIAGRAM';
 export const SAVE_DIAGRAM_REQUEST = 'SAVE_DIAGRAM_REQUEST';
 export const SAVE_DIAGRAM_SUCCESS = 'SAVE_DIAGRAM_SUCCESS';
 export const SAVE_DIAGRAM_FAILURE = 'SAVE_DIAGRAM_FAILURE';
@@ -33,6 +34,10 @@ export function showDatabaseDiagram(name) {
 
 export function closeDatabaseDiagram() {
   return { type: CLOSE_DATABASE_DIAGRAM };
+}
+
+export function generateDatabaseDiagram() {
+  return { type: GENERATE_DATABASE_DIAGRAM };
 }
 
 export function saveDatabaseDiagram(diagramJSON) {
