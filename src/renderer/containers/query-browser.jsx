@@ -173,7 +173,7 @@ class QueryBrowserContainer extends Component {
     dispatch(DbAction.showDatabaseDiagram(database.name));
   }
 
-  onShowDatabaseDiagram(database) {
+  onGenerateDatabaseDiagram(database) {
     const { dispatch } = this.props;
     const selectedTables = [];
 
@@ -189,8 +189,8 @@ class QueryBrowserContainer extends Component {
     });
   }
 
-  onSaveDatabaseDiagram(bla) {
-    this.props.dispatch(DbAction.saveDatabaseDiagram(bla));
+  onSaveDatabaseDiagram(diagram) {
+    this.props.dispatch(DbAction.saveDatabaseDiagram(diagram));
   }
 
   onOpenDatabaseDiagram() {
@@ -297,7 +297,7 @@ class QueryBrowserContainer extends Component {
         columnsByTable={columns.columnsByTable[selectedDB]}
         references={references.referencesByTable[selectedDB]}
         diagramJSON={databases.diagramJSON}
-        onShowDatabaseDiagram={::this.onShowDatabaseDiagram}
+        onGenerateDatabaseDiagram={::this.onGenerateDatabaseDiagram}
         onSaveDatabaseDiagram={::this.onSaveDatabaseDiagram}
         onOpenDatabaseDiagram={::this.onOpenDatabaseDiagram}
         onClose={::this.onCloseDiagramModal} />

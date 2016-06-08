@@ -16,7 +16,7 @@ export default class DatabaseDiagramModal extends Component {
     columnsByTable: PropTypes.object,
     references: PropTypes.object,
     diagramJSON: PropTypes.string,
-    onShowDatabaseDiagram: PropTypes.func.isRequired,
+    onGenerateDatabaseDiagram: PropTypes.func.isRequired,
     onSaveDatabaseDiagram: PropTypes.func.isRequired,
     onOpenDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -63,7 +63,7 @@ export default class DatabaseDiagramModal extends Component {
 
   onGenerateDiagramClick() {
     this.setState({ showLoader: true });
-    this.props.onShowDatabaseDiagram(this.props.database);
+    this.props.onGenerateDatabaseDiagram(this.props.database);
   }
 
   showDiagramIfNeeded(props) {
