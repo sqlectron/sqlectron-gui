@@ -15,8 +15,10 @@ export default class DatabaseDiagramModal extends Component {
     views: PropTypes.array,
     columnsByTable: PropTypes.object,
     references: PropTypes.object,
+    diagramJSON: PropTypes.string,
     onShowDatabaseDiagram: PropTypes.func.isRequired,
     onSaveDatabaseDiagram: PropTypes.func.isRequired,
+    onOpenDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
   }
 
@@ -65,7 +67,7 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   showDiagramIfNeeded(props) {
-    if (this.isDataLoaded(props)) {
+    if (this.isDataLoaded(props) || props.diagramJSON) {
       this.setState({ showDatabaseDiagram: true });
     }
   }
@@ -82,42 +84,55 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   renderSelectTablesMenu() {
-    const { tables, views } = this.props;
+    const { tables, views, onOpenDatabaseDiagram } = this.props;
     const tablesAndViews = tables.concat(views);
 
     return (
-      <div className="content" style={{minHeight: '300px'}}>
-        <h4 className="ui horizontal divider header">
-          <i className="list icon"></i>
-          Select tables to include on diagram
-        </h4>
-        <div style={{ margin: '0 33% 0 33%' }}>
-          <div className="ui mini buttons">
-            <button className="ui button mini" onClick={::this.onSelectAllTables}>
-              Select All
-            </button>
-            <div className="or"></div>
-            <button className="ui button mini" onClick={::this.onDeselectAllTables}>
-              Deselect All
-            </button>
-          </div>
-          <div className="ui list" style={STYLE.list}>
-            {tablesAndViews.map((item) =>
-              <div key={item.name} className="item">
-                <div className="ui checkbox">
-                  <input id={item.name} type="checkbox" onChange={::this.onCheckBoxesChange}/>
-                  <label>{item.name}</label>
+      <div className="content">
+        <div className="ui middle aligned padded very relaxed stackable grid" >
+          <div className="ten wide column">
+            <h4 className="ui horizontal divider header">
+              <i className="list icon"></i>
+              Select tables to include on diagram
+            </h4>
+            <div className="ui mini buttons">
+              <button className="ui button mini" onClick={::this.onSelectAllTables}>
+                Select All
+              </button>
+              <div className="or"></div>
+              <button className="ui button mini" onClick={::this.onDeselectAllTables}>
+                Deselect All
+              </button>
+            </div>
+            <div className="ui list" style={STYLE.list}>
+              {tablesAndViews.map((item) =>
+                <div key={item.name} className="item">
+                  <div className="ui checkbox">
+                    <input id={item.name} type="checkbox" onChange={::this.onCheckBoxesChange}/>
+                    <label>{item.name}</label>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+            <button
+              ref="generateButton"
+              className="ui right floated positive button disabled"
+              style={{marginBottom: '1em'}}
+              onClick={::this.onGenerateDiagramClick}>
+              Generate diagram
+            </button>
           </div>
-          <button
-            ref="generateButton"
-            className="ui right floated positive button disabled"
-            style={{marginBottom: '1em'}}
-            onClick={::this.onGenerateDiagramClick}>
-            Generate diagram
-          </button>
+          <div className="ui vertical divider">
+            Or
+          </div>
+          <div className="six wide center aligned column">
+            <button
+              className="fluid ui blue labeled icon button"
+              onClick={() => onOpenDatabaseDiagram()}>
+              <i className="folder open outline icon"></i>
+              Open diagram from file
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -132,14 +147,15 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   renderDiagram() {
-    const { selectedTables, columnsByTable, references } = this.props;
+    const { selectedTables, columnsByTable, references, diagramJSON } = this.props;
 
     return (
       <DatabaseDiagram
         ref="databaseDiagram"
         tables={selectedTables}
         columnsByTable={columnsByTable}
-        links={references} />
+        links={references}
+        diagramJSON={diagramJSON} />
     );
   }
 

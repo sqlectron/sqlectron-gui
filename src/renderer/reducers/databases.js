@@ -9,6 +9,7 @@ const INITIAL_STATE = {
   items: [],
   showingDiagram: false,
   diagramDatabase: null,
+  diagramJSON: null,
 };
 
 
@@ -54,6 +55,7 @@ export default function (state = INITIAL_STATE, action) {
       ...state,
       showingDiagram: false,
       diagramDatabase: null,
+      diagramJSON: null,
     };
   }
   case types.SAVE_DIAGRAM_SUCCESS: {
@@ -62,7 +64,15 @@ export default function (state = INITIAL_STATE, action) {
       fileName: action.fileName,
     };
   }
-  case types.SAVE_DIAGRAM_FAILURE: {
+  case types.OPEN_DIAGRAM_SUCCESS: {
+    return {
+      ...state,
+      fileName: action.fileName,
+      diagramJSON: action.diagramJSON,
+    };
+  }
+  case types.SAVE_DIAGRAM_FAILURE:
+  case types.OPEN_DIAGRAM_FAILURE: {
     return {
       ...state,
       error: action.error,

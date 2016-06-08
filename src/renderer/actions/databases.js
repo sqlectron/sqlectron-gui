@@ -13,6 +13,9 @@ export const CLOSE_DATABASE_DIAGRAM = 'CLOSE_DATABASE_DIAGRAM';
 export const SAVE_DIAGRAM_REQUEST = 'SAVE_DIAGRAM_REQUEST';
 export const SAVE_DIAGRAM_SUCCESS = 'SAVE_DIAGRAM_SUCCESS';
 export const SAVE_DIAGRAM_FAILURE = 'SAVE_DIAGRAM_FAILURE';
+export const OPEN_DIAGRAM_REQUEST = 'OPEN_DIAGRAM_REQUEST';
+export const OPEN_DIAGRAM_SUCCESS = 'OPEN_DIAGRAM_SUCCESS';
+export const OPEN_DIAGRAM_FAILURE = 'OPEN_DIAGRAM_FAILURE';
 
 
 export function filterDatabases(name) {
@@ -48,6 +51,25 @@ export function saveDatabaseDiagram(diagramJSON) {
       dispatch({ type: SAVE_DIAGRAM_SUCCESS, fileName });
     } catch (error) {
       dispatch({ type: SAVE_DIAGRAM_FAILURE, error });
+    }
+  };
+}
+
+export function openDatabaseDiagram() {
+  return async (dispatch, getState) => {
+    dispatch({ type: OPEN_DIAGRAM_REQUEST });
+    try {
+      // Path user used last for save or open diagram in the same session. If such exists.
+      const defaultPath = path.dirname(getState().databases.fileName || '');
+      const filters = [ { name: 'JSON', extensions: ['json'] }];
+
+      const [fileName] = await FileHandler.showOpenDialog(filters, defaultPath);
+
+      const diagramJSON = await FileHandler.openFile(fileName);
+
+      dispatch({ type: OPEN_DIAGRAM_SUCCESS, fileName, diagramJSON });
+    } catch (error) {
+      dispatch({ type: OPEN_DIAGRAM_FAILURE, error });
     }
   };
 }

@@ -193,6 +193,10 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(DbAction.saveDatabaseDiagram(bla));
   }
 
+  onOpenDatabaseDiagram() {
+    this.props.dispatch(DbAction.openDatabaseDiagram());
+  }
+
   onCloseDiagramModal() {
     this.props.dispatch(DbAction.closeDatabaseDiagram());
   }
@@ -292,8 +296,10 @@ class QueryBrowserContainer extends Component {
         views={views.viewsByDatabase[selectedDB]}
         columnsByTable={columns.columnsByTable[selectedDB]}
         references={references.referencesByTable[selectedDB]}
+        diagramJSON={databases.diagramJSON}
         onShowDatabaseDiagram={::this.onShowDatabaseDiagram}
         onSaveDatabaseDiagram={::this.onSaveDatabaseDiagram}
+        onOpenDatabaseDiagram={::this.onOpenDatabaseDiagram}
         onClose={::this.onCloseDiagramModal} />
     );
   }
