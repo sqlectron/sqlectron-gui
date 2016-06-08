@@ -1,7 +1,6 @@
-import fs from 'fs';
 import path from 'path';
-import { remote } from 'electron';
 import { getCurrentDBConn } from './connections';
+import { showSaveDialog, saveFile } from '../utils/save-file';
 
 
 export const REFRESH_DATABASES = 'REFRESH_DATABASES';
@@ -37,7 +36,9 @@ export function saveDatabaseDiagram(diagramJSON) {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_DIAGRAM_REQUEST });
     try {
-      let fileName = (getState().databases.fileName || await showSaveDialog());
+      const filters = [ { name: 'JSON', extensions: ['json'] }];
+
+      let fileName = (getState().databases.fileName || await showSaveDialog(filters));
       if (path.extname(fileName) !== '.json') {
         fileName += '.json';
       }
@@ -80,30 +81,4 @@ function fetchDatabases () {
       dispatch({ type: FETCH_DATABASES_FAILURE, error });
     }
   };
-}
-
-
-function showSaveDialog() {
-  return new Promise((resolve, reject) => {
-    remote.dialog.showSaveDialog({
-      filters: [
-        { name: 'JSON', extensions: ['json'] }
-      ],
-    }, function (fileName) {
-      if (fileName) {
-        return resolve(fileName);
-      }
-
-      return reject();
-    });
-  });
-}
-
-function saveFile(fileName, data) {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(fileName, data, 'utf8', (err) => {
-      if (err) { return reject(err); }
-      resolve();
-    });
-  });
 }
