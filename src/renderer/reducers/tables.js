@@ -64,6 +64,12 @@ export default function (state = INITIAL_STATE, action) {
       didInvalidate: true,
     };
   }
+  case dbTypes.CLOSE_DATABASE_DIAGRAM: {
+    return {
+      ...state,
+      selectedTablesForDiagram: null,
+    }
+  }
   default : return state;
   }
 }
