@@ -1,11 +1,10 @@
-import fs from 'fs';
 import path from 'path';
-import { remote } from 'electron';
 import { cloneDeep, trim } from 'lodash';
 import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron';
 import { getCurrentDBConn, getDBConnByName } from './connections';
 import { rowsValuesToString } from '../utils/convert';
+import { showSaveDialog, saveFile } from '../utils/file-handler';
 import wait from '../utils/wait';
 
 
@@ -130,8 +129,12 @@ export function saveQuery () {
     dispatch({ type: SAVE_QUERY_REQUEST });
     try {
       const currentQuery = getCurrentQuery(getState());
+      const filters = [
+        { name: 'SQL', extensions: ['sql'] },
+        { name: 'All Files', extensions: ['*'] },
+      ];
 
-      let filename = (currentQuery.filename || await showSaveDialog());
+      let filename = (currentQuery.filename || await showSaveDialog(filters));
       if (path.extname(filename) !== '.sql') {
         filename += '.sql';
       }
@@ -200,34 +203,6 @@ function stringifyResultToCSV(rows) {
 function getCurrentQuery(state) {
   return state.queries.queriesById[state.queries.currentQueryId];
 }
-
-function showSaveDialog() {
-  return new Promise((resolve, reject) => {
-    remote.dialog.showSaveDialog({
-      filters: [
-        { name: 'SQL', extensions: ['sql'] },
-        { name: 'All Files', extensions: ['*'] },
-      ],
-    }, function (filename) {
-      if (filename) {
-        return resolve(filename);
-      }
-
-      return reject();
-    });
-  });
-}
-
-
-function saveFile(filename, data) {
-  return new Promise((resolve, reject) => {
-    fs.writeFile(filename, data, 'utf8', (err) => {
-      if (err) { return reject(err); }
-      resolve();
-    });
-  });
-}
-
 
 function needNewQuery(currentState, database, queryDefaultSelect) {
   const currentQuery = getCurrentQuery(currentState);

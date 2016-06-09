@@ -9,6 +9,8 @@ const INITIAL_STATE = {
   items: [],
   showingDiagram: false,
   diagramDatabase: null,
+  fileName: null,
+  diagramJSON: null,
 };
 
 
@@ -54,6 +56,33 @@ export default function (state = INITIAL_STATE, action) {
       ...state,
       showingDiagram: false,
       diagramDatabase: null,
+      diagramJSON: null,
+    };
+  }
+  case types.GENERATE_DATABASE_DIAGRAM: {
+    return {
+      ...state,
+      fileName: null,
+    };
+  }
+  case types.SAVE_DIAGRAM_SUCCESS: {
+    return {
+      ...state,
+      fileName: action.fileName,
+    };
+  }
+  case types.OPEN_DIAGRAM_SUCCESS: {
+    return {
+      ...state,
+      fileName: action.fileName,
+      diagramJSON: action.diagramJSON,
+    };
+  }
+  case types.SAVE_DIAGRAM_FAILURE:
+  case types.OPEN_DIAGRAM_FAILURE: {
+    return {
+      ...state,
+      error: action.error,
     };
   }
   case queryTypes.EXECUTE_QUERY_SUCCESS: {

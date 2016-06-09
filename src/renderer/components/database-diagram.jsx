@@ -12,6 +12,7 @@ export default class DatabaseDiagram extends Component {
     tables: PropTypes.array,
     columnsByTable: PropTypes.object,
     links: PropTypes.object,
+    diagramJSON: PropTypes.string,
   }
 
   constructor(props) {
@@ -21,12 +22,23 @@ export default class DatabaseDiagram extends Component {
   }
 
   componentDidMount() {
+    const { diagramJSON } = this.props;
     const tableShapes = [];
     const tableCells = [];
     const tableLinks = [];
 
     this.addGraphPaper();
 
+    if ( diagramJSON ) {
+      try {
+        this.graph.fromJSON(JSON.parse(diagramJSON));
+      } catch (error) {
+        this.setState({ error: `Error while reading graph from file: ${error.message}` });
+      }
+      return;
+    }
+
+    // Generate graph if needed
     this.generateTableElements(tableShapes, tableCells);
     this.generateLinks(tableShapes, tableLinks);
 

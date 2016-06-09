@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
-import { refreshDatabase, fetchDatabasesIfNeeded, showDatabaseDiagram, closeDatabaseDiagram } from '../actions/databases';
+import * as DbAction from '../actions/databases';
 import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
@@ -100,7 +100,7 @@ class QueryBrowserContainer extends Component {
 
     const lastConnectedDB = connections.databases[connections.databases.length - 1];
 
-    dispatch(fetchDatabasesIfNeeded());
+    dispatch(DbAction.fetchDatabasesIfNeeded());
     dispatch(fetchTablesIfNeeded(lastConnectedDB));
     dispatch(fetchViewsIfNeeded(lastConnectedDB));
     dispatch(fetchRoutinesIfNeeded(lastConnectedDB));
@@ -165,18 +165,20 @@ class QueryBrowserContainer extends Component {
 
   onRefreshDatabase(database) {
     const { dispatch } = this.props;
-    dispatch(refreshDatabase(database));
+    dispatch(DbAction.refreshDatabase(database));
   }
 
   onShowDiagramModal(database) {
     const { dispatch } = this.props;
-    dispatch(showDatabaseDiagram(database.name));
+    dispatch(DbAction.showDatabaseDiagram(database.name));
   }
 
-  onShowDatabaseDiagram(database) {
+  onGenerateDatabaseDiagram(database) {
     const { dispatch } = this.props;
     const selectedTables = [];
 
+    dispatch(DbAction.generateDatabaseDiagram());
+    
     $(':checkbox:checked', 'div.ui.list').map((index, checkbox) => {
       selectedTables.push(checkbox.id);
     });
@@ -189,8 +191,16 @@ class QueryBrowserContainer extends Component {
     });
   }
 
+  onSaveDatabaseDiagram(diagram) {
+    this.props.dispatch(DbAction.saveDatabaseDiagram(diagram));
+  }
+
+  onOpenDatabaseDiagram() {
+    this.props.dispatch(DbAction.openDatabaseDiagram());
+  }
+
   onCloseDiagramModal() {
-    this.props.dispatch(closeDatabaseDiagram());
+    this.props.dispatch(DbAction.closeDatabaseDiagram());
   }
 
   getCurrentQuery() {
@@ -288,7 +298,10 @@ class QueryBrowserContainer extends Component {
         views={views.viewsByDatabase[selectedDB]}
         columnsByTable={columns.columnsByTable[selectedDB]}
         references={references.referencesByTable[selectedDB]}
-        onShowDatabaseDiagram={::this.onShowDatabaseDiagram}
+        diagramJSON={databases.diagramJSON}
+        onGenerateDatabaseDiagram={::this.onGenerateDatabaseDiagram}
+        onSaveDatabaseDiagram={::this.onSaveDatabaseDiagram}
+        onOpenDatabaseDiagram={::this.onOpenDatabaseDiagram}
         onClose={::this.onCloseDiagramModal} />
     );
   }

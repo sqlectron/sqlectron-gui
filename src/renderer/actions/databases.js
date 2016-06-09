@@ -1,4 +1,6 @@
+import path from 'path';
 import { getCurrentDBConn } from './connections';
+import * as FileHandler from '../utils/file-handler';
 
 
 export const REFRESH_DATABASES = 'REFRESH_DATABASES';
@@ -8,6 +10,13 @@ export const FETCH_DATABASES_FAILURE = 'FETCH_DATABASES_FAILURE';
 export const FILTER_DATABASES = 'FILTER_DATABASES';
 export const SHOW_DATABASE_DIAGRAM = 'SHOW_DATABASE_DIAGRAM';
 export const CLOSE_DATABASE_DIAGRAM = 'CLOSE_DATABASE_DIAGRAM';
+export const GENERATE_DATABASE_DIAGRAM = 'GENERATE_DATABASE_DIAGRAM';
+export const SAVE_DIAGRAM_REQUEST = 'SAVE_DIAGRAM_REQUEST';
+export const SAVE_DIAGRAM_SUCCESS = 'SAVE_DIAGRAM_SUCCESS';
+export const SAVE_DIAGRAM_FAILURE = 'SAVE_DIAGRAM_FAILURE';
+export const OPEN_DIAGRAM_REQUEST = 'OPEN_DIAGRAM_REQUEST';
+export const OPEN_DIAGRAM_SUCCESS = 'OPEN_DIAGRAM_SUCCESS';
+export const OPEN_DIAGRAM_FAILURE = 'OPEN_DIAGRAM_FAILURE';
 
 
 export function filterDatabases(name) {
@@ -25,6 +34,49 @@ export function showDatabaseDiagram(name) {
 
 export function closeDatabaseDiagram() {
   return { type: CLOSE_DATABASE_DIAGRAM };
+}
+
+export function generateDatabaseDiagram() {
+  return { type: GENERATE_DATABASE_DIAGRAM };
+}
+
+export function saveDatabaseDiagram(diagramJSON) {
+  return async (dispatch, getState) => {
+    dispatch({ type: SAVE_DIAGRAM_REQUEST });
+    try {
+      const filters = [ { name: 'JSON', extensions: ['json'] }];
+
+      let fileName = (getState().databases.fileName || await FileHandler.showSaveDialog(filters));
+      if (path.extname(fileName) !== '.json') {
+        fileName += '.json';
+      }
+
+      await FileHandler.saveFile(fileName, JSON.stringify(diagramJSON));
+
+      dispatch({ type: SAVE_DIAGRAM_SUCCESS, fileName });
+    } catch (error) {
+      dispatch({ type: SAVE_DIAGRAM_FAILURE, error });
+    }
+  };
+}
+
+export function openDatabaseDiagram() {
+  return async (dispatch, getState) => {
+    dispatch({ type: OPEN_DIAGRAM_REQUEST });
+    try {
+      // Path user used last for save or open diagram in the same session. If such exists.
+      const defaultPath = path.dirname(getState().databases.fileName || '');
+      const filters = [ { name: 'JSON', extensions: ['json'] }];
+
+      const [fileName] = await FileHandler.showOpenDialog(filters, defaultPath);
+
+      const diagramJSON = await FileHandler.openFile(fileName);
+
+      dispatch({ type: OPEN_DIAGRAM_SUCCESS, fileName, diagramJSON });
+    } catch (error) {
+      dispatch({ type: OPEN_DIAGRAM_FAILURE, error });
+    }
+  };
 }
 
 
