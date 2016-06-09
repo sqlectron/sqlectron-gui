@@ -1,9 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import joint from 'jointjs';
+import joint from 'jointjs/dist/joint';
+import './jointjs-diagram-table';
+import './jointjs-diagram-table-cell';
 
 require('jointjs/dist/joint.min.css');
-require('./jointjs-diagram-table.js');
-require('./jointjs-diagram-table-cell.js');
 require('./database-diagram.css');
 
 

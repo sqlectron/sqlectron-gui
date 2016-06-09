@@ -1,4 +1,4 @@
-import joint from 'jointjs';
+import joint from 'jointjs/dist/joint';
 import { bindAll, template } from 'lodash';
 
 

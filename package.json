@@ -66,7 +66,7 @@
     "history": "^1.12.6",
     "html-webpack-plugin": "^2.19.0",
     "imports-loader": "^0.6.5",
-    "jointjs": "^0.9.7",
+    "jointjs": "^0.9.9",
     "jquery": "^2.2.0",
     "json-loader": "^0.5.4",
     "lodash": "^3.10.1",
