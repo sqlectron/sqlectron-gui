@@ -40,6 +40,7 @@ export default class QueryResultTable extends Component {
     this.renderCell = this.renderCell.bind(this);
     this.renderHeaderCell = this.renderHeaderCell.bind(this);
     this.getColumnWidth = this.getColumnWidth.bind(this);
+    this.renderNoRows = this.renderNoRows.bind(this);
   }
 
   componentDidMount() {
@@ -158,8 +159,22 @@ export default class QueryResultTable extends Component {
 
     var field = this.props.fields[params.columnIndex];
 
-    return <div className="item">{field.name}</div>;
+    return <div className="item">
+        {field.name}
+        {/*TODO: Implement resizing of columns using a scrollable element
+        <span style={{
+          cursor:"move",
+          width: "5px",
+          height:"30px",
+          position:"absolute",
+          right:"-3px",
+          top:"0"}}></span>*/}
+    </div>;
 
+  }
+
+  renderNoRows() {
+    return <div style={{textAlign:"center",fontSize:"16px"}}>No results found</div>;
   }
 
   resize(nextProps) {
@@ -221,8 +236,17 @@ export default class QueryResultTable extends Component {
       return null;
     }
 
+    var j = 0, totalColumnWidths = 0, autoColumnWidths = fields.map(({ name, index }) => this.resolveCellWidth(name, fields, rows, averageTableCellWidth))
 
-    this.state.autoColumnWidths = fields.map(({ name }) => this.resolveCellWidth(name, fields, rows, averageTableCellWidth));
+    for ( j=0; j < autoColumnWidths.length; j=j+1 ) {
+        totalColumnWidths = totalColumnWidths + autoColumnWidths[j];
+        if ( (j+1) === autoColumnWidths.length && totalColumnWidths < tableWidth ) {
+            totalColumnWidths = totalColumnWidths - autoColumnWidths[j];
+            autoColumnWidths[j] = (tableWidth - totalColumnWidths);
+        }
+    }
+
+    this.state.autoColumnWidths = autoColumnWidths;
 
     let previewModal = null;
     if (this.state.showPreview) {
@@ -234,30 +258,51 @@ export default class QueryResultTable extends Component {
       );
     }
 
+    var self = this;
+
     return (
       <div>
         {previewModal}
 
         <ScrollSync>
           {({ clientHeight, clientWidth, onScroll, scrollHeight, scrollLeft, scrollTop, scrollWidth }) => {
-            
+
              return ( <div>
                 
                 {this.renderHeader()}
-                
-                <Grid
-                    columnWidth={this.getColumnWidth}
-                    columnCount={fields.length}
-                    height={30}
-                    cellRenderer={this.renderHeaderCell}
-                    className="grid-header-row"
-                    rowHeight={30}
-                    rowCount={1}
-                    width={tableWidth - scrollbarSize()}
-                    scrollLeft={scrollLeft}
-                >
 
-                </Grid>
+                {(() => {
+
+                    if ( fields.length > 0 ) {
+
+                        return <div style={{position:"relative"}}>
+
+                          <div style={{position:"absolute",
+                            left:(tableWidth - scrollbarSize()),
+                            top:"0",background:"#e8e8e8",
+                            border:"1px solid #dadada",
+                            width:scrollbarSize(),
+                            height:"30px"}}></div>
+
+                          <Grid
+                              columnWidth={this.getColumnWidth}
+                              columnCount={fields.length}
+                              height={30}
+                              cellRenderer={this.renderHeaderCell}
+                              className="grid-header-row"
+                              rowHeight={30}
+                              rowCount={1}
+                              width={tableWidth - scrollbarSize()}
+                              scrollLeft={scrollLeft}
+                          >
+
+                          </Grid>
+
+                      </div>
+
+                    }                    
+
+                })()}
 
                 <Grid
                     cellRenderer={this.renderCell}
@@ -269,6 +314,7 @@ export default class QueryResultTable extends Component {
                     columnCount={fields.length}
                     columnWidth={this.getColumnWidth}
                     rowsCount={rowCount}
+                    noContentRenderer={this.renderNoRows}
                 >
 
                 </Grid>

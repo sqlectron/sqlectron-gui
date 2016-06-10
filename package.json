@@ -87,7 +87,7 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.1",
     "webpack-dev-middleware": "^1.6.1",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-dev-server": "^1.14.1",
     "react-virtualized": "^7.3.1",
     "react-addons-shallow-compare": "^15.1.0"
   }
