@@ -12,14 +12,30 @@ joint.shapes.sqlectron.TableCell = joint.shapes.basic.Rect.extend({
 });
 
 joint.shapes.sqlectron.TableCellView = joint.dia.ElementView.extend({
-  template: `<div class="sqlectron-table-cell"><span></span></div>`,
+  template: `<div class="sqlectron-table-cell"><span style="white-space:nowrap;"></span></div>`,
 
   initialize: function() {
     bindAll(this, 'updateCell');
     joint.dia.ElementView.prototype.initialize.apply(this, arguments);
     this.$box = $(template(this.template)());
-    this.model.on('change', this.updateCell, this);
 
+    const keyType = this.model.get('keyType');
+    const keyColor = keyType === 'PRIMARY KEY' ? 'yellow' : '';
+    const cellSpanEl = this.$box.find('span');
+
+    cellSpanEl.text(this.model.get('name'));
+    this.$box.addClass(this.model.get('tableName'));
+
+    if (keyType) {
+      cellSpanEl.prepend(`<i class="privacy icon ${keyColor}"></i>`);
+    } else {
+      cellSpanEl.css({
+        paddingLeft: '1.18em',
+        marginLeft: '0.25rem',
+      });
+    }
+
+    this.model.on('change', this.updateCell, this);
     this.updateCell();
   },
   render: function() {
@@ -36,7 +52,5 @@ joint.shapes.sqlectron.TableCellView = joint.dia.ElementView.extend({
       top: bbox.y,
       transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)',
     });
-    this.$box.find('span').text(this.model.get('name'));
-    this.$box.addClass(this.model.get('tableName'));
   },
 });

@@ -57,8 +57,9 @@ export default class DatabaseDiagram extends Component {
   }
 
   generateTableElements(tableShapes, tableCells) {
-    const { tables, columnsByTable } = this.props;
+    const { tables, columnsByTable, tableKeys } = this.props;
     let currentTable;
+    let columnKey;
     let newTabCell;
 
     try {
@@ -77,6 +78,8 @@ export default class DatabaseDiagram extends Component {
         currentTable = tableShapes[index];
 
         columnsByTable[table].map((column, idx) => {
+          columnKey = tableKeys[table].find((k) => k.columnName === column.name);
+
           newTabCell = new joint.shapes.sqlectron.TableCell({
             position: {
               x: (currentTable.position().x),
@@ -88,6 +91,7 @@ export default class DatabaseDiagram extends Component {
             },
             name: column.name,
             tableName: table,
+            keyType: columnKey ? columnKey.keyType : null,
           });
           currentTable.embed(newTabCell);
           tableCells.push(newTabCell);
@@ -127,25 +131,29 @@ export default class DatabaseDiagram extends Component {
 
   putEverythingOnGraph(tableShapes, tableCells, tableLinks) {
     this.graph.addCells(tableShapes.concat(tableCells, tableLinks));
-    this.resizeTableElements(tableShapes);
+    this.resizeTableElements(tableShapes, tableCells);
   }
 
 
   // Resize table elements based on attributes text length
-  resizeTableElements(tableShapes) {
+  resizeTableElements(tableShapes, tableCells) {
     const { tables, columnsByTable } = this.props;
 
     tables.map((table) => {
-      let biggestCellSize = $('span', `.sqlectron-table.${table} > p`).width();
+      let biggestCellSize = $('span', `.sqlectron-table.${table} > p`).outerWidth();
       $('span', `.sqlectron-table-cell.${table}`).each(function() {
-        if ( $(this).width() > biggestCellSize ) {
-          biggestCellSize = $(this).width();
+        if ( $(this).outerWidth()  > biggestCellSize ) {
+          biggestCellSize = $(this).outerWidth();
         }
       });
 
-      if (biggestCellSize > 110) {
-        tableShapes.find((shape) =>
-          shape.attributes.name === table).resize(biggestCellSize + 20, (columnsByTable[table].length + 1.5) * 20);
+      if (biggestCellSize > 100) {
+        // resize tables
+        tableShapes.find((shape) => shape.attributes.name === table)
+          .resize( biggestCellSize + 20, (columnsByTable[table].length + 1.5) * 20 );
+        // resize table cells
+        tableCells.filter((cell) => cell.attributes.tableName === table)
+          .map((cell) => cell.resize( biggestCellSize, 20 ));
       }
     });
   }
