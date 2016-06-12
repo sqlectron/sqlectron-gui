@@ -30,14 +30,11 @@ export default class QueryResultTable extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = { columnWidths: {} };
+    this.resizeHandler = debounce(::this.onResize, 20);
   }
 
   componentDidMount() {
-    window.addEventListener(
-      'resize',
-      debounce(::this.onResize, 20),
-      false,
-    );
+    window.addEventListener('resize', this.resizeHandler, false);
     this.resize();
   }
 
@@ -59,6 +56,10 @@ export default class QueryResultTable extends Component {
     if (allVisibleRowsHeight && allVisibleRowsHeight < this.state.tableHeight) {
       this.setState({ tableHeight: allVisibleRowsHeight });
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resizeHandler, false);
   }
 
   onColumnResizeEndCallback(newColumnWidth, columnKey) {
