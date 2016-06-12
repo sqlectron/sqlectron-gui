@@ -14,7 +14,7 @@ export default class DatabaseDiagramModal extends Component {
     selectedTables: PropTypes.array,
     views: PropTypes.array,
     columnsByTable: PropTypes.object,
-    references: PropTypes.object,
+    tableKeys: PropTypes.object,
     diagramJSON: PropTypes.string,
     onGenerateDatabaseDiagram: PropTypes.func.isRequired,
     onSaveDatabaseDiagram: PropTypes.func.isRequired,
@@ -73,13 +73,13 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   isDataLoaded(props) {
-    const { selectedTables, columnsByTable, references } = props;
+    const { selectedTables, columnsByTable, tableKeys } = props;
 
     return (selectedTables
       && columnsByTable
-      && references
+      && tableKeys
       && selectedTables.every((t) => Object.keys(columnsByTable).includes(t))
-      && selectedTables.every((t) => Object.keys(references).includes(t))
+      && selectedTables.every((t) => Object.keys(tableKeys).includes(t))
     );
   }
 
@@ -147,14 +147,14 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   renderDiagram() {
-    const { selectedTables, columnsByTable, references, diagramJSON } = this.props;
+    const { selectedTables, columnsByTable, tableKeys, diagramJSON } = this.props;
 
     return (
       <DatabaseDiagram
         ref="databaseDiagram"
         tables={selectedTables}
         columnsByTable={columnsByTable}
-        links={references}
+        tableKeys={tableKeys}
         diagramJSON={diagramJSON} />
     );
   }

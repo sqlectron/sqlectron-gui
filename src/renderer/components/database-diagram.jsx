@@ -11,7 +11,7 @@ export default class DatabaseDiagram extends Component {
   static propTypes = {
     tables: PropTypes.array,
     columnsByTable: PropTypes.object,
-    links: PropTypes.object,
+    tableKeys: PropTypes.object,
     diagramJSON: PropTypes.string,
   }
 
@@ -99,7 +99,7 @@ export default class DatabaseDiagram extends Component {
   }
 
   generateLinks(tableShapes, tableLinks) {
-    const { tables, links } = this.props;
+    const { tables, tableKeys } = this.props;
     let currentTable;
     let newLink;
     let targetIndex;
@@ -108,8 +108,8 @@ export default class DatabaseDiagram extends Component {
       tables.map((table, index) => {
         currentTable = tableShapes[index];
 
-        links[table].map((target) => {
-          targetIndex = tables.findIndex((t) => t === target.linksTo);
+        tableKeys[table].map((target) => {
+          targetIndex = tables.findIndex((t) => t === target.referencedTable);
           if (targetIndex !== -1) {
             newLink = new joint.dia.Link({
               source: { id: currentTable.id },
