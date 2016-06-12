@@ -97,12 +97,12 @@ export default class QueryResultTable extends Component {
       return null;
     }
 
-    // additional spacing to not show vertical scroll
-    const padding = 2;
+    // additional spacing due scroll bars
+    const paddingScroll = (this.props.rows.length === 1 ? 19 : 2);
     const tableElement = ReactDOM.findDOMNode(this.refs.table);
     return Array.prototype.slice.call(
       tableElement.querySelectorAll('.fixedDataTableRowLayout_rowWrapper')
-    ).reduce((total, elem) => total + elem.offsetHeight, 0) + padding;
+    ).reduce((total, elem) => total + elem.offsetHeight, 0) + paddingScroll;
   }
 
   /**
