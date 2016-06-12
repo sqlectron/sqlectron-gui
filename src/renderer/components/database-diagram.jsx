@@ -67,7 +67,7 @@ export default class DatabaseDiagram extends Component {
         tableShapes.push(new joint.shapes.sqlectron.Table({
           position: {
             x: 100 + (index % 6) * 100,
-            y: 30 + (index % 4) * 100,
+            y: 20 + (index % 4) * 100,
           },
           size: {
             width: 120,
@@ -83,7 +83,7 @@ export default class DatabaseDiagram extends Component {
           newTabCell = new joint.shapes.sqlectron.TableCell({
             position: {
               x: (currentTable.position().x),
-              y: (currentTable.position().y + (idx + 1) * 20),
+              y: ((currentTable.position().y + 7) + (idx + 1) * 20),
             },
             size: {
               width: 100,

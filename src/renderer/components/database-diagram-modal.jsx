@@ -180,9 +180,16 @@ export default class DatabaseDiagramModal extends Component {
     // For more check this issue: https://github.com/clientIO/joint/issues/262
     return (
       <div className="ui modal" ref="diagramModal">
-        {!this.state.showDatabaseDiagram && !this.state.showLoader && this.renderSelectTablesMenu()}
-        {!this.state.showDatabaseDiagram && !!this.state.showLoader && this.renderLoader()}
-        {!!this.state.showDatabaseDiagram && this.renderDiagram()}
+        {!!this.state.showDatabaseDiagram &&
+          <div className="header">
+            Database diagram
+          </div>
+        }
+        <div className="content">
+          {!this.state.showDatabaseDiagram && !this.state.showLoader && this.renderSelectTablesMenu()}
+          {!this.state.showDatabaseDiagram && !!this.state.showLoader && this.renderLoader()}
+          {!!this.state.showDatabaseDiagram && this.renderDiagram()}
+        </div>
         {!!this.state.showDatabaseDiagram && this.renderActionButtons()}
       </div>
     );
