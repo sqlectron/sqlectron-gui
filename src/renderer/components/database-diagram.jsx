@@ -167,7 +167,13 @@ export default class DatabaseDiagram extends Component {
   }
 
   onTableDoubleClick(table) {
-    const { tableKeys, addRelatedTables } = this.props;
+    const { tableKeys, diagramJSON, addRelatedTables } = this.props;
+
+    // Currently not supported for diagram loaded from file
+    if (diagramJSON) {
+      return;
+    }
+
     const relatedTables = tableKeys[table].map(k => k.referencedTable).filter(rt => rt !== null);
     addRelatedTables(relatedTables);
   }
