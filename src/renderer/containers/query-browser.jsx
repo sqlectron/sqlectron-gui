@@ -184,11 +184,7 @@ class QueryBrowserContainer extends Component {
     });
 
     dispatch(selectTablesForDiagram(selectedTables));
-
-    selectedTables.map((item) => {
-      dispatch(fetchTableColumnsIfNeeded(database, item));
-      dispatch(fetchTableKeysIfNeeded(database, item));
-    });
+    this.fetchTableDiagramData(database, selectedTables);
   }
 
   onAddRelatedTables(relatedTables) {
@@ -198,8 +194,12 @@ class QueryBrowserContainer extends Component {
     const selectedTables = union(tablesOnDiagram, relatedTables);
 
     dispatch(selectTablesForDiagram(selectedTables));
+    this.fetchTableDiagramData(database, relatedTables);
+  }
 
-    relatedTables.map((item) => {
+  fetchTableDiagramData(database, tables) {
+    const { dispatch } = this.props;
+    tables.map((item) => {
       dispatch(fetchTableColumnsIfNeeded(database, item));
       dispatch(fetchTableKeysIfNeeded(database, item));
     });
