@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import { debounce, union } from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -184,8 +184,22 @@ class QueryBrowserContainer extends Component {
     });
 
     dispatch(selectTablesForDiagram(selectedTables));
+    this.fetchTableDiagramData(database, selectedTables);
+  }
 
-    selectedTables.map((item) => {
+  onAddRelatedTables(relatedTables) {
+    const { dispatch, databases, tables } = this.props;
+    const database = databases.diagramDatabase;
+    const tablesOnDiagram = tables.selectedTablesForDiagram;
+    const selectedTables = union(tablesOnDiagram, relatedTables);
+
+    dispatch(selectTablesForDiagram(selectedTables));
+    this.fetchTableDiagramData(database, relatedTables);
+  }
+
+  fetchTableDiagramData(database, tables) {
+    const { dispatch } = this.props;
+    tables.map((item) => {
       dispatch(fetchTableColumnsIfNeeded(database, item));
       dispatch(fetchTableKeysIfNeeded(database, item));
     });
@@ -300,6 +314,7 @@ class QueryBrowserContainer extends Component {
         tableKeys={keys.keysByTable[selectedDB]}
         diagramJSON={databases.diagramJSON}
         onGenerateDatabaseDiagram={::this.onGenerateDatabaseDiagram}
+        addRelatedTables={::this.onAddRelatedTables}
         onSaveDatabaseDiagram={::this.onSaveDatabaseDiagram}
         onOpenDatabaseDiagram={::this.onOpenDatabaseDiagram}
         onClose={::this.onCloseDiagramModal} />

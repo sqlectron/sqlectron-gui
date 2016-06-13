@@ -13,6 +13,7 @@ export default class DatabaseDiagram extends Component {
     columnsByTable: PropTypes.object,
     tableKeys: PropTypes.object,
     diagramJSON: PropTypes.string,
+    addRelatedTables: PropTypes.func.isRequired,
   }
 
   constructor(props) {
@@ -54,6 +55,15 @@ export default class DatabaseDiagram extends Component {
       gridSize: 1,
       restrictTranslate: true,
     });
+
+    if (!this.props.diagramJSON) { //Only supported for newely generated diagrams
+      this.paper.on('cell:contextmenu',
+        (cellView, evt, x, y) => {
+          const table = cellView.model.attributes.name;
+          this.onTableRightClick(table);
+        }
+      );
+    }
   }
 
   generateTableElements(tableShapes, tableCells) {
@@ -156,6 +166,12 @@ export default class DatabaseDiagram extends Component {
           .map((cell) => cell.resize( biggestCellSize, 20 ));
       }
     });
+  }
+
+  onTableRightClick(table) {
+    const { tableKeys, addRelatedTables } = this.props;
+    const relatedTables = tableKeys[table].map(k => k.referencedTable).filter(rt => rt !== null);
+    addRelatedTables(relatedTables);
   }
 
   render() {
