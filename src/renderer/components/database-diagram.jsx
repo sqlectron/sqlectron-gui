@@ -56,12 +56,14 @@ export default class DatabaseDiagram extends Component {
       restrictTranslate: true,
     });
 
-    this.paper.on('cell:pointerdblclick',
-      (cellView, evt, x, y) => {
-        const table = cellView.model.attributes.name;
-        this.onTableDoubleClick(table);
-      }
-    );
+    if (!this.props.diagramJSON) { //Only supported for newely generated diagrams
+      this.paper.on('cell:contextmenu',
+        (cellView, evt, x, y) => {
+          const table = cellView.model.attributes.name;
+          this.onTableRightClick(table);
+        }
+      );
+    }
   }
 
   generateTableElements(tableShapes, tableCells) {
@@ -166,14 +168,8 @@ export default class DatabaseDiagram extends Component {
     });
   }
 
-  onTableDoubleClick(table) {
-    const { tableKeys, diagramJSON, addRelatedTables } = this.props;
-
-    // Currently not supported for diagram loaded from file
-    if (diagramJSON) {
-      return;
-    }
-
+  onTableRightClick(table) {
+    const { tableKeys, addRelatedTables } = this.props;
     const relatedTables = tableKeys[table].map(k => k.referencedTable).filter(rt => rt !== null);
     addRelatedTables(relatedTables);
   }
