@@ -1,12 +1,12 @@
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
-import * as types from '../actions/references';
+import * as types from '../actions/keys';
 
 
 const INITIAL_STATE = {
   isFetching: {},
   didInvalidate: false,
-  referencesByTable: {},
+  keysByTable: {},
 };
 
 
@@ -17,7 +17,7 @@ export default function (state = INITIAL_STATE, action) {
       ? { ...INITIAL_STATE, didInvalidate: true }
       : state;
   }
-  case types.FETCH_REFERENCES_REQUEST: {
+  case types.FETCH_KEYS_REQUEST: {
     return {
       ...state,
       isFetching: {
@@ -31,7 +31,7 @@ export default function (state = INITIAL_STATE, action) {
       error: null,
     };
   }
-  case types.FETCH_REFERENCES_SUCCESS: {
+  case types.FETCH_KEYS_SUCCESS: {
     return {
       ...state,
       isFetching: {
@@ -42,17 +42,17 @@ export default function (state = INITIAL_STATE, action) {
         },
       },
       didInvalidate: false,
-      referencesByTable: {
-        ...state.referencesByTable,
+      keysByTable: {
+        ...state.keysByTable,
         [action.database]: {
-          ...state.referencesByTable[action.database],
-          [action.table]: action.references.map(linksTo => ({ linksTo })),
+          ...state.keysByTable[action.database],
+          [action.table]: action.tableKeys,
         },
       },
       error: null,
     };
   }
-  case types.FETCH_REFERENCES_FAILURE: {
+  case types.FETCH_KEYS_FAILURE: {
     return {
       ...state,
       isFetching: {

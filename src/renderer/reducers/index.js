@@ -10,7 +10,7 @@ import routines from './routines';
 import columns from './columns';
 import triggers from './triggers';
 import sqlscripts from './sqlscripts';
-import references from './references';
+import keys from './keys';
 
 
 const rootReducer = combineReducers({
@@ -25,7 +25,7 @@ const rootReducer = combineReducers({
   columns,
   triggers,
   sqlscripts,
-  references,
+  keys,
 });
 
 

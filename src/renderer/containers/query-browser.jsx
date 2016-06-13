@@ -12,7 +12,7 @@ import { fetchTableTriggersIfNeeded } from '../actions/triggers';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
-import { fetchTableReferencesIfNeeded } from '../actions/references';
+import { fetchTableKeysIfNeeded } from '../actions/keys';
 import DatabaseFilter from '../components/database-filter.jsx';
 import DatabaseList from '../components/database-list.jsx';
 import DatabaseDiagramModal from '../components/database-diagram-modal.jsx';
@@ -56,7 +56,7 @@ class QueryBrowserContainer extends Component {
     routines: PropTypes.object.isRequired,
     queries: PropTypes.object.isRequired,
     sqlscripts: PropTypes.object.isRequired,
-    references: PropTypes.object.isRequired,
+    keys: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired,
     route: PropTypes.object.isRequired,
@@ -178,7 +178,7 @@ class QueryBrowserContainer extends Component {
     const selectedTables = [];
 
     dispatch(DbAction.generateDatabaseDiagram());
-    
+
     $(':checkbox:checked', 'div.ui.list').map((index, checkbox) => {
       selectedTables.push(checkbox.id);
     });
@@ -187,7 +187,7 @@ class QueryBrowserContainer extends Component {
 
     selectedTables.map((item) => {
       dispatch(fetchTableColumnsIfNeeded(database, item));
-      dispatch(fetchTableReferencesIfNeeded(database, item));
+      dispatch(fetchTableKeysIfNeeded(database, item));
     });
   }
 
@@ -285,7 +285,7 @@ class QueryBrowserContainer extends Component {
       tables,
       columns,
       views,
-      references,
+      keys,
     } = this.props;
 
     const selectedDB = databases.diagramDatabase;
@@ -297,7 +297,7 @@ class QueryBrowserContainer extends Component {
         selectedTables={tables.selectedTablesForDiagram}
         views={views.viewsByDatabase[selectedDB]}
         columnsByTable={columns.columnsByTable[selectedDB]}
-        references={references.referencesByTable[selectedDB]}
+        tableKeys={keys.keysByTable[selectedDB]}
         diagramJSON={databases.diagramJSON}
         onGenerateDatabaseDiagram={::this.onGenerateDatabaseDiagram}
         onSaveDatabaseDiagram={::this.onSaveDatabaseDiagram}
@@ -478,7 +478,7 @@ function mapStateToProps (state) {
     routines,
     queries,
     sqlscripts,
-    references,
+    keys,
     status,
   } = state;
 
@@ -492,7 +492,7 @@ function mapStateToProps (state) {
     routines,
     queries,
     sqlscripts,
-    references,
+    keys,
     status,
   };
 }

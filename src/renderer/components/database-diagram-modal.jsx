@@ -14,7 +14,7 @@ export default class DatabaseDiagramModal extends Component {
     selectedTables: PropTypes.array,
     views: PropTypes.array,
     columnsByTable: PropTypes.object,
-    references: PropTypes.object,
+    tableKeys: PropTypes.object,
     diagramJSON: PropTypes.string,
     onGenerateDatabaseDiagram: PropTypes.func.isRequired,
     onSaveDatabaseDiagram: PropTypes.func.isRequired,
@@ -73,13 +73,13 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   isDataLoaded(props) {
-    const { selectedTables, columnsByTable, references } = props;
+    const { selectedTables, columnsByTable, tableKeys } = props;
 
     return (selectedTables
       && columnsByTable
-      && references
+      && tableKeys
       && selectedTables.every((t) => Object.keys(columnsByTable).includes(t))
-      && selectedTables.every((t) => Object.keys(references).includes(t))
+      && selectedTables.every((t) => Object.keys(tableKeys).includes(t))
     );
   }
 
@@ -147,14 +147,14 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   renderDiagram() {
-    const { selectedTables, columnsByTable, references, diagramJSON } = this.props;
+    const { selectedTables, columnsByTable, tableKeys, diagramJSON } = this.props;
 
     return (
       <DatabaseDiagram
         ref="databaseDiagram"
         tables={selectedTables}
         columnsByTable={columnsByTable}
-        links={references}
+        tableKeys={tableKeys}
         diagramJSON={diagramJSON} />
     );
   }
@@ -180,9 +180,16 @@ export default class DatabaseDiagramModal extends Component {
     // For more check this issue: https://github.com/clientIO/joint/issues/262
     return (
       <div className="ui modal" ref="diagramModal">
-        {!this.state.showDatabaseDiagram && !this.state.showLoader && this.renderSelectTablesMenu()}
-        {!this.state.showDatabaseDiagram && !!this.state.showLoader && this.renderLoader()}
-        {!!this.state.showDatabaseDiagram && this.renderDiagram()}
+        {!!this.state.showDatabaseDiagram &&
+          <div className="header">
+            Database diagram
+          </div>
+        }
+        <div className="content">
+          {!this.state.showDatabaseDiagram && !this.state.showLoader && this.renderSelectTablesMenu()}
+          {!this.state.showDatabaseDiagram && !!this.state.showLoader && this.renderLoader()}
+          {!!this.state.showDatabaseDiagram && this.renderDiagram()}
+        </div>
         {!!this.state.showDatabaseDiagram && this.renderActionButtons()}
       </div>
     );

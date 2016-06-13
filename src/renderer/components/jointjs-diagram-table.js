@@ -20,6 +20,10 @@ joint.shapes.sqlectron.TableView = joint.dia.ElementView.extend({
     bindAll(this, 'updateBox');
     joint.dia.ElementView.prototype.initialize.apply(this, arguments);
     this.$box = $(template(this.template)());
+
+    this.$box.find('span').text(this.model.get('name'));
+    this.$box.addClass(this.model.get('name'));
+
     // Update the box position whenever the underlying model changes.
     this.model.on('change', this.updateBox, this);
 
@@ -40,7 +44,5 @@ joint.shapes.sqlectron.TableView = joint.dia.ElementView.extend({
       top: bbox.y,
       transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)',
     });
-    this.$box.find('span').text(this.model.get('name'));
-    this.$box.addClass(this.model.get('name'));
   },
 });
