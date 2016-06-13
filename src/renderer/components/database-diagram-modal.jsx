@@ -17,6 +17,7 @@ export default class DatabaseDiagramModal extends Component {
     tableKeys: PropTypes.object,
     diagramJSON: PropTypes.string,
     onGenerateDatabaseDiagram: PropTypes.func.isRequired,
+    addRelatedTables: PropTypes.func.isRequired,
     onSaveDatabaseDiagram: PropTypes.func.isRequired,
     onOpenDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -64,6 +65,18 @@ export default class DatabaseDiagramModal extends Component {
   onGenerateDiagramClick() {
     this.setState({ showLoader: true });
     this.props.onGenerateDatabaseDiagram(this.props.database);
+  }
+
+  onAddRelatedTables(relatedTables) {
+    const { selectedTables, addRelatedTables } = this.props;
+
+    // If all related tables are already on diagram -> no need to reset positions
+    if (relatedTables.every(t => selectedTables.includes(t))) {
+      return;
+    }
+
+    this.setState({  showDatabaseDiagram: false });
+    addRelatedTables(relatedTables);
   }
 
   showDiagramIfNeeded(props) {
@@ -147,7 +160,13 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   renderDiagram() {
-    const { selectedTables, columnsByTable, tableKeys, diagramJSON } = this.props;
+    const {
+      selectedTables,
+      columnsByTable,
+      tableKeys,
+      diagramJSON,
+      onAddRelatedTables,
+    } = this.props;
 
     return (
       <DatabaseDiagram
@@ -155,7 +174,8 @@ export default class DatabaseDiagramModal extends Component {
         tables={selectedTables}
         columnsByTable={columnsByTable}
         tableKeys={tableKeys}
-        diagramJSON={diagramJSON} />
+        diagramJSON={diagramJSON}
+        addRelatedTables={::this.onAddRelatedTables} />
     );
   }
 
