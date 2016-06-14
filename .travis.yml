@@ -34,6 +34,8 @@ addons:
       #- clang-3.8
       - clang
       - graphicsmagick
+      - rpm
+      - bsdtar
 
 install:
 - clang --version
