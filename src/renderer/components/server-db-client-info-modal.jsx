@@ -36,7 +36,7 @@ export default class ServerDBClientInfoModal extends Component {
     return (
       <div id="server-modal" className="ui modal" ref="infoModal">
         <div className="header">
-          {dbClient.name} Query Infomartions
+          {dbClient.name} Query Information
         </div>
         <div className="content">
           <p>Some particularities about queries on {dbClient.name} you should know:</p>
