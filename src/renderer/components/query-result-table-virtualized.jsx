@@ -10,6 +10,7 @@ import 'react-virtualized/styles.css';
 import { Grid, ScrollSync } from 'react-virtualized'
 import classNames from 'classnames';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize'
+import Draggable from 'react-draggable';
 
 export default class QueryResultTable extends Component {
   
@@ -35,7 +36,8 @@ export default class QueryResultTable extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = { columnWidths: {}, 
-      autoColumnWidths: []
+      autoColumnWidths: [],
+      columnWidths: {}
     };
     this.renderCell = this.renderCell.bind(this);
     this.renderHeaderCell = this.renderHeaderCell.bind(this);
@@ -155,20 +157,75 @@ export default class QueryResultTable extends Component {
 
   }
 
+  handleStart() {
+  }
+
+  handleDrag() {
+  }
+
+  handleStop(data,e,move) {
+
+    var originalWidth = 0;
+
+    var columnWidths = this.state.columnWidths;
+
+    if ( data.name && columnWidths && columnWidths[data.name] !== undefined ) {
+      originalWidth = columnWidths[data.name];
+    } else if ( this.state.autoColumnWidths && this.state.autoColumnWidths[data.index] !== undefined ) {
+      originalWidth = this.state.autoColumnWidths[data.index];
+    }
+
+    columnWidths[data.name] = Math.max((originalWidth + move.x),10);
+
+    this.setState({columnWidths:columnWidths});
+    
+    if ( this.headerGrid ) {
+      this.headerGrid.measureAllCells();
+      this.headerGrid.recomputeGridSize();
+      this.headerGrid.forceUpdate();
+    }
+
+    if ( this.rowsGrid ) {
+      this.rowsGrid.measureAllCells();
+      this.rowsGrid.recomputeGridSize();
+      this.rowsGrid.forceUpdate();
+    }
+
+
+  }
+
   renderHeaderCell(params) {
 
     var field = this.props.fields[params.columnIndex];
-
+    var handleStart = this.handleStart.bind(this,{name:field.name,index:params.columnIndex});
+    var handleDrag = this.handleDrag.bind(this,{name:field.name,index:params.columnIndex});
+    var handleStop = this.handleStop.bind(this,{name:field.name,index:params.columnIndex});
+    
     return <div className="item">
-        {field.name}
-        {/*TODO: Implement resizing of columns using a scrollable element
-        <span style={{
-          cursor:"move",
-          width: "5px",
-          height:"30px",
-          position:"absolute",
-          right:"-3px",
-          top:"0"}}></span>*/}
+        
+        <span>{field.name}</span>
+        
+        {(() => {
+          
+          // We don't want the resizable handle on the last column for layout reasons
+          if ( (this.props.fields.length-1) != params.columnIndex ) {
+
+             return <Draggable
+                axis="x"
+                onStart={handleStart}
+                onDrag={handleDrag}
+                onStop={handleStop}
+                position={{x:0,y:0}}
+                zIndex={999}>
+
+                <div className="draggable-handle"></div>
+
+              </Draggable>
+
+          }
+        
+        })()}
+
     </div>;
 
   }
@@ -212,14 +269,17 @@ export default class QueryResultTable extends Component {
 
     return (
       <div style={{"height":"32px","width":tableWidth}}>
-        <div style={{"margin-left":"10px","float":"left"}}>Rows: {rowCount}</div>
+        <div style={{"marginLeft":"10px","float":"left"}}>Rows: {rowCount}</div>
         {copyPanel}
       </div>
     );
   }
 
   getColumnWidth({index}) {
-    if ( this.state.autoColumnWidths && this.state.autoColumnWidths[index] !== undefined ) {
+    var field = this.props.fields[index];
+    if ( field && this.state.columnWidths && this.state.columnWidths[field.name] !== undefined ) {
+      return this.state.columnWidths[field.name];
+    } else if ( this.state.autoColumnWidths && this.state.autoColumnWidths[index] !== undefined ) {
       return this.state.autoColumnWidths[index];
     } else {
       return 50;
@@ -277,14 +337,12 @@ export default class QueryResultTable extends Component {
 
                         return <div style={{position:"relative"}}>
 
-                          <div style={{position:"absolute",
-                            left:(tableWidth - scrollbarSize()),
-                            top:"0",background:"#e8e8e8",
-                            border:"1px solid #dadada",
-                            width:scrollbarSize(),
-                            height:"30px"}}></div>
+                          <div className="scrollPlaceholder" 
+                            style={{left:(tableWidth - scrollbarSize()),
+                              width:scrollbarSize()}}></div>
 
                           <Grid
+                              ref={(ref) => self.headerGrid = ref}
                               columnWidth={this.getColumnWidth}
                               columnCount={fields.length}
                               height={30}
@@ -305,6 +363,7 @@ export default class QueryResultTable extends Component {
                 })()}
 
                 <Grid
+                    ref={(ref) => this.rowsGrid = ref}
                     cellRenderer={this.renderCell}
                     width={tableWidth}
                     height={tableHeight-62}

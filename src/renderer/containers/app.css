@@ -41,6 +41,24 @@ span.clickable {
   cursor: pointer;
 }
 
+.Grid.grid-header-row .Grid__cell .draggable-handle {
+    width: 5px;
+    cursor: move;
+    height: 30px;
+    position: absolute;
+    right: 0;
+    border-right: 1px solid #bfbfbf;
+    top: 0
+}
+
+.scrollPlaceholder {
+  position:absolute;
+  top:0;
+  background:#e8e8e8;
+  border:1px solid #bfbfbf;
+  height:30px;
+}
+
 .Grid__cell {
   overflow: hidden;
 }
@@ -50,12 +68,30 @@ span.clickable {
   padding-left: 3px;
 }
 
+.Grid.grid-header-row .Grid__cell {
+  overflow: visible;
+}
+
+.Grid.grid-header-row .Grid__cell span {
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.Grid.grid-header-row .Grid__cell > .item {
+  border: none;
+}
+
 .Grid.grid-header-row {
   overflow: hidden;
+  background: #e8e8e8;
+  border-left: 1px solid #bfbfbf;
+  border-top: 1px solid #bfbfbf;
+  border-bottom: 1px solid #bfbfbf;
 }
 
 .grid-header-row .Grid__cell > .item {
-  background-color: #e8e8e8;
   border: 1px solid #dadada;
 }
 
