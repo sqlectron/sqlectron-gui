@@ -34,6 +34,9 @@
           "type": "file"
         }
       ]
+    },
+    "linux": {
+      "target": ["deb", "rpm", "sh", "freebsd", "pacman", "tar.xz", "tar.gz"]
     }
   },
   "devDependencies": {
