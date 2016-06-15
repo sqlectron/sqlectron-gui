@@ -65,7 +65,7 @@ export function saveDatabaseDiagram(diagramJSON) {
 }
 
 export function exportDatabaseDiagram(diagram, imageType) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: EXPORT_DIAGRAM_REQUEST });
     try {
       // fix - reapply css roles which html2canvas ignores for some reason
@@ -81,7 +81,7 @@ export function exportDatabaseDiagram(diagram, imageType) {
       // Create image
       const canvas = await html2canvas(diagram, { background: '#fff' });
       const image = await canvas.toDataURL(`image/${imageType}`);
-      const imageData = image.replace(/^data:image\/\w+;base64,/, "");
+      const imageData = image.replace(/^data:image\/\w+;base64,/, '');
       const buff = new Buffer(imageData, 'base64');
 
       await FileHandler.saveFile(fileName, buff, 'binary');
