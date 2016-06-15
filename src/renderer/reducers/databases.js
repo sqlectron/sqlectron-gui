@@ -11,6 +11,7 @@ const INITIAL_STATE = {
   diagramDatabase: null,
   fileName: null,
   diagramJSON: null,
+  isSaving: false,
 };
 
 
@@ -65,10 +66,19 @@ export default function (state = INITIAL_STATE, action) {
       fileName: null,
     };
   }
-  case types.SAVE_DIAGRAM_SUCCESS: {
+  case types.SAVE_DIAGRAM_REQUEST:
+  case types.EXPORT_DIAGRAM_REQUEST: {
+    return {
+      ...state,
+      isSaving: true,
+    };
+  }
+  case types.SAVE_DIAGRAM_SUCCESS:
+  case types.EXPORT_DIAGRAM_SUCCESS: {
     return {
       ...state,
       fileName: action.fileName,
+      isSaving: false,
     };
   }
   case types.OPEN_DIAGRAM_SUCCESS: {
@@ -84,6 +94,7 @@ export default function (state = INITIAL_STATE, action) {
     return {
       ...state,
       error: action.error,
+      isSaving: false,
     };
   }
   case queryTypes.EXECUTE_QUERY_SUCCESS: {

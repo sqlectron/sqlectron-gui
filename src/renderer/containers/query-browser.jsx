@@ -317,6 +317,7 @@ class QueryBrowserContainer extends Component {
         columnsByTable={columns.columnsByTable[selectedDB]}
         tableKeys={keys.keysByTable[selectedDB]}
         diagramJSON={databases.diagramJSON}
+        isSaving={databases.isSaving}
         onGenerateDatabaseDiagram={::this.onGenerateDatabaseDiagram}
         addRelatedTables={::this.onAddRelatedTables}
         onSaveDatabaseDiagram={::this.onSaveDatabaseDiagram}

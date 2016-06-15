@@ -16,6 +16,7 @@ export default class DatabaseDiagramModal extends Component {
     columnsByTable: PropTypes.object,
     tableKeys: PropTypes.object,
     diagramJSON: PropTypes.string,
+    isSaving: PropTypes.bool,
     onGenerateDatabaseDiagram: PropTypes.func.isRequired,
     addRelatedTables: PropTypes.func.isRequired,
     onSaveDatabaseDiagram: PropTypes.func.isRequired,
@@ -166,6 +167,7 @@ export default class DatabaseDiagramModal extends Component {
       columnsByTable,
       tableKeys,
       diagramJSON,
+      isSaving,
       onAddRelatedTables,
     } = this.props;
 
