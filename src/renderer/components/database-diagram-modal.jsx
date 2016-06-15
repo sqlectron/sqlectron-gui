@@ -19,6 +19,7 @@ export default class DatabaseDiagramModal extends Component {
     onGenerateDatabaseDiagram: PropTypes.func.isRequired,
     addRelatedTables: PropTypes.func.isRequired,
     onSaveDatabaseDiagram: PropTypes.func.isRequired,
+    onExportDatabaseDiagram: PropTypes.func.isRequired,
     onOpenDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
   }
@@ -175,19 +176,37 @@ export default class DatabaseDiagramModal extends Component {
         columnsByTable={columnsByTable}
         tableKeys={tableKeys}
         diagramJSON={diagramJSON}
+        isSaving={isSaving}
         addRelatedTables={::this.onAddRelatedTables} />
     );
   }
 
   renderActionButtons() {
-    const { onSaveDatabaseDiagram } = this.props;
+    const { onSaveDatabaseDiagram, onExportDatabaseDiagram } = this.props;
 
     return (
       <div className="actions">
-        <div className="ui small positive button"
-          tabIndex="0"
-          onClick={() => onSaveDatabaseDiagram(this.refs.databaseDiagram.graph.toJSON())}>
-          Save
+        <div className="ui buttons">
+          <div className="ui small positive button"
+            tabIndex="0"
+            onClick={() => onSaveDatabaseDiagram(this.refs.databaseDiagram.graph.toJSON())}>
+            Save
+          </div>
+          <div className="or"></div>
+          <div className="ui small button simple dropdown">
+            Export to
+            <i className="dropdown icon"></i>
+            <div className="menu">
+              <div className="item"
+                onClick={() => onExportDatabaseDiagram(this.refs.databaseDiagram.refs.diagram, 'png')}>
+                PNG
+              </div>
+              <div className="item"
+                onClick={() => onExportDatabaseDiagram(this.refs.databaseDiagram.refs.diagram, 'jpeg')}>
+                JPEG
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

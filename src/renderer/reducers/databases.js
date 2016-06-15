@@ -79,6 +79,7 @@ export default function (state = INITIAL_STATE, action) {
     };
   }
   case types.SAVE_DIAGRAM_FAILURE:
+  case types.EXPORT_DIAGRAM_FAILURE:
   case types.OPEN_DIAGRAM_FAILURE: {
     return {
       ...state,
