@@ -68,10 +68,6 @@ export function exportDatabaseDiagram(diagram, imageType) {
   return async (dispatch) => {
     dispatch({ type: EXPORT_DIAGRAM_REQUEST });
     try {
-      // fix - reapply css roles which html2canvas ignores for some reason
-      $('.link-tools, .marker-arrowheads', diagram).css({ display: 'none' });
-      $('.link, .connection', diagram).css({ fill: 'none' });
-
       // html2canvas library only captures elements in window view
       diagram.scrollIntoView();
 

@@ -81,6 +81,17 @@ export default class DatabaseDiagramModal extends Component {
     addRelatedTables(relatedTables);
   }
 
+  onExportDatabaseDiagram(imageType) {
+    const { onExportDatabaseDiagram } = this.props;
+    const diagram = this.refs.databaseDiagram.refs.diagram;
+
+    // fix - reapply css roles which html2canvas ignores for some reason
+    $('.link-tools, .marker-arrowheads', diagram).css({ display: 'none' });
+    $('.link, .connection', diagram).css({ fill: 'none' });
+
+    onExportDatabaseDiagram(diagram, imageType);
+  }
+
   showDiagramIfNeeded(props) {
     if (this.isDataLoaded(props) || props.diagramJSON) {
       this.setState({ showDatabaseDiagram: true });
@@ -184,7 +195,7 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   renderActionButtons() {
-    const { onSaveDatabaseDiagram, onExportDatabaseDiagram } = this.props;
+    const { onSaveDatabaseDiagram } = this.props;
 
     return (
       <div className="actions">
@@ -200,11 +211,11 @@ export default class DatabaseDiagramModal extends Component {
             <i className="dropdown icon"></i>
             <div className="menu">
               <div className="item"
-                onClick={() => onExportDatabaseDiagram(this.refs.databaseDiagram.refs.diagram, 'png')}>
+                onClick={() => this.onExportDatabaseDiagram('png')}>
                 PNG
               </div>
               <div className="item"
-                onClick={() => onExportDatabaseDiagram(this.refs.databaseDiagram.refs.diagram, 'jpeg')}>
+                onClick={() => this.onExportDatabaseDiagram('jpeg')}>
                 JPEG
               </div>
             </div>
