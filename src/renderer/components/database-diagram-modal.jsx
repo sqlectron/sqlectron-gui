@@ -206,9 +206,9 @@ export default class DatabaseDiagramModal extends Component {
             Save
           </div>
           <div className="or"></div>
-          <div className="ui small button simple dropdown">
+          <div className="ui small right labeled icon button simple upward dropdown">
             Export to
-            <i className="dropdown icon"></i>
+            <i className="caret up icon"></i>
             <div className="menu">
               <div className="item"
                 onClick={() => this.onExportDatabaseDiagram('png')}>
