@@ -1,4 +1,5 @@
 import path from 'path';
+import html2canvas from 'html2canvas';
 import { getCurrentDBConn } from './connections';
 import * as FileHandler from '../utils/file-handler';
 
@@ -17,6 +18,9 @@ export const SAVE_DIAGRAM_FAILURE = 'SAVE_DIAGRAM_FAILURE';
 export const OPEN_DIAGRAM_REQUEST = 'OPEN_DIAGRAM_REQUEST';
 export const OPEN_DIAGRAM_SUCCESS = 'OPEN_DIAGRAM_SUCCESS';
 export const OPEN_DIAGRAM_FAILURE = 'OPEN_DIAGRAM_FAILURE';
+export const EXPORT_DIAGRAM_REQUEST = 'EXPORT_DIAGRAM_REQUEST';
+export const EXPORT_DIAGRAM_SUCCESS = 'EXPORT_DIAGRAM_SUCCESS';
+export const EXPORT_DIAGRAM_FAILURE = 'EXPORT_DIAGRAM_FAILURE';
 
 
 export function filterDatabases(name) {
@@ -56,6 +60,31 @@ export function saveDatabaseDiagram(diagramJSON) {
       dispatch({ type: SAVE_DIAGRAM_SUCCESS, fileName });
     } catch (error) {
       dispatch({ type: SAVE_DIAGRAM_FAILURE, error });
+    }
+  };
+}
+
+export function exportDatabaseDiagram(diagram, imageType) {
+  return async (dispatch) => {
+    dispatch({ type: EXPORT_DIAGRAM_REQUEST });
+    try {
+      // html2canvas library only captures elements in window view
+      diagram.scrollIntoView();
+
+      const filters = [{ name: 'Images', extensions: [imageType] }];
+      const fileName = await FileHandler.showSaveDialog(filters);
+
+      // Create image
+      const canvas = await html2canvas(diagram, { background: '#fff' });
+      const image = await canvas.toDataURL(`image/${imageType}`);
+      const imageData = image.replace(/^data:image\/\w+;base64,/, '');
+      const buff = new Buffer(imageData, 'base64');
+
+      await FileHandler.saveFile(fileName, buff, 'binary');
+
+      dispatch({ type: EXPORT_DIAGRAM_SUCCESS });
+    } catch (error) {
+      dispatch({ type: EXPORT_DIAGRAM_FAILURE, error });
     }
   };
 }

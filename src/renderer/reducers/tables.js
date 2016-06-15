@@ -68,7 +68,7 @@ export default function (state = INITIAL_STATE, action) {
     return {
       ...state,
       selectedTablesForDiagram: null,
-    }
+    };
   }
   default : return state;
   }

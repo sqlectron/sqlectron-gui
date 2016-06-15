@@ -16,9 +16,11 @@ export default class DatabaseDiagramModal extends Component {
     columnsByTable: PropTypes.object,
     tableKeys: PropTypes.object,
     diagramJSON: PropTypes.string,
+    isSaving: PropTypes.bool,
     onGenerateDatabaseDiagram: PropTypes.func.isRequired,
     addRelatedTables: PropTypes.func.isRequired,
     onSaveDatabaseDiagram: PropTypes.func.isRequired,
+    onExportDatabaseDiagram: PropTypes.func.isRequired,
     onOpenDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
   }
@@ -77,6 +79,17 @@ export default class DatabaseDiagramModal extends Component {
 
     this.setState({  showDatabaseDiagram: false });
     addRelatedTables(relatedTables);
+  }
+
+  onExportDatabaseDiagram(imageType) {
+    const { onExportDatabaseDiagram } = this.props;
+    const diagram = this.refs.databaseDiagram.refs.diagram;
+
+    // fix - reapply css roles which html2canvas ignores for some reason
+    $('.link-tools, .marker-arrowheads', diagram).css({ display: 'none' });
+    $('.link, .connection', diagram).css({ fill: 'none' });
+
+    onExportDatabaseDiagram(diagram, imageType);
   }
 
   showDiagramIfNeeded(props) {
@@ -165,6 +178,7 @@ export default class DatabaseDiagramModal extends Component {
       columnsByTable,
       tableKeys,
       diagramJSON,
+      isSaving,
       onAddRelatedTables,
     } = this.props;
 
@@ -175,6 +189,7 @@ export default class DatabaseDiagramModal extends Component {
         columnsByTable={columnsByTable}
         tableKeys={tableKeys}
         diagramJSON={diagramJSON}
+        isSaving={isSaving}
         addRelatedTables={::this.onAddRelatedTables} />
     );
   }
@@ -184,10 +199,27 @@ export default class DatabaseDiagramModal extends Component {
 
     return (
       <div className="actions">
-        <div className="ui small positive button"
-          tabIndex="0"
-          onClick={() => onSaveDatabaseDiagram(this.refs.databaseDiagram.graph.toJSON())}>
-          Save
+        <div className="ui buttons">
+          <div className="ui small positive button"
+            tabIndex="0"
+            onClick={() => onSaveDatabaseDiagram(this.refs.databaseDiagram.graph.toJSON())}>
+            Save
+          </div>
+          <div className="or"></div>
+          <div className="ui small right labeled icon button simple upward dropdown">
+            Export to
+            <i className="caret up icon"></i>
+            <div className="menu">
+              <div className="item"
+                onClick={() => this.onExportDatabaseDiagram('png')}>
+                PNG
+              </div>
+              <div className="item"
+                onClick={() => this.onExportDatabaseDiagram('jpeg')}>
+                JPEG
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );

@@ -34,3 +34,7 @@
 .marker-arrowheads {
   display: none
 }
+
+.ui.simple.upward.dropdown > .menu {
+  top: auto !important;
+}

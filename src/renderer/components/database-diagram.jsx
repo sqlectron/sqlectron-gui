@@ -13,6 +13,7 @@ export default class DatabaseDiagram extends Component {
     columnsByTable: PropTypes.object,
     tableKeys: PropTypes.object,
     diagramJSON: PropTypes.string,
+    isSaving: PropTypes.bool,
     addRelatedTables: PropTypes.func.isRequired,
   }
 
@@ -168,6 +169,13 @@ export default class DatabaseDiagram extends Component {
     });
   }
 
+  shouldDisableDiagram() {
+    const { isSaving } = this.props;
+    return isSaving
+      ? { pointerEvents: 'none' }
+      : { pointerEvents: 'auto' };
+  }
+
   onTableRightClick(table) {
     const { tableKeys, addRelatedTables } = this.props;
     const relatedTables = tableKeys[table].map(k => k.referencedTable).filter(rt => rt !== null);
@@ -179,6 +187,6 @@ export default class DatabaseDiagram extends Component {
       return <div className="ui negative message" style={{textAlign: 'center'}}>{this.state.error}</div>;
     }
 
-    return <div ref="diagram"></div>;
+    return <div ref="diagram" style={this.shouldDisableDiagram()}></div>;
   }
 }
