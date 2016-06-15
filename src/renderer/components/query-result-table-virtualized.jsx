@@ -366,7 +366,7 @@ export default class QueryResultTable extends Component {
                     ref={(ref) => this.rowsGrid = ref}
                     cellRenderer={this.renderCell}
                     width={tableWidth}
-                    height={tableHeight-62}
+                    height={Math.min((tableHeight-62),(rowCount*32))}
                     rowHeight={28}
                     onScroll={onScroll}
                     rowCount={rowCount}
