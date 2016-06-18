@@ -1,16 +1,17 @@
 import { debounce } from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
-import { Table, ColumnGroup, Column, Cell } from 'fixed-data-table';
+import { Grid, ScrollSync } from 'react-virtualized';
+import scrollbarSize from 'dom-helpers/util/scrollbarSize';
+import Draggable from 'react-draggable';
+
 import TableCell from './query-result-table-cell.jsx';
 import PreviewModal from './preview-modal.jsx';
 import { valueToString } from '../utils/convert';
 
+import 'react-virtualized/styles.css';
+import './query-result-table.scss';
 
-require('fixed-data-table/dist/fixed-data-table.css');
-require('./query-result-table.scss');
-
-
+/* eslint react/sort-comp:0 */
 export default class QueryResultTable extends Component {
   static propTypes = {
     widthOffset: PropTypes.number.isRequired,
@@ -21,15 +22,20 @@ export default class QueryResultTable extends Component {
     query: PropTypes.string,
     fields: PropTypes.array,
     rows: PropTypes.array,
+    cellClass: PropTypes.string,
+    nullCellClass: PropTypes.string,
     rowCount: PropTypes.oneOfType([
-      React.PropTypes.array,
-      React.PropTypes.number,
+      PropTypes.array,
+      PropTypes.number,
     ]),
   }
 
   constructor(props, context) {
     super(props, context);
-    this.state = { columnWidths: {} };
+    this.state = {
+      columnWidths: {},
+      autoColumnWidths: [],
+    };
     this.resizeHandler = debounce(::this.onResize, 20);
   }
 
@@ -50,11 +56,6 @@ export default class QueryResultTable extends Component {
     if (this.state.showCopied) {
       /* eslint react/no-did-update-set-state: 0 */
       setTimeout(() => this.setState({ showCopied: false }), 1000);
-    }
-
-    const allVisibleRowsHeight = this.getAllVisibleRowsHeight();
-    if (allVisibleRowsHeight && allVisibleRowsHeight < this.state.tableHeight) {
-      this.setState({ tableHeight: allVisibleRowsHeight });
     }
   }
 
@@ -93,17 +94,197 @@ export default class QueryResultTable extends Component {
     return context.measureText(text).width + padding;
   }
 
-  getAllVisibleRowsHeight() {
-    if (!this.refs.table) {
+  autoResizeColumnsWidth(fields, rows, tableWidth) {
+    const averageTableCellWidth = tableWidth / fields.length;
+    let totalColumnWidths = 0;
+
+    const autoColumnWidths = fields.map((name, index) => {
+      const cellWidth = this.resolveCellWidth(name, fields, rows, averageTableCellWidth);
+      totalColumnWidths = totalColumnWidths + cellWidth;
+
+      const isLastColumn = (index + 1) === fields.length;
+      if (isLastColumn && totalColumnWidths < tableWidth) {
+        totalColumnWidths = totalColumnWidths - cellWidth;
+        return tableWidth - totalColumnWidths;
+      }
+
+      return cellWidth;
+    });
+
+    this.setState({ autoColumnWidths });
+  }
+
+  renderHeaderCell(params) {
+    const field = this.props.fields[params.columnIndex];
+    const handleStop = this.handleStop.bind(this, { name: field.name, index: params.columnIndex });
+
+    // We don't want the resizable handle on the last column for layout reasons
+    let resizeDrag = null;
+    if ((this.props.fields.length - 1) !== params.columnIndex) {
+      resizeDrag = (
+        <Draggable
+          axis="x"
+          onStop={handleStop}
+          position={{ x: 0, y: 0 }}
+          zIndex={999}>
+          <div className="draggable-handle"></div>
+        </Draggable>
+      );
+    }
+
+    return (
+      <div className="item">
+        <span>{field.name}</span>
+        {resizeDrag}
+      </div>
+    );
+  }
+
+  renderNoRows() {
+    return (
+      <div style={{ textAlign: 'center', fontSize: '16px' }}>
+        No results found
+      </div>
+    );
+  }
+
+  handleStop(data, e, move) {
+    const { columnWidths } = this.state;
+    const originalWidth = this.getColumnWidth(data);
+
+    // update dragged column width
+    this.setState({
+      columnWidths: {
+        ...columnWidths,
+        [data.name]: Math.max((originalWidth + move.x), 10),
+      },
+    });
+
+    if (this.headerGrid) {
+      this.headerGrid.measureAllCells();
+      this.headerGrid.recomputeGridSize();
+      this.headerGrid.forceUpdate();
+    }
+
+    if (this.rowsGrid) {
+      this.rowsGrid.measureAllCells();
+      this.rowsGrid.recomputeGridSize();
+      this.rowsGrid.forceUpdate();
+    }
+  }
+
+  resize(nextProps) {
+    const props = nextProps || this.props;
+    const tableWidth = window.innerWidth - (props.widthOffset + 27);
+    const tableHeight = window.innerHeight - (props.heigthOffset + 225);
+
+    // trigger columns resize
+    this.autoResizeColumnsWidth(props.fields, props.rows, tableWidth);
+
+    this.setState({ tableWidth, tableHeight });
+  }
+
+  renderHeaderTopBar() {
+    const { rows, rowCount, onCopyToClipboardClick } = this.props;
+    const styleCopied = { display: this.state.showCopied ? 'inline-block' : 'none' };
+    const styleButtons = { display: this.state.showCopied ? 'none' : 'inline-block' };
+
+    let copyPanel = null;
+    if (rowCount) {
+      copyPanel = (
+        <div className="ui small label" title="Copy as" style={{ float: 'right', margin: '3px' }}>
+          <i className="copy icon"></i>
+          <a className="detail" style={styleCopied}>Copied</a>
+          <a className="detail"
+            style={styleButtons}
+            onClick={() => onCopyToClipboardClick(rows, 'CSV')}>CSV</a>
+          <a className="detail"
+            style={styleButtons}
+            onClick={() => onCopyToClipboardClick(rows, 'JSON')}>JSON</a>
+        </div>
+      );
+    }
+
+    return (
+      <div style={{ background: 'rgba(0, 0, 0, 0.05)', overflow: 'hidden' }}>
+        <div className="ui label" style={{ margin: '3px', float: 'left' }}>
+          <i className="table icon"></i>
+          Rows
+          <div className="detail">{rowCount}</div>
+        </div>
+        {copyPanel}
+      </div>
+    );
+  }
+
+  renderPreviewModal() {
+    if (!this.state.showPreview) {
       return null;
     }
 
-    // additional spacing due scroll bars
-    const paddingScroll = (this.props.rows.length === 1 ? 19 : 2);
-    const tableElement = ReactDOM.findDOMNode(this.refs.table);
-    return Array.prototype.slice.call(
-      tableElement.querySelectorAll('.fixedDataTableRowLayout_rowWrapper')
-    ).reduce((total, elem) => total + elem.offsetHeight, 0) + paddingScroll;
+    return (
+      <PreviewModal
+        value={this.state.valuePreview}
+        onCloseClick={::this.onClosePreviewClick}
+      />
+    );
+  }
+
+  renderTableBody(onScroll) {
+    const { rowCount, fields } = this.props;
+    const { tableWidth, tableHeight } = this.state;
+
+    return (
+      <Grid
+          className="grid-body"
+          ref={(ref) => this.rowsGrid = ref}
+          cellRenderer={::this.renderCell}
+          width={tableWidth}
+          height={Math.min((tableHeight - 62), (rowCount * 32))}
+          rowHeight={28}
+          onScroll={onScroll}
+          rowCount={rowCount}
+          columnCount={fields.length}
+          columnWidth={::this.getColumnWidth}
+          rowsCount={rowCount}
+          noContentRenderer={::this.renderNoRows} />
+
+    );
+  }
+
+  renderTableHeader(scrollLeft) {
+    const { fields } = this.props;
+    const { tableWidth } = this.state;
+
+    if (!fields.length) {
+      return null;
+    }
+
+    return (
+      <Grid
+          ref={(ref) => this.headerGrid = ref}
+          columnWidth={::this.getColumnWidth}
+          columnCount={fields.length}
+          height={30}
+          cellRenderer={::this.renderHeaderCell}
+          className="grid-header-row"
+          rowHeight={30}
+          rowCount={1}
+          width={tableWidth - scrollbarSize()}
+          scrollLeft={scrollLeft} />
+    );
+  }
+
+  getColumnWidth({ index }) {
+    const { columnWidths, autoColumnWidths } = this.state;
+    const field = this.props.fields[index];
+
+    if (field && columnWidths && columnWidths[field.name] !== undefined) {
+      return columnWidths[field.name];
+    } else if (autoColumnWidths && autoColumnWidths[index] !== undefined) {
+      return autoColumnWidths[index];
+    }
+    return 50;
   }
 
   /**
@@ -123,8 +304,7 @@ export default class QueryResultTable extends Component {
         const value = valueToString(row[fieldName]);
         return this.getTextWidth(value, font);
       })
-      .reduce((prev, curr) => prev + curr, 0)
-      / numRowsToFindAverage;
+      .reduce((prev, curr) => prev + curr, 0) / numRowsToFindAverage;
 
     if (headerWidth > averageRowsCellWidth) {
       return headerWidth > maxWidth ? maxWidth : headerWidth;
@@ -133,127 +313,36 @@ export default class QueryResultTable extends Component {
     return averageRowsCellWidth > maxWidth ? maxWidth : averageRowsCellWidth;
   }
 
-  resize(nextProps) {
-    const props = nextProps || this.props;
-    const widthOffset = props.widthOffset;
-    const heigthOffset = props.heigthOffset;
-
-    this.setState({
-      tableWidth: window.innerWidth - (widthOffset + 25),
-      tableHeight: window.innerHeight - (heigthOffset + 225),
-    });
-  }
-
-  renderHeaderColumns() {
-    const { rows, rowCount, onCopyToClipboardClick } = this.props;
-    const styleCopied = {display: this.state.showCopied ? 'inline-block' : 'none'};
-    const styleButtons = {display: this.state.showCopied ? 'none' : 'inline-block'};
-
-    let copyPanel = null;
-    if (rowCount) {
-      copyPanel = (
-        <div className="ui small label" title="Copy as" style={{float: 'right'}}>
-          <i className="copy icon"></i>
-          <a className="detail" style={styleCopied}>Copied</a>
-          <a className="detail"
-            style={styleButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'CSV')}>CSV</a>
-          <a className="detail"
-            style={styleButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'JSON')}>JSON</a>
-        </div>
-      );
-    }
-
+  renderCell(params) {
+    const field = this.props.fields[params.columnIndex];
     return (
-      <Cell>
-        Rows: {rowCount}
-        {copyPanel}
-      </Cell>
+      <TableCell
+        rowIndex={params.rowIndex}
+        data={this.props.rows}
+        col={field.name}
+        onOpenPreviewClick={::this.onOpenPreviewClick}/>
     );
   }
 
-  renderColumns() {
-    const { rowCount, fields, rows } = this.props;
-    const { tableWidth, columnWidths } = this.state;
-
-    if (!rowCount) {
-      return (
-        <Column
-          header={<Cell>No results found</Cell>}
-          width={this.state.tableWidth}
-        />
-      );
-    }
-
-    const averageTableCellWidth = tableWidth / fields.length;
-    const autoColumnWidths = fields
-      .map(({ name }) => this.resolveCellWidth(name, fields, rows, averageTableCellWidth));
-
-    // force last column fill the rest of the table width
-    const totalTableWidth = autoColumnWidths.reduce((total, width) => total + width, 0);
-    if (totalTableWidth < tableWidth) {
-      autoColumnWidths[fields.length - 1] += tableWidth - totalTableWidth;
-    }
-
-    return fields.map(({ name }, index) => {
-      return (
-        <Column
-          key={`${name}_${index}`}
-          columnKey={name}
-          header={<Cell>{name}</Cell>}
-          cell={
-            <TableCell
-              rowIndex={index}
-              data={rows}
-              col={name}
-              onOpenPreviewClick={::this.onOpenPreviewClick}
-            />
-          }
-          width={columnWidths[name] || autoColumnWidths[index]}
-          isResizable
-        />
-      );
-    });
-  }
-
   render() {
-    const { rowCount } = this.props;
-    const { tableWidth, tableHeight } = this.state;
-
     // not completed loaded yet
-    if (!tableWidth) {
+    if (!this.state.tableWidth) {
       return null;
-    }
-
-    let previewModal = null;
-    if (this.state.showPreview) {
-      previewModal = (
-        <PreviewModal
-          value={this.state.valuePreview}
-          onCloseClick={::this.onClosePreviewClick}
-        />
-      );
     }
 
     return (
       <div>
-        {previewModal}
-        <Table
-          ref="table"
-          rowHeight={30}
-          headerHeight={30}
-          groupHeaderHeight={40}
-          rowsCount={rowCount}
-          width={tableWidth}
-          height={tableHeight}
-          isColumnResizing={false}
-          onColumnResizeEndCallback={::this.onColumnResizeEndCallback}
-        >
-          <ColumnGroup header={this.renderHeaderColumns()}>
-            {this.renderColumns()}
-          </ColumnGroup>
-        </Table>
+        {this.renderPreviewModal()}
+
+        <ScrollSync>
+          {({ onScroll, scrollLeft }) => (
+            <div className="grid-query-wrapper">
+              {this.renderHeaderTopBar()}
+              {this.renderTableHeader(scrollLeft)}
+              {this.renderTableBody(onScroll)}
+            </div>
+          )}
+        </ScrollSync>
     </div>
     );
   }

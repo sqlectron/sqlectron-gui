@@ -1,14 +1,80 @@
-.public_fixedDataTableCell_cellContent {
-  line-height: 15px;
+.grid-query-wrapper {
+  border-color: #d3d3d3;
+  border-style: solid;
+  border-width: 1px;
+  box-sizing: border-box;
+  border-radius: .25rem;
+}
+
+.Grid {
+  outline: none;
+}
+
+.Grid.grid-header-row .Grid__cell .draggable-handle {
+  width: 5px;
+  cursor: col-resize;
+  height: 30px;
+  position: absolute;
+  right: 0;
+  border-right: 1px solid #bfbfbf;
+  top: 0;
+  z-index: 10000;
+}
+
+.Grid.grid-header-row .Grid__cell .draggable-handle:hover,
+.Grid.grid-header-row .Grid__cell .react-draggable-dragging {
+  border-right: 3px solid #0284ff;
+}
+
+.Grid.grid-body {
+  background: rgb(245, 245, 245);
+}
+
+.Grid.grid-body > .Grid__innerScrollContainer {
+  background: #fff;
+}
+
+.Grid__cell {
+  overflow: hidden;
+}
+
+.Grid__cell > .item {
+  border: 1px solid #eee;
+  padding-left: 3px;
+  text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.fixedDataTableCellGroupLayout_cellGroup .public_fixedDataTableCell_cellContent {
-  line-height: 20px;
+.Grid.grid-header-row .Grid__cell {
+  overflow: visible;
+  font-weight: bold;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
-.public_fixedDataTableCell_cellContent .table-cell-type-null {
-  margin-top: -8px;
-  position: fixed;
+.Grid.grid-header-row .Grid__cell span {
+  overflow: hidden;
+  width: 100%;
+  text-overflow: ellipsis;
+  display: block;
+}
+
+.Grid.grid-header-row .Grid__cell > .item {
+  border: none;
+}
+
+.Grid.grid-header-row {
+  overflow: hidden;
+  background: #f9fafb;
+  border: 1px solid rgba(34,36,38,.1);
+  border-right: none;
+}
+
+.grid-header-row .Grid__cell > .item {
+  border: 1px solid #dadada;
+}
+
+.Grid .table-cell-type-null {
+  vertical-align: text-bottom;
 }

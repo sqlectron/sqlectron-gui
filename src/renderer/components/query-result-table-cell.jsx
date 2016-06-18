@@ -2,12 +2,9 @@ import { isPlainObject } from 'lodash';
 import { remote } from 'electron';
 import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
-import { Cell } from 'fixed-data-table';
 import { valueToString } from '../utils/convert';
 
-
 const { Menu, MenuItem } = remote;
-
 
 export default class TableCell extends Component {
   static propTypes = {
@@ -57,11 +54,13 @@ export default class TableCell extends Component {
     });
 
     return (
-      <Cell {...this.props} onContextMenu={::this.onContextMenu}>
-        <span className={className}>
-          {valueToString(value)}
-        </span>
-      </Cell>
+      <div className="item" onContextMenu={::this.onContextMenu}>
+        {
+          value === null
+            ? <span className={className}>NULL</span>
+            : valueToString(value)
+        }
+      </div>
     );
   }
 }

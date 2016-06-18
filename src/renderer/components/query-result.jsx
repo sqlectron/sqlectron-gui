@@ -3,7 +3,6 @@ import Loader from './loader.jsx';
 import Message from './message.jsx';
 import QueryResultTable from './query-result-table.jsx';
 
-
 export default class QueryResult extends Component {
   static propTypes = {
     widthOffset: PropTypes.number.isRequired,
