@@ -11,10 +11,13 @@ export function getSQLScriptIfNeeded(database, item, actionType, objectType) {
   return (dispatch, getState) => {
     const state = getState();
     if (shouldFetchScript(state, database, item, actionType)) {
-      return dispatch(getSQLScript(database, item, actionType, objectType));
-    } else if (isScriptAlreadyFetched(state, database, item, actionType)) {
+      dispatch(getSQLScript(database, item, actionType, objectType));
+      return;
+    }
+
+    if (isScriptAlreadyFetched(state, database, item, actionType)) {
       const script = getAlreadyFetchedScript(state, database, item, actionType);
-      return dispatch(appendQuery(script));
+      dispatch(appendQuery(script));
     }
   };
 }

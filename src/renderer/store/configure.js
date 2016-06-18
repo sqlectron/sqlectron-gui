@@ -3,9 +3,9 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 
 
-const middlewares = [ thunkMiddleware ];
+const middlewares = [thunkMiddleware];
 
-
+/* eslint global-require:0 */
 if (process.env.NODE_ENV !== 'production') {
   middlewares.push(require('redux-logger')({
     level: 'info',

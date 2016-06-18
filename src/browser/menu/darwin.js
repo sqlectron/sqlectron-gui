@@ -1,4 +1,4 @@
-import { shell } from 'electron';
+import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 
 export function buildTemplate(app, buildNewWindow, appConfig) {
   return [

@@ -1,4 +1,4 @@
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from 'electron'; // eslint-disable-line import/no-unresolved
 
 
 export default class MenuHandler {

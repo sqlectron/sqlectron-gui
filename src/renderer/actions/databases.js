@@ -48,7 +48,7 @@ export function saveDatabaseDiagram(diagramJSON) {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_DIAGRAM_REQUEST });
     try {
-      const filters = [ { name: 'JSON', extensions: ['json'] }];
+      const filters = [{ name: 'JSON', extensions: ['json'] }];
 
       let fileName = (getState().databases.fileName || await FileHandler.showSaveDialog(filters));
       if (path.extname(fileName) !== '.json') {
@@ -95,7 +95,7 @@ export function openDatabaseDiagram() {
     try {
       // Path user used last for save or open diagram in the same session. If such exists.
       const defaultPath = path.dirname(getState().databases.fileName || '');
-      const filters = [ { name: 'JSON', extensions: ['json'] }];
+      const filters = [{ name: 'JSON', extensions: ['json'] }];
 
       const [fileName] = await FileHandler.showOpenDialog(filters, defaultPath);
 
@@ -112,7 +112,7 @@ export function openDatabaseDiagram() {
 export function fetchDatabasesIfNeeded () {
   return (dispatch, getState) => {
     if (shouldFetchDatabases(getState())) {
-      return dispatch(fetchDatabases());
+      dispatch(fetchDatabases());
     }
   };
 }

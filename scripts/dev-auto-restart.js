@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint no-var: 0 */
+/* eslint no-var: 0, object-shorthand:0 */
 var fs = require('fs');
 var join = require('path').join;
 var electron = require('electron-prebuilt');

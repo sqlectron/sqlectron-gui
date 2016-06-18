@@ -9,7 +9,7 @@ export const FETCH_VIEWS_FAILURE = 'FETCH_VIEWS_FAILURE';
 export function fetchViewsIfNeeded (database) {
   return (dispatch, getState) => {
     if (shouldFetchViews(getState(), database)) {
-      return dispatch(fetchViews(database));
+      dispatch(fetchViews(database));
     }
   };
 }

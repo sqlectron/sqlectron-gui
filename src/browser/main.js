@@ -1,6 +1,6 @@
 var path = require('path');
 
-/* eslint no-var: 0, no-extend-native: 0, vars-on-top: 0 */
+/* eslint global-require:0, no-var: 0, no-extend-native: 0, vars-on-top: 0 */
 var devMode = (process.argv || []).indexOf('--dev') !== -1;
 
 // enables ES6+ support

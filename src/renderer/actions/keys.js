@@ -9,7 +9,7 @@ export const FETCH_KEYS_FAILURE = 'FETCH_KEYS_FAILURE';
 export function fetchTableKeysIfNeeded (database, table) {
   return (dispatch, getState) => {
     if (shouldFetchTableKeys(getState(), database, table)) {
-      return dispatch(fetchTableKeys(database, table));
+      dispatch(fetchTableKeys(database, table));
     }
   };
 }

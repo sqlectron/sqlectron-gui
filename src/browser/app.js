@@ -1,4 +1,4 @@
-import { app, dialog } from 'electron';
+import { app, dialog } from 'electron'; // eslint-disable-line import/no-unresolved
 import { buildNewWindow } from './window';
 
 

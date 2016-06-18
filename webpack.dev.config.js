@@ -64,9 +64,9 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       Radium: 'radium',
-      'jQuery': 'jquery',
-      '$': 'jquery',
-      '_': 'lodash',
+      jQuery: 'jquery',
+      $: 'jquery',
+      _: 'lodash',
     }),
   ],
 };

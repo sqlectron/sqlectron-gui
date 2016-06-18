@@ -9,8 +9,9 @@ export function rowValuesToString(row) {
   }
 
   return Object.keys(row).reduce((_row, col) => {
-    _row[col] = valueToString(row[col]);
-    return _row;
+    const rowData = { ...row };
+    rowData[col] = valueToString(row[col]);
+    return rowData;
   }, {});
 }
 

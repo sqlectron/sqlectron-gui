@@ -12,66 +12,66 @@ const INITIAL_STATE = {
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
-  case connTypes.CONNECTION_REQUEST: {
-    return action.isServerConnection
-      ? { ...INITIAL_STATE, didInvalidate: true }
-      : state;
-  }
-  case types.FETCH_KEYS_REQUEST: {
-    return {
-      ...state,
-      isFetching: {
-        ...state.isFetching,
-        [action.database]: {
-          ...state.isFetching[action.database],
-          [action.table]: true,
+    case connTypes.CONNECTION_REQUEST: {
+      return action.isServerConnection
+        ? { ...INITIAL_STATE, didInvalidate: true }
+        : state;
+    }
+    case types.FETCH_KEYS_REQUEST: {
+      return {
+        ...state,
+        isFetching: {
+          ...state.isFetching,
+          [action.database]: {
+            ...state.isFetching[action.database],
+            [action.table]: true,
+          },
         },
-      },
-      didInvalidate: false,
-      error: null,
-    };
-  }
-  case types.FETCH_KEYS_SUCCESS: {
-    return {
-      ...state,
-      isFetching: {
-        ...state.isFetching,
-        [action.database]: {
-          ...state.isFetching[action.database],
-          [action.table]: false,
+        didInvalidate: false,
+        error: null,
+      };
+    }
+    case types.FETCH_KEYS_SUCCESS: {
+      return {
+        ...state,
+        isFetching: {
+          ...state.isFetching,
+          [action.database]: {
+            ...state.isFetching[action.database],
+            [action.table]: false,
+          },
         },
-      },
-      didInvalidate: false,
-      keysByTable: {
-        ...state.keysByTable,
-        [action.database]: {
-          ...state.keysByTable[action.database],
-          [action.table]: action.tableKeys,
+        didInvalidate: false,
+        keysByTable: {
+          ...state.keysByTable,
+          [action.database]: {
+            ...state.keysByTable[action.database],
+            [action.table]: action.tableKeys,
+          },
         },
-      },
-      error: null,
-    };
-  }
-  case types.FETCH_KEYS_FAILURE: {
-    return {
-      ...state,
-      isFetching: {
-        ...state.isFetching,
-        [action.database]: {
-          ...state.isFetching[action.database],
-          [action.table]: false,
+        error: null,
+      };
+    }
+    case types.FETCH_KEYS_FAILURE: {
+      return {
+        ...state,
+        isFetching: {
+          ...state.isFetching,
+          [action.database]: {
+            ...state.isFetching[action.database],
+            [action.table]: false,
+          },
         },
-      },
-      didInvalidate: true,
-      error: action.error,
-    };
-  }
-  case dbTypes.REFRESH_DATABASES: {
-    return {
-      ...state,
-      didInvalidate: true,
-    };
-  }
-  default : return state;
+        didInvalidate: true,
+        error: action.error,
+      };
+    }
+    case dbTypes.REFRESH_DATABASES: {
+      return {
+        ...state,
+        didInvalidate: true,
+      };
+    }
+    default : return state;
   }
 }

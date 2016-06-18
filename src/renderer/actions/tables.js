@@ -15,7 +15,7 @@ export function selectTablesForDiagram(tables) {
 export function fetchTablesIfNeeded (database) {
   return (dispatch, getState) => {
     if (shouldFetchTables(getState(), database)) {
-      return dispatch(fetchTables(database));
+      dispatch(fetchTables(database));
     }
   };
 }

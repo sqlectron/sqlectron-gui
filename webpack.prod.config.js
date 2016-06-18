@@ -90,9 +90,9 @@ module.exports = {
     }),
     new webpack.ProvidePlugin({
       Radium: 'radium',
-      'jQuery': 'jquery',
-      '$': 'jquery',
-      '_': 'lodash',
+      jQuery: 'jquery',
+      $: 'jquery',
+      _: 'lodash',
     }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: { warnings: false },

@@ -9,7 +9,7 @@ export const FETCH_ROUTINES_FAILURE = 'FETCH_ROUTINES_FAILURE';
 export function fetchRoutinesIfNeeded (database) {
   return (dispatch, getState) => {
     if (shouldFetchRoutines(getState(), database)) {
-      return dispatch(fetchRoutines(database));
+      dispatch(fetchRoutines(database));
     }
   };
 }

@@ -13,56 +13,56 @@ const INITIAL_STATE = {
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
-  case connTypes.CONNECTION_REQUEST: {
-    return action.isServerConnection
-      ? { ...INITIAL_STATE, didInvalidate: true }
-      : state;
-  }
-  case types.FETCH_ROUTINES_REQUEST: {
-    return { ...state, isFetching: true, didInvalidate: false, error: null };
-  }
-  case types.FETCH_ROUTINES_SUCCESS: {
-    return {
-      ...state,
-      isFetching: false,
-      didInvalidate: false,
-      functionsByDatabase: {
-        ...state.functionsByDatabase,
-        [action.database]: action.routines.filter(_isFunction).map(routine => ({
-          name: routine.routineName,
-          routineDefinition: routine.routineDefinition })),
-      },
-      proceduresByDatabase: {
-        ...state.proceduresByDatabase,
-        [action.database]: action.routines.filter(_isProcedure).map(routine => ({
-          name: routine.routineName,
-          routineDefinition: routine.routineDefinition })),
-      },
-      error: null,
-    };
-  }
-  case types.FETCH_ROUTINES_FAILURE: {
-    return {
-      ...state,
-      isFetching: false,
-      didInvalidate: true,
-      error: action.error,
-    };
-  }
-  case dbTypes.REFRESH_DATABASES: {
-    return {
-      ...state,
-      didInvalidate: true,
-    };
-  }
-  default : return state;
+    case connTypes.CONNECTION_REQUEST: {
+      return action.isServerConnection
+        ? { ...INITIAL_STATE, didInvalidate: true }
+        : state;
+    }
+    case types.FETCH_ROUTINES_REQUEST: {
+      return { ...state, isFetching: true, didInvalidate: false, error: null };
+    }
+    case types.FETCH_ROUTINES_SUCCESS: {
+      return {
+        ...state,
+        isFetching: false,
+        didInvalidate: false,
+        functionsByDatabase: {
+          ...state.functionsByDatabase,
+          [action.database]: action.routines.filter(isFunction).map(routine => ({
+            name: routine.routineName,
+            routineDefinition: routine.routineDefinition })),
+        },
+        proceduresByDatabase: {
+          ...state.proceduresByDatabase,
+          [action.database]: action.routines.filter(isProcedure).map(routine => ({
+            name: routine.routineName,
+            routineDefinition: routine.routineDefinition })),
+        },
+        error: null,
+      };
+    }
+    case types.FETCH_ROUTINES_FAILURE: {
+      return {
+        ...state,
+        isFetching: false,
+        didInvalidate: true,
+        error: action.error,
+      };
+    }
+    case dbTypes.REFRESH_DATABASES: {
+      return {
+        ...state,
+        didInvalidate: true,
+      };
+    }
+    default : return state;
   }
 }
 
-function _isFunction (routine) {
+function isFunction (routine) {
   return routine.routineType === 'FUNCTION';
 }
 
-function _isProcedure (routine) {
+function isProcedure (routine) {
   return routine.routineType === 'PROCEDURE';
 }

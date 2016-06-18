@@ -1,4 +1,4 @@
-/* eslint no-var: 0 */
+/* eslint no-var: 0, prefer-arrow-callback:0 */
 /**
  * Inject global configurations in the renderer process.
  *

@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow } from 'electron'; // eslint-disable-line import/no-unresolved
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
 import { get as getConfig } from './config';

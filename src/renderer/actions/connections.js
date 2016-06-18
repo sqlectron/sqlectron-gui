@@ -58,7 +58,13 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       defaultDatabase = sqlectron.db.CLIENTS.find(c => c.key === server.client).defaultDatabase;
       database = databaseName || server.database || defaultDatabase;
 
-      dispatch({ type: CONNECTION_REQUEST, server, database, reconnecting, isServerConnection: !databaseName });
+      dispatch({
+        type: CONNECTION_REQUEST,
+        server,
+        database,
+        reconnecting,
+        isServerConnection: !databaseName,
+      });
 
       if (!serverSession) {
         if (server.ssh) {
@@ -81,7 +87,7 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       }
 
       dbConn = serverSession.createConnection(database);
-      const [, config ] = await Promise.all([
+      const [, config] = await Promise.all([
         dbConn.connect(),
         sqlectron.config.get(),
       ]);

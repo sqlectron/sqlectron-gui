@@ -8,15 +8,15 @@ joint.shapes.sqlectron.TableCell = joint.shapes.basic.Rect.extend({
     attrs: {
       rect: { stroke: 'none', 'fill-opacity': 0, style: { 'pointer-events': 'none' } },
     },
-  }, joint.shapes.basic.Rect.prototype.defaults ),
+  }, joint.shapes.basic.Rect.prototype.defaults),
 });
 
 joint.shapes.sqlectron.TableCellView = joint.dia.ElementView.extend({
-  template: `<div class="sqlectron-table-cell"><span style="white-space:nowrap;"></span></div>`,
+  template: '<div class="sqlectron-table-cell"><span style="white-space:nowrap;"></span></div>',
 
-  initialize: function() {
+  initialize(...args) {
     bindAll(this, 'updateCell');
-    joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+    joint.dia.ElementView.prototype.initialize.apply(this, args);
     this.$box = $(template(this.template)());
 
     const keyType = this.model.get('keyType');
@@ -38,19 +38,19 @@ joint.shapes.sqlectron.TableCellView = joint.dia.ElementView.extend({
     this.model.on('change', this.updateCell, this);
     this.updateCell();
   },
-  render: function() {
-    joint.dia.ElementView.prototype.render.apply(this, arguments);
+  render(...args) {
+    joint.dia.ElementView.prototype.render.apply(this, args);
     this.paper.$el.prepend(this.$box);
     return this;
   },
-  updateCell: function() {
+  updateCell() {
     const bbox = this.model.getBBox();
     this.$box.css({
       width: bbox.width,
       height: bbox.height,
       left: bbox.x,
       top: bbox.y,
-      transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)',
+      transform: `rotate(${this.model.get('angle') || 0}deg)`,
     });
   },
 });

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'; // eslint-disable-line import/no-unresolved
 import createDebug from './debug';
 
 const debug = createDebug('gh-update-checker');

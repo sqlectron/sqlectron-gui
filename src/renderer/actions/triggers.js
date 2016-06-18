@@ -9,7 +9,7 @@ export const FETCH_TRIGGERS_FAILURE = 'FETCH_TRIGGERS_FAILURE';
 export function fetchTableTriggersIfNeeded (database, table) {
   return (dispatch, getState) => {
     if (shouldFetchTableTriggers(getState(), database, table)) {
-      return dispatch(fetchTableTriggers(database, table));
+      dispatch(fetchTableTriggers(database, table));
     }
   };
 }

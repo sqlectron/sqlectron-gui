@@ -9,7 +9,7 @@ export const FETCH_COLUMNS_FAILURE = 'FETCH_COLUMNS_FAILURE';
 export function fetchTableColumnsIfNeeded (database, table) {
   return (dispatch, getState) => {
     if (shouldFetchTableColumns(getState(), database, table)) {
-      return dispatch(fetchTableColumns(database, table));
+      dispatch(fetchTableColumns(database, table));
     }
   };
 }

@@ -14,11 +14,11 @@ joint.shapes.sqlectron.Table = joint.shapes.basic.Rect.extend({
 });
 
 joint.shapes.sqlectron.TableView = joint.dia.ElementView.extend({
-  template: `<div class="sqlectron-table"><p><span></span></p></div>`,
+  template: '<div class="sqlectron-table"><p><span></span></p></div>',
 
-  initialize: function() {
+  initialize(...args) {
     bindAll(this, 'updateBox');
-    joint.dia.ElementView.prototype.initialize.apply(this, arguments);
+    joint.dia.ElementView.prototype.initialize.apply(this, args);
     this.$box = $(template(this.template)());
 
     this.$box.find('span').text(this.model.get('name'));
@@ -29,12 +29,12 @@ joint.shapes.sqlectron.TableView = joint.dia.ElementView.extend({
 
     this.updateBox();
   },
-  render: function() {
-    joint.dia.ElementView.prototype.render.apply(this, arguments);
+  render(...args) {
+    joint.dia.ElementView.prototype.render.apply(this, args);
     this.paper.$el.prepend(this.$box);
     return this;
   },
-  updateBox: function() {
+  updateBox() {
     // Set the position and dimension of the box so that it covers the JointJS element.
     const bbox = this.model.getBBox();
     this.$box.css({
@@ -42,7 +42,7 @@ joint.shapes.sqlectron.TableView = joint.dia.ElementView.extend({
       height: bbox.height,
       left: bbox.x,
       top: bbox.y,
-      transform: 'rotate(' + (this.model.get('angle') || 0) + 'deg)',
+      transform: `rotate(${this.model.get('angle') || 0}deg)`,
     });
   },
 });

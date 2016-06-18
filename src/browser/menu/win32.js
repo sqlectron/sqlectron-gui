@@ -1,11 +1,11 @@
-import { shell } from 'electron';
+import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 
 
 export function buildTemplate(app, buildNewWindow, appConfig) {
   return [
     {
-      'label': 'File',
-      'submenu': [
+      label: 'File',
+      submenu: [
         {
           label: 'New Window',
           accelerator: 'Ctrl+N',
@@ -33,8 +33,8 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
           type: 'separator',
         },
         {
-          'label': 'Quit',
-          'accelerator': 'Alt+F4',
+          label: 'Quit',
+          accelerator: 'Alt+F4',
           click: () => app.quit(),
         },
       ],
@@ -130,7 +130,7 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
           click: () => shell.openExternal(appConfig.bugs),
         },
         {
-          'label': `About ${appConfig.name}`,
+          label: `About ${appConfig.name}`,
           click: () => shell.openExternal(appConfig.homepage),
         },
       ],
