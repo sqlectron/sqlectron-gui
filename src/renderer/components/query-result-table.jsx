@@ -298,13 +298,16 @@ export default class QueryResultTable extends Component {
 
     const headerWidth = this.getTextWidth(fieldName, `bold ${font}`);
 
-    const averageRowsCellWidth = rows
-      .slice(0, numRowsToFindAverage)
-      .map(row => {
-        const value = valueToString(row[fieldName]);
-        return this.getTextWidth(value, font);
-      })
-      .reduce((prev, curr) => prev + curr, 0) / numRowsToFindAverage;
+    let averageRowsCellWidth = 0;
+    if (rows.length) {
+      averageRowsCellWidth = rows
+        .slice(0, numRowsToFindAverage)
+        .map(row => {
+          const value = valueToString(row[fieldName]);
+          return this.getTextWidth(value, font);
+        })
+        .reduce((prev, curr) => prev + curr, 0) / numRowsToFindAverage;
+    }
 
     if (headerWidth > averageRowsCellWidth) {
       return headerWidth > maxWidth ? maxWidth : headerWidth;
