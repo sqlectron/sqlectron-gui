@@ -64,7 +64,7 @@ export default class QueryResultTable extends Component {
   }
 
   onColumnResizeEndCallback(newColumnWidth, columnKey) {
-    this.setState(({columnWidths}) => ({
+    this.setState(({ columnWidths }) => ({
       columnWidths: {
         ...columnWidths,
         [columnKey]: newColumnWidth,
@@ -236,18 +236,18 @@ export default class QueryResultTable extends Component {
 
     return (
       <Grid
-          className="grid-body"
-          ref={(ref) => this.rowsGrid = ref}
-          cellRenderer={::this.renderCell}
-          width={tableWidth}
-          height={Math.min((tableHeight - 62), (rowCount * 32))}
-          rowHeight={28}
-          onScroll={onScroll}
-          rowCount={rowCount}
-          columnCount={fields.length}
-          columnWidth={::this.getColumnWidth}
-          rowsCount={rowCount}
-          noContentRenderer={::this.renderNoRows} />
+        className="grid-body"
+        ref={(ref) => { this.rowsGrid = ref; }}
+        cellRenderer={::this.renderCell}
+        width={tableWidth}
+        height={Math.min((tableHeight - 62), (rowCount * 32))}
+        rowHeight={28}
+        onScroll={onScroll}
+        rowCount={rowCount}
+        columnCount={fields.length}
+        columnWidth={::this.getColumnWidth}
+        rowsCount={rowCount}
+        noContentRenderer={::this.renderNoRows} />
 
     );
   }
@@ -262,16 +262,16 @@ export default class QueryResultTable extends Component {
 
     return (
       <Grid
-          ref={(ref) => this.headerGrid = ref}
-          columnWidth={::this.getColumnWidth}
-          columnCount={fields.length}
-          height={30}
-          cellRenderer={::this.renderHeaderCell}
-          className="grid-header-row"
-          rowHeight={30}
-          rowCount={1}
-          width={tableWidth - scrollbarSize()}
-          scrollLeft={scrollLeft} />
+        ref={(ref) => { this.headerGrid = ref; }}
+        columnWidth={::this.getColumnWidth}
+        columnCount={fields.length}
+        height={30}
+        cellRenderer={::this.renderHeaderCell}
+        className="grid-header-row"
+        rowHeight={30}
+        rowCount={1}
+        width={tableWidth - scrollbarSize()}
+        scrollLeft={scrollLeft} />
     );
   }
 
@@ -323,7 +323,7 @@ export default class QueryResultTable extends Component {
         rowIndex={params.rowIndex}
         data={this.props.rows}
         col={field.name}
-        onOpenPreviewClick={::this.onOpenPreviewClick}/>
+        onOpenPreviewClick={::this.onOpenPreviewClick} />
     );
   }
 
@@ -346,7 +346,7 @@ export default class QueryResultTable extends Component {
             </div>
           )}
         </ScrollSync>
-    </div>
+      </div>
     );
   }
 }

@@ -20,7 +20,7 @@ export default class ServerFilter extends Component {
   render () {
     return (
       <div className="ui small action left icon input fluid"
-            style={{marginBottom: '1em', fontSize: '0.8em'}}>
+        style={{ marginBottom: '1em', fontSize: '0.8em' }}>
         <i className="search icon"></i>
         <input type="text" placeholder="Search..." onChange={::this.onFilterChange} />
         <button className="ui button green" onClick={::this.props.onAddClick}>Add</button>
@@ -28,6 +28,3 @@ export default class ServerFilter extends Component {
     );
   }
 }
-
-
-export default ServerFilter;

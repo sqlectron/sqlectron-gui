@@ -1,4 +1,4 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
 
 
 import '../vendor/semantic-ui/semantic';
@@ -7,28 +7,24 @@ require('../vendor/semantic-ui/semantic.css');
 require('./app.css');
 
 
-export default class AppContainer extends Component {
-  static propTypes = {
-    history: PropTypes.object.isRequired,
-    route: PropTypes.object.isRequired,
-    routeParams: PropTypes.object.isRequired,
-    location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
-    }),
-    children: PropTypes.node,
-  };
+const AppContainer = ({ children }) => (
+  <div className="ui">
+    {children}
+  </div>
+);
 
-  static contextTypes = {
-    history: PropTypes.object.isRequired,
-  };
+AppContainer.propTypes = {
+  history: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired,
+  routeParams: PropTypes.object.isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired,
+  }),
+  children: PropTypes.node,
+};
 
-  render() {
-    const { children } = this.props;
+AppContainer.contextTypes = {
+  history: PropTypes.object.isRequired,
+};
 
-    return (
-      <div className="ui">
-        {children}
-      </div>
-    );
-  }
-}
+export default AppContainer;

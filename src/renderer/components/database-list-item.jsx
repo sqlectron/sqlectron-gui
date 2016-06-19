@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import DatabaseListItemMetatada from './database-list-item-metadata.jsx';
 import DatabaseFilter from './database-filter.jsx';
-import { remote } from 'electron';
+import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 
 
 const { Menu, MenuItem } = remote;
@@ -115,7 +115,7 @@ export default class DatabaseListItem extends Component {
         onContextMenu={::this.onContextMenu}
         style={STYLE.database}>
         <i className={`${collapseCssClass} triangle icon`}
-          style={{cursor: 'pointer'}}
+          style={{ cursor: 'pointer' }}
           onClick={() => this.onHeaderDoubleClick(database)}></i>
         <i className="database icon"></i>
         {database.name}

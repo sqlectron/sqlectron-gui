@@ -41,9 +41,9 @@ export default class PreviewModal extends Component {
     const { value } = this.props;
     try {
       switch (type) {
-      case 'plain': return isPlainObject(value) ? JSON.stringify(value) : value;
-      case 'json': return <pre>{JSON.stringify(value, null, 2)}</pre>;
-      default: return value;
+        case 'plain': return isPlainObject(value) ? JSON.stringify(value) : value;
+        case 'json': return <pre>{JSON.stringify(value, null, 2)}</pre>;
+        default: return value;
       }
     } catch (err) {
       return 'Not valid format';
@@ -66,6 +66,7 @@ export default class PreviewModal extends Component {
               active: (!selected && item.default) || selected === item.type,
             });
 
+            /* eslint react/jsx-no-bind:0 */
             return (
               <a key={item.type}
                 onClick={this.onClick.bind(this, item.type)}

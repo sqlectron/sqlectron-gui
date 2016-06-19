@@ -1,6 +1,5 @@
-import { ipcRenderer } from 'electron';
-import { shell } from 'electron';
-import React, {Component} from 'react';
+import { ipcRenderer, shell } from 'electron'; // eslint-disable-line import/no-unresolved
+import React, { Component } from 'react';
 
 
 const EVENT_KEY = 'sqlectron:update-available';

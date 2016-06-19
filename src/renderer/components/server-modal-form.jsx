@@ -11,7 +11,7 @@ require('./override-select.css');
 
 const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
   value: dbClient.key,
-  logo: require(`./server-db-client-${dbClient.key}.png`),
+  logo: require(`./server-db-client-${dbClient.key}.png`), // eslint-disable-line global-require
   label: dbClient.name,
   defaultPort: dbClient.defaultPort,
 }));
@@ -172,7 +172,7 @@ export default class ServerModalForm extends Component {
   renderClientItem({ label, logo }) {
     return (
       <div>
-        <img src={logo} style={{width: '16px'}} /> {label}
+        <img alt="logo" src={logo} style={{ width: '16px' }} /> {label}
       </div>
     );
   }
@@ -228,7 +228,7 @@ export default class ServerModalForm extends Component {
                   valueRenderer={this.renderClientItem}
                   value={this.state.client} />
               </div>
-              <div className="one field" style={{paddingTop: '2em'}}>
+              <div className="one field" style={{ paddingTop: '2em' }}>
                 <div className="ui toggle checkbox" ref="ssl">
                   <input type="checkbox"
                     name="ssl"
@@ -262,23 +262,23 @@ export default class ServerModalForm extends Component {
                 </div>
                 <div className={`six wide field ${this.highlightError('socketPath')}`}>
                   <div className="ui action input">
-                      <input type="text"
-                        name="socketPath"
-                        maxLength="250"
-                        placeholder="Unix socket path"
-                        value={this.state.socketPath}
+                    <input type="text"
+                      name="socketPath"
+                      maxLength="250"
+                      placeholder="Unix socket path"
+                      value={this.state.socketPath}
+                      onChange={::this.handleChange}
+                      disabled={(this.state.host || this.state.port)} />
+                    <label htmlFor="file.socketPath" className="ui icon button btn-file">
+                      <i className="file outline icon" />
+                      <input
+                        type="file"
+                        id="file.socketPath"
+                        name="file.socketPath"
                         onChange={::this.handleChange}
-                        disabled={(this.state.host || this.state.port)} />
-                      <label htmlFor="file.socketPath" className="ui icon button btn-file">
-                         <i className="file outline icon" />
-                         <input
-                           type="file"
-                           id="file.socketPath"
-                           name="file.socketPath"
-                           onChange={::this.handleChange}
-                           style={{display: 'none'}} />
-                      </label>
-                    </div>
+                        style={{ display: 'none' }} />
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -373,21 +373,21 @@ export default class ServerModalForm extends Component {
                       name="ssh.privateKey"
                       maxLength="250"
                       placeholder="~/.ssh/id_rsa"
-                      disabled={(!isSSHChecked || ssh.password )}
+                      disabled={(!isSSHChecked || ssh.password)}
                       value={ssh.privateKey}
                       onChange={::this.handleChange} />
                     <label htmlFor="file.ssh.privateKey" className="ui icon button btn-file">
-                       <i className="file outline icon" />
-                       <input
-                         type="file"
-                         id="file.ssh.privateKey"
-                         name="file.ssh.privateKey"
-                         onChange={::this.handleChange}
-                         style={{display: 'none'}} />
+                      <i className="file outline icon" />
+                      <input
+                        type="file"
+                        id="file.ssh.privateKey"
+                        name="file.ssh.privateKey"
+                        onChange={::this.handleChange}
+                        style={{ display: 'none' }} />
                     </label>
                   </div>
                 </div>
-                <div className="three wide field" style={{paddingTop: '2em'}}>
+                <div className="three wide field" style={{ paddingTop: '2em' }}>
                   <div className="ui toggle checkbox" ref="privateKeyWithPassphrase">
                     <input type="checkbox"
                       name="privateKeyWithPassphrase"

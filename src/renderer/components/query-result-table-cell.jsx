@@ -1,5 +1,5 @@
 import { isPlainObject } from 'lodash';
-import { remote } from 'electron';
+import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import { valueToString } from '../utils/convert';

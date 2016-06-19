@@ -31,10 +31,11 @@ export default class DatabaseDiagram extends Component {
 
     this.addGraphPaper();
 
-    if ( diagramJSON ) {
+    if (diagramJSON) {
       try {
         this.graph.fromJSON(JSON.parse(diagramJSON));
       } catch (error) {
+        /* eslint react/no-did-mount-set-state: 0 */
         this.setState({ error: `Error while reading graph from file: ${error.message}` });
       }
       return;
@@ -47,6 +48,12 @@ export default class DatabaseDiagram extends Component {
     this.putEverythingOnGraph(tableShapes, tableCells, tableLinks);
   }
 
+  onTableRightClick(table) {
+    const { tableKeys, addRelatedTables } = this.props;
+    const relatedTables = tableKeys[table].map(k => k.referencedTable).filter(rt => rt !== null);
+    addRelatedTables(relatedTables);
+  }
+
   addGraphPaper() {
     this.paper = new joint.dia.Paper({
       el: $(this.refs.diagram),
@@ -57,13 +64,11 @@ export default class DatabaseDiagram extends Component {
       restrictTranslate: true,
     });
 
-    if (!this.props.diagramJSON) { //Only supported for newely generated diagrams
-      this.paper.on('cell:contextmenu',
-        (cellView, evt, x, y) => {
-          const table = cellView.model.attributes.name;
-          this.onTableRightClick(table);
-        }
-      );
+    if (!this.props.diagramJSON) { // Only supported for newely generated diagrams
+      this.paper.on('cell:contextmenu', (cellView) => {
+        const table = cellView.model.attributes.name;
+        this.onTableRightClick(table);
+      });
     }
   }
 
@@ -74,7 +79,7 @@ export default class DatabaseDiagram extends Component {
     let newTabCell;
 
     try {
-      tables.map((table, index) => {
+      tables.forEach((table, index) => {
         tableShapes.push(new joint.shapes.sqlectron.Table({
           position: {
             x: 100 + (index % 6) * 100,
@@ -88,7 +93,7 @@ export default class DatabaseDiagram extends Component {
         }));
         currentTable = tableShapes[index];
 
-        columnsByTable[table].map((column, idx) => {
+        columnsByTable[table].forEach((column, idx) => {
           columnKey = tableKeys[table].find((k) => k.columnName === column.name);
 
           newTabCell = new joint.shapes.sqlectron.TableCell({
@@ -120,17 +125,17 @@ export default class DatabaseDiagram extends Component {
     let targetIndex;
 
     try {
-      tables.map((table, index) => {
+      tables.forEach((table, index) => {
         currentTable = tableShapes[index];
 
-        tableKeys[table].map((target) => {
+        tableKeys[table].forEach((target) => {
           targetIndex = tables.findIndex((t) => t === target.referencedTable);
           if (targetIndex !== -1) {
             newLink = new joint.dia.Link({
               source: { id: currentTable.id },
               target: { id: tableShapes[targetIndex].id },
             });
-            newLink.attr({'.marker-target': { fill: 'yellow', d: 'M 10 0 L 0 5 L 10 10 z' }});
+            newLink.attr({ '.marker-target': { fill: 'yellow', d: 'M 10 0 L 0 5 L 10 10 z' } });
             tableLinks.push(newLink);
           }
         });
@@ -140,35 +145,6 @@ export default class DatabaseDiagram extends Component {
     }
   }
 
-  putEverythingOnGraph(tableShapes, tableCells, tableLinks) {
-    this.graph.addCells(tableShapes.concat(tableCells, tableLinks));
-    this.resizeTableElements(tableShapes, tableCells);
-  }
-
-
-  // Resize table elements based on attributes text length
-  resizeTableElements(tableShapes, tableCells) {
-    const { tables, columnsByTable } = this.props;
-
-    tables.map((table) => {
-      let biggestCellSize = $('span', `.sqlectron-table.${table} > p`).outerWidth();
-      $('span', `.sqlectron-table-cell.${table}`).each(function() {
-        if ( $(this).outerWidth()  > biggestCellSize ) {
-          biggestCellSize = $(this).outerWidth();
-        }
-      });
-
-      if (biggestCellSize > 100) {
-        // resize tables
-        tableShapes.find((shape) => shape.attributes.name === table)
-          .resize( biggestCellSize + 20, (columnsByTable[table].length + 1.5) * 20 );
-        // resize table cells
-        tableCells.filter((cell) => cell.attributes.tableName === table)
-          .map((cell) => cell.resize( biggestCellSize, 20 ));
-      }
-    });
-  }
-
   shouldDisableDiagram() {
     const { isSaving } = this.props;
     return isSaving
@@ -176,15 +152,42 @@ export default class DatabaseDiagram extends Component {
       : { pointerEvents: 'auto' };
   }
 
-  onTableRightClick(table) {
-    const { tableKeys, addRelatedTables } = this.props;
-    const relatedTables = tableKeys[table].map(k => k.referencedTable).filter(rt => rt !== null);
-    addRelatedTables(relatedTables);
+  putEverythingOnGraph(tableShapes, tableCells, tableLinks) {
+    this.graph.addCells(tableShapes.concat(tableCells, tableLinks));
+    this.resizeTableElements(tableShapes, tableCells);
+  }
+
+  // Resize table elements based on attributes text length
+  resizeTableElements(tableShapes, tableCells) {
+    const { tables, columnsByTable } = this.props;
+
+    tables.forEach((table) => {
+      let biggestCellSize = $('span', `.sqlectron-table.${table} > p`).outerWidth();
+      $('span', `.sqlectron-table-cell.${table}`).each(function() {
+        if ($(this).outerWidth() > biggestCellSize) {
+          biggestCellSize = $(this).outerWidth();
+        }
+      });
+
+      if (biggestCellSize > 100) {
+        // resize tables
+        tableShapes.find((shape) => shape.attributes.name === table)
+          .resize(biggestCellSize + 20, (columnsByTable[table].length + 1.5) * 20);
+        // resize table cells
+        tableCells.filter((cell) => cell.attributes.tableName === table)
+          .map((cell) => cell.resize(biggestCellSize, 20));
+      }
+    });
   }
 
   render() {
     if (!!this.state.error) {
-      return <div className="ui negative message" style={{textAlign: 'center'}}>{this.state.error}</div>;
+      return (
+        <div className="ui negative message"
+          style={{ textAlign: 'center' }}>
+          {this.state.error}
+        </div>
+      );
     }
 
     return <div ref="diagram" style={this.shouldDisableDiagram()}></div>;

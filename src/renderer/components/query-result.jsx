@@ -39,7 +39,18 @@ export default class QueryResult extends Component {
     }
   }
 
-  renderQueryResult({ fields, rows, rowCount, affectedRows, queryIndex, totalQueries, command, isMultipleResults }) {
+  renderQueryResult(queryResult) {
+    const {
+      fields,
+      rows,
+      rowCount,
+      affectedRows,
+      queryIndex,
+      totalQueries,
+      command,
+      isMultipleResults,
+    } = queryResult;
+
     if (command !== 'SELECT') {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
@@ -93,7 +104,7 @@ export default class QueryResult extends Component {
 
     if (isExecuting) {
       return (
-        <div ref="loader" style={{minHeight: '250px'}}>
+        <div ref="loader" style={{ minHeight: '250px' }}>
           <Loader message="Loading" type="active" inverted />
         </div>
       );

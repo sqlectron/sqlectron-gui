@@ -60,7 +60,7 @@ export default class DatabaseList extends Component {
     }
 
     return (
-      <div className="item" style={{padding: 0}}>
+      <div className="item" style={{ padding: 0 }}>
       {
         databases.map(database => (
           <DatabaseListItem

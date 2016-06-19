@@ -16,7 +16,7 @@ const STYLES = {
 };
 
 
-const BREADCRUMB = [{ icon: 'server', label: 'servers'}];
+const BREADCRUMB = [{ icon: 'server', label: 'servers' }];
 
 
 class ServerManagerment extends Component {
@@ -98,7 +98,11 @@ class ServerManagerment extends Component {
   render() {
     const { filter } = this.state;
     const { connections, servers, status } = this.props;
-    const selected = servers.editingId !== null ? servers.items.find(srv => srv.id === servers.editingId) : {};
+    const selected = (
+      servers.editingId !== null
+      ? servers.items.find(srv => srv.id === servers.editingId)
+      : {}
+    );
     const filteredServers = this.filterServers(filter, servers.items);
 
     const testConnection = {
@@ -119,26 +123,26 @@ class ServerManagerment extends Component {
 
           {
             connections.error &&
-            <Message
-              closeable
-              title="Connection Error"
-              message={connections.error.message}
-              type="error" />
+              <Message
+                closeable
+                title="Connection Error"
+                message={connections.error.message}
+                type="error" />
           }
 
           <ServerList servers={filteredServers}
-                      onEditClick={::this.onEditClick}
-                      onConnectClick={::this.onConnectClick} />
+            onEditClick={::this.onEditClick}
+            onConnectClick={::this.onConnectClick} />
 
           {servers.isEditing && <ServerModalForm
-                 server={selected}
-                 error={servers.error}
-                 testConnection={testConnection}
-                 onTestConnectionClick={::this.onTestConnectionClick}
-                 onDuplicateClick={::this.onDuplicateClick}
-                 onSaveClick={::this.onSaveClick}
-                 onCancelClick={::this.onCancelClick}
-                 onRemoveClick={::this.onRemoveClick} />}
+            server={selected}
+            error={servers.error}
+            testConnection={testConnection}
+            onTestConnectionClick={::this.onTestConnectionClick}
+            onDuplicateClick={::this.onDuplicateClick}
+            onSaveClick={::this.onSaveClick}
+            onCancelClick={::this.onCancelClick}
+            onRemoveClick={::this.onRemoveClick} />}
         </div>
         <div style={STYLES.footer}>
           <Footer status={status} />

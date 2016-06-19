@@ -18,7 +18,7 @@ export default class ServerList extends Component {
     return items.reduce((rows, item, index) => {
       const position = Math.floor(index / itemsPerRow);
       if (!rows[position]) {
-        rows[position] = [];
+        rows[position] = []; // eslint-disable-line no-param-reassign
       }
 
       rows[position].push(item);
@@ -40,8 +40,8 @@ export default class ServerList extends Component {
             {row.map(server =>
               <ServerListItem
                 key={server.id}
-                onConnectClick={() => onConnectClick(server) }
-                onEditClick={() => onEditClick(server) }
+                onConnectClick={() => onConnectClick(server)}
+                onEditClick={() => onEditClick(server)}
                 server={server} />
             )}
           </div>

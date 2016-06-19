@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import TableSubmenu from './table-submenu.jsx';
-import { remote } from 'electron';
+import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 
 const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
@@ -71,7 +71,7 @@ export default class DatabaseItem extends Component {
         DELETE: 'Delete Statement',
       };
 
-      actionTypes.map(actionType => {
+      actionTypes.forEach(actionType => {
         this.contextMenu.append(new MenuItem({
           label: labelsByTypes[actionType],
           click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
@@ -102,13 +102,13 @@ export default class DatabaseItem extends Component {
           title="Columns"
           table={table}
           itemsByTable={columnsByTable}
-          database={database}/>
+          database={database} />
         <TableSubmenu
           collapsed
           title="Triggers"
           table={table}
           itemsByTable={triggersByTable}
-          database={database}/>
+          database={database} />
       </div>
     );
   }
@@ -117,15 +117,18 @@ export default class DatabaseItem extends Component {
     const { database, item, style, onSelectItem, dbObjectType } = this.props;
     const hasChildElements = !!onSelectItem;
     const onSingleClick = hasChildElements
-      ? () => {onSelectItem(database, item); this.toggleTableCollapse();}
+      ? () => { onSelectItem(database, item); this.toggleTableCollapse(); }
       : () => {};
 
     const collapseCssClass = this.state.tableCollapsed ? 'down' : 'right';
     const collapseIcon = (
-      <i className={`${collapseCssClass} triangle icon`} style={{float: 'left', margin: '0 0.15em 0 -1em'}}></i>
+      <i
+        className={`${collapseCssClass} triangle icon`}
+        style={{ float: 'left', margin: '0 0.15em 0 -1em' }}
+      ></i>
     );
     const tableIcon = (
-      <i className="table icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
+      <i className="table icon" style={{ float: 'left', margin: '0 0.3em 0 0' }}></i>
     );
 
     return (
@@ -135,8 +138,8 @@ export default class DatabaseItem extends Component {
           className="item"
           onClick={onSingleClick}
           onContextMenu={::this.onContextMenu}>
-          { dbObjectType === 'Table' ? collapseIcon : null }
-          { dbObjectType === 'Table' ? tableIcon : null }
+          {dbObjectType === 'Table' ? collapseIcon : null}
+          {dbObjectType === 'Table' ? tableIcon : null}
           {item.name}
         </span>
         {this.renderSubItems(item.name)}

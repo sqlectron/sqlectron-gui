@@ -39,7 +39,7 @@ export default class ServerModalForm extends Component {
     const { title, message } = this.props;
 
     return (
-      <div className="ui modal" ref="confirmModal" style={{position: 'absolute'}}>
+      <div className="ui modal" ref="confirmModal" style={{ position: 'absolute' }}>
         <div className="header">
           {title}
         </div>

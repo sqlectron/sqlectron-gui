@@ -3,7 +3,13 @@ import DatabaseDiagram from './database-diagram.jsx';
 import Loader from './loader.jsx';
 
 const STYLE = {
-  list: { maxHeight: '250px', overflow: 'hidden', overflowY: 'scroll', padding: '8px', border: '2px solid' },
+  list: {
+    maxHeight: '250px',
+    overflow: 'hidden',
+    overflowY: 'scroll',
+    padding: '8px',
+    border: '2px solid',
+  },
 };
 
 
@@ -77,7 +83,7 @@ export default class DatabaseDiagramModal extends Component {
       return;
     }
 
-    this.setState({  showDatabaseDiagram: false });
+    this.setState({ showDatabaseDiagram: false });
     addRelatedTables(relatedTables);
   }
 
@@ -134,7 +140,7 @@ export default class DatabaseDiagramModal extends Component {
               {tablesAndViews.map((item) =>
                 <div key={item.name} className="item">
                   <div className="ui checkbox">
-                    <input id={item.name} type="checkbox" onChange={::this.onCheckBoxesChange}/>
+                    <input id={item.name} type="checkbox" onChange={::this.onCheckBoxesChange} />
                     <label>{item.name}</label>
                   </div>
                 </div>
@@ -143,7 +149,7 @@ export default class DatabaseDiagramModal extends Component {
             <button
               ref="generateButton"
               className="ui right floated positive button disabled"
-              style={{marginBottom: '1em'}}
+              style={{ marginBottom: '1em' }}
               onClick={::this.onGenerateDiagramClick}>
               Generate diagram
             </button>
@@ -166,7 +172,7 @@ export default class DatabaseDiagramModal extends Component {
 
   renderLoader() {
     return (
-      <div style={{minHeight: '300px'}}>
+      <div style={{ minHeight: '300px' }}>
         <Loader message="Generating diagram" type="active" inverted />
       </div>
     );
@@ -179,7 +185,6 @@ export default class DatabaseDiagramModal extends Component {
       tableKeys,
       diagramJSON,
       isSaving,
-      onAddRelatedTables,
     } = this.props;
 
     return (
@@ -238,7 +243,11 @@ export default class DatabaseDiagramModal extends Component {
           </div>
         }
         <div className="content">
-          {!this.state.showDatabaseDiagram && !this.state.showLoader && this.renderSelectTablesMenu()}
+          {
+            !this.state.showDatabaseDiagram
+            && !this.state.showLoader
+            && this.renderSelectTablesMenu()
+          }
           {!this.state.showDatabaseDiagram && !!this.state.showLoader && this.renderLoader()}
           {!!this.state.showDatabaseDiagram && this.renderDiagram()}
         </div>

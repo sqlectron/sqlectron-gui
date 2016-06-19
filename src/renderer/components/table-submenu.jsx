@@ -61,13 +61,18 @@ export default class TableSubmenu extends Component {
       );
     }
 
-    const cssStyle = {...STYLE.item};
+    const cssStyle = { ...STYLE.item };
     if (this.state.collapsed) {
       cssStyle.display = 'none';
     }
     const columnsIcon = (
-      <i className="columns icon" style={{float: 'left', margin: '0 0.3em 0 0'}}></i>
+      <i className="columns icon" style={{ float: 'left', margin: '0 0.3em 0 0' }}></i>
     );
+    const styleColumnType = {
+      float: 'right',
+      padding: '0 0.5em 0 0.5em',
+      textTransform: 'uppercase',
+    };
 
     return itemsByTable[table].map(item => (
       <span
@@ -77,9 +82,11 @@ export default class TableSubmenu extends Component {
         className="item">
         {this.props.title === 'Columns' ? columnsIcon : null}
         {item.name}
-        {this.props.title === 'Columns' ?
-          <span style={{float:'right', padding: '0 0.5em 0 0.5em', textTransform: 'uppercase'}}>{item.dataType}</span>
-          : null}
+        {
+          this.props.title === 'Columns'
+            ? <span style={styleColumnType}>{item.dataType}</span>
+            : null
+        }
       </span>
     ));
   }

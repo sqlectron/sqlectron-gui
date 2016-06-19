@@ -19,11 +19,13 @@ const langTools = ace.acequire('ace/ext/language_tools');
 
 const INFOS = {
   mysql: [
-    'MySQL treats commented query as a non select query. So you may see "affected rows" for a commented query.',
+    'MySQL treats commented query as a non select query.' +
+      'So you may see "affected rows" for a commented query.',
     'Usually executing a single query per tab will give better results.',
   ],
   sqlserver: [
-    'MSSQL treats multiple non select queries as a single query result. So you affected rows will show the amount over all queries executed in the same tab.',
+    'MSSQL treats multiple non select queries as a single query result.' +
+      'So you affected rows will show the amount over all queries executed in the same tab.',
     'Usually executing a single query per tab will give better results.',
   ],
 };
@@ -80,8 +82,10 @@ export default class Query extends Component {
       || ((nextProps.views || []).length !== (this.props.views || []).length)
       || ((nextProps.functions || []).length !== (this.props.functions || []).length)
       || ((nextProps.procedures || []).length !== (this.props.procedures || []).length)
-      || (Object.keys(nextProps.columnsByTable || {}).length !== Object.keys(this.props.columnsByTable || []).length)
-      || (Object.keys(nextProps.triggersByTable || {}).length !== Object.keys(this.props.triggersByTable || []).length)
+      || (Object.keys(nextProps.columnsByTable || {}).length
+          !== Object.keys(this.props.columnsByTable || []).length)
+      || (Object.keys(nextProps.triggersByTable || {}).length
+          !== Object.keys(this.props.triggersByTable || []).length)
     );
 
     if (!isMetadataChanged) {
@@ -105,8 +109,15 @@ export default class Query extends Component {
       customCompleter,
     ];
 
-    this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', true);
-    this.refs.queryBoxTextarea.editor.setOption('enableLiveAutocompletion', nextProps.enabledLiveAutoComplete);
+    this.refs.queryBoxTextarea.editor.setOption(
+      'enableBasicAutocompletion',
+      true
+    );
+
+    this.refs.queryBoxTextarea.editor.setOption(
+      'enableLiveAutocompletion',
+      nextProps.enabledLiveAutoComplete
+    );
   }
 
   componentDidUpdate() {
@@ -176,9 +187,7 @@ export default class Query extends Component {
       ...mapCompletionTypes(views, 'view'),
       ...mapCompletionTypes(functions, 'function'),
       ...mapCompletionTypes(procedures, 'procedure'),
-    ].map(({ name, type }) => {
-      return { name: name, value: name, score: 1, meta: type };
-    });
+    ].map(({ name, type }) => ({ name, value: name, score: 1, meta: type }));
   }
 
   getCommands () {
@@ -186,7 +195,7 @@ export default class Query extends Component {
       {
         name: 'increaseFontSize',
         bindKey: 'Ctrl-=|Ctrl-+',
-        exec: function(editor) {
+        exec(editor) {
           const size = parseInt(editor.getFontSize(), 10) || 12;
           editor.setFontSize(size + 1);
         },
@@ -194,7 +203,7 @@ export default class Query extends Component {
       {
         name: 'decreaseFontSize',
         bindKey: 'Ctrl+-|Ctrl-_',
-        exec: function(editor) {
+        exec(editor) {
           const size = parseInt(editor.getFontSize(), 10) || 12;
           editor.setFontSize(Math.max(size - 1 || 1));
         },
@@ -202,14 +211,14 @@ export default class Query extends Component {
       {
         name: 'resetFontSize',
         bindKey: 'Ctrl+0|Ctrl-Numpad0',
-        exec: function(editor) {
+        exec(editor) {
           editor.setFontSize(12);
         },
       },
       {
         name: 'selectCurrentLine',
         bindKey: { win: 'Ctrl-L', mac: 'Command-L' },
-        exec: function(editor) {
+        exec(editor) {
           const { row } = editor.selection.getCursor();
           const endColumn = editor.session.getLine(row).length;
           editor.selection.setSelectionRange({
@@ -247,13 +256,13 @@ export default class Query extends Component {
               value={query.query}
               showPrintMargin={false}
               commands={this.getCommands()}
-              editorProps={{$blockScrolling: Infinity}}
+              editorProps={{ $blockScrolling: Infinity }}
               onChange={debounce(onSQLChange, 50)}
               enableBasicAutocompletion
               enableLiveAutocompletion
               />
           </ResizableBox>
-          <div className="ui secondary menu" style={{marginTop: 0}}>
+          <div className="ui secondary menu" style={{ marginTop: 0 }}>
             {infos &&
               <div className="item">
                 <span>

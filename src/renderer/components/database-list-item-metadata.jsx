@@ -75,7 +75,7 @@ export default class DbMetadataList extends Component {
     return items.map(item => {
       const hasChildElements = !!onSelectItem;
 
-      const cssStyle = {...STYLE.item};
+      const cssStyle = { ...STYLE.item };
       if (this.state.collapsed) {
         cssStyle.display = 'none';
       }
