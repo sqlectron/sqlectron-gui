@@ -38,6 +38,12 @@ export default class DatabaseListItem extends Component {
     onGetSQLScript: PropTypes.func.isRequired,
     onRefreshDatabase: PropTypes.func.isRequired,
     onShowDiagramModal: PropTypes.func.isRequired,
+    scrollHeight: PropTypes.number.isRequired,
+    scrollTop: PropTypes.number.isRequired,
+    offsetTop: PropTypes.number.isRequired,
+    width: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number]),
   }
 
   constructor(props, context) {
@@ -136,6 +142,10 @@ export default class DatabaseListItem extends Component {
       onExecuteDefaultQuery,
       onSelectTable,
       onGetSQLScript,
+      scrollHeight,
+      scrollTop,
+      offsetTop,
+      width,
     } = this.props;
 
     let filteredTables;
@@ -173,26 +183,42 @@ export default class DatabaseListItem extends Component {
             database={database}
             onExecuteDefaultQuery={onExecuteDefaultQuery}
             onSelectItem={onSelectTable}
-            onGetSQLScript={onGetSQLScript} />
+            onGetSQLScript={onGetSQLScript}
+            scrollHeight={scrollHeight}
+            scrollTop={scrollTop}
+            offsetTop={offsetTop}
+            width={width} />
           <DatabaseListItemMetatada
             collapsed
             title="Views"
             items={filteredViews || views}
             database={database}
             onExecuteDefaultQuery={onExecuteDefaultQuery}
-            onGetSQLScript={onGetSQLScript} />
+            onGetSQLScript={onGetSQLScript}
+            scrollHeight={scrollHeight}
+            scrollTop={scrollTop}
+            offsetTop={offsetTop}
+            width={width} />
           <DatabaseListItemMetatada
             collapsed
             title="Functions"
             items={filteredFunctions || functions}
             database={database}
-            onGetSQLScript={onGetSQLScript} />
+            onGetSQLScript={onGetSQLScript}
+            scrollHeight={scrollHeight}
+            scrollTop={scrollTop}
+            offsetTop={offsetTop}
+            width={width} />
           <DatabaseListItemMetatada
             collapsed
             title="Procedures"
             items={filteredProcedures || procedures}
             database={database}
-            onGetSQLScript={onGetSQLScript} />
+            onGetSQLScript={onGetSQLScript}
+            scrollHeight={scrollHeight}
+            scrollTop={scrollTop}
+            offsetTop={offsetTop}
+            width={width} />
         </div>
       </div>
     );
