@@ -15,6 +15,7 @@ export default class TableSubmenu extends Component {
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
     onDoubleClickItem: PropTypes.func,
+    onToggle: PropTypes.func,
   }
 
   constructor(props, context) {
@@ -29,6 +30,9 @@ export default class TableSubmenu extends Component {
   }
 
   toggleCollapse() {
+    if (this.props.onToggle) {
+      this.props.onToggle({ collapsed: !this.state.collapsed });
+    }
     this.setState({ collapsed: !this.state.collapsed });
   }
 
