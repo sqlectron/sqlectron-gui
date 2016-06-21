@@ -22,7 +22,7 @@ import Query from '../components/query.jsx';
 import Loader from '../components/loader.jsx';
 import PromptModal from '../components/prompt-modal.jsx';
 import MenuHandler from '../menu-handler';
-import scrollbarSize from 'dom-helpers/util/scrollbarSize'
+import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 
 import { ResizableBox } from 'react-resizable';
 require('../components/react-resizable.css');
@@ -442,7 +442,7 @@ class QueryBrowserContainer extends Component {
 
     return (
       <div style={STYLES.wrapper}>
-        { isLoading && <Loader message={status} type="page" />}
+        {isLoading && <Loader message={status} type="page" />}
         <div style={STYLES.header}>
           <Header items={breadcrumb}
             onCloseConnectionClick={::this.onCloseConnectionClick}
@@ -453,13 +453,13 @@ class QueryBrowserContainer extends Component {
             <ResizableBox className="react-resizable react-resizable-ew-resize"
               onResizeStop={(event, { size }) => this.setState({ sideBarWidth: size.width })}
               onResize={(event, { size }) => this.setState({ sideBarWidth: size.width })}
-              style={{"height": "100%", "width": sideBarWidth}}
+              style={{ height: '100%', width: sideBarWidth }}
               width={SIDEBAR_WIDTH}
               height={NaN}
               minConstraints={[SIDEBAR_WIDTH, 300]}
               maxConstraints={[750, 10000]}>
               <div className="ui vertical menu" style={STYLES.resizeable}>
-                <div className="item active" style={{textAlign: 'center'}}>
+                <div className="item active" style={{ textAlign: 'center' }}>
                   <b>{currentClient.title}</b>
                 </div>
                 <div className="item">
@@ -471,7 +471,7 @@ class QueryBrowserContainer extends Component {
                 </div>
                 <DatabaseList
                   ref="databaseList"
-                  width={sideBarWidth-scrollbarSize()-2}
+                  width={sideBarWidth - scrollbarSize() - 2}
                   databases={filteredDatabases}
                   isFetching={databases.isFetching}
                   tablesByDatabase={tables.itemsByDatabase}
