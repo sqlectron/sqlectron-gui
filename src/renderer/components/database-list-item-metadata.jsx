@@ -27,7 +27,8 @@ export default class DbMetadataList extends Component {
     offsetTop: PropTypes.number.isRequired,
     width: React.PropTypes.oneOfType([
       React.PropTypes.string,
-      React.PropTypes.number]),
+      React.PropTypes.number,
+    ]),
   }
 
   constructor(props, context) {
@@ -50,7 +51,7 @@ export default class DbMetadataList extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if ((this.props.columnsByTable !== nextProps.columnsByTable) ||
     (this.state.tableheights !== nextState.tableheights) ||
-    this.recalc === true ||
+    this.recalc ||
     nextProps.items !== this.props.items ||
     this.state.collapsed !== nextState.collapsed) {
       this.recalc = true;
@@ -68,20 +69,25 @@ export default class DbMetadataList extends Component {
   }
 
   onAdjustHeight({ height, table, showcolumns, showtriggers, tableCollapsed }) {
-    const temptableheights = this.state.tableheights;
-    const tempshowcolumns = this.state.showcolumns;
-    const tempshowtriggers = this.state.showtriggers;
-    const temptablecollapsed = this.state.tableCollapsed;
-    if (temptableheights[table] !== height) {
-      temptableheights[table] = height;
-      tempshowcolumns[table] = showcolumns;
-      tempshowtriggers[table] = showtriggers;
-      temptablecollapsed[table] = tableCollapsed;
+    if (this.state.tableheights[table] !== height) {
       this.setState({
-        tableheights: temptableheights,
-        showcolumns: tempshowcolumns,
-        showtriggers: tempshowtriggers,
-        tableCollapsed: temptablecollapsed });
+        tableheights: {
+          ...this.state.tableheights,
+          [table]: height,
+        },
+        showcolumns: {
+          ...this.state.showcolumns,
+          [table]: showcolumns,
+        },
+        showtriggers: {
+          ...this.state.showtriggers,
+          [table]: showtriggers,
+        },
+        tableCollapsed: {
+          ...this.state.tableCollapsed,
+          [table]: tableCollapsed,
+        },
+      });
       this.recalc = true;
     }
   }

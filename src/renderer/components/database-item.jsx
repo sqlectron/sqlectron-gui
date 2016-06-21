@@ -29,7 +29,8 @@ export default class DatabaseItem extends Component {
       height: 0,
       showcolumns: props.showcolumns,
       showtriggers: props.showtriggers,
-      tableCollapsed: props.tableCollapsed };
+      tableCollapsed: props.tableCollapsed,
+    };
     this.contextMenu = null;
   }
 
@@ -140,7 +141,6 @@ export default class DatabaseItem extends Component {
   }
 
   toggleTableCollapse() {
-    // const { columnsByTable, onAdjustHeight, item } = this.props;
     this.setState({ tableCollapsed: !this.state.tableCollapsed });
   }
 
