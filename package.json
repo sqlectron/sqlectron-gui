@@ -38,6 +38,7 @@
       ]
     },
     "linux": {
+      "depends": [],
       "target": [
         "deb",
         "rpm",
