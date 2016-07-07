@@ -234,7 +234,12 @@ export default class QueryResultTable extends Component {
     const { rowCount, fields } = this.props;
     const { tableWidth, tableHeight } = this.state;
 
-    let fixedHeightRow = (rowCount > 1) ? rowCount * 32: 48;
+    const scrollBarSize = 15;
+    const offsetHeight = scrollBarSize + 9;
+    const fixedHeightRow = (rowCount > 1) ? (rowCount * 32) - offsetHeight : 44;
+
+    console.log("fixed: "+fixedHeightRow);
+    console.log("tableHeight: "+(tableHeight-62));
 
     return (
       <Grid
@@ -258,8 +263,6 @@ export default class QueryResultTable extends Component {
     const { fields } = this.props;
     const { tableWidth, tableHeight } = this.state;
 
-    console.log(this);
-
     if (!fields.length) {
       return null;
     }
@@ -274,7 +277,6 @@ export default class QueryResultTable extends Component {
         className="grid-header-row"
         rowHeight={30}
         rowCount={1}
-        height={30}
         width={tableWidth}
         scrollLeft={scrollLeft} />
     );

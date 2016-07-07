@@ -47,7 +47,7 @@
 }
 
 .Grid.grid-header-row .Grid__cell {
-  overflow: visible;
+  //overflow: visible;
   font-weight: bold;
   padding-left: 10px;
   padding-right: 10px;
@@ -65,7 +65,7 @@
 }
 
 .Grid.grid-header-row {
-  overflow: hidden;
+  overflow: hidden !important;
   background: #f9fafb;
   border: 1px solid rgba(34,36,38,.1);
   border-right: none;
