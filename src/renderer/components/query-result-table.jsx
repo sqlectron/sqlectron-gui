@@ -261,7 +261,7 @@ export default class QueryResultTable extends Component {
 
   renderTableHeader(scrollLeft) {
     const { fields } = this.props;
-    const { tableWidth, tableHeight } = this.state;
+    const { tableWidth } = this.state;
 
     if (!fields.length) {
       return null;
