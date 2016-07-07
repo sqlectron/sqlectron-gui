@@ -238,9 +238,6 @@ export default class QueryResultTable extends Component {
     const offsetHeight = scrollBarSize + 9;
     const fixedHeightRow = (rowCount > 1) ? (rowCount * 32) - offsetHeight : 44;
 
-    console.log("fixed: "+fixedHeightRow);
-    console.log("tableHeight: "+(tableHeight-62));
-
     return (
       <Grid
         className="grid-body"
