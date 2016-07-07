@@ -1,7 +1,6 @@
 import { debounce } from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { Grid, ScrollSync } from 'react-virtualized';
-import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 import Draggable from 'react-draggable';
 
 import TableCell from './query-result-table-cell.jsx';
