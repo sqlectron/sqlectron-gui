@@ -17,6 +17,7 @@
     "build:linux": "npm run clean:linux && build --linux",
     "build:win": "npm run clean:win && build --windows",
     "dist": "npm run compile && build",
+    "dist:all-arch": "npm run compile && build --ia32 --x64",
     "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win"
   },
   "build": {

@@ -46,6 +46,12 @@ install:
 script:
 - npm test
 - npm run dist
+- |
+  if [[ "$TRAVIS_OS_NAME" == "osx"  ]]; then
+    npm run dist
+  else
+    npm run dist:all-arch
+  fi
 
 branches:
   except:
