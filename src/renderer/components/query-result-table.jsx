@@ -1,7 +1,6 @@
 import { debounce } from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { Grid, ScrollSync } from 'react-virtualized';
-import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 import Draggable from 'react-draggable';
 
 import TableCell from './query-result-table-cell.jsx';
@@ -234,13 +233,17 @@ export default class QueryResultTable extends Component {
     const { rowCount, fields } = this.props;
     const { tableWidth, tableHeight } = this.state;
 
+    const scrollBarSize = 15;
+    const offsetHeight = scrollBarSize + 9;
+    const fixedHeightRow = (rowCount > 1) ? (rowCount * 32) - offsetHeight : 44;
+
     return (
       <Grid
         className="grid-body"
         ref={(ref) => { this.rowsGrid = ref; }}
         cellRenderer={::this.renderCell}
         width={tableWidth}
-        height={Math.min((tableHeight - 62), (rowCount * 32))}
+        height={Math.min((tableHeight - 62), fixedHeightRow)}
         rowHeight={28}
         onScroll={onScroll}
         rowCount={rowCount}
@@ -270,7 +273,7 @@ export default class QueryResultTable extends Component {
         className="grid-header-row"
         rowHeight={30}
         rowCount={1}
-        width={tableWidth - scrollbarSize()}
+        width={tableWidth}
         scrollLeft={scrollLeft} />
     );
   }
