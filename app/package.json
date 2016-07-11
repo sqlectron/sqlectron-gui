@@ -1,6 +1,6 @@
 {
   "name": "Sqlectron",
-  "version": "1.11.2-beta.0",
+  "version": "1.11.2",
   "description": "A simple and lightweight SQL client with cross database and platform support",
   "author": {
     "name": "The Sqlectron Team",
