@@ -16,7 +16,7 @@
 * [MySQL](https://www.mysql.com/)
 * [Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/)
 
-Do you want support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
+Do you want to support another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
 
 ## Download
 
