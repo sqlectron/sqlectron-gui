@@ -16,23 +16,23 @@
 * [MySQL](https://www.mysql.com/)
 * [Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/)
 
-Do you wanna support for another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
+Do you want to support another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
 
 ## Download
 
-All versions available are at the [release page](https://github.com/sqlectron/sqlectron-gui/releases).
+All available versions are at the [release page](https://github.com/sqlectron/sqlectron-gui/releases).
 
 ## Terminal
 
-SQLECTRON has also a terminal-based interface called [sqlectron-term](https://github.com/sqlectron/sqlectron-term).
+SQLECTRON also has a terminal-based interface called [sqlectron-term](https://github.com/sqlectron/sqlectron-term).
 
 ## Configuration
 
-See the available configuration at [here](https://github.com/sqlectron/sqlectron-core#configuration).
+See the available configuration [here](https://github.com/sqlectron/sqlectron-core#configuration).
 
 ## Development
 
-* Required node 4 or higher.
+* Requires node 4 or higher.
 
 Running the application:
 
@@ -44,7 +44,7 @@ npm run dev:webpack
 npm run dev:electron
 ```
 
-### Setup databases
+### Set up databases
 
 You can test it using your own database or use a [docker-compose](https://github.com/sqlectron/sqlectron-databases) built for us to bring up several different databases.
 
