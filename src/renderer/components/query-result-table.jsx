@@ -233,9 +233,10 @@ export default class QueryResultTable extends Component {
     const { rowCount, fields } = this.props;
     const { tableWidth, tableHeight } = this.state;
 
-    const scrollBarSize = 15;
-    const offsetHeight = scrollBarSize + 9;
-    const fixedHeightRow = (rowCount > 1) ? (rowCount * 32) - offsetHeight : 44;
+    const headerHeight = 62; // value of 2 headers together
+    const scrollBarHeight = 15;
+    const rowHeight = 28;
+    const fixedHeightRows = ((rowCount || 1) * rowHeight) + scrollBarHeight;
 
     return (
       <Grid
@@ -243,8 +244,8 @@ export default class QueryResultTable extends Component {
         ref={(ref) => { this.rowsGrid = ref; }}
         cellRenderer={::this.renderCell}
         width={tableWidth}
-        height={Math.min((tableHeight - 62), fixedHeightRow)}
-        rowHeight={28}
+        height={Math.min((tableHeight - headerHeight), fixedHeightRows)}
+        rowHeight={rowHeight}
         onScroll={onScroll}
         rowCount={rowCount}
         columnCount={fields.length}
