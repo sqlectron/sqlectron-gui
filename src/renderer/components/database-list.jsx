@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import DatabaseListItem from './database-list-item.jsx';
-
+import Scroller from './scroller.jsx';
 
 export default class DatabaseList extends Component {
   static propTypes = {
@@ -18,6 +18,9 @@ export default class DatabaseList extends Component {
     onGetSQLScript: PropTypes.func.isRequired,
     onRefreshDatabase: PropTypes.func.isRequired,
     onShowDiagramModal: PropTypes.func.isRequired,
+    width: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number]),
   }
 
   constructor(props, context) {
@@ -45,6 +48,7 @@ export default class DatabaseList extends Component {
       onGetSQLScript,
       onRefreshDatabase,
       onShowDiagramModal,
+      width,
     } = this.props;
 
     if (isFetching) {
@@ -60,28 +64,33 @@ export default class DatabaseList extends Component {
     }
 
     return (
-      <div className="item" style={{ padding: 0 }}>
-      {
-        databases.map(database => (
-          <DatabaseListItem
-            ref={database.name}
-            key={database.name}
-            database={database}
-            tables={tablesByDatabase[database.name]}
-            columnsByTable={columnsByTable[database.name]}
-            triggersByTable={triggersByTable[database.name]}
-            views={viewsByDatabase[database.name]}
-            functions={functionsByDatabase[database.name]}
-            procedures={proceduresByDatabase[database.name]}
-            onExecuteDefaultQuery={onExecuteDefaultQuery}
-            onSelectTable={onSelectTable}
-            onSelectDatabase={onSelectDatabase}
-            onGetSQLScript={onGetSQLScript}
-            onRefreshDatabase={onRefreshDatabase}
-            onShowDiagramModal={onShowDiagramModal} />
-        ))
-      }
-      </div>
+      <Scroller className="item" height="100%" width={width}>
+        {({ scrollHeight, scrollTop, offsetTop }) => (
+          databases.map(database => (
+            <DatabaseListItem
+              ref={database.name}
+              key={database.name}
+              database={database}
+              tables={tablesByDatabase[database.name]}
+              columnsByTable={columnsByTable[database.name]}
+              triggersByTable={triggersByTable[database.name]}
+              views={viewsByDatabase[database.name]}
+              functions={functionsByDatabase[database.name]}
+              procedures={proceduresByDatabase[database.name]}
+              onExecuteDefaultQuery={onExecuteDefaultQuery}
+              onSelectTable={onSelectTable}
+              onSelectDatabase={onSelectDatabase}
+              onGetSQLScript={onGetSQLScript}
+              onRefreshDatabase={onRefreshDatabase}
+              onShowDiagramModal={onShowDiagramModal}
+              scrollHeight={scrollHeight}
+              scrollTop={scrollTop}
+              offsetTop={offsetTop}
+              width={width} />
+          ))
+
+        )}
+      </Scroller>
     );
   }
 }

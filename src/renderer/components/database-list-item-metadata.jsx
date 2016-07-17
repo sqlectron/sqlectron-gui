@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import DatabaseItem from './database-item.jsx';
-
+import ScrollerOffset from './scroller-offset.jsx';
+import { VirtualScroll } from 'react-virtualized';
+import 'react-virtualized/styles.css';
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
@@ -20,11 +22,24 @@ export default class DbMetadataList extends Component {
     onExecuteDefaultQuery: PropTypes.func,
     onSelectItem: PropTypes.func,
     onGetSQLScript: PropTypes.func,
+    scrollHeight: PropTypes.number.isRequired,
+    scrollTop: PropTypes.number.isRequired,
+    offsetTop: PropTypes.number.isRequired,
+    width: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+    ]),
   }
 
   constructor(props, context) {
     super(props, context);
-    this.state = {};
+    this.state = {
+      tableheights: {},
+      showcolumns: {},
+      showtriggers: {},
+      tableCollapsed: {},
+    };
+    this.recalc = false;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,8 +48,63 @@ export default class DbMetadataList extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if ((this.props.columnsByTable !== nextProps.columnsByTable) ||
+    (this.state.tableheights !== nextState.tableheights) ||
+    this.recalc ||
+    nextProps.items !== this.props.items ||
+    this.state.collapsed !== nextState.collapsed) {
+      this.recalc = true;
+      return true;
+    }
+    return false;
+  }
+
+  componentDidUpdate() {
+    if (this.recalc === true) {
+      this.recalc = false;
+      this.metadataScroll.recomputeRowHeights();
+      this.metadataScroll.forceUpdate();
+    }
+  }
+
+  onAdjustHeight({ height, table, showcolumns, showtriggers, tableCollapsed }) {
+    if (this.state.tableheights[table] !== height) {
+      this.setState({
+        tableheights: {
+          ...this.state.tableheights,
+          [table]: height,
+        },
+        showcolumns: {
+          ...this.state.showcolumns,
+          [table]: showcolumns,
+        },
+        showtriggers: {
+          ...this.state.showtriggers,
+          [table]: showtriggers,
+        },
+        tableCollapsed: {
+          ...this.state.tableCollapsed,
+          [table]: tableCollapsed,
+        },
+      });
+      this.recalc = true;
+    }
+  }
+
   toggleCollapse() {
     this.setState({ collapsed: !this.state.collapsed });
+  }
+
+  rowHeight({ index }) {
+    let height = 30;
+    const table = this.props.items[index];
+
+    if (this.state.tableheights[table.name]) {
+      height = this.state.tableheights[table.name] + 26;
+    }
+
+    return height;
   }
 
   renderHeader() {
@@ -53,56 +123,78 @@ export default class DbMetadataList extends Component {
     );
   }
 
-  renderItems() {
+  renderItem({ index }) {
     const {
       onExecuteDefaultQuery,
       onSelectItem,
       items,
       database,
       onGetSQLScript,
+      columnsByTable,
+      triggersByTable,
+      title,
     } = this.props;
 
-    if (!items || this.state.collapsed) {
-      return null;
+    const item = items[index];
+
+    const hasChildElements = !!onSelectItem;
+
+    const cssStyle = { ...STYLE.item };
+    if (this.state.collapsed) {
+      cssStyle.display = 'none';
     }
+    cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
 
-    if (!items.length) {
-      return (
-        <span className="ui grey item"><i> No results found</i></span>
+    return (
+      <DatabaseItem
+        key={item.name}
+        database={database}
+        item={item}
+        dbObjectType={title.slice(0, -1)}
+        style={cssStyle}
+        showtriggers={!!this.state.showtriggers[item.name]}
+        showcolumns={!!this.state.showcolumns[item.name]}
+        tableCollapsed={!!this.state.tableCollapsed[item.name]}
+        columnsByTable={columnsByTable}
+        triggersByTable={triggersByTable}
+        onAdjustHeight={::this.onAdjustHeight}
+        onSelectItem={onSelectItem}
+        onExecuteDefaultQuery={onExecuteDefaultQuery}
+        onGetSQLScript={onGetSQLScript} />
       );
-    }
-
-    return items.map(item => {
-      const hasChildElements = !!onSelectItem;
-
-      const cssStyle = { ...STYLE.item };
-      if (this.state.collapsed) {
-        cssStyle.display = 'none';
-      }
-      cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
-
-      return (
-        <DatabaseItem
-          key={item.name}
-          database={database}
-          item={item}
-          dbObjectType={this.props.title.slice(0, -1)}
-          style={cssStyle}
-          columnsByTable={this.props.columnsByTable}
-          triggersByTable={this.props.triggersByTable}
-          onSelectItem={onSelectItem}
-          onExecuteDefaultQuery={onExecuteDefaultQuery}
-          onGetSQLScript={onGetSQLScript} />
-      );
-    });
   }
 
   render() {
+    const {
+      items,
+      scrollHeight,
+      scrollTop,
+      offsetTop,
+      width,
+    } = this.props;
+
     return (
       <div className="item">
         {this.renderHeader()}
         <div className="menu" style={STYLE.menu}>
-          {this.renderItems()}
+          <ScrollerOffset
+            scrollHeight={scrollHeight}
+            scrollTop={scrollTop}
+            offsetTop={offsetTop}>
+
+            {({ scrollHeight, scrollTop }) => (
+              <VirtualScroll
+                ref={(ref) => this.metadataScroll = ref}
+                height={scrollHeight}
+                rowCount={(items && !this.state.collapsed) ? items.length : 0}
+                rowHeight={::this.rowHeight}
+                rowRenderer={::this.renderItem}
+                scrollTop={Math.max(scrollTop, 1)}
+                autoHeight
+                width={width}
+              />
+            )}
+          </ScrollerOffset>
         </div>
       </div>
     );

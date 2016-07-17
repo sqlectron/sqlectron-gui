@@ -16,13 +16,46 @@ export default class DatabaseItem extends Component {
     triggersByTable: PropTypes.object,
     onSelectItem: PropTypes.func,
     onExecuteDefaultQuery: PropTypes.func,
+    showtriggers: PropTypes.bool,
+    showcolumns: PropTypes.bool,
     onGetSQLScript: PropTypes.func,
+    onAdjustHeight: PropTypes.func,
+    tableCollapsed: PropTypes.bool,
   }
 
   constructor(props, context) {
     super(props, context);
-    this.state = {};
+    this.state = {
+      height: 0,
+      showcolumns: props.showcolumns,
+      showtriggers: props.showtriggers,
+      tableCollapsed: props.tableCollapsed,
+    };
     this.contextMenu = null;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.tableCollapsed !== this.state.tableCollapsed) {
+      this.setState({ tableCollapsed: nextProps.tableCollapsed });
+    }
+    if (nextProps.showcolumns !== this.state.showcolumns) {
+      this.setState({ showcolumns: nextProps.showcolumns });
+    }
+    if (nextProps.showtriggers !== this.state.showtriggers) {
+      this.setState({ showtriggers: nextProps.showtriggers });
+    }
+  }
+
+  componentDidUpdate() {
+    const { onAdjustHeight, item } = this.props;
+    if (onAdjustHeight) {
+      onAdjustHeight({
+        height: this.calculateHeight(),
+        table: item.name,
+        showtriggers: this.state.showtriggers,
+        showcolumns: this.state.showcolumns,
+        tableCollapsed: !!this.state.tableCollapsed });
+    }
   }
 
   // Context menu is built dinamically on click (if it does not exist), because building
@@ -36,6 +69,33 @@ export default class DatabaseItem extends Component {
     }
 
     this.contextMenu.popup(event.clientX, event.clientY);
+  }
+
+  onToggleColumns({ collapsed }) {
+    this.setState({ showcolumns: !collapsed });
+    this.forceUpdate();
+  }
+
+  onToggleTriggers({ collapsed }) {
+    this.setState({ showtriggers: !collapsed });
+    this.forceUpdate();
+  }
+
+  calculateHeight() {
+    const { columnsByTable, triggersByTable, item } = this.props;
+    const { tableCollapsed, showcolumns, showtriggers } = this.state;
+    let tempheight = 0;
+    if (tableCollapsed && showcolumns && columnsByTable && columnsByTable[item.name]) {
+      tempheight = tempheight + (Math.max(columnsByTable[item.name].length, 1) * 21) + 20;
+    } else if (tableCollapsed) {
+      tempheight = tempheight + 28;
+    }
+    if (tableCollapsed && showtriggers && triggersByTable && triggersByTable[item.name]) {
+      tempheight = tempheight + (Math.max(triggersByTable[item.name].length, 1) * 21) + 20;
+    } else if (tableCollapsed) {
+      tempheight = tempheight + 28;
+    }
+    return tempheight;
   }
 
   buildContextMenu() {
@@ -86,6 +146,7 @@ export default class DatabaseItem extends Component {
 
   renderSubItems(table) {
     const { columnsByTable, triggersByTable, database } = this.props;
+    const { showcolumns, showtriggers } = this.state;
 
     if (!columnsByTable || !columnsByTable[table]) {
       return null;
@@ -99,13 +160,16 @@ export default class DatabaseItem extends Component {
     return (
       <div style={displayStyle}>
         <TableSubmenu
+          collapsed={!showcolumns}
           title="Columns"
           table={table}
+          onToggle={::this.onToggleColumns}
           itemsByTable={columnsByTable}
           database={database} />
         <TableSubmenu
-          collapsed
+          collapsed={!showtriggers}
           title="Triggers"
+          onToggle={::this.onToggleTriggers}
           table={table}
           itemsByTable={triggersByTable}
           database={database} />
