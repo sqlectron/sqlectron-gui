@@ -40,3 +40,7 @@ span.list-item {
 span.clickable {
   cursor: pointer;
 }
+
+::-webkit-scrollbar { width:8px; height:8px }
+::-webkit-scrollbar-track { background: #fff; }
+::-webkit-scrollbar-thumb { background: #666; border-radius:5px }
