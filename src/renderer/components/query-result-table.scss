@@ -28,7 +28,12 @@
 
 .Grid.grid-body {
   background: rgb(245, 245, 245);
+  overflow: hidden !important;
 }
+
+.Grid.grid-body ::-webkit-scrollbar{ display: none }
+.Grid.grid-body:hover { overflow:auto !important; }
+.Grid.grid-body:hover ::-webkit-scrollbar { display: block }
 
 .Grid.grid-body > .Grid__innerScrollContainer {
   background: #fff;

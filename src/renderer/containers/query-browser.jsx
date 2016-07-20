@@ -25,6 +25,7 @@ import MenuHandler from '../menu-handler';
 
 
 import { ResizableBox } from 'react-resizable';
+require('./query-browser.css');
 require('../components/react-resizable.css');
 require('../components/react-tabs.scss');
 
@@ -37,7 +38,7 @@ const STYLES = {
     boxSizing: 'border-box',
     padding: '50px 10px 40px 10px',
   },
-  sidebar: { overflowY: 'auto' },
+  sidebar: {},
   content: { flex: 1, overflow: 'auto', paddingLeft: '5px' },
   resizeable: { width: 'auto', maxWidth: '100%' },
 };
@@ -443,7 +444,7 @@ class QueryBrowserContainer extends Component {
             onReConnectionClick={::this.onReConnectionClick} />
         </div>
         <div style={STYLES.container}>
-          <div style={STYLES.sidebar}>
+          <div id="sidebar" style={STYLES.sidebar}>
             <ResizableBox className="react-resizable react-resizable-ew-resize"
               onResizeStop={(event, { size }) => this.setState({ sideBarWidth: size.width })}
               width={SIDEBAR_WIDTH}
