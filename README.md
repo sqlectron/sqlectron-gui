@@ -9,7 +9,7 @@
 </p>
 
 #### Demo (version 1.0.0)
-![demo](https://sqlectron.github.io/demos/sqlectron-demo-gui-v1.0.0.gif)
+![demo](https://sqlectron.github.io/demos/sqlectron-demo-gui-v1.0.0-small.gif)
 
 #### Current supported databases
 * [PostgreSQL](http://www.postgresql.org/)
