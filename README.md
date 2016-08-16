@@ -18,21 +18,11 @@
 
 Do you want to support another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
 
-### Download
-
-All available versions are at the [release page](https://github.com/sqlectron/sqlectron-gui/releases).
-
-### Configuration
-
-See the available configuration [here](https://github.com/sqlectron/sqlectron-core#configuration).
-
-### Keyboard Shortcuts
-
-Check out the available shortcuts [here](https://github.com/sqlectron/sqlectron-gui/wiki/Keyboard-Shortcuts).
-
-## Terminal
-
-SQLECTRON also has a terminal-based interface called [sqlectron-term](https://github.com/sqlectron/sqlectron-term).
+* [Download](https://github.com/sqlectron/sqlectron-gui/releases) - Installers, binaries and source.
+* [Configuration](https://github.com/sqlectron/sqlectron-core#configuration) - List of saved servers and custom configurations.
+* [Keyboard Shortcuts](https://github.com/sqlectron/sqlectron-gui/wiki/Keyboard-Shortcuts) - List of shortcuts.
+* [Wiki](https://github.com/sqlectron/sqlectron-gui/wiki) - Other docs.
+* [Terminal](https://github.com/sqlectron/sqlectron-term) - A terminal-based interface of SQLECTRON.
 
 ## Development
 
