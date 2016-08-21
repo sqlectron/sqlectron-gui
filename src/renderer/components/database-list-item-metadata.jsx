@@ -12,6 +12,7 @@ const STYLE = {
 export default class DbMetadataList extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
+    client: PropTypes.string.isRequired,
     items: PropTypes.array,
     columnsByTable: PropTypes.object,
     triggersByTable: PropTypes.object,
@@ -55,6 +56,7 @@ export default class DbMetadataList extends Component {
 
   renderItems() {
     const {
+      client,
       onExecuteDefaultQuery,
       onSelectItem,
       items,
@@ -84,6 +86,7 @@ export default class DbMetadataList extends Component {
       return (
         <DatabaseItem
           key={item.name}
+          client={client}
           database={database}
           item={item}
           dbObjectType={this.props.title.slice(0, -1)}

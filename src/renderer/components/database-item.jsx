@@ -1,13 +1,16 @@
 import React, { Component, PropTypes } from 'react';
 import TableSubmenu from './table-submenu.jsx';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
+import { sqlectron } from '../../browser/remote';
 
 const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
+const CLIENTS = sqlectron.db.CLIENTS;
 
 
 export default class DatabaseItem extends Component {
   static propTypes = {
+    client: PropTypes.string.isRequired,
     database: PropTypes.object.isRequired,
     item: PropTypes.object.isRequired,
     dbObjectType: PropTypes.string.isRequired,
@@ -40,6 +43,7 @@ export default class DatabaseItem extends Component {
 
   buildContextMenu() {
     const {
+      client,
       database,
       item,
       dbObjectType,
@@ -57,10 +61,13 @@ export default class DatabaseItem extends Component {
 
     this.contextMenu.append(new MenuItem({ type: 'separator' }));
 
-    this.contextMenu.append(new MenuItem({
-      label: 'Create Statement',
-      click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
-    }));
+    const { disabledFeatures } = CLIENTS.find(dbClient => dbClient.key === client);
+    if (!disabledFeatures || !~disabledFeatures.indexOf('scriptCreateTable')) {
+      this.contextMenu.append(new MenuItem({
+        label: 'Create Statement',
+        click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
+      }));
+    }
 
     if (dbObjectType === 'Table') {
       const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];

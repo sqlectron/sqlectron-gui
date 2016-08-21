@@ -25,6 +25,7 @@ const STYLE = {
 
 export default class DatabaseListItem extends Component {
   static propTypes = {
+    client: PropTypes.string.isRequired,
     tables: PropTypes.array,
     columnsByTable: PropTypes.object,
     triggersByTable: PropTypes.object,
@@ -126,6 +127,7 @@ export default class DatabaseListItem extends Component {
   render() {
     const { filter } = this.state;
     const {
+      client,
       tables,
       columnsByTable,
       triggersByTable,
@@ -167,6 +169,7 @@ export default class DatabaseListItem extends Component {
           </div>
           <DatabaseListItemMetatada
             title="Tables"
+            client={client}
             items={filteredTables || tables}
             columnsByTable={columnsByTable}
             triggersByTable={triggersByTable}
@@ -177,6 +180,7 @@ export default class DatabaseListItem extends Component {
           <DatabaseListItemMetatada
             collapsed
             title="Views"
+            client={client}
             items={filteredViews || views}
             database={database}
             onExecuteDefaultQuery={onExecuteDefaultQuery}
@@ -184,12 +188,14 @@ export default class DatabaseListItem extends Component {
           <DatabaseListItemMetatada
             collapsed
             title="Functions"
+            client={client}
             items={filteredFunctions || functions}
             database={database}
             onGetSQLScript={onGetSQLScript} />
           <DatabaseListItemMetatada
             collapsed
             title="Procedures"
+            client={client}
             items={filteredProcedures || procedures}
             database={database}
             onGetSQLScript={onGetSQLScript} />

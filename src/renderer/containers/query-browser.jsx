@@ -464,6 +464,7 @@ class QueryBrowserContainer extends Component {
                 </div>
                 <DatabaseList
                   ref="databaseList"
+                  client={connections.server.client}
                   databases={filteredDatabases}
                   isFetching={databases.isFetching}
                   tablesByDatabase={tables.itemsByDatabase}

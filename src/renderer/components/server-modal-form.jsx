@@ -14,6 +14,7 @@ const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
   logo: require(`./server-db-client-${dbClient.key}.png`), // eslint-disable-line global-require
   label: dbClient.name,
   defaultPort: dbClient.defaultPort,
+  disabledFeatures: dbClient.disabledFeatures,
 }));
 
 
@@ -105,6 +106,15 @@ export default class ServerModalForm extends Component {
 
   onDuplicateClick() {
     this.props.onDuplicateClick(this.mapStateToServer(this.state));
+  }
+
+  isFeatureDisabled(feature) {
+    if (!this.state.client) {
+      return false;
+    }
+
+    const dbClient = CLIENTS.find(dbc => dbc.value === this.state.client);
+    return dbClient.disabledFeatures && ~dbClient.disabledFeatures.indexOf(feature);
   }
 
   mapStateToServer(state) {
@@ -234,6 +244,7 @@ export default class ServerModalForm extends Component {
                     name="ssl"
                     tabIndex="0"
                     className="hidden"
+                    disabled={this.isFeatureDisabled('server:ssl')}
                     defaultChecked={this.state.ssl} />
                   <label>SSL</label>
                 </div>
@@ -268,7 +279,11 @@ export default class ServerModalForm extends Component {
                       placeholder="Unix socket path"
                       value={this.state.socketPath}
                       onChange={::this.handleChange}
-                      disabled={(this.state.host || this.state.port)} />
+                      disabled={(
+                        this.state.host ||
+                        this.state.port ||
+                        this.isFeatureDisabled('server:socketPath')
+                      )} />
                     <label htmlFor="file.socketPath" className="ui icon button btn-file">
                       <i className="file outline icon" />
                       <input
@@ -290,6 +305,7 @@ export default class ServerModalForm extends Component {
                   maxLength="55"
                   placeholder="User"
                   value={this.state.user}
+                  disabled={this.isFeatureDisabled('server:user')}
                   onChange={::this.handleChange} />
               </div>
               <div className={`five wide field ${this.highlightError('password')}`}>
@@ -299,10 +315,11 @@ export default class ServerModalForm extends Component {
                   maxLength="55"
                   placeholder="Password"
                   value={this.state.password}
+                  disabled={this.isFeatureDisabled('server:password')}
                   onChange={::this.handleChange} />
               </div>
               <div className={`six wide field ${this.highlightError('database')}`}>
-                <label>Database</label>
+                <label>Database/Keyspace</label>
                 <input type="text"
                   name="database"
                   maxLength="100"

@@ -4,6 +4,7 @@ import DatabaseListItem from './database-list-item.jsx';
 
 export default class DatabaseList extends Component {
   static propTypes = {
+    client: PropTypes.string.isRequired,
     databases: PropTypes.array.isRequired,
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
@@ -31,6 +32,7 @@ export default class DatabaseList extends Component {
 
   render() {
     const {
+      client,
       databases,
       isFetching,
       tablesByDatabase,
@@ -66,6 +68,7 @@ export default class DatabaseList extends Component {
           <DatabaseListItem
             ref={database.name}
             key={database.name}
+            client={client}
             database={database}
             tables={tablesByDatabase[database.name]}
             columnsByTable={columnsByTable[database.name]}
