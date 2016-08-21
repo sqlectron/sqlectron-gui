@@ -11,13 +11,7 @@
 #### Demo (version 1.0.0)
 ![demo](https://sqlectron.github.io/demos/sqlectron-demo-gui-v1.0.0-small.gif)
 
-#### Current supported databases
-* [PostgreSQL](http://www.postgresql.org/)
-* [MySQL](https://www.mysql.com/)
-* [Microsoft SQL Server](http://www.microsoft.com/en-us/server-cloud/products/sql-server/)
-
-Do you want to support another SQL database? Please send a pull request to [sqlectron-core](https://github.com/sqlectron/sqlectron-core).
-
+* [Databases](https://github.com/sqlectron/sqlectron-core#current-supported-databases) - List of current supported databases.
 * [Download](https://github.com/sqlectron/sqlectron-gui/releases) - Installers, binaries and source.
 * [Configuration](https://github.com/sqlectron/sqlectron-core#configuration) - List of saved servers and custom configurations.
 * [Keyboard Shortcuts](https://github.com/sqlectron/sqlectron-gui/wiki/Keyboard-Shortcuts) - List of shortcuts.
