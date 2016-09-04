@@ -28,40 +28,37 @@ Running the application:
 npm run dev
 ```
 
+### Testing changes of sqlectron-core
+
+This is an easy way to test sqlectron-core changes on the GUI project.
+
+1. Make the GUI project use the core from `../sqlectron-core` directory:
+
+  ```bash
+  # from sqlectron-gui directory
+  ./scripts/link-sqlectron-core.sh
+  ```
+
+1. Start the auto compile of sqlectron-core:
+
+  ```bash
+  # from sqlectron-core directory
+  npm run watch
+  ```
+
+1. Then run the GUI project normally:
+
+  ```shell
+  # from sqlectron-gui directory
+  npm run dev
+  ```
+
 ### Set up databases
 
 You can test it using your own database or use a [docker-compose](https://github.com/sqlectron/sqlectron-databases) built for us to bring up several different databases.
-
-### Testing changes of sqlectron-core
-
-This is an easy way to test sqlectron-core changes from the GUI. But please do not forget including some unit tests on sqlectron-core before applying a pull request.
-
-Link the dependency to the original project:
-
-```bash
-# from sqlectron-gui folder
-./scripts/link-sqlectron-core.sh
-```
-
-Auto compile the sqlectron-core every time a change is done:
-
-```bash
-# from sqlectron-core folder
-npm run watch
-```
-
-Then follow the steps to run the GUI application.
 
 ## Build
 
 1. `npm install`
 1. `npm run dist`
 1. The installer will be placed at `dist` folder.
-
-### Building windows apps from non-windows platforms
-
-You will need follow [it](https://github.com/maxogden/electron-packager#building-windows-apps-from-non-windows-platforms) or build through the docker:
-
-```shell
-docker-compose run dist
-```
