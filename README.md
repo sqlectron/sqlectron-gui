@@ -25,11 +25,7 @@
 Running the application:
 
 ```shell
-# first shell window
-npm run dev:webpack
-
-# second shell window
-npm run dev:electron
+npm run dev
 ```
 
 ### Set up databases
