@@ -27,6 +27,11 @@ body {
   max-width: 100%;
 }
 
+.ui.message pre {
+  margin-top: 1em;
+  font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
 /* Custom css for tables, views and routines lists */
 span.list-title {
   cursor: pointer;

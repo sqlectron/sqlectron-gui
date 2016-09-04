@@ -6,6 +6,7 @@ export default class Message extends Component {
     type: PropTypes.string,
     title: PropTypes.string,
     message: PropTypes.string,
+    preformatted: PropTypes.bool,
   }
 
   onClose() {
@@ -13,9 +14,9 @@ export default class Message extends Component {
   }
 
   render() {
-    const { closeable, title, message, type } = this.props;
+    const { closeable, title, message, type, preformatted } = this.props;
     return (
-      <div ref="message" className={`ui message ${type}`}>
+      <div ref="message" className={`ui message ${type || ''}`}>
         {
           closeable && <i className="close icon" onClick={::this.onClose}></i>
         }
@@ -23,7 +24,7 @@ export default class Message extends Component {
           title && <div className="header">{title}</div>
         }
         {
-          message && <p>{message}</p>
+          message && preformatted ? <pre>{message}</pre> : <p>{message}</p>
         }
       </div>
     );

@@ -51,13 +51,27 @@ export default class QueryResult extends Component {
       isMultipleResults,
     } = queryResult;
 
-    if (command !== 'SELECT') {
+    const isSelect = command === 'SELECT';
+    const isExplain = command === 'EXPLAIN';
+    if (!isSelect && !isExplain) {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
         <Message
           key={queryIndex}
           message={`Query executed successfully. ${msgAffectedRows}`}
           type="success" />
+      );
+    }
+
+    if (isExplain) {
+      const title = fields[0].name;
+      return (
+        <Message
+          key={queryIndex}
+          preformatted
+          title={title}
+          message={rows.map(row => row[title]).join('\n')}
+        />
       );
     }
 
