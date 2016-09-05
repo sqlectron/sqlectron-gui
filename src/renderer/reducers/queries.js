@@ -83,7 +83,7 @@ export default function (state = INITIAL_STATE, action) {
         query: action.query,
         selectedQuery: action.selectedQuery,
         copied: false,
-      });
+      }, { table: action.table });
     }
     case types.COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST: {
       return changeStateByCurrentQuery(state, {
@@ -145,7 +145,7 @@ function addNewQuery(state, action) {
   const newQuery = {
     id: newId,
     database: action.database,
-    name: `SQL File ${newId}`,
+    name: createQueryName(newId, action.database, action.table),
     filename: null,
     isExecuting: false,
     isDefaultSelect: false,
@@ -175,15 +175,34 @@ function addNewQuery(state, action) {
 }
 
 
-function changeStateByCurrentQuery(oldFullState, newCurrentQueryState) {
+function changeStateByCurrentQuery(oldFullState, newCurrentQueryState, options = {}) {
+  const oldQueryState = oldFullState.queriesById[oldFullState.currentQueryId];
+
+  oldQueryState.name = newCurrentQueryState.name || oldQueryState.name;
+  if (options.table) {
+    oldQueryState.name = createQueryName(
+      oldFullState.currentQueryId,
+      oldQueryState.database,
+      options.table
+    );
+  }
+
   return {
     ...oldFullState,
     queriesById: {
       ...oldFullState.queriesById,
       [oldFullState.currentQueryId]: {
-        ...oldFullState.queriesById[oldFullState.currentQueryId],
+        ...oldQueryState,
         ...newCurrentQueryState,
       },
     },
   };
+}
+
+function createQueryName (id, database, table) {
+  return (
+    table
+    ? `[db: ${database}][tb: ${table}] #${id}`
+    : `[db: ${database}] #${id}`
+  );
 }
