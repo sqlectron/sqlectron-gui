@@ -339,83 +339,87 @@ export default class ServerModalForm extends Component {
                   <label>SSH Tunnel</label>
                 </div>
               </div>
-              <div className="field">
-                <label>SSH Address</label>
-                <div className="fields">
-                  <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
-                    <input type="text"
-                      name="ssh.host"
-                      maxLength="250"
-                      placeholder="Host"
-                      disabled={!isSSHChecked}
-                      value={ssh.host}
-                      onChange={::this.handleChange} />
+              {isSSHChecked &&
+                <div>
+                  <div className="field">
+                    <label>SSH Address</label>
+                    <div className="fields">
+                      <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
+                        <input type="text"
+                          name="ssh.host"
+                          maxLength="250"
+                          placeholder="Host"
+                          disabled={!isSSHChecked}
+                          value={ssh.host}
+                          onChange={::this.handleChange} />
+                      </div>
+                      <div className={`three wide field ${this.highlightError('ssh.port')}`}>
+                        <input type="number"
+                          name="ssh.port"
+                          maxLength="5"
+                          placeholder="Port"
+                          disabled={!isSSHChecked}
+                          value={ssh.port}
+                          onChange={::this.handleChange} />
+                      </div>
+                    </div>
                   </div>
-                  <div className={`three wide field ${this.highlightError('ssh.port')}`}>
-                    <input type="number"
-                      name="ssh.port"
-                      maxLength="5"
-                      placeholder="Port"
-                      disabled={!isSSHChecked}
-                      value={ssh.port}
-                      onChange={::this.handleChange} />
+                  <div className="fields">
+                    <div className={`four wide field ${this.highlightError('ssh.user')}`}>
+                      <label>User</label>
+                      <input type="text"
+                        name="ssh.user"
+                        maxLength="55"
+                        placeholder="User"
+                        disabled={!isSSHChecked}
+                        value={ssh.user}
+                        onChange={::this.handleChange} />
+                    </div>
+                    <div className={`four wide field ${this.highlightError('ssh.password')}`}>
+                      <label>Password</label>
+                      <input type="password"
+                        name="ssh.password"
+                        maxLength="55"
+                        placeholder="Password"
+                        disabled={(!isSSHChecked || ssh.privateKey)}
+                        value={ssh.password}
+                        onChange={::this.handleChange} />
+                    </div>
+                    <div className={`five wide field ${this.highlightError('ssh.privateKey')}`}>
+                      <label>Private Key</label>
+                      <div className="ui action input">
+                        <input type="text"
+                          name="ssh.privateKey"
+                          maxLength="250"
+                          placeholder="~/.ssh/id_rsa"
+                          disabled={(!isSSHChecked || ssh.password)}
+                          value={ssh.privateKey}
+                          onChange={::this.handleChange} />
+                        <label htmlFor="file.ssh.privateKey" className="ui icon button btn-file">
+                          <i className="file outline icon" />
+                          <input
+                            type="file"
+                            id="file.ssh.privateKey"
+                            name="file.ssh.privateKey"
+                            onChange={::this.handleChange}
+                            style={{ display: 'none' }} />
+                        </label>
+                      </div>
+                    </div>
+                    <div className="three wide field" style={{ paddingTop: '2em' }}>
+                      <div className="ui toggle checkbox" ref="privateKeyWithPassphrase">
+                        <input type="checkbox"
+                          name="privateKeyWithPassphrase"
+                          tabIndex="0"
+                          className="hidden"
+                          disabled={(!isSSHChecked || ssh.password)}
+                          defaultChecked={this.state.ssh && this.state.ssh.privateKeyWithPassphrase} />
+                        <label>Passphrase</label>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="fields">
-                <div className={`four wide field ${this.highlightError('ssh.user')}`}>
-                  <label>User</label>
-                  <input type="text"
-                    name="ssh.user"
-                    maxLength="55"
-                    placeholder="User"
-                    disabled={!isSSHChecked}
-                    value={ssh.user}
-                    onChange={::this.handleChange} />
-                </div>
-                <div className={`four wide field ${this.highlightError('ssh.password')}`}>
-                  <label>Password</label>
-                  <input type="password"
-                    name="ssh.password"
-                    maxLength="55"
-                    placeholder="Password"
-                    disabled={(!isSSHChecked || ssh.privateKey)}
-                    value={ssh.password}
-                    onChange={::this.handleChange} />
-                </div>
-                <div className={`five wide field ${this.highlightError('ssh.privateKey')}`}>
-                  <label>Private Key</label>
-                  <div className="ui action input">
-                    <input type="text"
-                      name="ssh.privateKey"
-                      maxLength="250"
-                      placeholder="~/.ssh/id_rsa"
-                      disabled={(!isSSHChecked || ssh.password)}
-                      value={ssh.privateKey}
-                      onChange={::this.handleChange} />
-                    <label htmlFor="file.ssh.privateKey" className="ui icon button btn-file">
-                      <i className="file outline icon" />
-                      <input
-                        type="file"
-                        id="file.ssh.privateKey"
-                        name="file.ssh.privateKey"
-                        onChange={::this.handleChange}
-                        style={{ display: 'none' }} />
-                    </label>
-                  </div>
-                </div>
-                <div className="three wide field" style={{ paddingTop: '2em' }}>
-                  <div className="ui toggle checkbox" ref="privateKeyWithPassphrase">
-                    <input type="checkbox"
-                      name="privateKeyWithPassphrase"
-                      tabIndex="0"
-                      className="hidden"
-                      disabled={(!isSSHChecked || ssh.password)}
-                      defaultChecked={this.state.ssh && this.state.ssh.privateKeyWithPassphrase} />
-                    <label>Passphrase</label>
-                  </div>
-                </div>
-              </div>
+              }
             </div>
           </form>
         </div>
