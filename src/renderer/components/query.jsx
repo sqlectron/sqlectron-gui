@@ -11,6 +11,7 @@ import ServerDBClientInfoModal from './server-db-client-info-modal.jsx';
 
 import { ResizableBox } from 'react-resizable';
 require('./react-resizable.css');
+require('./override-ace.css');
 
 
 const QUERY_EDITOR_HEIGTH = 200;
