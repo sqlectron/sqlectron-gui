@@ -22,6 +22,12 @@
 
 * Requires node 4 or higher.
 
+Installing the dependencies:
+
+```shell
+npm install
+```
+
 Running the application:
 
 ```shell
