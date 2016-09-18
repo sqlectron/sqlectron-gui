@@ -277,7 +277,7 @@ export default class ServerModalForm extends Component {
                       name="socketPath"
                       maxLength="250"
                       placeholder="Unix socket path"
-                      value={this.state.socketPath}
+                      value={this.state.socketPath || ''}
                       onChange={::this.handleChange}
                       disabled={(
                         this.state.host ||
@@ -413,7 +413,7 @@ export default class ServerModalForm extends Component {
                           tabIndex="0"
                           className="hidden"
                           disabled={(!isSSHChecked || ssh.password)}
-                          defaultChecked={this.state.ssh && this.state.ssh.privateKeyWithPassphrase} />
+                          defaultChecked={ssh && ssh.privateKeyWithPassphrase} />
                         <label>Passphrase</label>
                       </div>
                     </div>
