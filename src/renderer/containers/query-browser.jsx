@@ -10,6 +10,7 @@ import * as ConnActions from '../actions/connections.js';
 import * as QueryActions from '../actions/queries';
 import * as DbAction from '../actions/databases';
 import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
+import { fetchSchemasIfNeeded } from '../actions/schemas';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
 import { fetchViewsIfNeeded } from '../actions/views';
@@ -61,6 +62,7 @@ class QueryBrowserContainer extends Component {
     connections: PropTypes.object.isRequired,
     status: PropTypes.string.isRequired,
     databases: PropTypes.object.isRequired,
+    schemas: PropTypes.object.isRequired,
     tables: PropTypes.object.isRequired,
     columns: PropTypes.object.isRequired,
     triggers: PropTypes.object.isRequired,
@@ -111,6 +113,7 @@ class QueryBrowserContainer extends Component {
 
     dispatch(DbAction.fetchDatabasesIfNeeded());
     dispatch(fetchTablesIfNeeded(lastConnectedDB));
+    dispatch(fetchSchemasIfNeeded(lastConnectedDB));
     dispatch(fetchViewsIfNeeded(lastConnectedDB));
     dispatch(fetchRoutinesIfNeeded(lastConnectedDB));
 
@@ -358,6 +361,7 @@ class QueryBrowserContainer extends Component {
       connections,
       queries,
       databases,
+      schemas,
       tables,
       columns,
       triggers,
@@ -436,6 +440,7 @@ class QueryBrowserContainer extends Component {
             enabledLiveAutoComplete={queries.enabledLiveAutoComplete}
             database={currentDB}
             databases={databases.items}
+            schemas={schemas.itemsByDatabase[query.database]}
             tables={tables.itemsByDatabase[query.database]}
             columnsByTable={columns.columnsByTable[query.database]}
             triggersByTable={triggers.triggersByTable[query.database]}
@@ -501,6 +506,7 @@ class QueryBrowserContainer extends Component {
       status,
       connections,
       databases,
+      schemas,
       tables,
       columns,
       triggers,
@@ -567,6 +573,7 @@ class QueryBrowserContainer extends Component {
                   client={connections.server.client}
                   databases={filteredDatabases}
                   isFetching={databases.isFetching}
+                  schemasByDatabase={schemas.itemsByDatabase}
                   tablesByDatabase={tables.itemsByDatabase}
                   columnsByTable={columns.columnsByTable}
                   triggersByTable={triggers.triggersByTable}
@@ -600,6 +607,7 @@ function mapStateToProps (state) {
   const {
     connections,
     databases,
+    schemas,
     tables,
     columns,
     triggers,
@@ -614,6 +622,7 @@ function mapStateToProps (state) {
   return {
     connections,
     databases,
+    schemas,
     tables,
     columns,
     triggers,

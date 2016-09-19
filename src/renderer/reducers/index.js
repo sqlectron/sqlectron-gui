@@ -3,6 +3,7 @@ import databases from './databases';
 import servers from './servers';
 import queries from './queries';
 import connections from './connections';
+import schemas from './schemas';
 import tables from './tables';
 import status from './status';
 import views from './views';
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
   servers,
   queries,
   connections,
+  schemas,
   tables,
   status,
   views,
