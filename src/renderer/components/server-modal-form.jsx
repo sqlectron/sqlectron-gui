@@ -224,7 +224,7 @@ export default class ServerModalForm extends Component {
                   name="name"
                   maxLength="250"
                   placeholder="Name"
-                  value={this.state.name}
+                  value={this.state.name || ''}
                   onChange={::this.handleChange} />
               </div>
               <div className={`six wide field ${this.highlightError('client')}`}>
@@ -258,7 +258,7 @@ export default class ServerModalForm extends Component {
                     name="host"
                     maxLength="250"
                     placeholder="Host"
-                    value={this.state.host}
+                    value={this.state.host || ''}
                     onChange={::this.handleChange}
                     disabled={this.state.socketPath} />
                 </div>
@@ -267,7 +267,7 @@ export default class ServerModalForm extends Component {
                     name="port"
                     maxLength="5"
                     placeholder="Port"
-                    value={this.state.port || this.state.defaultPort}
+                    value={this.state.port || this.state.defaultPort || ''}
                     onChange={::this.handleChange}
                     disabled={this.state.socketPath} />
                 </div>
@@ -304,7 +304,7 @@ export default class ServerModalForm extends Component {
                   name="user"
                   maxLength="55"
                   placeholder="User"
-                  value={this.state.user}
+                  value={this.state.user || ''}
                   disabled={this.isFeatureDisabled('server:user')}
                   onChange={::this.handleChange} />
               </div>
@@ -314,7 +314,7 @@ export default class ServerModalForm extends Component {
                   name="password"
                   maxLength="55"
                   placeholder="Password"
-                  value={this.state.password}
+                  value={this.state.password || ''}
                   disabled={this.isFeatureDisabled('server:password')}
                   onChange={::this.handleChange} />
               </div>
@@ -324,7 +324,7 @@ export default class ServerModalForm extends Component {
                   name="database"
                   maxLength="100"
                   placeholder="Database"
-                  value={this.state.database}
+                  value={this.state.database || ''}
                   onChange={::this.handleChange} />
               </div>
             </div>
