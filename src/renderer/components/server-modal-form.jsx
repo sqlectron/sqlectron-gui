@@ -189,12 +189,15 @@ export default class ServerModalForm extends Component {
 
   render() {
     const { testConnection } = this.props;
-    const { confirmingRemove, isNew } = this.state;
+    const { confirmingRemove, isNew, client } = this.state;
     const isSSHChecked = !!this.state.ssh;
     const ssh = this.state.ssh || {};
 
     const classStatusButtons = testConnection.connecting ? 'disabled' : '';
-    const classStatusTestButton = testConnection.connecting ? 'loading' : '';
+    const classStatusTestButton = [
+      client ? '' : 'disabled',
+      testConnection.connecting ? 'loading' : '',
+    ].join(' ');
 
     return (
       <div id="server-modal" className="ui modal" ref="serverModal">
@@ -228,11 +231,12 @@ export default class ServerModalForm extends Component {
                   onChange={::this.handleChange} />
               </div>
               <div className={`six wide field ${this.highlightError('client')}`}>
-                <label>Client</label>
+                <label>Database Type</label>
                 <Select
                   name="client"
                   placeholder="Select"
                   options={CLIENTS}
+                  clearable={false}
                   onChange={::this.handleOnClientChange}
                   optionRenderer={this.renderClientItem}
                   valueRenderer={this.renderClientItem}
