@@ -201,7 +201,7 @@ function changeStateByCurrentQuery(oldFullState, newCurrentQueryState, options =
 function createQueryName (id, database, table) {
   return (
     table
-    ? `[db: ${database}][tb: ${table}] #${id}`
-    : `[db: ${database}] #${id}`
+    ? `${database} / ${table} #${id}`
+    : `${database} #${id}`
   );
 }
