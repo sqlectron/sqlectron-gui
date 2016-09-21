@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import * as ServersActions from '../actions/servers.js';
 import * as ConnActions from '../actions/connections.js';
@@ -25,18 +26,9 @@ class ServerManagerment extends Component {
     connections: PropTypes.object.isRequired,
     servers: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
-    route: PropTypes.object.isRequired,
-    routeParams: PropTypes.object.isRequired,
-    location: PropTypes.shape({
-      pathname: PropTypes.string.isRequired,
-    }),
+    router: PropTypes.object.isRequired,
     children: PropTypes.node,
   };
-
-  static contextTypes = {
-    history: PropTypes.object.isRequired,
-  }
 
   constructor(props, context) {
     super(props, context);
@@ -48,7 +40,7 @@ class ServerManagerment extends Component {
   }
 
   onConnectClick({ id }) {
-    this.props.history.pushState(null, `/server/${id}`);
+    this.props.router.push(`/server/${id}`);
   }
 
   onTestConnectionClick(server) {
@@ -161,4 +153,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(ServerManagerment);
+export default connect(mapStateToProps)(withRouter(ServerManagerment));

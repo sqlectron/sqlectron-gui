@@ -1,5 +1,6 @@
 import { debounce, union } from 'lodash';
 import React, { Component, PropTypes } from 'react';
+import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
@@ -64,15 +65,9 @@ class QueryBrowserContainer extends Component {
     sqlscripts: PropTypes.object.isRequired,
     keys: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
-    route: PropTypes.object.isRequired,
+    router: PropTypes.object.isRequired,
     params: PropTypes.object.isRequired,
-    location: PropTypes.shape({ query: PropTypes.object }),
     children: PropTypes.node,
-  };
-
-  static contextTypes = {
-    history: PropTypes.object.isRequired,
   };
 
   constructor(props, context) {
@@ -93,12 +88,12 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { dispatch, history, connections } = nextProps;
+    const { dispatch, router, connections } = nextProps;
 
     if (connections.error ||
        (!connections.connecting && !connections.server && !connections.waitingSSHPassword)
     ) {
-      history.pushState(null, '/');
+      router.push('/');
       return;
     }
 
@@ -527,4 +522,4 @@ function mapStateToProps (state) {
 }
 
 
-export default connect(mapStateToProps)(QueryBrowserContainer);
+export default connect(mapStateToProps)(withRouter(QueryBrowserContainer));
