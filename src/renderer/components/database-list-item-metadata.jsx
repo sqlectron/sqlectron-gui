@@ -39,15 +39,21 @@ export default class DbMetadataList extends Component {
   }
 
   renderHeader() {
+    const {
+      items,
+    } = this.props;
     const title = this.state.collapsed ? 'Expand' : 'Collapse';
     const cssClass = this.state.collapsed ? 'right' : 'down';
-
+    const cssStyle = { ...STYLE.header };
+    if (!items || !items.length) {
+      cssStyle.color = 'lightgray';
+    }
     return (
       <span
         title={title}
         className="header clickable"
         onClick={::this.toggleCollapse}
-        style={STYLE.header}>
+        style={cssStyle}>
         <i className={`${cssClass} triangle icon`}></i>
         {this.props.title}
       </span>
