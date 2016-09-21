@@ -74,7 +74,6 @@ export default function (state = INITIAL_STATE, action) {
       return changeStateByCurrentQuery(state, {
         results: null,
         isExecuting: false,
-        query: action.query,
         error: action.error,
       });
     }
