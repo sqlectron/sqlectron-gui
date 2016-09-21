@@ -33,15 +33,20 @@ export default class TableSubmenu extends Component {
   }
 
   renderSubMenuHeader() {
+    const { itemsByTable, table } = this.props;
+
     const title = this.state.collapsed ? 'Expand' : 'Collapse';
     const cssClass = this.state.collapsed ? 'right' : 'down';
-
+    const cssStyle = { ...STYLE.header };
+    if (!itemsByTable || !itemsByTable[table] || itemsByTable[table].length) {
+      cssStyle.color = 'lightgray';
+    }
     return (
       <span
         title={title}
         className="header clickable"
         onClick={::this.toggleCollapse}
-        style={STYLE.header}>
+        style={cssStyle}>
         <i className={`${cssClass} triangle icon`}></i>
         {this.props.title}
       </span>
