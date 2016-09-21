@@ -111,7 +111,19 @@ export default class QueryResult extends Component {
     const { isExecuting, error, results } = this.props;
     if (error) {
       if (error.message) {
-        return <div className="ui negative message">{error.message}</div>;
+        const errorBody = Object.keys(error)
+          .filter(key => error[key] && key !== 'message')
+          .map(key => `${key}: ${error[key]}`)
+          .join('\n');
+
+        return (
+          <Message
+            preformatted
+            type="negative"
+            title={error.message}
+            message={errorBody}
+          />
+        );
       }
       return <pre>{JSON.stringify(error, null, 2)}</pre>;
     }
