@@ -246,7 +246,7 @@ export default class Query extends Component {
             className="react-resizable react-resizable-se-resize ui segment"
             height={QUERY_EDITOR_HEIGTH}
             width={500}
-            onResize={::this.onQueryBoxResize}>
+            onResizeStop={::this.onQueryBoxResize}>
             <AceEditor
               mode="sql"
               theme="github"
