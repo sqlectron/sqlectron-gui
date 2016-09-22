@@ -52,6 +52,7 @@ module.exports = {
         loader: 'json',
       },
     ],
+    noParse: [/html2canvas/],
   },
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
