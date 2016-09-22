@@ -74,7 +74,7 @@
     "del": "^2.2.0",
     "denodeify": "^1.2.1",
     "electron-builder": "next",
-    "electron-prebuilt": "^1.2.7",
+    "electron-prebuilt": "^1.4.0",
     "eslint": "^2.12.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-config-airbnb-base": "^3.0.1",
