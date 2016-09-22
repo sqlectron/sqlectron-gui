@@ -6,6 +6,7 @@ import Draggable from 'react-draggable';
 import TableCell from './query-result-table-cell.jsx';
 import PreviewModal from './preview-modal.jsx';
 import { valueToString } from '../utils/convert';
+import scrollbarSize from 'dom-helpers/util/scrollbarSize';
 
 import 'react-virtualized/styles.css';
 import './query-result-table.scss';
@@ -274,7 +275,7 @@ export default class QueryResultTable extends Component {
         className="grid-header-row"
         rowHeight={30}
         rowCount={1}
-        width={tableWidth}
+        width={tableWidth - scrollbarSize()}
         scrollLeft={scrollLeft} />
     );
   }
