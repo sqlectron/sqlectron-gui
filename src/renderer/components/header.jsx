@@ -56,7 +56,7 @@ const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
             <button className="ui icon button"
               title="Close connection"
               onClick={onCloseConnectionClick}>
-              <i className="ban icon"></i>
+              <i className="power icon"></i>
             </button>
           </div>
         </div>
