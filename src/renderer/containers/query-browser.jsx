@@ -46,7 +46,11 @@ const STYLES = {
 
 
 const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
-  clients[dbClient.key] = { title: dbClient.name }; // eslint-disable-line no-param-reassign
+  /* eslint no-param-reassign:0, global-require:0 */
+  clients[dbClient.key] = {
+    title: dbClient.name,
+    image: require(`../components/server-db-client-${dbClient.key}.png`),
+  };
   return clients;
 }, {});
 
@@ -427,9 +431,7 @@ class QueryBrowserContainer extends Component {
       { icon: 'database', label: this.getCurrentQuery().database },
     ] : [];
 
-    const currentClient = CLIENTS[connections.server.client];
     const filteredDatabases = this.filterDatabases(filter, databases.items);
-
     return (
       <div style={STYLES.wrapper}>
         {isLoading && <Loader message={status} type="page" />}
@@ -448,7 +450,12 @@ class QueryBrowserContainer extends Component {
               maxConstraints={[750, 10000]}>
               <div className="ui vertical menu" style={STYLES.resizeable}>
                 <div className="item active" style={{ textAlign: 'center' }}>
-                  <b>{currentClient.title}</b>
+                  <b>{connections.server.name}</b>
+                  <img
+                    title={CLIENTS[connections.server.client].name}
+                    alt={CLIENTS[connections.server.client].name} style={{ width: '2.5em' }}
+                    className="ui mini left spaced image right"
+                    src={CLIENTS[connections.server.client].image} />
                 </div>
                 <div className="item">
                   <DatabaseFilter
