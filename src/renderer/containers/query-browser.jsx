@@ -1,5 +1,6 @@
 import { debounce, union } from 'lodash';
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
@@ -77,6 +78,7 @@ class QueryBrowserContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
+      tabNavPosition: 0,
       sideBarWidth: SIDEBAR_WIDTH,
     };
     this.menuHandler = new MenuHandler();
@@ -113,6 +115,19 @@ class QueryBrowserContainer extends Component {
     dispatch(fetchRoutinesIfNeeded(lastConnectedDB));
 
     this.setMenus();
+  }
+
+  componentDidUpdate() {
+    const elem = ReactDOM.findDOMNode(this.refs.tabList);
+    if (!elem) {
+      return;
+    }
+
+    this.tabListTotalWidth = elem.offsetWidth;
+    this.tabListTotalWidthChildren = 0;
+    for (const child of elem.children) {
+      this.tabListTotalWidthChildren += child.offsetWidth;
+    }
   }
 
   componentWillUnmount() {
@@ -388,10 +403,37 @@ class QueryBrowserContainer extends Component {
       );
     });
 
+    const isOnMaxPosition = (
+      this.tabListTotalWidthChildren - Math.abs(this.state.tabNavPosition) <= this.tabListTotalWidth
+    );
     const selectedIndex = queries.queryIds.indexOf(queries.currentQueryId);
     return (
       <Tabs onSelect={::this.handleSelectTab} selectedIndex={selectedIndex}>
-        <TabList className="ui pointing secondary menu">{menu}</TabList>
+        <div id="tabs-nav-wrapper" className="ui pointing secondary menu">
+          <button className="ui icon button"
+            disabled={this.state.tabNavPosition === 0}
+            onClick={() => {
+              const position = this.state.tabNavPosition + 100;
+              this.setState({ tabNavPosition: position > 0 ? 0 : position });
+            }}>
+            <i className="left chevron icon"></i>
+          </button>
+          <div className="tabs-container">
+            <TabList
+              ref="tabList"
+              style={{ left: `${this.state.tabNavPosition}px`, transition: 'left 0.2s linear' }}>
+              {menu}
+            </TabList>
+          </div>
+          <button className="ui icon button"
+            disabled={this.tabListTotalWidthChildren < this.tabListTotalWidth || isOnMaxPosition}
+            onClick={() => {
+              const position = this.state.tabNavPosition - 100;
+              this.setState({ tabNavPosition: position });
+            }}>
+            <i className="right chevron icon"></i>
+          </button>
+        </div>
         {panels}
       </Tabs>
     );
