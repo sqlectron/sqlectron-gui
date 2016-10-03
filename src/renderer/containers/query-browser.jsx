@@ -407,17 +407,20 @@ class QueryBrowserContainer extends Component {
       this.tabListTotalWidthChildren - Math.abs(this.state.tabNavPosition) <= this.tabListTotalWidth
     );
     const selectedIndex = queries.queryIds.indexOf(queries.currentQueryId);
+    const isTabsFitOnScreen = this.tabListTotalWidthChildren >= this.tabListTotalWidth;
     return (
       <Tabs onSelect={::this.handleSelectTab} selectedIndex={selectedIndex}>
         <div id="tabs-nav-wrapper" className="ui pointing secondary menu">
-          <button className="ui icon button"
-            disabled={this.state.tabNavPosition === 0}
-            onClick={() => {
-              const position = this.state.tabNavPosition + 100;
-              this.setState({ tabNavPosition: position > 0 ? 0 : position });
-            }}>
-            <i className="left chevron icon"></i>
-          </button>
+          {isTabsFitOnScreen &&
+            <button className="ui icon button"
+              disabled={this.state.tabNavPosition === 0}
+              onClick={() => {
+                const position = this.state.tabNavPosition + 100;
+                this.setState({ tabNavPosition: position > 0 ? 0 : position });
+              }}>
+              <i className="left chevron icon"></i>
+            </button>
+          }
           <div className="tabs-container">
             <TabList
               ref="tabList"
@@ -425,14 +428,16 @@ class QueryBrowserContainer extends Component {
               {menu}
             </TabList>
           </div>
-          <button className="ui icon button"
-            disabled={this.tabListTotalWidthChildren < this.tabListTotalWidth || isOnMaxPosition}
-            onClick={() => {
-              const position = this.state.tabNavPosition - 100;
-              this.setState({ tabNavPosition: position });
-            }}>
-            <i className="right chevron icon"></i>
-          </button>
+          {isTabsFitOnScreen &&
+            <button className="ui icon button"
+              disabled={this.tabListTotalWidthChildren < this.tabListTotalWidth || isOnMaxPosition}
+              onClick={() => {
+                const position = this.state.tabNavPosition - 100;
+                this.setState({ tabNavPosition: position });
+              }}>
+              <i className="right chevron icon"></i>
+            </button>
+          }
         </div>
         {panels}
       </Tabs>
