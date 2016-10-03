@@ -29,8 +29,9 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
       <div className="header">
         {server.name}
       </div>
-      <div className="meta" style={{ lineHeight: '1.5em', marginTop: '5px' }}>
+      <div className="meta" style={{ lineHeight: '1.5em', marginTop: '5px', marginLeft: '45px' }}>
         {server.host ? `${server.host}:${server.port}` : server.socketPath}
+        {server.ssh && (<div>via {server.ssh.host}</div>)}
       </div>
     </div>
     <div className="ui bottom attached button"
