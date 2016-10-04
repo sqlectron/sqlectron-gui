@@ -428,6 +428,9 @@ class QueryBrowserContainer extends Component {
               {menu}
             </TabList>
           </div>
+          <button className="ui basic icon button" onClick={() => this.newTab()}>
+            <i className="plus icon"></i>
+          </button>
           {isTabsFitOnScreen &&
             <button className="ui icon button"
               disabled={this.tabListTotalWidthChildren < this.tabListTotalWidth || isOnMaxPosition}
