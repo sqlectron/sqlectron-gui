@@ -33,6 +33,12 @@ export default class PromptModal extends Component {
     $(this.refs.promptModal).modal('hide');
   }
 
+  handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      this.props.onOKClick(this.refs.text.value);
+    }
+  }
+
   render() {
     const { title, message, type } = this.props;
 
@@ -44,7 +50,7 @@ export default class PromptModal extends Component {
         <div className="content">
           {message}
           <div className="ui fluid icon input">
-            <input ref="text" type={type} />
+            <input ref="text" type={type} onKeyPress={::this.handleKeyPress} />
           </div>
         </div>
         <div className="actions">
