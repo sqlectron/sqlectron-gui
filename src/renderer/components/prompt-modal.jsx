@@ -12,9 +12,13 @@ export default class PromptModal extends Component {
 
   componentDidMount() {
     $(this.refs.promptModal).modal({
-      closable: false,
+      closable: true,
       detachable: false,
       onDeny: () => {
+        this.props.onCancelClick();
+        return true;
+      },
+      onHidden: () => {
         this.props.onCancelClick();
         return true;
       },

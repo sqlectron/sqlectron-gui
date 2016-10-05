@@ -41,10 +41,14 @@ export default class ServerModalForm extends Component {
 
   componentDidMount() {
     $(this.refs.serverModal).modal({
-      closable: false,
+      closable: true,
       detachable: false,
       allowMultiple: true,
       observeChanges: true,
+      onHidden: () => {
+        this.props.onCancelClick();
+        return true;
+      },
       onDeny: () => {
         this.props.onCancelClick();
         return true;
