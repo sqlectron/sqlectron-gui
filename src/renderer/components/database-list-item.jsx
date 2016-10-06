@@ -74,7 +74,7 @@ export default class DatabaseListItem extends Component {
     this.setState({ filter: value });
   }
 
-  onHeaderDoubleClick(database) {
+  onHeaderClick(database) {
     if (!this.isMetadataLoaded()) {
       this.props.onSelectDatabase(database);
       return;
@@ -112,12 +112,12 @@ export default class DatabaseListItem extends Component {
     return (
       <span
         className="header"
-        onDoubleClick={() => this.onHeaderDoubleClick(database)}
+        onClick={() => this.onHeaderClick(database)}
         onContextMenu={::this.onContextMenu}
         style={STYLE.database}>
         <i className={`${collapseCssClass} triangle icon`}
           style={{ cursor: 'pointer' }}
-          onClick={() => this.onHeaderDoubleClick(database)}></i>
+          onClick={() => this.onHeaderClick(database)}></i>
         <i className="database icon"></i>
         {database.name}
       </span>
