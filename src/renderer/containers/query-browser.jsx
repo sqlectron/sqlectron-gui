@@ -368,7 +368,11 @@ class QueryBrowserContainer extends Component {
         <Tab key={queryId} className={`item ${isCurrentQuery ? 'active' : ''}`}>
           {queries.queriesById[queryId].name}
           <button className="right floated ui icon button mini"
-            onClick={debounce(() => this.removeQuery(queryId), 200)}>
+            onClick={debounce(() => {
+              this.removeQuery(queryId);
+              const position = this.state.tabNavPosition + 200;
+              this.setState({ tabNavPosition: position > 0 ? 0 : position });
+            }, 200)}>
             <i className="icon remove"></i>
           </button>
         </Tab>
