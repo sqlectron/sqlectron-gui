@@ -101,6 +101,15 @@ export default function (state = INITIAL_STATE, action) {
         copied: false,
       });
     }
+    case types.RENAME_QUERY: {
+      if (!action.name.length) {
+        return state;
+      }
+
+      return changeStateByCurrentQuery(state, {
+        name: action.name,
+      });
+    }
     case types.SAVE_QUERY_SUCCESS: {
       return changeStateByCurrentQuery(state, {
         name: action.name,

@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { ResizableBox } from 'react-resizable';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections.js';
@@ -26,7 +27,6 @@ import PromptModal from '../components/prompt-modal.jsx';
 import MenuHandler from '../menu-handler';
 
 
-import { ResizableBox } from 'react-resizable';
 require('./query-browser.css');
 require('../components/react-resizable.css');
 require('../components/react-tabs.scss');
@@ -234,6 +234,10 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(DbAction.closeDatabaseDiagram());
   }
 
+  onTabDoubleClick(queryId) {
+    this.setState({ renamingTabQueryId: queryId });
+  }
+
   getCurrentQuery() {
     return this.props.queries.queriesById[this.props.queries.currentQueryId];
   }
@@ -350,6 +354,7 @@ class QueryBrowserContainer extends Component {
 
   renderTabQueries() {
     const {
+      dispatch,
       connections,
       queries,
       databases,
@@ -362,19 +367,58 @@ class QueryBrowserContainer extends Component {
 
     const currentDB = this.getCurrentQuery().database;
 
+
     const menu = queries.queryIds.map(queryId => {
       const isCurrentQuery = queryId === queries.currentQueryId;
+      const buildContent = () => {
+        const isRenaming = this.state.renamingTabQueryId === queryId;
+        if (isRenaming) {
+          return (
+            <div className="ui input">
+              <input
+                autoFocus
+                type="text"
+                ref={(comp) => { this.tabInput = comp; }}
+                onBlur={() => {
+                  dispatch(QueryActions.renameQuery(this.tabInput.value));
+                  this.setState({ renamingTabQueryId: null });
+                }}
+                onKeyDown={(event) => {
+                  if (event.key !== 'Escape' && event.key !== 'Enter') {
+                    return;
+                  }
+
+                  if (event.key === 'Enter') {
+                    dispatch(QueryActions.renameQuery(this.tabInput.value));
+                  }
+
+                  this.setState({ renamingTabQueryId: null });
+                }}
+                defaultValue={queries.queriesById[queryId].name} />
+            </div>
+          );
+        }
+
+        return (
+          <div>
+            {queries.queriesById[queryId].name}
+            <button className="right floated ui icon button mini"
+              onClick={debounce(() => {
+                this.removeQuery(queryId);
+                const position = this.state.tabNavPosition + 200;
+                this.setState({ tabNavPosition: position > 0 ? 0 : position });
+              }, 200)}>
+              <i className="icon remove"></i>
+            </button>
+          </div>
+        );
+      };
+
       return (
-        <Tab key={queryId} className={`item ${isCurrentQuery ? 'active' : ''}`}>
-          {queries.queriesById[queryId].name}
-          <button className="right floated ui icon button mini"
-            onClick={debounce(() => {
-              this.removeQuery(queryId);
-              const position = this.state.tabNavPosition + 200;
-              this.setState({ tabNavPosition: position > 0 ? 0 : position });
-            }, 200)}>
-            <i className="icon remove"></i>
-          </button>
+        <Tab key={queryId}
+          onDoubleClick={() => this.onTabDoubleClick(queryId)}
+          className={`item ${isCurrentQuery ? 'active' : ''}`}>
+          {buildContent()}
         </Tab>
       );
     });

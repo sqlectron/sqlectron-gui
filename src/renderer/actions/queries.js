@@ -9,6 +9,7 @@ import wait from '../utils/wait';
 
 
 export const NEW_QUERY = 'NEW_QUERY';
+export const RENAME_QUERY = 'RENAME_QUERY';
 export const SELECT_QUERY = 'SELECT_QUERY';
 export const REMOVE_QUERY = 'REMOVE_QUERY';
 export const EXECUTE_QUERY_REQUEST = 'EXECUTE_QUERY_REQUEST';
@@ -25,6 +26,11 @@ export const UPDATE_QUERY = 'UPDATE_QUERY';
 
 export function newQuery (database) {
   return { type: NEW_QUERY, database };
+}
+
+
+export function renameQuery (name) {
+  return { type: RENAME_QUERY, name };
 }
 
 
