@@ -129,8 +129,8 @@ export default class ServerModalForm extends Component {
       host: state.host && state.host.length ? state.host : null,
       port: state.port || state.defaultPort,
       socketPath: state.socketPath && state.socketPath.length ? state.socketPath : null,
-      user: state.user,
-      password: state.password,
+      user: state.user || null,
+      password: state.password || null,
       database: state.database,
     };
     if (!this.state.ssh) { return server; }
