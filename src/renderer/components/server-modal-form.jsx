@@ -132,6 +132,7 @@ export default class ServerModalForm extends Component {
       user: state.user || null,
       password: state.password || null,
       database: state.database,
+      schema: state.schema || null,
     };
     if (!this.state.ssh) { return server; }
 
@@ -333,6 +334,16 @@ export default class ServerModalForm extends Component {
                   maxLength="100"
                   placeholder="Database"
                   value={this.state.database || ''}
+                  onChange={::this.handleChange} />
+              </div>
+              <div className={`six wide field ${this.highlightError('schema')}`}>
+                <label>Schema</label>
+                <input type="text"
+                  name="schema"
+                  maxLength="100"
+                  placeholder="Schema"
+                  disabled={this.isFeatureDisabled('server:schema')}
+                  value={this.state.schema || ''}
                   onChange={::this.handleChange} />
               </div>
             </div>

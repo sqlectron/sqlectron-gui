@@ -6,10 +6,10 @@ export const FETCH_COLUMNS_SUCCESS = 'FETCH_COLUMNS_SUCCESS';
 export const FETCH_COLUMNS_FAILURE = 'FETCH_COLUMNS_FAILURE';
 
 
-export function fetchTableColumnsIfNeeded (database, table) {
+export function fetchTableColumnsIfNeeded (database, table, schema) {
   return (dispatch, getState) => {
-    if (shouldFetchTableColumns(getState(), database, table)) {
-      dispatch(fetchTableColumns(database, table));
+    if (shouldFetchTableColumns(getState(), database, table, schema)) {
+      dispatch(fetchTableColumns(database, table, schema));
     }
   };
 }
@@ -25,12 +25,12 @@ function shouldFetchTableColumns (state, database, table) {
 }
 
 
-function fetchTableColumns (database, table) {
+function fetchTableColumns (database, table, schema) {
   return async dispatch => {
     dispatch({ type: FETCH_COLUMNS_REQUEST, database, table });
     try {
       const dbConn = getDBConnByName(database);
-      const columns = await dbConn.listTableColumns(table);
+      const columns = await dbConn.listTableColumns(table, schema);
       dispatch({ type: FETCH_COLUMNS_SUCCESS, database, table, columns });
     } catch (error) {
       dispatch({ type: FETCH_COLUMNS_FAILURE, error });
