@@ -6,10 +6,10 @@ export const FETCH_ROUTINES_SUCCESS = 'FETCH_ROUTINES_SUCCESS';
 export const FETCH_ROUTINES_FAILURE = 'FETCH_ROUTINES_FAILURE';
 
 
-export function fetchRoutinesIfNeeded (database) {
+export function fetchRoutinesIfNeeded (database, schema) {
   return (dispatch, getState) => {
     if (shouldFetchRoutines(getState(), database)) {
-      dispatch(fetchRoutines(database));
+      dispatch(fetchRoutines(database, schema));
     }
   };
 }
@@ -23,12 +23,12 @@ function shouldFetchRoutines (state, database) {
   return routines.didInvalidate;
 }
 
-function fetchRoutines (database) {
+function fetchRoutines (database, schema) {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_ROUTINES_REQUEST, database });
     try {
       const dbConn = getCurrentDBConn(getState());
-      const routines = await dbConn.listRoutines();
+      const routines = await dbConn.listRoutines(schema);
       dispatch({ type: FETCH_ROUTINES_SUCCESS, database, routines });
     } catch (error) {
       dispatch({ type: FETCH_ROUTINES_FAILURE, error });

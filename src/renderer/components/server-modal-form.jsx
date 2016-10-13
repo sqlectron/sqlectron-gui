@@ -133,6 +133,7 @@ export default class ServerModalForm extends Component {
       password: state.password || null,
       database: state.database,
       domain: state.domain,
+      schema: state.schema || null,
     };
     if (!this.state.ssh) { return server; }
 
@@ -261,7 +262,7 @@ export default class ServerModalForm extends Component {
             <div className="field">
               <label>Server Address</label>
               <div className="fields">
-                <div className={`seven wide field ${this.highlightError('host')}`}>
+                <div className={`five wide field ${this.highlightError('host')}`}>
                   <input type="text"
                     name="host"
                     placeholder="Host"
@@ -269,7 +270,7 @@ export default class ServerModalForm extends Component {
                     onChange={::this.handleChange}
                     disabled={this.isFeatureDisabled('server:host') || this.state.socketPath} />
                 </div>
-                <div className={`three wide field ${this.highlightError('port')}`}>
+                <div className={`two wide field ${this.highlightError('port')}`}>
                   <input type="number"
                     name="port"
                     maxLength="5"
@@ -278,7 +279,15 @@ export default class ServerModalForm extends Component {
                     onChange={::this.handleChange}
                     disabled={this.isFeatureDisabled('server:port') || this.state.socketPath} />
                 </div>
-                <div className={`six wide field ${this.highlightError('socketPath')}`}>
+                <div className={`four wide field ${this.highlightError('domain')}`}>
+                  <input type="text"
+                    name="domain"
+                    placeholder="Domain"
+                    value={this.state.domain || ''}
+                    disabled={this.isFeatureDisabled('server:domain')}
+                    onChange={::this.handleChange} />
+                </div>
+                <div className={`five wide field ${this.highlightError('socketPath')}`}>
                   <div className="ui action input">
                     <input type="text"
                       name="socketPath"
@@ -330,13 +339,14 @@ export default class ServerModalForm extends Component {
                   value={this.state.database || ''}
                   onChange={::this.handleChange} />
               </div>
-              <div className={`four wide field ${this.highlightError('domain')}`}>
-                <label>Domain</label>
+              <div className={`four wide field ${this.highlightError('schema')}`}>
+                <label>Schema</label>
                 <input type="text"
-                  name="domain"
-                  placeholder="Domain"
-                  value={this.state.domain || ''}
-                  disabled={this.isFeatureDisabled('server:domain')}
+                  name="schema"
+                  maxLength="100"
+                  placeholder="Schema"
+                  disabled={this.isFeatureDisabled('server:schema')}
+                  value={this.state.schema || ''}
                   onChange={::this.handleChange} />
               </div>
             </div>

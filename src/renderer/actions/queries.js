@@ -56,11 +56,11 @@ export function executeQueryIfNeeded (query, queryId) {
 }
 
 
-export function executeDefaultSelectQueryIfNeeded (database, table) {
+export function executeDefaultSelectQueryIfNeeded (database, table, schema) {
   return async (dispatch, getState) => {
     const currentState = getState();
     const dbConn = getDBConnByName(database);
-    const queryDefaultSelect = await dbConn.getQuerySelectTop(table);
+    const queryDefaultSelect = await dbConn.getQuerySelectTop(table, schema);
 
     if (!shouldExecuteQuery(queryDefaultSelect, currentState)) {
       return;

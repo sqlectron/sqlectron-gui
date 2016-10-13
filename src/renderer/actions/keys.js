@@ -6,10 +6,10 @@ export const FETCH_KEYS_SUCCESS = 'FETCH_KEYS_SUCCESS';
 export const FETCH_KEYS_FAILURE = 'FETCH_KEYS_FAILURE';
 
 
-export function fetchTableKeysIfNeeded (database, table) {
+export function fetchTableKeysIfNeeded (database, table, schema) {
   return (dispatch, getState) => {
     if (shouldFetchTableKeys(getState(), database, table)) {
-      dispatch(fetchTableKeys(database, table));
+      dispatch(fetchTableKeys(database, table, schema));
     }
   };
 }
@@ -25,12 +25,12 @@ function shouldFetchTableKeys (state, database, table) {
 }
 
 
-function fetchTableKeys (database, table) {
+function fetchTableKeys (database, table, schema) {
   return async dispatch => {
     dispatch({ type: FETCH_KEYS_REQUEST, database, table });
     try {
       const dbConn = getDBConnByName(database);
-      const tableKeys = await dbConn.getTableKeys(table);
+      const tableKeys = await dbConn.getTableKeys(table, schema);
       dispatch({ type: FETCH_KEYS_SUCCESS, database, table, tableKeys });
     } catch (error) {
       dispatch({ type: FETCH_KEYS_FAILURE, error });
