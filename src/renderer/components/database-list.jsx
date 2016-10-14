@@ -6,6 +6,7 @@ export default class DatabaseList extends Component {
   static propTypes = {
     client: PropTypes.string.isRequired,
     databases: PropTypes.array.isRequired,
+    currentDB: PropTypes.string,
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
     columnsByTable: PropTypes.object.isRequired,
@@ -47,6 +48,7 @@ export default class DatabaseList extends Component {
       onGetSQLScript,
       onRefreshDatabase,
       onShowDiagramModal,
+      currentDB,
     } = this.props;
 
     if (isFetching) {
@@ -68,6 +70,7 @@ export default class DatabaseList extends Component {
           <DatabaseListItem
             ref={database.name}
             key={database.name}
+            currentDB={currentDB}
             client={client}
             database={database}
             tables={tablesByDatabase[database.name]}

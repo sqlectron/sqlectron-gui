@@ -32,6 +32,7 @@ export default class DatabaseListItem extends Component {
     views: PropTypes.array,
     functions: PropTypes.array,
     procedures: PropTypes.array,
+    currentDB: PropTypes.string,
     database: PropTypes.object.isRequired,
     onExecuteDefaultQuery: PropTypes.func.isRequired,
     onSelectTable: PropTypes.func.isRequired,
@@ -138,6 +139,7 @@ export default class DatabaseListItem extends Component {
       onExecuteDefaultQuery,
       onSelectTable,
       onGetSQLScript,
+      currentDB,
     } = this.props;
 
     let filteredTables;
@@ -157,7 +159,7 @@ export default class DatabaseListItem extends Component {
     }
 
     return (
-      <div className="item">
+      <div className={`item ${currentDB === database.name ? 'active' : ''}`}>
         {this.renderHeader(database)}
         <div className="ui list" style={cssStyleItems}>
           <div className="item" style={cssStyleItems}>
