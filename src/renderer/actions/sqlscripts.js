@@ -7,11 +7,11 @@ export const GET_SCRIPT_SUCCESS = 'GET_SCRIPT_SUCCESS';
 export const GET_SCRIPT_FAILURE = 'GET_SCRIPT_FAILURE';
 
 
-export function getSQLScriptIfNeeded(database, item, actionType, objectType) {
+export function getSQLScriptIfNeeded(database, item, actionType, objectType, schema) {
   return (dispatch, getState) => {
     const state = getState();
     if (shouldFetchScript(state, database, item, actionType)) {
-      dispatch(getSQLScript(database, item, actionType, objectType));
+      dispatch(getSQLScript(database, item, actionType, objectType, schema));
       return;
     }
 
@@ -45,26 +45,26 @@ function getAlreadyFetchedScript (state, database, item, actionType) {
 }
 
 
-function getSQLScript (database, item, actionType, objectType) {
+function getSQLScript (database, item, actionType, objectType, schema) {
   return async (dispatch) => {
     dispatch({ type: GET_SCRIPT_REQUEST, database, item, actionType, objectType });
     try {
       const dbConn = getDBConnByName(database);
       let script;
       if (actionType === 'CREATE' && objectType === 'Table') {
-        [script] = await dbConn.getTableCreateScript(item);
+        [script] = await dbConn.getTableCreateScript(item, schema);
       } else if (actionType === 'CREATE' && objectType === 'View') {
-        [script] = await dbConn.getViewCreateScript(item);
+        [script] = await dbConn.getViewCreateScript(item, schema);
       } else if (actionType === 'CREATE') {
-        [script] = await dbConn.getRoutineCreateScript(item, objectType);
+        [script] = await dbConn.getRoutineCreateScript(item, objectType, schema);
       } else if (actionType === 'SELECT') {
-        script = await dbConn.getTableSelectScript(item);
+        script = await dbConn.getTableSelectScript(item, schema);
       } else if (actionType === 'INSERT') {
-        script = await dbConn.getTableInsertScript(item);
+        script = await dbConn.getTableInsertScript(item, schema);
       } else if (actionType === 'UPDATE') {
-        script = await dbConn.getTableUpdateScript(item);
+        script = await dbConn.getTableUpdateScript(item, schema);
       } else if (actionType === 'DELETE') {
-        script = await dbConn.getTableDeleteScript(item);
+        script = await dbConn.getTableDeleteScript(item, schema);
       }
       dispatch({ type: GET_SCRIPT_SUCCESS, database, item, script, actionType, objectType });
       dispatch(appendQuery(script));

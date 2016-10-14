@@ -162,6 +162,7 @@ export default class Query extends Component {
   getQueryCompletions(props) {
     const {
       databases,
+      schemas,
       tables,
       columnsByTable,
       triggersByTable,
@@ -182,6 +183,7 @@ export default class Query extends Component {
 
     return [
       ...mapCompletionTypes(databases, 'database'),
+      ...mapCompletionTypes(schemas, 'schema'),
       ...mapCompletionTypes(tables, 'table'),
       ...mapCompletionTypes(columnsByTable, 'column'),
       ...mapCompletionTypes(triggersByTable, 'trigger'),

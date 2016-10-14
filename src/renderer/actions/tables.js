@@ -12,10 +12,10 @@ export function selectTablesForDiagram(tables) {
 }
 
 
-export function fetchTablesIfNeeded (database) {
+export function fetchTablesIfNeeded (database, schema) {
   return (dispatch, getState) => {
     if (shouldFetchTables(getState(), database)) {
-      dispatch(fetchTables(database));
+      dispatch(fetchTables(database, schema));
     }
   };
 }
@@ -30,12 +30,12 @@ function shouldFetchTables (state, database) {
 }
 
 
-function fetchTables (database) {
+function fetchTables (database, schema) {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_TABLES_REQUEST, database });
     try {
       const dbConn = getCurrentDBConn(getState());
-      const tables = await dbConn.listTables();
+      const tables = await dbConn.listTables(schema);
       dispatch({ type: FETCH_TABLES_SUCCESS, database, tables });
     } catch (error) {
       dispatch({ type: FETCH_TABLES_FAILURE, error });
