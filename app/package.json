@@ -23,6 +23,6 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "debug": "^2.2.0",
-    "sqlectron-core": "^7.1.1"
+    "sqlectron-core": "^7.1.2"
   }
 }
