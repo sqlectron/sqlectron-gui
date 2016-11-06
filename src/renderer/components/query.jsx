@@ -41,6 +41,7 @@ export default class Query extends Component {
   static propTypes = {
     widthOffset: PropTypes.number.isRequired,
     client: PropTypes.string.isRequired,
+    allowCancel: PropTypes.bool.isRequired,
     query: PropTypes.object.isRequired,
     enabledAutoComplete: PropTypes.bool.isRequired,
     enabledLiveAutoComplete: PropTypes.bool.isRequired,
@@ -52,6 +53,7 @@ export default class Query extends Component {
     functions: PropTypes.array,
     procedures: PropTypes.array,
     onExecQueryClick: PropTypes.func.isRequired,
+    onCancelQueryClick: PropTypes.func.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
     onSQLChange: PropTypes.func.isRequired,
     onSelectionChange: PropTypes.func.isRequired,
@@ -151,6 +153,10 @@ export default class Query extends Component {
     this.props.onSQLChange('');
   }
 
+  onCancelQueryClick() {
+    this.props.onCancelQueryClick();
+  }
+
   onShowInfoClick() {
     this.setState({ infoModalVisible: true });
   }
@@ -236,7 +242,15 @@ export default class Query extends Component {
   }
 
   render() {
-    const { widthOffset, client, query, onCopyToClipboardClick, onSQLChange } = this.props;
+    const {
+      widthOffset,
+      client,
+      query,
+      onCopyToClipboardClick,
+      onSQLChange,
+      allowCancel,
+    } = this.props;
+
     const infos = INFOS[client];
 
     return (
@@ -282,9 +296,19 @@ export default class Query extends Component {
                     className={`ui positive button ${query.isExecuting ? 'loading' : ''}`}
                     onClick={::this.onExecQueryClick}>Execute</button>
                   <div className="or"></div>
-                  <button
-                    className={`ui button ${query.isExecuting ? 'disabled' : ''}`}
-                    onClick={::this.onDiscQueryClick}>Discard</button>
+                  {
+                    query.isExecuting && allowCancel
+                    ? (
+                      <button
+                        className="ui negative button"
+                        onClick={::this.onCancelQueryClick}>Cancel</button>
+                    )
+                    : (
+                      <button
+                        className="ui button"
+                        onClick={::this.onDiscQueryClick}>Discard</button>
+                    )
+                  }
                 </div>
               </div>
             </div>

@@ -15,6 +15,9 @@ export const REMOVE_QUERY = 'REMOVE_QUERY';
 export const EXECUTE_QUERY_REQUEST = 'EXECUTE_QUERY_REQUEST';
 export const EXECUTE_QUERY_SUCCESS = 'EXECUTE_QUERY_SUCCESS';
 export const EXECUTE_QUERY_FAILURE = 'EXECUTE_QUERY_FAILURE';
+export const CANCEL_QUERY_REQUEST = 'CANCEL_QUERY_REQUEST';
+export const CANCEL_QUERY_SUCCESS = 'CANCEL_QUERY_SUCCESS';
+export const CANCEL_QUERY_FAILURE = 'CANCEL_QUERY_FAILURE';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST = 'COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS = 'COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE = 'COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE';
@@ -44,10 +47,10 @@ export function removeQuery (id) {
 }
 
 
-export function executeQueryIfNeeded (query) {
+export function executeQueryIfNeeded (query, queryId) {
   return (dispatch, getState) => {
     if (shouldExecuteQuery(query, getState())) {
-      dispatch(executeQuery(query));
+      dispatch(executeQuery(query, false, null, queryId));
     }
   };
 }
@@ -163,13 +166,15 @@ function shouldExecuteQuery (query, state) {
   return true;
 }
 
+const executingQueries = {};
 
-function executeQuery (query, isDefaultSelect = false, dbConnection) {
+function executeQuery (query, isDefaultSelect = false, dbConnection, queryId) {
   return async (dispatch, getState) => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
       const dbConn = dbConnection || getCurrentDBConn(getState());
-      const remoteResult = await dbConn.executeQuery(query);
+      executingQueries[queryId] = dbConn.query(query);
+      const remoteResult = await executingQueries[queryId].execute();
 
       // Remove any "reference" to the remote IPC object
       const results = cloneDeep(remoteResult);
@@ -177,6 +182,26 @@ function executeQuery (query, isDefaultSelect = false, dbConnection) {
       dispatch({ type: EXECUTE_QUERY_SUCCESS, query, results });
     } catch (error) {
       dispatch({ type: EXECUTE_QUERY_FAILURE, query, error });
+    } finally {
+      delete executingQueries[queryId];
+    }
+  };
+}
+
+
+export function cancelQuery (queryId) {
+  return async (dispatch) => {
+    dispatch({ type: CANCEL_QUERY_REQUEST, queryId });
+    try {
+      if (executingQueries[queryId]) {
+        await executingQueries[queryId].cancel();
+      }
+
+      dispatch({ type: CANCEL_QUERY_SUCCESS, queryId });
+    } catch (error) {
+      dispatch({ type: CANCEL_QUERY_FAILURE, queryId, error });
+    } finally {
+      delete executingQueries[queryId];
     }
   };
 }

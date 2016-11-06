@@ -284,7 +284,21 @@ class QueryBrowserContainer extends Component {
   }
 
   handleExecuteQuery (sqlQuery) {
-    this.props.dispatch(QueryActions.executeQueryIfNeeded(sqlQuery));
+    const currentQuery = this.getCurrentQuery();
+    if (!currentQuery) {
+      return;
+    }
+
+    this.props.dispatch(QueryActions.executeQueryIfNeeded(sqlQuery, currentQuery.id));
+  }
+
+  handleCancelQuery () {
+    const currentQuery = this.getCurrentQuery();
+    if (!currentQuery) {
+      return;
+    }
+
+    this.props.dispatch(QueryActions.cancelQuery(currentQuery.id));
   }
 
   filterDatabases(name, databases) {
@@ -423,6 +437,11 @@ class QueryBrowserContainer extends Component {
       );
     });
 
+    const { disabledFeatures } = sqlectron.db.CLIENTS
+      .find(dbClient => dbClient.key === connections.server.client);
+
+    const allowCancel = !disabledFeatures || !~disabledFeatures.indexOf('cancelQuery');
+
     const panels = queries.queryIds.map(queryId => {
       const query = queries.queriesById[queryId];
 
@@ -431,6 +450,7 @@ class QueryBrowserContainer extends Component {
           <Query
             ref={`queryBox_${queryId}`}
             client={connections.server.client}
+            allowCancel={allowCancel}
             query={query}
             enabledAutoComplete={queries.enabledAutoComplete}
             enabledLiveAutoComplete={queries.enabledLiveAutoComplete}
@@ -444,6 +464,7 @@ class QueryBrowserContainer extends Component {
             procedures={routines.proceduresByDatabase[query.database]}
             widthOffset={this.state.sideBarWidth}
             onExecQueryClick={::this.handleExecuteQuery}
+            onCancelQueryClick={::this.handleCancelQuery}
             onCopyToClipboardClick={::this.copyToClipboard}
             onSQLChange={::this.onSQLChange}
             onSelectionChange={::this.onQuerySelectionChange} />
