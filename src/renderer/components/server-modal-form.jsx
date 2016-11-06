@@ -132,6 +132,7 @@ export default class ServerModalForm extends Component {
       user: state.user || null,
       password: state.password || null,
       database: state.database,
+      domain: state.domain,
     };
     if (!this.state.ssh) { return server; }
 
@@ -306,7 +307,7 @@ export default class ServerModalForm extends Component {
               </div>
             </div>
             <div className="fields">
-              <div className={`five wide field ${this.highlightError('user')}`}>
+              <div className={`four wide field ${this.highlightError('user')}`}>
                 <label>User</label>
                 <input type="text"
                   name="user"
@@ -316,7 +317,7 @@ export default class ServerModalForm extends Component {
                   disabled={this.isFeatureDisabled('server:user')}
                   onChange={::this.handleChange} />
               </div>
-              <div className={`five wide field ${this.highlightError('password')}`}>
+              <div className={`four wide field ${this.highlightError('password')}`}>
                 <label>Password</label>
                 <input type="password"
                   name="password"
@@ -326,13 +327,23 @@ export default class ServerModalForm extends Component {
                   disabled={this.isFeatureDisabled('server:password')}
                   onChange={::this.handleChange} />
               </div>
-              <div className={`six wide field ${this.highlightError('database')}`}>
+              <div className={`four wide field ${this.highlightError('database')}`}>
                 <label>Database/Keyspace</label>
                 <input type="text"
                   name="database"
                   maxLength="100"
                   placeholder="Database"
                   value={this.state.database || ''}
+                  onChange={::this.handleChange} />
+              </div>
+              <div className={`four wide field ${this.highlightError('domain')}`}>
+                <label>Domain</label>
+                <input type="text"
+                  name="domain"
+                  maxLength="100"
+                  placeholder="Domain"
+                  value={this.state.domain || ''}
+                  disabled={this.isFeatureDisabled('server:domain')}
                   onChange={::this.handleChange} />
               </div>
             </div>
