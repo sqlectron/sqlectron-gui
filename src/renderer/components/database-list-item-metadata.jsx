@@ -16,6 +16,7 @@ export default class DbMetadataList extends Component {
     items: PropTypes.array,
     columnsByTable: PropTypes.object,
     triggersByTable: PropTypes.object,
+    indexesByTable: PropTypes.object,
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
     onExecuteDefaultQuery: PropTypes.func,
@@ -99,6 +100,7 @@ export default class DbMetadataList extends Component {
           style={cssStyle}
           columnsByTable={this.props.columnsByTable}
           triggersByTable={this.props.triggersByTable}
+          indexesByTable={this.props.indexesByTable}
           onSelectItem={onSelectItem}
           onExecuteDefaultQuery={onExecuteDefaultQuery}
           onGetSQLScript={onGetSQLScript} />
