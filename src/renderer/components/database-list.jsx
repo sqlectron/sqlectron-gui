@@ -11,6 +11,7 @@ export default class DatabaseList extends Component {
     tablesByDatabase: PropTypes.object.isRequired,
     columnsByTable: PropTypes.object.isRequired,
     triggersByTable: PropTypes.object.isRequired,
+    indexesByTable: PropTypes.object.isRequired,
     viewsByDatabase: PropTypes.object.isRequired,
     functionsByDatabase: PropTypes.object.isRequired,
     proceduresByDatabase: PropTypes.object.isRequired,
@@ -39,6 +40,7 @@ export default class DatabaseList extends Component {
       tablesByDatabase,
       columnsByTable,
       triggersByTable,
+      indexesByTable,
       viewsByDatabase,
       functionsByDatabase,
       proceduresByDatabase,
@@ -76,6 +78,7 @@ export default class DatabaseList extends Component {
             tables={tablesByDatabase[database.name]}
             columnsByTable={columnsByTable[database.name]}
             triggersByTable={triggersByTable[database.name]}
+            indexesByTable={indexesByTable[database.name]}
             views={viewsByDatabase[database.name]}
             functions={functionsByDatabase[database.name]}
             procedures={proceduresByDatabase[database.name]}
