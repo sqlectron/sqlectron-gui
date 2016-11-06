@@ -77,6 +77,25 @@ export default function (state = INITIAL_STATE, action) {
         error: action.error,
       });
     }
+    case types.CANCEL_QUERY_REQUEST: {
+      return changeStateByCurrentQuery(state, {
+        isCanceling: true,
+      });
+    }
+    case types.CANCEL_QUERY_SUCCESS: {
+      return changeStateByCurrentQuery(state, {
+        error: null,
+        isCanceling: false,
+      });
+    }
+    case types.CANCEL_QUERY_FAILURE: {
+      return changeStateByCurrentQuery(state, {
+        results: null,
+        isExecuting: false,
+        isCanceling: false,
+        error: action.error,
+      });
+    }
     case types.UPDATE_QUERY: {
       return changeStateByCurrentQuery(state, {
         query: action.query,

@@ -300,7 +300,7 @@ export default class Query extends Component {
                     query.isExecuting && allowCancel
                     ? (
                       <button
-                        className="ui negative button"
+                        className={`ui negative button ${query.isCanceling ? 'loading' : ''}`}
                         onClick={::this.onCancelQueryClick}>Cancel</button>
                     )
                     : (
