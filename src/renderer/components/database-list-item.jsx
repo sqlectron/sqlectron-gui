@@ -114,8 +114,103 @@ export default class DatabaseListItem extends Component {
     this.setState({ collapsed: !this.state.collapsed });
   }
 
-  renderHeader(database) {
-    const collapseCssClass = !this.isMetadataLoaded() || this.state.collapsed ? 'right' : 'down';
+  renderBody(isMetadataLoaded, isCurrentDB) {
+    const { filter } = this.state;
+    const {
+      client,
+      tables,
+      columnsByTable,
+      triggersByTable,
+      views,
+      functions,
+      procedures,
+      database,
+      onExecuteDefaultQuery,
+      onSelectTable,
+      onGetSQLScript,
+    } = this.props;
+
+    let filteredTables;
+    let filteredViews;
+    let filteredFunctions;
+    let filteredProcedures;
+
+    const cssStyleItems = {};
+    if (this.state.collapsed || !isMetadataLoaded) {
+      cssStyleItems.display = 'none';
+    } else {
+      filteredTables = this.filterItems(filter, tables);
+      filteredViews = this.filterItems(filter, views);
+      filteredFunctions = this.filterItems(filter, functions);
+      filteredProcedures = this.filterItems(filter, procedures);
+    }
+
+    const loadingContent = (
+      <div className="ui list">
+        <div className="item">
+          <DatabaseFilter
+            isFetching
+            placeholder="Loading..."
+            onFilterChange={() => {}} />
+        </div>
+      </div>
+    );
+
+    const fullConent = (
+      <div className="ui list" style={cssStyleItems}>
+        <div className="item" style={cssStyleItems}>
+          <DatabaseFilter
+            ref="filter"
+            value={filter}
+            isFetching={!isMetadataLoaded}
+            onFilterChange={::this.onFilterChange} />
+        </div>
+        <DatabaseListItemMetatada
+          title="Tables"
+          client={client}
+          items={filteredTables || tables}
+          columnsByTable={columnsByTable}
+          triggersByTable={triggersByTable}
+          database={database}
+          onExecuteDefaultQuery={onExecuteDefaultQuery}
+          onSelectItem={onSelectTable}
+          onGetSQLScript={onGetSQLScript} />
+        <DatabaseListItemMetatada
+          collapsed
+          title="Views"
+          client={client}
+          items={filteredViews || views}
+          database={database}
+          onExecuteDefaultQuery={onExecuteDefaultQuery}
+          onGetSQLScript={onGetSQLScript} />
+        <DatabaseListItemMetatada
+          collapsed
+          title="Functions"
+          client={client}
+          items={filteredFunctions || functions}
+          database={database}
+          onGetSQLScript={onGetSQLScript} />
+        <DatabaseListItemMetatada
+          collapsed
+          title="Procedures"
+          client={client}
+          items={filteredProcedures || procedures}
+          database={database}
+          onGetSQLScript={onGetSQLScript} />
+      </div>
+    );
+
+    return (
+      isCurrentDB && !isMetadataLoaded
+        ? loadingContent
+        : fullConent
+    );
+  }
+
+  renderHeader(isMetadataLoaded) {
+    const { database } = this.props;
+
+    const collapseCssClass = !isMetadataLoaded || this.state.collapsed ? 'right' : 'down';
 
     return (
       <span
@@ -133,38 +228,9 @@ export default class DatabaseListItem extends Component {
   }
 
   render() {
-    const { filter } = this.state;
-    const {
-      client,
-      tables,
-      columnsByTable,
-      triggersByTable,
-      views,
-      functions,
-      procedures,
-      database,
-      onExecuteDefaultQuery,
-      onSelectTable,
-      onGetSQLScript,
-      currentDB,
-    } = this.props;
+    const { database, currentDB } = this.props;
 
-    let filteredTables;
-    let filteredViews;
-    let filteredFunctions;
-    let filteredProcedures;
-
-    const cssStyleItems = {};
     const isMetadataLoaded = this.isMetadataLoaded();
-    if (this.state.collapsed || !isMetadataLoaded) {
-      cssStyleItems.display = 'none';
-    } else {
-      filteredTables = this.filterItems(filter, tables);
-      filteredViews = this.filterItems(filter, views);
-      filteredFunctions = this.filterItems(filter, functions);
-      filteredProcedures = this.filterItems(filter, procedures);
-    }
-
     const isCurrentDB = currentDB === database.name;
 
     let styleComponent = {};
@@ -176,48 +242,8 @@ export default class DatabaseListItem extends Component {
 
     return (
       <div className={`item ${isCurrentDB ? 'active' : ''}`} style={styleComponent}>
-        {this.renderHeader(database)}
-        <div className="ui list" style={cssStyleItems}>
-          <div className="item" style={cssStyleItems}>
-            <DatabaseFilter
-              ref="filter"
-              value={filter}
-              isFetching={!isMetadataLoaded}
-              onFilterChange={::this.onFilterChange} />
-          </div>
-          <DatabaseListItemMetatada
-            title="Tables"
-            client={client}
-            items={filteredTables || tables}
-            columnsByTable={columnsByTable}
-            triggersByTable={triggersByTable}
-            database={database}
-            onExecuteDefaultQuery={onExecuteDefaultQuery}
-            onSelectItem={onSelectTable}
-            onGetSQLScript={onGetSQLScript} />
-          <DatabaseListItemMetatada
-            collapsed
-            title="Views"
-            client={client}
-            items={filteredViews || views}
-            database={database}
-            onExecuteDefaultQuery={onExecuteDefaultQuery}
-            onGetSQLScript={onGetSQLScript} />
-          <DatabaseListItemMetatada
-            collapsed
-            title="Functions"
-            client={client}
-            items={filteredFunctions || functions}
-            database={database}
-            onGetSQLScript={onGetSQLScript} />
-          <DatabaseListItemMetatada
-            collapsed
-            title="Procedures"
-            client={client}
-            items={filteredProcedures || procedures}
-            database={database}
-            onGetSQLScript={onGetSQLScript} />
-        </div>
+        {this.renderHeader(isMetadataLoaded)}
+        {this.renderBody(isMetadataLoaded, isCurrentDB)}
       </div>
     );
   }
