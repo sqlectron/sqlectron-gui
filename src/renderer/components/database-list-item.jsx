@@ -20,6 +20,13 @@ const STYLE = {
     padding: '0.92857143em 1.14285714em',
     display: 'block',
   },
+  activeDatabase: {
+    backgroundColor: '#FFFAF3',
+    boxShadow: '0 0 0 1px #C9BA9B inset,0 0 0 0 transparent',
+  },
+  loadedDatabase: {
+    backgroundColor: '#F8FFFF',
+  },
 };
 
 
@@ -158,8 +165,17 @@ export default class DatabaseListItem extends Component {
       filteredProcedures = this.filterItems(filter, procedures);
     }
 
+    const isCurrentDB = currentDB === database.name;
+
+    let styleComponent = {};
+    if (isCurrentDB) {
+      styleComponent = STYLE.activeDatabase;
+    } else if (this.isMetadataLoaded()) {
+      styleComponent = STYLE.loadedDatabase;
+    }
+
     return (
-      <div className={`item ${currentDB === database.name ? 'active' : ''}`}>
+      <div className={`item ${isCurrentDB ? 'active' : ''}`} style={styleComponent}>
         {this.renderHeader(database)}
         <div className="ui list" style={cssStyleItems}>
           <div className="item" style={cssStyleItems}>
