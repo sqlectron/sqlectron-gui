@@ -36,6 +36,7 @@ export default class DatabaseListItem extends Component {
     tables: PropTypes.array,
     columnsByTable: PropTypes.object,
     triggersByTable: PropTypes.object,
+    indexesByTable: PropTypes.object,
     views: PropTypes.array,
     functions: PropTypes.array,
     procedures: PropTypes.array,
@@ -121,6 +122,7 @@ export default class DatabaseListItem extends Component {
       tables,
       columnsByTable,
       triggersByTable,
+      indexesByTable,
       views,
       functions,
       procedures,
@@ -171,6 +173,7 @@ export default class DatabaseListItem extends Component {
           items={filteredTables || tables}
           columnsByTable={columnsByTable}
           triggersByTable={triggersByTable}
+          indexesByTable={indexesByTable}
           database={database}
           onExecuteDefaultQuery={onExecuteDefaultQuery}
           onSelectItem={onSelectTable}

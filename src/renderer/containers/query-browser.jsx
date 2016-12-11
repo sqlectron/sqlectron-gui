@@ -12,6 +12,7 @@ import * as DbAction from '../actions/databases';
 import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
 import { fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
+import { fetchTableIndexesIfNeeded } from '../actions/indexes';
 import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
@@ -64,6 +65,7 @@ class QueryBrowserContainer extends Component {
     tables: PropTypes.object.isRequired,
     columns: PropTypes.object.isRequired,
     triggers: PropTypes.object.isRequired,
+    indexes: PropTypes.object.isRequired,
     views: PropTypes.object.isRequired,
     routines: PropTypes.object.isRequired,
     queries: PropTypes.object.isRequired,
@@ -157,6 +159,7 @@ class QueryBrowserContainer extends Component {
   onSelectTable(database, table) {
     this.props.dispatch(fetchTableColumnsIfNeeded(database.name, table.name));
     this.props.dispatch(fetchTableTriggersIfNeeded(database.name, table.name));
+    this.props.dispatch(fetchTableIndexesIfNeeded(database.name, table.name));
   }
 
   onGetSQLScript(database, item, actionType, objectType) {
@@ -375,6 +378,7 @@ class QueryBrowserContainer extends Component {
       tables,
       columns,
       triggers,
+      indexes,
       views,
       routines,
     } = this.props;
@@ -459,6 +463,7 @@ class QueryBrowserContainer extends Component {
             tables={tables.itemsByDatabase[query.database]}
             columnsByTable={columns.columnsByTable[query.database]}
             triggersByTable={triggers.triggersByTable[query.database]}
+            indexesByTable={indexes.indexesByTable[query.database]}
             views={views.viewsByDatabase[query.database]}
             functions={routines.functionsByDatabase[query.database]}
             procedures={routines.proceduresByDatabase[query.database]}
@@ -525,6 +530,7 @@ class QueryBrowserContainer extends Component {
       tables,
       columns,
       triggers,
+      indexes,
       views,
       routines,
     } = this.props;
@@ -593,6 +599,7 @@ class QueryBrowserContainer extends Component {
                   tablesByDatabase={tables.itemsByDatabase}
                   columnsByTable={columns.columnsByTable}
                   triggersByTable={triggers.triggersByTable}
+                  indexesByTable={indexes.indexesByTable}
                   viewsByDatabase={views.viewsByDatabase}
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
@@ -626,6 +633,7 @@ function mapStateToProps (state) {
     tables,
     columns,
     triggers,
+    indexes,
     views,
     routines,
     queries,
@@ -640,6 +648,7 @@ function mapStateToProps (state) {
     tables,
     columns,
     triggers,
+    indexes,
     views,
     routines,
     queries,

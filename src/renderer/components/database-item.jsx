@@ -17,6 +17,7 @@ export default class DatabaseItem extends Component {
     style: PropTypes.object,
     columnsByTable: PropTypes.object,
     triggersByTable: PropTypes.object,
+    indexesByTable: PropTypes.object,
     onSelectItem: PropTypes.func,
     onExecuteDefaultQuery: PropTypes.func,
     onGetSQLScript: PropTypes.func,
@@ -92,7 +93,7 @@ export default class DatabaseItem extends Component {
   }
 
   renderSubItems(table) {
-    const { columnsByTable, triggersByTable, database } = this.props;
+    const { columnsByTable, triggersByTable, indexesByTable, database } = this.props;
 
     if (!columnsByTable || !columnsByTable[table]) {
       return null;
@@ -115,6 +116,12 @@ export default class DatabaseItem extends Component {
           title="Triggers"
           table={table}
           itemsByTable={triggersByTable}
+          database={database} />
+        <TableSubmenu
+          collapsed
+          title="Indexes"
+          table={table}
+          itemsByTable={indexesByTable}
           database={database} />
       </div>
     );
