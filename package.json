@@ -22,9 +22,11 @@
     "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win"
   },
   "build": {
-    "app-bundle-id": "org.sqlectron.gui",
-    "app-category-type": "public.app-category.developer-tools",
-    "osx": {
+    "appId": "org.sqlectron.gui",
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "dmg": {
       "contents": [
         {
           "x": 438,
