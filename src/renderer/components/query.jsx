@@ -49,6 +49,7 @@ export default class Query extends Component {
     tables: PropTypes.array,
     columnsByTable: PropTypes.object,
     triggersByTable: PropTypes.object,
+    indexesByTable: PropTypes.object,
     views: PropTypes.array,
     functions: PropTypes.array,
     procedures: PropTypes.array,
