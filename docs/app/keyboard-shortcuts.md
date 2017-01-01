@@ -29,7 +29,7 @@
 | <kbd>Ctrl</kbd>-<kbd>T</kbd> | <kbd>Command</kbd>-<kbd>T</kbd> | New Tab |
 | <kbd>Ctrl</kbd>-<kbd>W</kbd> | <kbd>Command</kbd>-<kbd>W</kbd> | Close Tab |
 | <kbd>Ctrl</kbd>-<kbd>S</kbd> | <kbd>Command</kbd>-<kbd>S</kbd> | Save Query |
-| <kbd>Ctrl</kbd>-<kbd>Enter</kbd> | <kbd>Command</kbd>-<kbd>Enter</kbd> | Execute Query |
+| <kbd>Ctrl</kbd>-<kbd>Enter</kbd> or <kbd>Ctrl</kbd>-<kbd>R</kbd> | <kbd>Command</kbd>-<kbd>Enter</kbd> or <kbd>Command</kbd>-<kbd>R</kbd> | Execute Query |
 | <kbd>Shift</kbd>-<kbd>Ctrl</kbd>-<kbd>0</kbd> | <kbd>Shift</kbd>-<kbd>Command</kbd>-<kbd>0</kbd> | Focus Query Editor |
 
 
