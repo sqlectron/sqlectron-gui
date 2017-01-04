@@ -97,7 +97,7 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
       submenu: [
         {
           label: 'Reload',
-          accelerator: 'Ctrl+R',
+          accelerator: 'Ctrl+Shift+R',
           click: (item, win) => win.webContents.reloadIgnoringCache(),
         },
         {

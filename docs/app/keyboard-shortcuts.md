@@ -10,7 +10,7 @@
 | <kbd>Ctrl</kbd>-<kbd>C</kbd> | <kbd>Command</kbd>-<kbd>C</kbd> | Copy |
 | <kbd>Ctrl</kbd>-<kbd>V</kbd> | <kbd>Command</kbd>-<kbd>V</kbd> | Paste |
 | <kbd>Ctrl</kbd>-<kbd>A</kbd> | <kbd>Command</kbd>-<kbd>A</kbd> | Select All |
-| <kbd>Ctrl</kbd>-<kbd>R</kbd> | <kbd>Command</kbd>-<kbd>R</kbd> | Reload Application |
+| <kbd>Ctrl</kbd>-<kbd>Shift</kbd>-<kbd>R</kbd> | <kbd>Command</kbd>-<kbd>Shift</kbd>-<kbd>R</kbd> | Reload Application |
 | <kbd>Ctrl</kbd>-<kbd>Alt</kbd>-<kbd>I</kbd> | <kbd>Alt</kbd>-<kbd>Command</kbd>-<kbd>I</kbd> | Toggle DevTools |
 | | <kbd>Command</kbd>-<kbd>M</kbd> | Minimize Window |
 | | <kbd>Command</kbd>-<kbd>Shift</kbd>-<kbd>W</kbd> | Close Window |
@@ -29,7 +29,7 @@
 | <kbd>Ctrl</kbd>-<kbd>T</kbd> | <kbd>Command</kbd>-<kbd>T</kbd> | New Tab |
 | <kbd>Ctrl</kbd>-<kbd>W</kbd> | <kbd>Command</kbd>-<kbd>W</kbd> | Close Tab |
 | <kbd>Ctrl</kbd>-<kbd>S</kbd> | <kbd>Command</kbd>-<kbd>S</kbd> | Save Query |
-| <kbd>Ctrl</kbd>-<kbd>Enter</kbd> | <kbd>Command</kbd>-<kbd>Enter</kbd> | Execute Query |
+| <kbd>Ctrl</kbd>-<kbd>Enter</kbd> or <kbd>Ctrl</kbd>-<kbd>R</kbd> | <kbd>Command</kbd>-<kbd>Enter</kbd> or <kbd>Command</kbd>-<kbd>R</kbd> | Execute Query |
 | <kbd>Shift</kbd>-<kbd>Ctrl</kbd>-<kbd>0</kbd> | <kbd>Shift</kbd>-<kbd>Command</kbd>-<kbd>0</kbd> | Focus Query Editor |
 
 
