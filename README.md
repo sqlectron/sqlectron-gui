@@ -18,3 +18,7 @@
 * [Terminal](https://github.com/sqlectron/sqlectron-term) - A terminal-based interface of Sqlectron.
 * [Contribute](CONTRIBUTING.md) - Details on how you can contribute to Sqlectron.
 
+#### How to pronounce
+
+It is pronounced "sequelectron" - https://translate.google.com/?source=osdd#en/en/sequelectron
+
