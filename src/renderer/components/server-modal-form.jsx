@@ -230,7 +230,6 @@ export default class ServerModalForm extends Component {
                 <label>Name</label>
                 <input type="text"
                   name="name"
-                  maxLength="250"
                   placeholder="Name"
                   value={this.state.name || ''}
                   onChange={::this.handleChange} />
@@ -265,7 +264,6 @@ export default class ServerModalForm extends Component {
                 <div className={`seven wide field ${this.highlightError('host')}`}>
                   <input type="text"
                     name="host"
-                    maxLength="250"
                     placeholder="Host"
                     value={this.state.host || ''}
                     onChange={::this.handleChange}
@@ -284,7 +282,6 @@ export default class ServerModalForm extends Component {
                   <div className="ui action input">
                     <input type="text"
                       name="socketPath"
-                      maxLength="250"
                       placeholder="Unix socket path"
                       value={this.state.socketPath || ''}
                       onChange={::this.handleChange}
@@ -311,7 +308,6 @@ export default class ServerModalForm extends Component {
                 <label>User</label>
                 <input type="text"
                   name="user"
-                  maxLength="55"
                   placeholder="User"
                   value={this.state.user || ''}
                   disabled={this.isFeatureDisabled('server:user')}
@@ -321,7 +317,6 @@ export default class ServerModalForm extends Component {
                 <label>Password</label>
                 <input type="password"
                   name="password"
-                  maxLength="55"
                   placeholder="Password"
                   value={this.state.password || ''}
                   disabled={this.isFeatureDisabled('server:password')}
@@ -331,7 +326,6 @@ export default class ServerModalForm extends Component {
                 <label>Database/Keyspace</label>
                 <input type="text"
                   name="database"
-                  maxLength="100"
                   placeholder="Database"
                   value={this.state.database || ''}
                   onChange={::this.handleChange} />
@@ -340,7 +334,6 @@ export default class ServerModalForm extends Component {
                 <label>Domain</label>
                 <input type="text"
                   name="domain"
-                  maxLength="100"
                   placeholder="Domain"
                   value={this.state.domain || ''}
                   disabled={this.isFeatureDisabled('server:domain')}
@@ -366,7 +359,6 @@ export default class ServerModalForm extends Component {
                       <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
                         <input type="text"
                           name="ssh.host"
-                          maxLength="250"
                           placeholder="Host"
                           disabled={!isSSHChecked}
                           value={ssh.host}
@@ -388,7 +380,6 @@ export default class ServerModalForm extends Component {
                       <label>User</label>
                       <input type="text"
                         name="ssh.user"
-                        maxLength="55"
                         placeholder="User"
                         disabled={!isSSHChecked}
                         value={ssh.user}
@@ -398,7 +389,6 @@ export default class ServerModalForm extends Component {
                       <label>Password</label>
                       <input type="password"
                         name="ssh.password"
-                        maxLength="55"
                         placeholder="Password"
                         disabled={(!isSSHChecked || ssh.privateKey)}
                         value={ssh.password}
@@ -409,7 +399,6 @@ export default class ServerModalForm extends Component {
                       <div className="ui action input">
                         <input type="text"
                           name="ssh.privateKey"
-                          maxLength="250"
                           placeholder="~/.ssh/id_rsa"
                           disabled={(!isSSHChecked || ssh.password)}
                           value={ssh.privateKey}
