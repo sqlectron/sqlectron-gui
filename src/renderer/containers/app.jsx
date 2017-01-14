@@ -1,3 +1,4 @@
+import { webFrame } from 'electron'; // eslint-disable-line import/no-unresolved
 import React, { Component, PropTypes } from 'react';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
@@ -24,6 +25,18 @@ class AppContainer extends Component {
 
   componentDidMount() {
     this.props.dispatch(ConfigActions.loadConfig());
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { config } = newProps;
+    if (!config.data) { return; }
+
+    const { zoomFactor } = config.data;
+    if (typeof zoomFactor !== 'undefined' && zoomFactor > 0) {
+      // Apply the zoom factor
+      // Required for HiDPI support
+      webFrame.setZoomFactor(zoomFactor);
+    }
   }
 
   render() {
