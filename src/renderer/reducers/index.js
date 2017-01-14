@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import config from './config';
 import databases from './databases';
 import servers from './servers';
 import queries from './queries';
@@ -15,6 +16,7 @@ import keys from './keys';
 
 
 const rootReducer = combineReducers({
+  config,
   databases,
   servers,
   queries,

@@ -48,9 +48,9 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
     let defaultDatabase;
 
     try {
-      const state = getState();
+      const { config, servers } = getState();
 
-      server = state.servers.items.find(srv => srv.id === id);
+      server = servers.items.find(srv => srv.id === id);
       if (!server) {
         throw new Error('Server configuration not found');
       }
@@ -87,10 +87,7 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       }
 
       dbConn = serverSession.createConnection(database);
-      const [, config] = await Promise.all([
-        dbConn.connect(),
-        sqlectron.config.get(),
-      ]);
+      await dbConn.connect();
 
       dispatch({ type: CONNECTION_SUCCESS, server, database, config, reconnecting });
     } catch (error) {

@@ -1,4 +1,5 @@
 import * as types from '../actions/servers';
+import * as configTypes from '../actions/config';
 
 
 const INITIAL_STATE = {
@@ -12,10 +13,10 @@ const INITIAL_STATE = {
 
 export default function servers(state = INITIAL_STATE, action) {
   switch (action.type) {
-    case types.LOAD_SERVERS_SUCCESS:
+    case configTypes.LOAD_CONFIG_SUCCESS:
       return {
         ...state,
-        items: action.servers,
+        items: action.config.servers,
       };
     case types.START_EDITING_SERVER: {
       return {

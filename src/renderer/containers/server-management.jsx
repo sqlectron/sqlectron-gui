@@ -35,10 +35,6 @@ class ServerManagerment extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
-    this.props.dispatch(ServersActions.loadServers());
-  }
-
   onConnectClick({ id }) {
     this.props.router.push(`/server/${id}`);
   }

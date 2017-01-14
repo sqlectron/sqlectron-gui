@@ -1,9 +1,6 @@
 import { sqlectron } from '../../browser/remote';
 
 
-export const LOAD_SERVERS_REQUEST = 'LOAD_SERVERS_REQUEST';
-export const LOAD_SERVERS_SUCCESS = 'LOAD_SERVERS_SUCCESS';
-export const LOAD_SERVERS_FAILURE = 'LOAD_SERVERS_FAILURE';
 export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';
 export const SAVE_SERVER_SUCCESS = 'SAVE_SERVER_SUCCESS';
 export const SAVE_SERVER_FAILURE = 'SAVE_SERVER_FAILURE';
@@ -15,23 +12,6 @@ export const DUPLICATE_SERVER_SUCCESS = 'DUPLICATE_SERVER_SUCCESS';
 export const DUPLICATE_SERVER_FAILURE = 'DUPLICATE_SERVER_FAILURE';
 export const START_EDITING_SERVER = 'START_EDITING_SERVER';
 export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
-
-
-export function loadServers() {
-  return async dispatch => {
-    dispatch({ type: LOAD_SERVERS_REQUEST });
-    try {
-      await sqlectron.config.prepare();
-      const dataServers = await sqlectron.servers.getAll();
-      dispatch({
-        type: LOAD_SERVERS_SUCCESS,
-        servers: dataServers.map(convertToPlainObject),
-      });
-    } catch (error) {
-      dispatch({ type: LOAD_SERVERS_FAILURE, error });
-    }
-  };
-}
 
 
 export function startEditing(id) {

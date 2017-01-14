@@ -1,4 +1,7 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { withRouter } from 'react-router';
+import { connect } from 'react-redux';
+import * as ConfigActions from '../actions/config.js';
 
 
 import '../vendor/semantic-ui/semantic';
@@ -6,15 +9,38 @@ require('../vendor/lato/latofonts.css');
 require('../vendor/semantic-ui/semantic.css');
 require('./app.css');
 
+class AppContainer extends Component {
+  static propTypes = {
+    config: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    router: PropTypes.object.isRequired,
+    children: PropTypes.node,
+  };
 
-const AppContainer = ({ children }) => (
-  <div className="ui">
-    {children}
-  </div>
-);
+  constructor(props, context) {
+    super(props, context);
+    this.state = {};
+  }
 
-AppContainer.propTypes = {
-  children: PropTypes.node,
-};
+  componentDidMount() {
+    this.props.dispatch(ConfigActions.loadConfig());
+  }
 
-export default AppContainer;
+  render() {
+    const { children } = this.props;
+    return (
+      <div className="ui">
+        {children}
+      </div>
+    );
+  }
+}
+
+
+function mapStateToProps(state) {
+  return {
+    config: state.config,
+  };
+}
+
+export default connect(mapStateToProps)(withRouter(AppContainer));
