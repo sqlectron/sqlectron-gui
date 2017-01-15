@@ -1,25 +1,18 @@
 {
-  "scripts": {
-    "postinstall": "install-app-deps",
-    "dev": "concurrently --names 'webpack,electron' --prefix name 'npm run dev:webpack' 'npm run dev:electron'",
-    "dev:webpack": "webpack-dev-server --color --config ./webpack.dev.config.js",
-    "dev:electron": "cross-env DEBUG=sqlectron-gui:*,sqlectron-core:*,spawn-auto-restart node scripts/dev-auto-restart.js",
-    "lint": "eslint . --ext .js,.jsx",
-    "lint:fix": "npm run lint -- --fix",
-    "test": "npm run lint",
-    "clean": "rimraf dist",
-    "clean:osx": "rimraf dist/Sqlectron-darwin-*",
-    "clean:win": "rimraf dist/win* dist/Sqlectron-win*",
-    "clean:linux": "rimraf dist/Sqlectron-linux-* dist/*.deb",
-    "compile": "rimraf app/out && npm run compile:browser && npm run compile:renderer",
-    "compile:browser": "cross-env NODE_ENV=production babel ./src/browser -d app/out/browser",
-    "compile:renderer": "cross-env NODE_ENV=production webpack --progress --display-error-details --config ./webpack.prod.config",
-    "build:osx": "npm run clean:osx && build --osx",
-    "build:linux": "npm run clean:linux && build --linux",
-    "build:win": "npm run clean:win && build --windows",
-    "dist": "npm run compile && build",
-    "dist:all-arch": "npm run compile && build --ia32 --x64",
-    "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win"
+  "name": "Sqlectron",
+  "version": "1.18.0",
+  "description": "A simple and lightweight SQL client with cross database and platform support",
+  "author": {
+    "name": "The Sqlectron Team",
+    "email": "maxcnunes@gmail.com"
+  },
+  "main": "./out/browser/main.js",
+  "license": "MIT",
+  "homepage": "https://sqlectron.github.io",
+  "bugs": "https://github.com/sqlectron/sqlectron-gui/issues",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sqlectron/sqlectron-gui"
   },
   "build": {
     "appId": "org.sqlectron.gui",
@@ -54,6 +47,39 @@
       ]
     }
   },
+  "scripts": {
+    "postinstall": "install-app-deps",
+    "dev": "concurrently --names 'webpack,electron' --prefix name 'npm run dev:webpack' 'npm run dev:electron'",
+    "dev:webpack": "webpack-dev-server --color --config ./webpack.dev.config.js",
+    "dev:electron": "cross-env DEBUG=sqlectron-gui:*,sqlectron-core:*,spawn-auto-restart node scripts/dev-auto-restart.js",
+    "lint": "eslint . --ext .js,.jsx",
+    "lint:fix": "npm run lint -- --fix",
+    "test": "npm run lint",
+    "clean": "rimraf dist",
+    "clean:osx": "rimraf dist/Sqlectron-darwin-*",
+    "clean:win": "rimraf dist/win* dist/Sqlectron-win*",
+    "clean:linux": "rimraf dist/Sqlectron-linux-* dist/*.deb",
+    "compile": "rimraf out && npm run compile:browser && npm run compile:renderer",
+    "compile:browser": "cross-env NODE_ENV=production babel ./src/browser -d out/browser",
+    "compile:renderer": "cross-env NODE_ENV=production webpack --progress --display-error-details --config ./webpack.prod.config",
+    "build:osx": "npm run clean:osx && build --osx",
+    "build:linux": "npm run clean:linux && build --linux",
+    "build:win": "npm run clean:win && build --windows",
+    "dist": "npm run compile && build",
+    "dist:all-arch": "npm run compile && build --ia32 --x64",
+    "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win"
+  },
+  "dependencies": {
+    "axios": "^0.7.0",
+    "babel-core": "^6.9.1",
+    "babel-plugin-transform-runtime": "^6.9.0",
+    "babel-polyfill": "^6.9.1",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-preset-stage-0": "^6.5.0",
+    "debug": "^2.2.0",
+    "sqlectron-core": "^7.3.1"
+  },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
     "babel-cli": "^6.9.0",
@@ -77,6 +103,7 @@
     "denodeify": "^1.2.1",
     "electron-builder": "next",
     "electron-prebuilt": "^1.4.0",
+    "electron-rebuild": "~1.4.0",
     "eslint": "^2.12.0",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-config-airbnb-base": "^3.0.1",

@@ -53,7 +53,8 @@ export default class QueryResult extends Component {
 
     const isSelect = command === 'SELECT';
     const isExplain = command === 'EXPLAIN';
-    if (!isSelect && !isExplain) {
+    const isUnknown = command === 'UNKNOWN';
+    if (!isSelect && !isExplain && !isUnknown) {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
         <Message
