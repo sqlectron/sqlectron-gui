@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import Loader from './loader.jsx';
 import Message from './message.jsx';
@@ -58,7 +59,7 @@ export default class QueryResult extends Component {
       const msgAffectedRows = affectedRows ? `Affected rows: ${affectedRows}.` : '';
       return (
         <Message
-          key={queryIndex}
+          key={`msgAffectedRows-${queryIndex}`}
           message={`Query executed successfully. ${msgAffectedRows}`}
           type="success" />
       );
@@ -73,6 +74,24 @@ export default class QueryResult extends Component {
           title={title}
           message={rows.map(row => row[title]).join('\n')}
         />
+      );
+    }
+
+    let msgDuplicatedColumns = null;
+    const groupFields = _.groupBy(fields, (field) => field.name);
+    const duplicatedColumns = Object
+      .keys(groupFields)
+      .filter(field => groupFields[field].length > 1);
+    if (duplicatedColumns.length) {
+      msgDuplicatedColumns = (
+        <Message
+          key={`msgDuplicatedColumns-${queryIndex}`}
+          type="info"
+          message={
+            `Duplicated columns: ${duplicatedColumns.join(', ')}. ` +
+            'It may cause the result in the second column overwriting the first one. ' +
+            'Use an alias to avoid it.'
+          } />
       );
     }
 
@@ -95,7 +114,12 @@ export default class QueryResult extends Component {
     );
 
     if (totalQueries === 1) {
-      return tableResult;
+      return (
+        <div key={queryIndex}>
+          {msgDuplicatedColumns}
+          {tableResult}
+        </div>
+      );
     }
 
     return (
@@ -103,6 +127,7 @@ export default class QueryResult extends Component {
         <div className="ui top left attached label">
           Query {queryIndex + 1}
         </div>
+        {msgDuplicatedColumns}
         {tableResult}
       </div>
     );
