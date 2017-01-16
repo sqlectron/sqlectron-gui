@@ -92,10 +92,10 @@ export default class DatabaseItem extends Component {
     this.setState({ tableCollapsed: !this.state.tableCollapsed });
   }
 
-  renderSubItems(table) {
+  renderSubItems({ schema, name }) {
     const { columnsByTable, triggersByTable, indexesByTable, database } = this.props;
 
-    if (!columnsByTable || !columnsByTable[table]) {
+    if (!columnsByTable || !columnsByTable[name]) {
       return null;
     }
 
@@ -108,19 +108,22 @@ export default class DatabaseItem extends Component {
       <div style={displayStyle}>
         <TableSubmenu
           title="Columns"
-          table={table}
+          schema={schema}
+          table={name}
           itemsByTable={columnsByTable}
           database={database} />
         <TableSubmenu
           collapsed
           title="Triggers"
-          table={table}
+          schema={schema}
+          table={name}
           itemsByTable={triggersByTable}
           database={database} />
         <TableSubmenu
           collapsed
           title="Indexes"
-          table={table}
+          schema={schema}
+          table={name}
           itemsByTable={indexesByTable}
           database={database} />
       </div>
@@ -145,6 +148,9 @@ export default class DatabaseItem extends Component {
       <i className="table icon" style={{ float: 'left', margin: '0 0.3em 0 0' }}></i>
     );
 
+    const { schema, name } = item;
+    const fullName = schema ? `${schema}.${name}` : name;
+
     return (
       <div>
         <span
@@ -154,9 +160,9 @@ export default class DatabaseItem extends Component {
           onContextMenu={::this.onContextMenu}>
           {dbObjectType === 'Table' ? collapseIcon : null}
           {dbObjectType === 'Table' ? tableIcon : null}
-          {item.name}
+          {fullName}
         </span>
-        {this.renderSubItems(item.name)}
+        {this.renderSubItems(item)}
       </div>
     );
   }

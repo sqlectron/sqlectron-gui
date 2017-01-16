@@ -112,13 +112,13 @@ class QueryBrowserContainer extends Component {
     }
 
     const lastConnectedDB = connections.databases[connections.databases.length - 1];
-    const schema = connections.server.schema;
+    const filter = connections.server.filter;
 
-    dispatch(DbAction.fetchDatabasesIfNeeded());
+    dispatch(DbAction.fetchDatabasesIfNeeded(filter));
     dispatch(fetchSchemasIfNeeded(lastConnectedDB));
-    dispatch(fetchTablesIfNeeded(lastConnectedDB, schema));
-    dispatch(fetchViewsIfNeeded(lastConnectedDB, schema));
-    dispatch(fetchRoutinesIfNeeded(lastConnectedDB, schema));
+    dispatch(fetchTablesIfNeeded(lastConnectedDB, filter));
+    dispatch(fetchViewsIfNeeded(lastConnectedDB, filter));
+    dispatch(fetchRoutinesIfNeeded(lastConnectedDB, filter));
 
     this.setMenus();
   }
@@ -147,7 +147,7 @@ class QueryBrowserContainer extends Component {
   }
 
   onExecuteDefaultQuery(database, table) {
-    const schema = this.props.connections.server.schema;
+    const schema = table.schema || this.props.connections.server.schema;
     this.props.dispatch(
       QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema)
     );
@@ -164,14 +164,14 @@ class QueryBrowserContainer extends Component {
   }
 
   onSelectTable(database, table) {
-    const schema = this.props.connections.server.schema;
+    const schema = table.schema || this.props.connections.server.schema;
     this.props.dispatch(fetchTableColumnsIfNeeded(database.name, table.name, schema));
     this.props.dispatch(fetchTableTriggersIfNeeded(database.name, table.name, schema));
     this.props.dispatch(fetchTableIndexesIfNeeded(database.name, table.name, schema));
   }
 
   onGetSQLScript(database, item, actionType, objectType) {
-    const schema = this.props.connections.server.schema;
+    const schema = item.schema || this.props.connections.server.schema;
     this.props.dispatch(
       getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema)
     );
@@ -274,8 +274,8 @@ class QueryBrowserContainer extends Component {
 
   fetchTableDiagramData(database, tables) {
     const { dispatch, connections } = this.props;
-    const schema = connections.server.schema;
     tables.forEach((item) => {
+      const schema = item.schema || connections.server.schema;
       dispatch(fetchTableColumnsIfNeeded(database, item, schema));
       dispatch(fetchTableKeysIfNeeded(database, item, schema));
     });

@@ -67,6 +67,7 @@ export default class DbMetadataList extends Component {
       onExecuteDefaultQuery,
       onSelectItem,
       items,
+      title,
       database,
       onGetSQLScript,
     } = this.props;
@@ -90,9 +91,12 @@ export default class DbMetadataList extends Component {
       }
       cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
 
+      const { schema, name } = item;
+      const fullName = schema ? `${schema}.${name}` : name;
+
       return (
         <DatabaseItem
-          key={item.name}
+          key={`${title}.${database.name}.${fullName}`}
           client={client}
           database={database}
           item={item}

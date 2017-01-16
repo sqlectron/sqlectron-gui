@@ -29,14 +29,18 @@ export default function (state = INITIAL_STATE, action) {
         functionsByDatabase: {
           ...state.functionsByDatabase,
           [action.database]: action.routines.filter(isFunction).map(routine => ({
+            schema: routine.schema,
             name: routine.routineName,
-            routineDefinition: routine.routineDefinition })),
+            routineDefinition: routine.routineDefinition,
+          })),
         },
         proceduresByDatabase: {
           ...state.proceduresByDatabase,
           [action.database]: action.routines.filter(isProcedure).map(routine => ({
+            schema: routine.schema,
             name: routine.routineName,
-            routineDefinition: routine.routineDefinition })),
+            routineDefinition: routine.routineDefinition,
+          })),
         },
         error: null,
       };

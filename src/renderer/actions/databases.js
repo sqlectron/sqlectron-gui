@@ -109,10 +109,10 @@ export function openDatabaseDiagram() {
 }
 
 
-export function fetchDatabasesIfNeeded () {
+export function fetchDatabasesIfNeeded (filter) {
   return (dispatch, getState) => {
     if (shouldFetchDatabases(getState())) {
-      dispatch(fetchDatabases());
+      dispatch(fetchDatabases(filter));
     }
   };
 }
@@ -126,12 +126,12 @@ function shouldFetchDatabases (state) {
 }
 
 
-function fetchDatabases () {
+function fetchDatabases (filter) {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_DATABASES_REQUEST });
     try {
       const dbConn = getCurrentDBConn(getState());
-      const databases = await dbConn.listDatabases();
+      const databases = await dbConn.listDatabases(filter);
       dispatch({ type: FETCH_DATABASES_SUCCESS, databases });
     } catch (error) {
       dispatch({ type: FETCH_DATABASES_FAILURE, error });

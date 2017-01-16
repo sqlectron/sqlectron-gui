@@ -27,7 +27,7 @@ export default function (state = INITIAL_STATE, action) {
         didInvalidate: false,
         viewsByDatabase: {
           ...state.viewsByDatabase,
-          [action.database]: action.views.map(name => ({ name })),
+          [action.database]: action.views,
         },
         error: null,
       };

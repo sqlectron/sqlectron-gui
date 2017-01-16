@@ -38,7 +38,7 @@ export default function (state = INITIAL_STATE, action) {
         didInvalidate: false,
         itemsByDatabase: {
           ...state.itemsByDatabase,
-          [action.database]: action.tables.map(name => ({ name })),
+          [action.database]: action.tables,
         },
         error: null,
       };
