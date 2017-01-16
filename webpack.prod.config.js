@@ -2,6 +2,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 require('babel-polyfill');
 
 module.exports = {
@@ -36,7 +37,7 @@ module.exports = {
     ],
   },
   output: {
-    path: path.join(__dirname, 'app', 'out', 'static'),
+    path: path.join(__dirname, 'out', 'static'),
     filename: '[name].bundle.js',
   },
   module: {
@@ -71,6 +72,7 @@ module.exports = {
     noParse: [/html2canvas/],
   },
   plugins: [
+    // new BundleAnalyzerPlugin(),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendorCommon',
       filename: 'vendor-common.bundle.js',

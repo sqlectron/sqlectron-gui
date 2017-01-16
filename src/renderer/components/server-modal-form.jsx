@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { sqlectron } from '../../browser/remote';
 import ConfirmModal from './confim-modal.jsx';
 import Message from './message.jsx';
+import { requireLogos } from './require-context';
 
 
 require('react-select/dist/react-select.css');
@@ -11,7 +12,7 @@ require('./override-select.css');
 
 const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
   value: dbClient.key,
-  logo: require(`./server-db-client-${dbClient.key}.png`), // eslint-disable-line global-require
+  logo: requireLogos(`./server-db-client-${dbClient.key}.png`),
   label: dbClient.name,
   defaultPort: dbClient.defaultPort,
   disabledFeatures: dbClient.disabledFeatures,

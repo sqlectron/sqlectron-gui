@@ -27,6 +27,7 @@ import Query from '../components/query.jsx';
 import Loader from '../components/loader.jsx';
 import PromptModal from '../components/prompt-modal.jsx';
 import MenuHandler from '../menu-handler';
+import { requireLogos } from '../components/require-context';
 
 
 require('./query-browser.css');
@@ -49,10 +50,10 @@ const STYLES = {
 
 
 const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
-  /* eslint no-param-reassign:0, global-require:0 */
+  /* eslint no-param-reassign:0 */
   clients[dbClient.key] = {
     title: dbClient.name,
-    image: require(`../components/server-db-client-${dbClient.key}.png`),
+    image: requireLogos(`./server-db-client-${dbClient.key}.png`),
   };
   return clients;
 }, {});

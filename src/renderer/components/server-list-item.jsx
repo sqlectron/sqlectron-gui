@@ -1,13 +1,13 @@
 import React, { PropTypes } from 'react';
+import { requireLogos } from './require-context';
 import { sqlectron } from '../../browser/remote';
-
 
 /**
  * Load icons for supported database clients
  */
 const ICONS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
-  /* eslint no-param-reassign:0, global-require:0 */
-  clients[dbClient.key] = require(`./server-db-client-${dbClient.key}.png`);
+  /* eslint no-param-reassign:0 */
+  clients[dbClient.key] = requireLogos(`./server-db-client-${dbClient.key}.png`);
   return clients;
 }, {});
 

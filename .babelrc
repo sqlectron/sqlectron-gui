@@ -1,8 +1,21 @@
 {
-  "presets": ["es2015", "stage-0", "react"],
-  "plugins": ["transform-runtime"],
+  "presets": [
+    ["env", { "targets": { "chrome": 53 }, "useBuiltIns": true }],
+    "stage-1",
+    "react"
+  ],
   "env": {
+    "production": {
+      "presets": ["react-optimize"],
+      "plugins": [
+        "transform-function-bind",
+        "babel-plugin-dev-expression"
+      ]
+    },
     "development": {
+      "plugins": [
+        "transform-function-bind"
+      ],
       "presets": ["react-hmre"]
     }
   }
