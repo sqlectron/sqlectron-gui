@@ -3,6 +3,7 @@ import Select from 'react-select';
 import { sqlectron } from '../../browser/remote';
 import ConfirmModal from './confim-modal.jsx';
 import Message from './message.jsx';
+import Checkbox from './checkbox.jsx';
 import { requireLogos } from './require-context';
 
 
@@ -56,29 +57,6 @@ export default class ServerModalForm extends Component {
       },
       onApprove: () => false,
     }).modal('show');
-
-    $(this.refs.sshTunnel).checkbox({
-      onChecked: () => this.setState({ ssh: {} }),
-      onUnchecked: () => this.setState({ ssh: null }),
-    });
-
-    $(this.refs.ssl).checkbox({
-      onChecked: () => this.setState({ ssl: true }),
-      onUnchecked: () => this.setState({ ssl: false }),
-    });
-
-    $(this.refs.privateKeyWithPassphrase).checkbox({
-      onChecked: () => {
-        const ssh = this.state.ssh ? { ...this.state.ssh } : {};
-        ssh.privateKeyWithPassphrase = true;
-        this.setState({ ssh });
-      },
-      onUnchecked: () => {
-        const ssh = this.state.ssh ? { ...this.state.ssh } : {};
-        ssh.privateKeyWithPassphrase = false;
-        this.setState({ ssh });
-      },
-    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -194,11 +172,269 @@ export default class ServerModalForm extends Component {
     );
   }
 
-  render() {
+  renderMessage() {
     const { testConnection } = this.props;
-    const { confirmingRemove, isNew, client } = this.state;
+
+    if (testConnection.error) {
+      return (
+        <Message
+          closeable
+          title="Connection Error"
+          message={testConnection.error.message}
+          type="error" />
+      );
+    }
+
+    if (testConnection.connected) {
+      return (
+        <Message
+          closeable
+          title="Connection Test"
+          message="Successfully connected"
+          type="success" />
+      );
+    }
+
+    return null;
+  }
+
+  renderBasicPanel() {
+    return (
+      <div>
+        <div className="fields">
+          <div className={`nine wide field ${this.highlightError('name')}`}>
+            <label>Name</label>
+            <input type="text"
+              name="name"
+              placeholder="Name"
+              value={this.state.name || ''}
+              onChange={::this.handleChange} />
+          </div>
+          <div className={`six wide field ${this.highlightError('client')}`}>
+            <label>Database Type</label>
+            <Select
+              name="client"
+              placeholder="Select"
+              options={CLIENTS}
+              clearable={false}
+              onChange={::this.handleOnClientChange}
+              optionRenderer={this.renderClientItem}
+              valueRenderer={this.renderClientItem}
+              value={this.state.client} />
+          </div>
+          <div className="one field" style={{ paddingTop: '2em' }}>
+            <Checkbox
+              name="ssl"
+              label="SSL"
+              disabled={this.isFeatureDisabled('server:ssl')}
+              defaultChecked={this.state.ssl}
+              onChecked={() => this.setState({ ssl: true })}
+              onUnchecked={() => this.setState({ ssl: false })} />
+          </div>
+        </div>
+        <div className="field">
+          <label>Server Address</label>
+          <div className="fields">
+            <div className={`five wide field ${this.highlightError('host')}`}>
+              <input type="text"
+                name="host"
+                placeholder="Host"
+                value={this.state.host || ''}
+                onChange={::this.handleChange}
+                disabled={this.isFeatureDisabled('server:host') || this.state.socketPath} />
+            </div>
+            <div className={`two wide field ${this.highlightError('port')}`}>
+              <input type="number"
+                name="port"
+                maxLength="5"
+                placeholder="Port"
+                value={this.state.port || this.state.defaultPort || ''}
+                onChange={::this.handleChange}
+                disabled={this.isFeatureDisabled('server:port') || this.state.socketPath} />
+            </div>
+            <div className={`four wide field ${this.highlightError('domain')}`}>
+              <input type="text"
+                name="domain"
+                placeholder="Domain"
+                value={this.state.domain || ''}
+                disabled={this.isFeatureDisabled('server:domain')}
+                onChange={::this.handleChange} />
+            </div>
+            <div className={`five wide field ${this.highlightError('socketPath')}`}>
+              <div className="ui action input">
+                <input type="text"
+                  name="socketPath"
+                  placeholder="Unix socket path"
+                  value={this.state.socketPath || ''}
+                  onChange={::this.handleChange}
+                  disabled={(
+                    this.state.host ||
+                    this.state.port ||
+                    this.isFeatureDisabled('server:socketPath')
+                  )} />
+                <label htmlFor="file.socketPath" className="ui icon button btn-file">
+                  <i className="file outline icon" />
+                  <input
+                    type="file"
+                    id="file.socketPath"
+                    name="file.socketPath"
+                    onChange={::this.handleChange}
+                    style={{ display: 'none' }} />
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="fields">
+          <div className={`four wide field ${this.highlightError('user')}`}>
+            <label>User</label>
+            <input type="text"
+              name="user"
+              placeholder="User"
+              value={this.state.user || ''}
+              disabled={this.isFeatureDisabled('server:user')}
+              onChange={::this.handleChange} />
+          </div>
+          <div className={`four wide field ${this.highlightError('password')}`}>
+            <label>Password</label>
+            <input type="password"
+              name="password"
+              placeholder="Password"
+              value={this.state.password || ''}
+              disabled={this.isFeatureDisabled('server:password')}
+              onChange={::this.handleChange} />
+          </div>
+          <div className={`four wide field ${this.highlightError('database')}`}>
+            <label>Database/Keyspace</label>
+            <input type="text"
+              name="database"
+              placeholder="Database"
+              value={this.state.database || ''}
+              onChange={::this.handleChange} />
+          </div>
+          <div className={`four wide field ${this.highlightError('schema')}`}>
+            <label>Schema</label>
+            <input type="text"
+              name="schema"
+              maxLength="100"
+              placeholder="Schema"
+              disabled={this.isFeatureDisabled('server:schema')}
+              value={this.state.schema || ''}
+              onChange={::this.handleChange} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderSSHPanel() {
     const isSSHChecked = !!this.state.ssh;
     const ssh = this.state.ssh || {};
+
+    if (this.isFeatureDisabled('server:ssh')) {
+      return null;
+    }
+
+    return (
+      <div className="ui segment">
+        <div className="one field">
+          <Checkbox
+            name="sshTunnel"
+            label="SSH Tunnel"
+            defaultChecked={isSSHChecked}
+            onChecked={() => this.setState({ ssh: {} })}
+            onUnchecked={() => this.setState({ ssh: null })} />
+        </div>
+        {isSSHChecked &&
+          <div>
+            <div className="field">
+              <label>SSH Address</label>
+              <div className="fields">
+                <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
+                  <input type="text"
+                    name="ssh.host"
+                    placeholder="Host"
+                    disabled={!isSSHChecked}
+                    value={ssh.host || ''}
+                    onChange={::this.handleChange} />
+                </div>
+                <div className={`three wide field ${this.highlightError('ssh.port')}`}>
+                  <input type="number"
+                    name="ssh.port"
+                    maxLength="5"
+                    placeholder="Port"
+                    disabled={!isSSHChecked}
+                    value={ssh.port || ''}
+                    onChange={::this.handleChange} />
+                </div>
+              </div>
+            </div>
+            <div className="fields">
+              <div className={`four wide field ${this.highlightError('ssh.user')}`}>
+                <label>User</label>
+                <input type="text"
+                  name="ssh.user"
+                  placeholder="User"
+                  disabled={!isSSHChecked}
+                  value={ssh.user || ''}
+                  onChange={::this.handleChange} />
+              </div>
+              <div className={`four wide field ${this.highlightError('ssh.password')}`}>
+                <label>Password</label>
+                <input type="password"
+                  name="ssh.password"
+                  placeholder="Password"
+                  disabled={(!isSSHChecked || ssh.privateKey)}
+                  value={ssh.password || ''}
+                  onChange={::this.handleChange} />
+              </div>
+              <div className={`five wide field ${this.highlightError('ssh.privateKey')}`}>
+                <label>Private Key</label>
+                <div className="ui action input">
+                  <input type="text"
+                    name="ssh.privateKey"
+                    placeholder="~/.ssh/id_rsa"
+                    disabled={(!isSSHChecked || ssh.password)}
+                    value={ssh.privateKey || ''}
+                    onChange={::this.handleChange} />
+                  <label htmlFor="file.ssh.privateKey" className="ui icon button btn-file">
+                    <i className="file outline icon" />
+                    <input
+                      type="file"
+                      id="file.ssh.privateKey"
+                      name="file.ssh.privateKey"
+                      onChange={::this.handleChange}
+                      style={{ display: 'none' }} />
+                  </label>
+                </div>
+              </div>
+              <div className="three wide field" style={{ paddingTop: '2em' }}>
+                <Checkbox
+                  name="ssh.privateKeyWithPassphrase"
+                  label="Passphrase"
+                  disabled={!!(!isSSHChecked || ssh.password)}
+                  defaultChecked={ssh && ssh.privateKeyWithPassphrase}
+                  onChecked={() => {
+                    const stateSSH = this.state.ssh ? { ...this.state.ssh } : {};
+                    stateSSH.privateKeyWithPassphrase = true;
+                    this.setState({ ssh: stateSSH });
+                  }}
+                  onUnchecked={() => {
+                    const stateSSH = this.state.ssh ? { ...this.state.ssh } : {};
+                    stateSSH.privateKeyWithPassphrase = false;
+                    this.setState({ ssh: stateSSH });
+                  }} />
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    );
+  }
+
+  renderActionsPanel() {
+    const { testConnection } = this.props;
+    const { isNew, client } = this.state;
 
     const classStatusButtons = testConnection.connecting ? 'disabled' : '';
     const classStatusTestButton = [
@@ -207,281 +443,72 @@ export default class ServerModalForm extends Component {
     ].join(' ');
 
     return (
+      <div className="actions">
+        <div className={`small ui blue right labeled icon button ${classStatusTestButton}`}
+          tabIndex="0"
+          onClick={::this.onTestConnectionClick}>
+          Test
+          <i className="plug icon"></i>
+        </div>
+        {!isNew && <div className={`small ui right labeled icon button ${classStatusButtons}`}
+          tabIndex="0"
+          onClick={::this.onDuplicateClick}>
+          Duplicate
+          <i className="copy icon"></i>
+        </div>}
+        <div className={`small ui black deny right labeled icon button ${classStatusButtons}`}
+          tabIndex="0">
+          Cancel
+          <i className="ban icon"></i>
+        </div>
+        <div className={`small ui green right labeled icon button ${classStatusButtons}`}
+          tabIndex="0"
+          onClick={::this.onSaveClick}>
+          Save
+          <i className="checkmark icon"></i>
+        </div>
+        {!isNew && <div className={`small ui red right labeled icon button ${classStatusButtons}`}
+          tabIndex="0"
+          onClick={::this.onRemoveOpenClick}>
+          Remove
+          <i className="trash icon"></i>
+        </div>}
+      </div>
+    );
+  }
+
+  renderConfirmRemoveModal() {
+    const { confirmingRemove } = this.state;
+
+    if (!confirmingRemove) {
+      return null;
+    }
+
+    return (
+      <ConfirmModal
+        context="#server-modal"
+        title={`Delete ${this.state.name}`}
+        message="Are you sure you want to remove this server connection?"
+        onCancelClick={::this.onRemoveCancelClick}
+        onRemoveClick={::this.onRemoveConfirmClick} />
+    );
+  }
+
+  render() {
+    return (
       <div id="server-modal" className="ui modal" ref="serverModal">
         <div className="header">
           Server Information
         </div>
         <div className="content">
-          {
-            testConnection.error && <Message
-              closeable
-              title="Connection Error"
-              message={testConnection.error.message}
-              type="error" />
-          }
-          {
-            testConnection.connected && <Message
-              closeable
-              title="Connection Test"
-              message="Successfully connected"
-              type="success" />
-          }
+          {this.renderMessage()}
           <form className="ui form">
-            <div className="fields">
-              <div className={`nine wide field ${this.highlightError('name')}`}>
-                <label>Name</label>
-                <input type="text"
-                  name="name"
-                  placeholder="Name"
-                  value={this.state.name || ''}
-                  onChange={::this.handleChange} />
-              </div>
-              <div className={`six wide field ${this.highlightError('client')}`}>
-                <label>Database Type</label>
-                <Select
-                  name="client"
-                  placeholder="Select"
-                  options={CLIENTS}
-                  clearable={false}
-                  onChange={::this.handleOnClientChange}
-                  optionRenderer={this.renderClientItem}
-                  valueRenderer={this.renderClientItem}
-                  value={this.state.client} />
-              </div>
-              <div className="one field" style={{ paddingTop: '2em' }}>
-                <div className="ui toggle checkbox" ref="ssl">
-                  <input type="checkbox"
-                    name="ssl"
-                    tabIndex="0"
-                    className="hidden"
-                    disabled={this.isFeatureDisabled('server:ssl')}
-                    defaultChecked={this.state.ssl} />
-                  <label>SSL</label>
-                </div>
-              </div>
-            </div>
-            <div className="field">
-              <label>Server Address</label>
-              <div className="fields">
-                <div className={`five wide field ${this.highlightError('host')}`}>
-                  <input type="text"
-                    name="host"
-                    placeholder="Host"
-                    value={this.state.host || ''}
-                    onChange={::this.handleChange}
-                    disabled={this.isFeatureDisabled('server:host') || this.state.socketPath} />
-                </div>
-                <div className={`two wide field ${this.highlightError('port')}`}>
-                  <input type="number"
-                    name="port"
-                    maxLength="5"
-                    placeholder="Port"
-                    value={this.state.port || this.state.defaultPort || ''}
-                    onChange={::this.handleChange}
-                    disabled={this.isFeatureDisabled('server:port') || this.state.socketPath} />
-                </div>
-                <div className={`four wide field ${this.highlightError('domain')}`}>
-                  <input type="text"
-                    name="domain"
-                    placeholder="Domain"
-                    value={this.state.domain || ''}
-                    disabled={this.isFeatureDisabled('server:domain')}
-                    onChange={::this.handleChange} />
-                </div>
-                <div className={`five wide field ${this.highlightError('socketPath')}`}>
-                  <div className="ui action input">
-                    <input type="text"
-                      name="socketPath"
-                      placeholder="Unix socket path"
-                      value={this.state.socketPath || ''}
-                      onChange={::this.handleChange}
-                      disabled={(
-                        this.state.host ||
-                        this.state.port ||
-                        this.isFeatureDisabled('server:socketPath')
-                      )} />
-                    <label htmlFor="file.socketPath" className="ui icon button btn-file">
-                      <i className="file outline icon" />
-                      <input
-                        type="file"
-                        id="file.socketPath"
-                        name="file.socketPath"
-                        onChange={::this.handleChange}
-                        style={{ display: 'none' }} />
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="fields">
-              <div className={`four wide field ${this.highlightError('user')}`}>
-                <label>User</label>
-                <input type="text"
-                  name="user"
-                  placeholder="User"
-                  value={this.state.user || ''}
-                  disabled={this.isFeatureDisabled('server:user')}
-                  onChange={::this.handleChange} />
-              </div>
-              <div className={`four wide field ${this.highlightError('password')}`}>
-                <label>Password</label>
-                <input type="password"
-                  name="password"
-                  placeholder="Password"
-                  value={this.state.password || ''}
-                  disabled={this.isFeatureDisabled('server:password')}
-                  onChange={::this.handleChange} />
-              </div>
-              <div className={`four wide field ${this.highlightError('database')}`}>
-                <label>Database/Keyspace</label>
-                <input type="text"
-                  name="database"
-                  placeholder="Database"
-                  value={this.state.database || ''}
-                  onChange={::this.handleChange} />
-              </div>
-              <div className={`four wide field ${this.highlightError('schema')}`}>
-                <label>Schema</label>
-                <input type="text"
-                  name="schema"
-                  maxLength="100"
-                  placeholder="Schema"
-                  disabled={this.isFeatureDisabled('server:schema')}
-                  value={this.state.schema || ''}
-                  onChange={::this.handleChange} />
-              </div>
-            </div>
-          {
-            !this.isFeatureDisabled('server:ssh') &&
-              <div className="ui segment">
-                <div className="one field">
-                  <div className="ui toggle checkbox" ref="sshTunnel">
-                    <input type="checkbox"
-                      name="sshTunnel"
-                      tabIndex="0"
-                      className="hidden"
-                      defaultChecked={isSSHChecked} />
-                    <label>SSH Tunnel</label>
-                  </div>
-                </div>
-                {isSSHChecked &&
-                  <div>
-                    <div className="field">
-                      <label>SSH Address</label>
-                      <div className="fields">
-                        <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
-                          <input type="text"
-                            name="ssh.host"
-                            placeholder="Host"
-                            disabled={!isSSHChecked}
-                            value={ssh.host}
-                            onChange={::this.handleChange} />
-                        </div>
-                        <div className={`three wide field ${this.highlightError('ssh.port')}`}>
-                          <input type="number"
-                            name="ssh.port"
-                            maxLength="5"
-                            placeholder="Port"
-                            disabled={!isSSHChecked}
-                            value={ssh.port}
-                            onChange={::this.handleChange} />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="fields">
-                      <div className={`four wide field ${this.highlightError('ssh.user')}`}>
-                        <label>User</label>
-                        <input type="text"
-                          name="ssh.user"
-                          placeholder="User"
-                          disabled={!isSSHChecked}
-                          value={ssh.user}
-                          onChange={::this.handleChange} />
-                      </div>
-                      <div className={`four wide field ${this.highlightError('ssh.password')}`}>
-                        <label>Password</label>
-                        <input type="password"
-                          name="ssh.password"
-                          placeholder="Password"
-                          disabled={(!isSSHChecked || ssh.privateKey)}
-                          value={ssh.password}
-                          onChange={::this.handleChange} />
-                      </div>
-                      <div className={`five wide field ${this.highlightError('ssh.privateKey')}`}>
-                        <label>Private Key</label>
-                        <div className="ui action input">
-                          <input type="text"
-                            name="ssh.privateKey"
-                            placeholder="~/.ssh/id_rsa"
-                            disabled={(!isSSHChecked || ssh.password)}
-                            value={ssh.privateKey}
-                            onChange={::this.handleChange} />
-                          <label htmlFor="file.ssh.privateKey" className="ui icon button btn-file">
-                            <i className="file outline icon" />
-                            <input
-                              type="file"
-                              id="file.ssh.privateKey"
-                              name="file.ssh.privateKey"
-                              onChange={::this.handleChange}
-                              style={{ display: 'none' }} />
-                          </label>
-                        </div>
-                      </div>
-                      <div className="three wide field" style={{ paddingTop: '2em' }}>
-                        <div className="ui toggle checkbox" ref="privateKeyWithPassphrase">
-                          <input type="checkbox"
-                            name="privateKeyWithPassphrase"
-                            tabIndex="0"
-                            className="hidden"
-                            disabled={(!isSSHChecked || ssh.password)}
-                            defaultChecked={ssh && ssh.privateKeyWithPassphrase} />
-                          <label>Passphrase</label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                }
-              </div>
-          }
+            {this.renderBasicPanel()}
+            {this.renderSSHPanel()}
           </form>
         </div>
-        <div className="actions">
-          <div className={`small ui blue right labeled icon button ${classStatusTestButton}`}
-            tabIndex="0"
-            onClick={::this.onTestConnectionClick}>
-            Test
-            <i className="plug icon"></i>
-          </div>
-          {!isNew && <div className={`small ui right labeled icon button ${classStatusButtons}`}
-            tabIndex="0"
-            onClick={::this.onDuplicateClick}>
-            Duplicate
-            <i className="copy icon"></i>
-          </div>}
-          <div className={`small ui black deny right labeled icon button ${classStatusButtons}`}
-            tabIndex="0">
-            Cancel
-            <i className="ban icon"></i>
-          </div>
-          <div className={`small ui green right labeled icon button ${classStatusButtons}`}
-            tabIndex="0"
-            onClick={::this.onSaveClick}>
-            Save
-            <i className="checkmark icon"></i>
-          </div>
-          {!isNew && <div className={`small ui red right labeled icon button ${classStatusButtons}`}
-            tabIndex="0"
-            onClick={::this.onRemoveOpenClick}>
-            Remove
-            <i className="trash icon"></i>
-          </div>}
-        </div>
-        {confirmingRemove && <ConfirmModal
-          context="#server-modal"
-          title={`Delete ${this.state.name}`}
-          message="Are you sure you want to remove this server connection?"
-          onCancelClick={::this.onRemoveCancelClick}
-          onRemoveClick={::this.onRemoveConfirmClick} />}
+        {this.renderActionsPanel()}
+        {this.renderConfirmRemoveModal()}
       </div>
     );
   }
