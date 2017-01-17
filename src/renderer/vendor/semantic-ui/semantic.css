@@ -20417,6 +20417,7 @@ Floated Menu / Item
   border-radius: 0em;
   border: none;
   box-shadow: none;
+  max-width: 100%;
 }
 
 /* Item */
