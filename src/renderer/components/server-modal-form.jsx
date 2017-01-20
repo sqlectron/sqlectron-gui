@@ -19,6 +19,7 @@ const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
   disabledFeatures: dbClient.disabledFeatures,
 }));
 
+const DEFAULT_SSH_PORT = 22;
 
 export default class ServerModalForm extends Component {
   static propTypes = {
@@ -119,7 +120,7 @@ export default class ServerModalForm extends Component {
     const { ssh } = state;
     server.ssh = {
       host: ssh.host,
-      port: ssh.port,
+      port: ssh.port || DEFAULT_SSH_PORT,
       user: ssh.user,
       password: ssh.password && ssh.password.length ? ssh.password : null,
       privateKey: ssh.privateKey && ssh.privateKey.length ? ssh.privateKey : null,
@@ -364,7 +365,7 @@ export default class ServerModalForm extends Component {
                     maxLength="5"
                     placeholder="Port"
                     disabled={!isSSHChecked}
-                    value={ssh.port || ''}
+                    value={ssh.port || DEFAULT_SSH_PORT}
                     onChange={::this.handleChange} />
                 </div>
               </div>
