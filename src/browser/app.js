@@ -1,4 +1,4 @@
-import { app, dialog, globalShortcut } from 'electron'; // eslint-disable-line import/no-unresolved
+import { app, dialog } from 'electron'; // eslint-disable-line import/no-unresolved
 import createLogger from './logger';
 import { buildNewWindow } from './window';
 
@@ -19,16 +19,6 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
-});
-
-
-// This method will be called when Electron creates a new browser window
-app.on('browser-window-created', (item, win) => {
-  // Only one keybinding/accelerator can be set for each command in the menu.
-  // This registers more keybindings for commands already in the menus.
-  globalShortcut.register('CommandOrControl+R', () => {
-    win.webContents.send('sqlectron:query-execute');
-  });
 });
 
 

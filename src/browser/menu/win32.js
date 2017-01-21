@@ -48,6 +48,11 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
           click: (item, win) => win.webContents.send('sqlectron:query-execute'),
         },
         {
+          label: 'Execute',
+          accelerator: 'Ctrl+R',
+          click: (item, win) => win.webContents.send('sqlectron:query-execute'),
+        },
+        {
           label: 'Focus Query Editor',
           accelerator: 'Shift+Ctrl+0',
           click: (item, win) => win.webContents.send('sqlectron:query-focus'),
