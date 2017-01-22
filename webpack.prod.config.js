@@ -95,7 +95,6 @@ module.exports = {
       Radium: 'radium',
       jQuery: 'jquery',
       $: 'jquery',
-      _: 'lodash',
     }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: { warnings: false },

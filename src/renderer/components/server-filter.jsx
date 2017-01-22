@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { debounce } from 'lodash';
+import debounce from 'lodash.debounce';
 
 
 export default class ServerFilter extends Component {

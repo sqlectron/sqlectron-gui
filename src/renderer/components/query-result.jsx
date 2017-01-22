@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import groupBy from 'lodash.groupby';
 import React, { Component, PropTypes } from 'react';
 import Loader from './loader.jsx';
 import Message from './message.jsx';
@@ -78,7 +78,7 @@ export default class QueryResult extends Component {
     }
 
     let msgDuplicatedColumns = null;
-    const groupFields = _.groupBy(fields, (field) => field.name);
+    const groupFields = groupBy(fields, (field) => field.name);
     const duplicatedColumns = Object
       .keys(groupFields)
       .filter(field => groupFields[field].length > 1);

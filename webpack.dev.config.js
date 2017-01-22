@@ -67,7 +67,6 @@ module.exports = {
       Radium: 'radium',
       jQuery: 'jquery',
       $: 'jquery',
-      _: 'lodash',
     }),
   ],
 };

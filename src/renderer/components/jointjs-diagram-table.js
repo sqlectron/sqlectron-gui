@@ -1,5 +1,6 @@
 import joint from 'jointjs/dist/joint';
-import { bindAll, template } from 'lodash';
+import bindAll from 'lodash.bindall';
+import template from 'lodash.template';
 
 
 // Custom joint shape representing table/view object
