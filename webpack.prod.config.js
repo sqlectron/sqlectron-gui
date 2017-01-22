@@ -92,7 +92,6 @@ module.exports = {
       template: 'src/renderer/index.html',
     }),
     new webpack.ProvidePlugin({
-      Radium: 'radium',
       jQuery: 'jquery',
       $: 'jquery',
     }),

@@ -64,7 +64,6 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('development'),
     }),
     new webpack.ProvidePlugin({
-      Radium: 'radium',
       jQuery: 'jquery',
       $: 'jquery',
     }),
