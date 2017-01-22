@@ -1,16 +1,34 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
+import { createLogger } from '../../browser/remote';
 
 
 const middlewares = [thunkMiddleware];
 
 /* eslint global-require:0 */
-if (process.env.NODE_ENV !== 'production') {
-  middlewares.push(require('redux-logger')({
-    level: 'info',
+if (global.SQLECTRON_CONFIG.log.console) {
+  const loggerConfig = {
+    level: global.SQLECTRON_CONFIG.log.level,
     collapsed: true,
-  }));
+  };
+
+  if (global.SQLECTRON_CONFIG.log.file) {
+    const logger = createLogger('renderer:redux');
+    logger.log = logger.debug.bind(logger);
+    loggerConfig.logger = logger;
+
+    // log only the error messages
+    // otherwise is too much private information
+    // the user would need to remove to issue a bug
+    loggerConfig.stateTransformer = () => null;
+    loggerConfig.actionTransformer = (data) => {
+      const error = data && data.error;
+      return { error };
+    };
+  }
+
+  middlewares.push(require('redux-logger')(loggerConfig));
 }
 
 

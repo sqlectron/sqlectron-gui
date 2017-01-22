@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 import UpdateChecker from './update-checker.jsx';
+import LogStatus from './log-status.jsx';
 
 
 const STYLE = {
@@ -25,6 +26,7 @@ const Footer = ({ status }) => (
     <div style={STYLE.status}>{status}</div>
     <div className="right menu">
       <div className="item">
+        <LogStatus />
         <UpdateChecker />
       </div>
       <a href="#" className="item" onClick={onGithubClick}>Github</a>

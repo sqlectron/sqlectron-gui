@@ -51,7 +51,7 @@
     "postinstall": "install-app-deps",
     "dev": "concurrently --names 'webpack,electron' --prefix name 'npm run dev:webpack' 'npm run dev:electron'",
     "dev:webpack": "webpack-dev-server --color --config ./webpack.dev.config.js",
-    "dev:electron": "cross-env DEBUG=sqlectron-gui:*,sqlectron-core:*,spawn-auto-restart node scripts/dev-auto-restart.js",
+    "dev:electron": "cross-env DEBUG=spawn-auto-restart node scripts/dev-auto-restart.js | bunyan -o short",
     "lint": "eslint . --ext .js,.jsx",
     "lint:fix": "npm run lint -- --fix",
     "test": "npm run lint",
@@ -73,7 +73,7 @@
     "axios": "^0.7.0",
     "babel-core": "^6.9.1",
     "babel-polyfill": "^6.9.1",
-    "debug": "^2.2.0",
+    "bunyan": "^1.8.5",
     "sqlectron-core": "^7.5.1"
   },
   "devDependencies": {
@@ -116,6 +116,7 @@
     "lodash.bindall": "^4.4.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
+    "lodash.defaultsdeep": "^4.6.0",
     "lodash.groupby": "^4.6.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.template": "^4.4.0",

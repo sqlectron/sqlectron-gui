@@ -2,7 +2,7 @@
 /* eslint no-var: 0, object-shorthand:0 */
 var fs = require('fs');
 var join = require('path').join;
-var electron = require('electron-prebuilt');
+var electron = require('electron');
 
 
 var main = join(__dirname, '../src/browser/main.js');
@@ -23,6 +23,7 @@ require('spawn-auto-restart')({
   proc: {
     command: electron,
     args: [main, '--dev'],
+    // args: [main, '--dev', '--log-to-file'],
   },
   watch: watch,
 });

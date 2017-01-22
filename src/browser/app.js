@@ -1,6 +1,8 @@
 import { app, dialog, globalShortcut } from 'electron'; // eslint-disable-line import/no-unresolved
+import createLogger from './logger';
 import { buildNewWindow } from './window';
 
+const logger = createLogger('app');
 
 // TODO: Create a server to receive the crash reports
 // Report crashes to our server.
@@ -37,6 +39,7 @@ app.on('ready', () => buildNewWindow(app));
 
 // Show only the error description to the user
 process.on('uncaughtException', error => {
+  logger.error('uncaughtException', error);
   if (error.stack) {
     console.error('Sqlectron error:', error.stack);
   }

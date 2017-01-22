@@ -11,6 +11,9 @@ module.exports = {
   resolve: {
     extensions: ['', '.js'],
     modulesDirectories: ['node_modules', 'src/renderer'],
+    alias: {
+      'dtrace-provider': path.join(__dirname, 'empty-shim.js'),
+    },
   },
   entry: {
     app: [

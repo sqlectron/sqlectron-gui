@@ -1,4 +1,3 @@
-/* eslint no-var: 0 */
 /**
  * Load app configurations.
  *
@@ -6,29 +5,53 @@
  * without passing trhough a transpiler, this file must use ES5.
  */
 
-var fs = require('fs');
-var path = require('path');
+const fs = require('fs');
+const path = require('path');
+const defaultsDeep = require('lodash.defaultsdeep');
+const sqlectron = require('sqlectron-core');
 
-
-var appConfig;
-
+let config;
 
 exports.get = function getConfiguration() {
-  var basePath = path.resolve(__dirname, '..', '..');
-
-  if (appConfig) {
-    return appConfig;
+  if (config) {
+    return config;
   }
 
-  appConfig = readJSON(path.resolve(basePath, 'package.json'));
+  const args = (process.argv || []);
+  const argsConfig = {
+    devMode: args.indexOf('--dev') !== -1,
+    logToFile: args.indexOf('--log-to-file') !== -1,
+  };
 
-  if (appConfig.version) {
-    return appConfig;
-  }
+  const basePath = path.resolve(__dirname, '..', '..');
+  const packageConfig = readJSON(path.resolve(basePath, 'package.json'));
 
-  appConfig = readJSON(path.resolve(basePath, 'app', 'package.json'));
+  const configPath = sqlectron.config.path();
+  const appConfig = sqlectron.config.getSync();
 
-  return appConfig;
+  // use NODE_ENV for renderer process
+  // but if that is not defined then use --dev arg
+  const isDev = process.env.NODE_ENV !== 'production' || argsConfig.devMode;
+  const hasLogConfig = appConfig.log;
+
+  const defaultConfig = {
+    path: configPath,
+    log: {
+      console: !!(isDev || appConfig.log),
+      file: !!(!isDev || argsConfig.logToFile || (hasLogConfig && appConfig.log.file)),
+      level: appConfig.level || (process.env.DEBUG ? 'debug' : 'error'),
+      path: configPath.replace('.json', '.log'),
+    },
+  };
+
+  config = defaultsDeep(
+    defaultConfig,
+    argsConfig,
+    packageConfig,
+    appConfig
+  );
+
+  return config;
 };
 
 
