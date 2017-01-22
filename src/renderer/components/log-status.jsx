@@ -1,4 +1,3 @@
-import { ipcRenderer, shell } from 'electron'; // eslint-disable-line import/no-unresolved
 import React, { Component } from 'react';
 
 

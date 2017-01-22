@@ -3,6 +3,9 @@ import { BrowserWindow } from 'electron'; // eslint-disable-line import/no-unres
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
 import { get as getConfig } from './config';
+import createLogger from './logger';
+
+const logger = createLogger('window');
 
 
 const devMode = (process.argv || []).indexOf('--dev') !== -1;
@@ -48,5 +51,5 @@ export function buildNewWindow(app) {
   }
 
   checkUpdate(mainWindow, appConfig)
-    .catch(err => console.error('Unable to check for updates', err));
+    .catch(err => logger.error('Unable to check for updates', err));
 }

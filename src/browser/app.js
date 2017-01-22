@@ -40,8 +40,5 @@ app.on('ready', () => buildNewWindow(app));
 // Show only the error description to the user
 process.on('uncaughtException', error => {
   logger.error('uncaughtException', error);
-  if (error.stack) {
-    console.error('Sqlectron error:', error.stack);
-  }
   return dialog.showErrorBox('An error occurred', error.name + ': ' + error.message);
 });

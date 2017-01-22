@@ -2,6 +2,7 @@ import * as sqlectron from 'sqlectron-core';
 import config from './config';
 
 // Hack solution to ignore console.error from dtrace imported by bunyan
+/* eslint no-console:0 */
 const realConsoleError = console.error;
 console.error = () => {};
 const { createLogger } = require('bunyan');
