@@ -1,13 +1,12 @@
-/* eslint no-var: 0 */
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 require('babel-polyfill');
 
 module.exports = {
   debug: true,
   devtool: 'eval-source-map',
-  target: 'electron',
+  target: 'electron-renderer',
   resolve: {
     extensions: ['', '.js'],
     modulesDirectories: ['node_modules', 'src/renderer'],

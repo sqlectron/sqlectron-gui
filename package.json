@@ -74,6 +74,7 @@
     "bunyan": "^1.8.5",
     "babel-core": "^6.22.1",
     "babel-polyfill": "^6.22.0",
+    "lodash.defaultsdeep": "^4.6.0",
     "sqlectron-core": "^7.5.1"
   },
   "devDependencies": {
@@ -115,7 +116,6 @@
     "lodash.bindall": "^4.4.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.debounce": "^4.0.8",
-    "lodash.defaultsdeep": "^4.6.0",
     "lodash.groupby": "^4.6.0",
     "lodash.isplainobject": "^4.0.6",
     "lodash.template": "^4.4.0",

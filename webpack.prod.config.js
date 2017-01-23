@@ -1,24 +1,22 @@
-/* eslint no-var: 0 */
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 require('babel-polyfill');
 
 module.exports = {
   devtool: 'eval-source-map',
-  target: 'electron',
+  target: 'electron-renderer',
   resolve: {
     extensions: ['', '.js'],
     modulesDirectories: ['node_modules', 'src/renderer'],
   },
   entry: {
     app: './src/renderer/entry.jsx',
-    vendorCommon: [
+    vendor: [
+      // common
       'jquery',
-      'lodash',
-    ],
-    vendorCommonReact: [
+      // react related
       'classnames',
       'react',
       'react-ace',
@@ -29,8 +27,7 @@ module.exports = {
       'react-select',
       'redux',
       'redux-thunk',
-    ],
-    vendorSemanticUI: [
+      // semantic ui
       './vendor/renderer/lato/latofonts.css',
       './vendor/renderer/semantic-ui/semantic.js',
       './vendor/renderer/semantic-ui/semantic.css',
@@ -69,19 +66,24 @@ module.exports = {
         loader: 'json',
       },
     ],
-    noParse: [/(html2canvas|jointjs)/],
+    noParse: [/(html2canvas)/],
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(true),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendorCommon', 'vendorCommonReact', 'vendorSemanticUI'],
-      filename: 'vendor-common.bundle.js',
+      name: 'vendor',
+      filename: 'vendor.js',
       minChunks: Infinity,
     }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'common',
+      filename: 'common.js',
+    }),
+    new webpack.optimize.UglifyJsPlugin(),
     new HtmlWebpackPlugin({
       template: 'src/renderer/index.html',
+      chunksSortMode: 'none',
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
