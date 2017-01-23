@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 import * as ConfigActions from '../actions/config.js';
 
 
-import '../vendor/semantic-ui/semantic';
-require('../vendor/lato/latofonts.css');
-require('../vendor/semantic-ui/semantic.css');
+import '../../../vendor/renderer/semantic-ui/semantic';
+require('../../../vendor/renderer/lato/latofonts.css');
+require('../../../vendor/renderer/semantic-ui/semantic.css');
 require('./app.css');
 
 class AppContainer extends Component {

@@ -30,7 +30,7 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules|src\/renderer\/vendor)/,
+        exclude: /(node_modules|vendor)/,
         loaders: ['babel'],
       },
       {

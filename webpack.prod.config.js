@@ -31,9 +31,9 @@ module.exports = {
       'redux-thunk',
     ],
     vendorSemanticUI: [
-      './src/renderer/vendor/lato/latofonts.css',
-      './src/renderer/vendor/semantic-ui/semantic.js',
-      './src/renderer/vendor/semantic-ui/semantic.css',
+      './vendor/renderer/lato/latofonts.css',
+      './vendor/renderer/semantic-ui/semantic.js',
+      './vendor/renderer/semantic-ui/semantic.css',
     ],
   },
   output: {
@@ -44,7 +44,7 @@ module.exports = {
     loaders: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules|src\/renderer\/vendor)/,
+        exclude: /(node_modules|vendor)/,
         loaders: ['babel'],
       },
       {
@@ -69,24 +69,16 @@ module.exports = {
         loader: 'json',
       },
     ],
-    noParse: [/html2canvas/],
+    noParse: [/(html2canvas|jointjs)/],
   },
   plugins: [
-    // new BundleAnalyzerPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin(),
+    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendorCommon',
+      names: ['vendorCommon', 'vendorCommonReact', 'vendorSemanticUI'],
       filename: 'vendor-common.bundle.js',
-      children: true,
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendorCommonReact',
-      filename: 'vendor-common-react.bundle.js',
-      children: true,
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendorSemanticUI',
-      filename: 'vendor-semantic-ui.bundle.js',
-      children: true,
+      minChunks: Infinity,
     }),
     new HtmlWebpackPlugin({
       template: 'src/renderer/index.html',
@@ -95,13 +87,10 @@ module.exports = {
       jQuery: 'jquery',
       $: 'jquery',
     }),
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: { warnings: false },
-    }),
-    new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
+    // new BundleAnalyzerPlugin(),
     new webpack.NoErrorsPlugin(),
   ],
 };

@@ -1,4 +1,4 @@
 build/
 dist/
-src/renderer/vendor/
+vendor/
 out/
