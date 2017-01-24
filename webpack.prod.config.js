@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 require('babel-polyfill');
 
@@ -46,12 +47,12 @@ module.exports = {
       },
       {
         test: /\.s?css$/,
-        loaders: [
+        loader: ExtractTextPlugin.extract(
           'style',
-          'css',
+          'css!sass',
           'autoprefixer?browsers=last 2 version',
-          'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules'),
-        ],
+          'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules')
+        ),
       },
       {
         test: /\.png$/,
@@ -71,14 +72,13 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(true),
     new webpack.optimize.DedupePlugin(),
+    new ExtractTextPlugin('[name].bundle.css'),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      filename: 'vendor.js',
       minChunks: Infinity,
     }),
     new webpack.optimize.CommonsChunkPlugin({
       name: 'common',
-      filename: 'common.js',
     }),
     new webpack.optimize.UglifyJsPlugin(),
     new HtmlWebpackPlugin({
