@@ -21,14 +21,22 @@ app.on('window-all-closed', () => {
   }
 });
 
+let queryExecuteCommandRegister;
 
-// This method will be called when Electron creates a new browser window
 app.on('browser-window-created', (item, win) => {
-  // Only one keybinding/accelerator can be set for each command in the menu.
-  // This registers more keybindings for commands already in the menus.
-  globalShortcut.register('CommandOrControl+R', () => {
-    win.webContents.send('sqlectron:query-execute');
-  });
+  queryExecuteCommandRegister = () => {
+    globalShortcut.register('CommandOrControl+R', () => {
+      win.webContents.send('sqlectron:query-execute');
+    });
+  };
+});
+
+app.on('browser-window-focus', (event) => {
+  queryExecuteCommandRegister();
+});
+
+app.on('browser-window-blur', () => {
+  globalShortcut.unregister('CommandOrControl+R');
 });
 
 
