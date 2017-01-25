@@ -17,6 +17,7 @@ if (global.SQLECTRON_CONFIG.log.console) {
     const logger = createLogger('renderer:redux');
     logger.log = logger.debug.bind(logger);
     loggerConfig.logger = logger;
+    loggerConfig.colors = {}; // disable formatting
 
     // log only the error messages
     // otherwise is too much private information
