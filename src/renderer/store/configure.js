@@ -24,8 +24,8 @@ if (global.SQLECTRON_CONFIG.log.console) {
     // the user would need to remove to issue a bug
     loggerConfig.stateTransformer = () => null;
     loggerConfig.actionTransformer = (data) => {
-      const error = data && data.error;
-      return { error };
+      if (!data || !data.error) { return null; }
+      return { error: data.error.stack || data.error };
     };
   }
 
