@@ -98,7 +98,7 @@ export default class ServerModalForm extends Component {
     }
 
     const dbClient = CLIENTS.find(dbc => dbc.value === this.state.client);
-    return dbClient.disabledFeatures && ~dbClient.disabledFeatures.indexOf(feature);
+    return !!(dbClient.disabledFeatures && ~dbClient.disabledFeatures.indexOf(feature));
   }
 
   mapStateToServer(state) {
