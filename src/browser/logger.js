@@ -15,10 +15,15 @@ const loggerConfig = {
   app: 'sqlectron-gui',
   name: 'sqlectron-gui',
   level: dataConfig.log.level,
+  streams: [],
 };
 
+if (dataConfig.log.console) {
+  loggerConfig.streams.push({ stream: process.stdout });
+}
+
 if (dataConfig.log.file) {
-  loggerConfig.streams = [{ path: dataConfig.log.path }];
+  loggerConfig.streams.push({ path: dataConfig.log.path });
 }
 
 const logger = createLogger(loggerConfig);
