@@ -280,7 +280,12 @@ export default class ServerModalForm extends Component {
                     id="file.socketPath"
                     name="file.socketPath"
                     onChange={::this.handleChange}
-                    style={{ display: 'none' }} />
+                    style={{ display: 'none' }}
+                    disabled={(
+                      this.state.host ||
+                      this.state.port ||
+                      this.isFeatureDisabled('server:socketPath')
+                    )} />
                 </label>
               </div>
             </div>
@@ -405,6 +410,7 @@ export default class ServerModalForm extends Component {
                       id="file.ssh.privateKey"
                       name="file.ssh.privateKey"
                       onChange={::this.handleChange}
+                      disabled={(!isSSHChecked || ssh.password)}
                       style={{ display: 'none' }} />
                   </label>
                 </div>
