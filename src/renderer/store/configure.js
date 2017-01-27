@@ -7,26 +7,36 @@ import { createLogger } from '../../browser/remote';
 const middlewares = [thunkMiddleware];
 
 /* eslint global-require:0 */
-if (global.SQLECTRON_CONFIG.log.console) {
+const isLogConsoleEnabled = global.SQLECTRON_CONFIG.log.console;
+const isLogFileEnabled = global.SQLECTRON_CONFIG.log.file;
+
+if (isLogConsoleEnabled || isLogFileEnabled) {
   const loggerConfig = {
     level: global.SQLECTRON_CONFIG.log.level,
     collapsed: true,
   };
 
-  if (global.SQLECTRON_CONFIG.log.file) {
-    const logger = createLogger('renderer:redux');
-    logger.log = logger.debug.bind(logger);
-    loggerConfig.logger = logger;
-    loggerConfig.colors = {}; // disable formatting
+  if (isLogFileEnabled) {
+    const mainLogger = createLogger('renderer:redux');
 
-    // log only the error messages
-    // otherwise is too much private information
-    // the user would need to remove to issue a bug
-    loggerConfig.stateTransformer = () => null;
-    loggerConfig.actionTransformer = (data) => {
-      if (!data || !data.error) { return null; }
-      return { error: data.error.stack || data.error };
-    };
+    loggerConfig.logger = {};
+
+    for (const method in console) { // eslint-disable-line no-restricted-syntax
+      if (typeof console[method] === 'function') { // eslint-disable-line no-console
+        loggerConfig.logger[method] = function levelFn(...args) {
+          console[method].apply(console, args); // eslint-disable-line no-console
+
+          // log on file only messages with error
+          // otherwise is too much private information
+          // the user would need to remove to issue a bug
+          const lastArg = args[args.length - 1];
+          if (lastArg && lastArg.error) {
+            mainLogger.error('Error', lastArg.error);
+            mainLogger.error('Error Stack', lastArg.error.stack);
+          }
+        };
+      }
+    }
   }
 
   middlewares.push(require('redux-logger')(loggerConfig));
