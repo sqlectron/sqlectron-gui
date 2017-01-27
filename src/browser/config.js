@@ -20,7 +20,6 @@ exports.get = function getConfiguration() {
   const args = (process.argv || []);
   const argsConfig = {
     devMode: args.indexOf('--dev') !== -1,
-    logToFile: args.indexOf('--log-to-file') !== -1,
   };
 
   const basePath = path.resolve(__dirname, '..', '..');
@@ -32,23 +31,22 @@ exports.get = function getConfiguration() {
   // use NODE_ENV for renderer process
   // but if that is not defined then use --dev arg
   const isDev = process.env.NODE_ENV !== 'production' || argsConfig.devMode;
-  const hasLogConfig = appConfig.log;
 
   const defaultConfig = {
     path: configPath,
     log: {
-      console: !!(isDev || appConfig.log),
-      file: !!(!isDev || argsConfig.logToFile || (hasLogConfig && appConfig.log.file)),
+      console: isDev,
+      file: false,
       level: appConfig.level || (process.env.DEBUG ? 'debug' : 'error'),
       path: configPath.replace('.json', '.log'),
     },
   };
 
   config = defaultsDeep(
-    defaultConfig,
-    argsConfig,
+    appConfig,
     packageConfig,
-    appConfig
+    argsConfig,
+    defaultConfig
   );
 
   return config;

@@ -16,16 +16,18 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
     collapsed: true,
   };
 
-  if (isLogFileEnabled) {
-    const mainLogger = createLogger('renderer:redux');
+  const mainLogger = isLogFileEnabled ? createLogger('renderer:redux') : null;
 
-    loggerConfig.logger = {};
+  loggerConfig.logger = {};
 
-    for (const method in console) { // eslint-disable-line no-restricted-syntax
-      if (typeof console[method] === 'function') { // eslint-disable-line no-console
-        loggerConfig.logger[method] = function levelFn(...args) {
+  for (const method in console) { // eslint-disable-line no-restricted-syntax
+    if (typeof console[method] === 'function') { // eslint-disable-line no-console
+      loggerConfig.logger[method] = function levelFn(...args) {
+        if (isLogConsoleEnabled) {
           console[method].apply(console, args); // eslint-disable-line no-console
+        }
 
+        if (isLogFileEnabled) {
           // log on file only messages with error
           // otherwise is too much private information
           // the user would need to remove to issue a bug
@@ -34,8 +36,8 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
             mainLogger.error('Error', lastArg.error);
             mainLogger.error('Error Stack', lastArg.error.stack);
           }
-        };
-      }
+        }
+      };
     }
   }
 

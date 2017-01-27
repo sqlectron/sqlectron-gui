@@ -23,7 +23,6 @@ require('spawn-auto-restart')({
   proc: {
     command: electron,
     args: [main, '--dev'],
-    // args: [main, '--dev', '--log-to-file'],
   },
   watch: watch,
 });
