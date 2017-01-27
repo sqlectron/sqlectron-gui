@@ -25,8 +25,9 @@ exports.get = function getConfiguration() {
   const basePath = path.resolve(__dirname, '..', '..');
   const packageConfig = readJSON(path.resolve(basePath, 'package.json'));
 
-  const configPath = sqlectron.config.path();
+  sqlectron.config.prepareSync();
   const appConfig = sqlectron.config.getSync();
+  const configPath = sqlectron.config.path();
 
   // use NODE_ENV for renderer process
   // but if that is not defined then use --dev arg
