@@ -13,7 +13,7 @@
 
 * [Databases](https://github.com/sqlectron/sqlectron-core#current-supported-databases) - List of current supported databases.
 * [Download](https://github.com/sqlectron/sqlectron-gui/releases) - Installers, binaries and source.
-* [Configuration](https://github.com/sqlectron/sqlectron-core#configuration) - List of saved servers and custom configurations.
+* [Configuration](docs/app/configuration-file.md) - List of saved servers and custom configurations.
 * [App Docs](docs/app) - Helper docs about the app.
 * [Terminal](https://github.com/sqlectron/sqlectron-term) - A terminal-based interface of Sqlectron.
 * [Contribute](CONTRIBUTING.md) - Details on how you can contribute to Sqlectron.
