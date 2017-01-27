@@ -16,7 +16,7 @@ export default function(state = INITIAL_STATE, action) {
     case types.CONNECTION_REQUEST: {
       return { ...INITIAL_STATE, server: action.server };
     }
-    case types.CONNECTION_REQUIRE_SSH_PASSWORD: {
+    case types.CONNECTION_REQUIRE_SSH_PASSPHRASE: {
       return { ...state, waitingPrivateKeyPassphrase: true };
     }
     case types.CONNECTION_SUCCESS: {

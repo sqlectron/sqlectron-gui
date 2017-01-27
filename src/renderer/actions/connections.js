@@ -5,7 +5,7 @@ export const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
 export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
 export const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS';
 export const CONNECTION_FAILURE = 'CONNECTION_FAILURE';
-export const CONNECTION_REQUIRE_SSH_PASSWORD = 'CONNECTION_REQUIRE_SSH_PASSWORD';
+export const CONNECTION_REQUIRE_SSH_PASSPHRASE = 'CONNECTION_REQUIRE_SSH_PASSPHRASE';
 export const TEST_CONNECTION_REQUEST = 'TEST_CONNECTION_REQUEST';
 export const TEST_CONNECTION_SUCCESS = 'TEST_CONNECTION_SUCCESS';
 export const TEST_CONNECTION_FAILURE = 'TEST_CONNECTION_FAILURE';
@@ -69,7 +69,7 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       if (!serverSession) {
         if (server.ssh) {
           if (server.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
-            dispatch({ type: CONNECTION_REQUIRE_SSH_PASSWORD });
+            dispatch({ type: CONNECTION_REQUIRE_SSH_PASSPHRASE });
             return;
           }
 
