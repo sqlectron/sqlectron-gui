@@ -114,6 +114,8 @@ export default class ServerModalForm extends Component {
       database: state.database,
       domain: state.domain,
       schema: state.schema || null,
+      // custom data not availbale trough the interface
+      filter: state.filter,
     };
     if (!this.state.ssh) { return server; }
 
