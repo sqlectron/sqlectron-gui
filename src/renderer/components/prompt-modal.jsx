@@ -12,19 +12,15 @@ export default class PromptModal extends Component {
 
   componentDidMount() {
     $(this.refs.promptModal).modal({
-      closable: true,
+      closable: false,
       detachable: false,
       onDeny: () => {
         this.props.onCancelClick();
         return true;
       },
-      onHidden: () => {
-        this.props.onCancelClick();
-        return true;
-      },
       onApprove: () => {
-        this.props.onOKClick(this.refs.text.value);
-        return false;
+        this.props.onOKClick(this.state.value);
+        return true;
       },
     }).modal('show');
   }
@@ -35,8 +31,12 @@ export default class PromptModal extends Component {
 
   handleKeyPress(event) {
     if (event.key === 'Enter') {
-      this.props.onOKClick(this.refs.text.value);
+      this.props.onOKClick(this.state.value);
     }
+  }
+
+  handleChange(event) {
+    this.setState({ value: event.target.value });
   }
 
   render() {
@@ -50,7 +50,7 @@ export default class PromptModal extends Component {
         <div className="content">
           {message}
           <div className="ui fluid icon input">
-            <input ref="text" type={type} onKeyPress={::this.handleKeyPress} />
+            <input onChange={::this.handleChange} type={type} onKeyPress={::this.handleKeyPress} />
           </div>
         </div>
         <div className="actions">
