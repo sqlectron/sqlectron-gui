@@ -45,6 +45,13 @@
         "tar.xz",
         "tar.gz"
       ]
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "7z",
+        "zip"
+      ]
     }
   },
   "scripts": {
