@@ -15,6 +15,14 @@ This configuration is automatically handled by the app. Using default values whe
   // "100" by default in production
   "limitQueryDefaultSelectTop": 100,
 
+  // Enable/Disable auto complete for the query box
+  // "true" by default in production
+  "enabledAutoComplete": false,
+
+  // Enable/Disable live auto complete for the query box
+  // "true" by default in production
+  "enabledLiveAutoComplete": false,
+
   // Manage logging
   // It is disabled by default in production
   // More details: https://github.com/sqlectron/sqlectron-gui/blob/master/docs/app/logging.md
