@@ -1,52 +1,44 @@
 osx_image: xcode7.3
-
 sudo: required
 dist: trusty
-
 language: c
-
 matrix:
   include:
-    - os: osx
-    - os: linux
-      env: CC=clang CXX=clang++ npm_config_clang=1
-      compiler: clang
-
+  - os: osx
+  - os: linux
+    env: CC=clang CXX=clang++ npm_config_clang=1
+    compiler: clang
 cache:
   directories:
   - node_modules
   - app/node_modules
   - $HOME/.electron
-
 env:
   global:
   # GH_TOKEN
   - secure: EpeYT6T82lfJrnQn9QwHDxLRx9iT30yQp8NHIs+rH0T7Yxegm6YRHYr8nLOen/Ny+Kyq9qNeW6D3kelkWsfMADXIQKh7n/vSjXb535+iQeMOUSVQu8PKFzkwDLJIbYKRugVZJ2k+nqsBPqbiG5RiV71ztWgxz4GN28nLnJIYhiCA2yCilITS/WcreHUSAjFUWubQQTCptFHTYTvNKxclw9eps6vwPM0/+KSnbM5SD5O14ZtjairSwj72+RjT3WveAznD2nzqjroKd1r2JZPrRIrQUCj8tKJHilYzWW91IgH9FYJKHjO3VSjv1JiiJrO8LTmur9lArbYBA9pJvbCmg7iXYFUAHMlbKs/yRrIwiMOuKvEX6Mw43YG4zz2X+F5oH1tis8+b1kfehL44gfCNEJtfpJRHEvfafm4WZumar0aZV4xVUYkbYuRj07X/+/kn7Zy9M+obZbVaajh3irCSw79ApSZ0lRciYgVbGE7dHsx6u9CKFKOInONowU2koPkfgTneslmbYpyfRUPQTytYkzfjBFOYj3RFd7ruYr+qdt7ouusKjZmRgO6fNNG8+hYynb/grX8di9sxBSXIuh29EFVNY8uXBVKpyMcJ9AN4TZ/PCMjCfPYxMIyPx9YGE2tTalhuQf1YXT8n72MZGW+7DMWdiGBZzHPZJw2tH9oEtU4=
-
+  # SQLECTRON_SECRET
+  - secure: m7nfbNkVMkb/3+3D00b2yOWkao+rjXkKoCQwvizKwmkxDq6nF1G5VeGtfoQFpzpDFbQZtKgGV8r1GTObY+amDBQ0de5mLYStlpI8j+huQQEhnManx/mrszTt6Rt5p3IoHj8EcrxVoRO5wjdmpNxG0j0f7MCv2uV5G4hb26JAtH4Yzh1Dn+MYYU6N2+JfnoTWSd9UHwvokaGAuskKvm212R1h1tOuoSzaW/1TGKw5iCw/5oNle8HLQpG01+YEa1RjYAhkgEwN5CUZB6g/oUokwM/+UmK00qbLRvy7qUFhZBkxBoEhfsa0RbTNoomRZ+mzLFhRAVADyd9ZecsSkC9ku5SjXGxsrUM2FJv61HxdTKQiHUS/2ndS4ALUmX5IH7pTzHqAMOL6irXko2V/I39uCUAz8Mc3xjwHpDr59WrP85Lmod8XRa0vrgxQKCQKeg453U27I/Z1+HyKfTonAKrvWoW5Z/2PM2KQXfYzDlT0DLIjGTT+fyXax1P986PHAncThUl9uGdXEPU1Xvd7/DS8p0bTVoSWyLxvxzcHOig49flqNKupre/TwnhevtM4tFggjtyly69ItpR0BXod9vZIw4y3qH6x8+SNMiGwZVXuDWWMZwckAfcohPKT57b5ggJIkgnnFOTttzFIeWT8/eJ6gGC+Z8+Sl+1tJgrME+eYWNY=
 addons:
   apt:
     sources:
-      - ubuntu-toolchain-r-test
-      - llvm-toolchain-precise-3.8
+    - ubuntu-toolchain-r-test
+    - llvm-toolchain-precise-3.8
     packages:
-      - libgnome-keyring-dev
-      - icnsutils
-      - clang-3.8
-      - graphicsmagick
-      - rpm
-      - bsdtar
-
+    - libgnome-keyring-dev
+    - icnsutils
+    - clang-3.8
+    - graphicsmagick
+    - rpm
+    - bsdtar
 install:
 - clang --version
 - nvm install 6
-# - npm install npm -g
 - npm prune
 - npm install
-
 script:
 - npm test
 - npm run dist
-
 branches:
   except:
   - /^v\d+\.\d+\.\d+$/
