@@ -48,9 +48,11 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
     let defaultDatabase;
 
     try {
-      const { config, servers } = getState();
+      const { config } = getState();
+      const cryptoSecret = config.data.crypto.secret;
 
-      server = servers.items.find(srv => srv.id === id);
+      const servers = await sqlectron.servers.getAll(cryptoSecret);
+      server = servers.find(srv => srv.id === id);
       if (!server) {
         throw new Error('Server configuration not found');
       }

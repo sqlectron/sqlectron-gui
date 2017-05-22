@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
-import { sqlectron } from '../../browser/remote';
+import { config } from '../../browser/remote';
 
 
 export const LOAD_CONFIG_REQUEST = 'LOAD_CONFIG_REQUEST';
@@ -11,14 +11,13 @@ export function loadConfig() {
   return async dispatch => {
     dispatch({ type: LOAD_CONFIG_REQUEST });
     try {
-      await sqlectron.config.prepare();
-
-      const remoteConfig = await sqlectron.config.get();
+      const forceCleanCache = true;
+      const remoteConfig = await config.get(forceCleanCache);
 
       // Remove any "reference" to the remote IPC object
-      const config = cloneDeep(remoteConfig);
+      const configData = cloneDeep(remoteConfig);
 
-      dispatch({ type: LOAD_CONFIG_SUCCESS, config });
+      dispatch({ type: LOAD_CONFIG_SUCCESS, config: configData });
     } catch (error) {
       dispatch({ type: LOAD_CONFIG_FAILURE, error });
     }

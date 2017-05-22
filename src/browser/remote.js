@@ -6,3 +6,4 @@ import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
  */
 export const sqlectron = remote.require('sqlectron-core');
 export const createLogger = remote.require('./logger').default;
+export const config = remote.require('./config');

@@ -12,8 +12,12 @@ const sqlectron = require('sqlectron-core');
 
 let config;
 
-exports.get = function getConfiguration() {
-  if (config) {
+// load secret from file
+// this file is replaced with another during the CI build
+const cryptoSecret = fs.readFileSync(path.join(__dirname, 'secret'), 'utf8');
+
+exports.get = function getConfiguration(cleanCache) {
+  if (config && !cleanCache) {
     return config;
   }
 
@@ -25,7 +29,7 @@ exports.get = function getConfiguration() {
   const basePath = path.resolve(__dirname, '..', '..');
   const packageConfig = readJSON(path.resolve(basePath, 'package.json'));
 
-  sqlectron.config.prepareSync();
+  sqlectron.config.prepareSync(cryptoSecret);
   const appConfig = sqlectron.config.getSync();
   const configPath = sqlectron.config.path();
 
@@ -43,7 +47,14 @@ exports.get = function getConfiguration() {
     },
   };
 
+  const cryptoConfig = {
+    crypto: {
+      secret: cryptoSecret,
+    },
+  };
+
   config = defaultsDeep(
+    cryptoConfig,
     appConfig,
     packageConfig,
     argsConfig,
