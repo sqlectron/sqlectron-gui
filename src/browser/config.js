@@ -12,9 +12,7 @@ const sqlectron = require('sqlectron-core');
 
 let config;
 
-// load secret from file
-// this file is replaced with another during the CI build
-const cryptoSecret = fs.readFileSync(path.join(__dirname, 'secret'), 'utf8');
+const cryptoSecret = 'j[F6Y6NoWT}+YG|4c|-<89:ByJ83-9Aj?O8>$Zk/[WFk_~gFbg7<wm+*V|A{xQZ,';
 
 exports.get = function getConfiguration(cleanCache) {
   if (config && !cleanCache) {

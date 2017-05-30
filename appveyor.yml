@@ -12,8 +12,6 @@ cache:
 environment:
   GH_TOKEN:
     secure: b2OJ5cBogX2ABZkue3un76SwbmFuJmy0zTC8WMW9eaUARWQCGBQSoQzP6ilwbm2r
-  SQLECTRON_SECRET:
-    secure: im8rnohxVuuAoyVQOtmXQKshyajv4St/Ieu2dNzsO2yJLGGMiXKzC06+hMgid1gLDQAHapwZhVZWUhYeeouPdvuXT/yLEUIZhbVBEcZWQuk=
 
 init:
   - git config --global core.autocrlf input
