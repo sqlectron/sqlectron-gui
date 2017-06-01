@@ -19,7 +19,7 @@ init:
 install:
   - ps: Install-Product node 6 x64
   - git reset --hard HEAD
-  - npm install npm -g
+  - npm install npm@4 -g
   - npm prune
   - npm install
 
