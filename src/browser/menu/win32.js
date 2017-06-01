@@ -1,5 +1,11 @@
 import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 
+function sendMessage(win, message) {
+  if (win) {
+    win.webContents.send(message);
+  }
+}
+
 
 export function buildTemplate(app, buildNewWindow, appConfig) {
   return [
@@ -14,12 +20,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'New Tab',
           accelerator: 'Ctrl+T',
-          click: (item, win) => win.webContents.send('sqlectron:new-tab'),
+          click: (item, win) => sendMessage(win, 'sqlectron:new-tab'),
         },
         {
           label: 'Close Tab',
           accelerator: 'Ctrl+W',
-          click: (item, win) => win.webContents.send('sqlectron:close-tab'),
+          click: (item, win) => sendMessage(win, 'sqlectron:close-tab'),
         },
         {
           type: 'separator',
@@ -27,7 +33,7 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Save Query',
           accelerator: 'Ctrl+S',
-          click: (item, win) => win.webContents.send('sqlectron:save-query'),
+          click: (item, win) => sendMessage(win, 'sqlectron:save-query'),
         },
         {
           type: 'separator',
@@ -45,17 +51,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Execute',
           accelerator: 'Ctrl+Enter',
-          click: (item, win) => win.webContents.send('sqlectron:query-execute'),
+          click: (item, win) => sendMessage(win, 'sqlectron:query-execute'),
         },
         {
           label: 'Execute',
           accelerator: 'Ctrl+R',
-          click: (item, win) => win.webContents.send('sqlectron:query-execute'),
+          click: (item, win) => sendMessage(win, 'sqlectron:query-execute'),
         },
         {
           label: 'Focus Query Editor',
           accelerator: 'Shift+Ctrl+0',
-          click: (item, win) => win.webContents.send('sqlectron:query-focus'),
+          click: (item, win) => sendMessage(win, 'sqlectron:query-focus'),
         },
       ],
     },
@@ -118,12 +124,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Search databases',
           accelerator: 'Shift+Ctrl+9',
-          click: (item, win) => win.webContents.send('sqlectron:toggle-database-search'),
+          click: (item, win) => sendMessage(win, 'sqlectron:toggle-database-search'),
         },
         {
           label: 'Search database objects',
           accelerator: 'Ctrl+9',
-          click: (item, win) => win.webContents.send('sqlectron:toggle-database-objects-search'),
+          click: (item, win) => sendMessage(win, 'sqlectron:toggle-database-objects-search'),
         },
       ],
     },
