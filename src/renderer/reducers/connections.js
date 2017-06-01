@@ -1,11 +1,14 @@
 import * as types from '../actions/connections';
 import * as serverTypes from '../actions/servers';
+import { sqlectron } from '../../browser/remote';
 
+const CLIENTS = sqlectron.db.CLIENTS;
 
 const INITIAL_STATE = {
   connected: false,
   connecting: false,
   server: null,
+  disabledFeatures: null,
   waitingPrivateKeyPassphrase: false,
   databases: [], // connected databases
 };
@@ -14,7 +17,12 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case types.CONNECTION_REQUEST: {
-      return { ...INITIAL_STATE, server: action.server };
+      const { disabledFeatures } = CLIENTS.find(dbClient => dbClient.key === action.server.client);
+      return {
+        ...INITIAL_STATE,
+        server: action.server,
+        disabledFeatures: disabledFeatures || [],
+      };
     }
     case types.CONNECTION_REQUIRE_SSH_PASSPHRASE: {
       return { ...state, waitingPrivateKeyPassphrase: true };

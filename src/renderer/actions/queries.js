@@ -169,13 +169,24 @@ function shouldExecuteQuery (query, state) {
 
 const executingQueries = {};
 
+function canCancelQuery(state) {
+  return !state.connections.disabledFeatures.includes('cancelQuery');
+}
+
 function executeQuery (query, isDefaultSelect = false, dbConnection, queryId) {
   return async (dispatch, getState) => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
-      const dbConn = dbConnection || getCurrentDBConn(getState());
-      executingQueries[queryId] = dbConn.query(query);
-      const remoteResult = await executingQueries[queryId].execute();
+      const state = getState();
+      const dbConn = dbConnection || getCurrentDBConn(state);
+
+      let remoteResult;
+      if (canCancelQuery(state)) {
+        executingQueries[queryId] = dbConn.query(query);
+        remoteResult = await executingQueries[queryId].execute();
+      } else {
+        remoteResult = await dbConn.executeQuery(query);
+      }
 
       // Remove any "reference" to the remote IPC object
       const results = cloneDeep(remoteResult);
