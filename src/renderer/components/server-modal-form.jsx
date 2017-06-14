@@ -320,15 +320,17 @@ export default class ServerModalForm extends Component {
                 placeholder="Database"
                 value={this.state.database || ''}
                 onChange={::this.handleChange} />
-              <label htmlFor="file.database" className="ui icon button btn-file">
-                <i className="file outline icon" />
-                <input
-                  type="file"
-                  id="file.database"
-                  name="file.database"
-                  onChange={::this.handleChange}
-                  style={{ display: 'none' }} />
-              </label>
+              {this.isFeatureDisabled('server:password') &&
+                <label htmlFor="file.database" className="ui icon button btn-file">
+                  <i className="file outline icon" />
+                  <input
+                    type="file"
+                    id="file.database"
+                    name="file.database"
+                    onChange={::this.handleChange}
+                    style={{ display: 'none' }} />
+                </label>
+              }
             </div>
           </div>
           <div className={`four wide field ${this.highlightError('schema')}`}>
