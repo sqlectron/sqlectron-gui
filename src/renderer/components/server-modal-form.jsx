@@ -320,7 +320,7 @@ export default class ServerModalForm extends Component {
                 placeholder="Database"
                 value={this.state.database || ''}
                 onChange={::this.handleChange} />
-              {this.isFeatureDisabled('server:password') &&
+              { this.state.client === "sqlite" &&
                 <label htmlFor="file.database" className="ui icon button btn-file">
                   <i className="file outline icon" />
                   <input
