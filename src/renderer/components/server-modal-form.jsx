@@ -314,7 +314,7 @@ export default class ServerModalForm extends Component {
           </div>
           <div className={`four wide field ${this.highlightError('database')}`}>
             <label>Database/Keyspace</label>
-            <div className="ui action input">
+            <div className={this.state.client === "sqlite" && "ui action input"}>
               <input type="text"
                 name="database"
                 placeholder="Database"
