@@ -314,13 +314,13 @@ export default class ServerModalForm extends Component {
           </div>
           <div className={`four wide field ${this.highlightError('database')}`}>
             <label>Database/Keyspace</label>
-            <div className={this.state.client === "sqlite" && "ui action input"}>
+            <div className={this.state.client === 'sqlite' && 'ui action input'}>
               <input type="text"
                 name="database"
                 placeholder="Database"
                 value={this.state.database || ''}
                 onChange={::this.handleChange} />
-              { this.state.client === "sqlite" &&
+              {this.state.client === 'sqlite' &&
                 <label htmlFor="file.database" className="ui icon button btn-file">
                   <i className="file outline icon" />
                   <input
