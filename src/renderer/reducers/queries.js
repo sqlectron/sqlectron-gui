@@ -135,12 +135,18 @@ export default function (state = INITIAL_STATE, action) {
         filename: action.filename,
       });
     }
+    case types.OPEN_QUERY_SUCCESS: {
+      return changeStateByCurrentQuery(state, {
+        name: action.name,
+        query: action.query,
+      });
+    }
+    case types.OPEN_QUERY_FAILURE:
     case types.SAVE_QUERY_FAILURE: {
       return changeStateByCurrentQuery(state, {
         error: action.error,
       });
     }
-
     default : return state;
   }
 }
