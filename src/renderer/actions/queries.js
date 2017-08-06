@@ -5,7 +5,7 @@ import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron'; // eslint-disable-line import/no-unresolved
 import { getCurrentDBConn, getDBConnByName } from './connections';
 import { rowsValuesToString } from '../utils/convert';
-import { showSaveDialog, saveFile } from '../utils/file-handler';
+import * as fileHandler from '../utils/file-handler';
 import wait from '../utils/wait';
 
 
@@ -25,6 +25,9 @@ export const COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE = 'COPY_QUERY_RESULT_TO_CLIP
 export const SAVE_QUERY_REQUEST = 'SAVE_QUERY_REQUEST';
 export const SAVE_QUERY_SUCCESS = 'SAVE_QUERY_SUCCESS';
 export const SAVE_QUERY_FAILURE = 'SAVE_QUERY_FAILURE';
+export const OPEN_QUERY_REQUEST = 'OPEN_QUERY_REQUEST';
+export const OPEN_QUERY_SUCCESS = 'OPEN_QUERY_SUCCESS';
+export const OPEN_QUERY_FAILURE = 'OPEN_QUERY_FAILURE';
 export const UPDATE_QUERY = 'UPDATE_QUERY';
 
 
@@ -144,17 +147,37 @@ export function saveQuery () {
         { name: 'All Files', extensions: ['*'] },
       ];
 
-      let filename = (currentQuery.filename || await showSaveDialog(filters));
+      let filename = (currentQuery.filename || await fileHandler.showSaveDialog(filters));
       if (path.extname(filename) !== '.sql') {
         filename += '.sql';
       }
 
-      await saveFile(filename, currentQuery.query);
+      await fileHandler.saveFile(filename, currentQuery.query);
       const name = path.basename(filename, '.sql');
 
       dispatch({ type: SAVE_QUERY_SUCCESS, name, filename });
     } catch (error) {
       dispatch({ type: SAVE_QUERY_FAILURE, error });
+    }
+  };
+}
+
+export function openQuery () {
+  return async (dispatch) => {
+    dispatch({ type: OPEN_QUERY_REQUEST });
+    try {
+      const filters = [
+        { name: 'SQL', extensions: ['sql'] },
+      ];
+
+      const [filename] = await fileHandler.showOpenDialog(filters);
+      const name = path.basename(filename, '.sql');
+
+      const query = await fileHandler.openFile(filename);
+
+      dispatch({ type: OPEN_QUERY_SUCCESS, name, query });
+    } catch (error) {
+      dispatch({ type: OPEN_QUERY_FAILURE, error });
     }
   };
 }
