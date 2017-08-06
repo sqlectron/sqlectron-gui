@@ -592,7 +592,7 @@ class QueryBrowserContainer extends Component {
           <div id="sidebar" style={STYLES.sidebar}>
             <ResizableBox className="react-resizable react-resizable-ew-resize"
               onResizeStop={(event, { size }) => this.setState({ sideBarWidth: size.width })}
-              width={SIDEBAR_WIDTH}
+              width={this.state.sideBarWidth || SIDEBAR_WIDTH}
               height={NaN}
               minConstraints={[SIDEBAR_WIDTH, 300]}
               maxConstraints={[750, 10000]}>
