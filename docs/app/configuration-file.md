@@ -1,8 +1,14 @@
 ## Configuration File
 
-SQLECTRON keeps a hidden configuration file called `.sqlectron.json` at the user's home directory (`~/` osx and linux; `%userprofile%` windows ).
+SQLECTRON keeps a configuration file in the directory:
 
-This configuration is automatically handled by the app. Using default values when is possible. And saving automatically changes made to servers through the app. But you can override the default configurations by manually changing these values:
+* **MacOS:** `~/Library/Preferences/Sqlectron`
+* **Linux** (`$XDG_CONFIG_HOME` or `~/.config`) + `/Sqlectron`
+* **Windows** (`$LOCALAPPDATA` or `%USERPROFILE%\AppData\Local`) + `\Sqlectron\Config`
+
+> For older versions it was stored as `.sqlectron.json` at the user's home directory (`~/` osx and linux; `%userprofile%` windows ).
+
+This configuration is automatically handled by the app. Using default values when is possible and saving automatically changes made to servers through the app. But you can override the default configurations by manually changing these values:
 
 ```js
 {
