@@ -57,6 +57,11 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
         throw new Error('Server configuration not found');
       }
 
+      // Terrible workaround to avoid a state issue of data loading from the main process.
+      // For some reason chaging a value here in client from a data coming from the main process
+      // don't have any effect. We need to clone this data and use the new state.
+      server = JSON.parse(JSON.stringify(server));
+
       defaultDatabase = sqlectron.db.CLIENTS.find(c => c.key === server.client).defaultDatabase;
       database = databaseName || server.database || defaultDatabase;
 
