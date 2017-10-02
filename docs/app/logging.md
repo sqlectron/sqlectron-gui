@@ -2,7 +2,7 @@
 
 > **IMPORTANT!** Replace any sensitive data (e.g. password) before including the log data in an issue.
 >
-> **IMPORTANT!** Disable the log if you are not investigating an issue. It makes the app slower. And with log to file enabled it may saves data to file that you don't want to be saved everytime you are using the app.
+> **IMPORTANT!** Disable the log if you are not investigating an issue. It makes the app slower. And with log to file enabled it may saves data to file that you don't want to be saved every time you are using the app.
 
 Is possible to enable logging by adding the configuration below to your `~/.sqlectron.json`:
 
