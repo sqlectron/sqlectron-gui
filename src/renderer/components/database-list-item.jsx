@@ -94,7 +94,7 @@ export default class DatabaseListItem extends Component {
 
   filterItems(filterInput, items) {
     const regex = RegExp(filterInput, 'i');
-    return items.filter(item => regex.test(item.name));
+    return items.filter(item => regex.test(`${item.schema}.${item.name}`));
   }
 
   focus() {
