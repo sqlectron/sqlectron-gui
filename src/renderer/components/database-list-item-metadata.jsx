@@ -113,7 +113,7 @@ export default class DbMetadataList extends Component {
         ? grouped[key].map(item => {
           const hasChildElements = !!onSelectItem;
 
-          const cssStyle = { ...STYLE.item, marginLeft: hasGroup ? '15px' : '0px' };
+          const cssStyle = { ...STYLE.item, marginLeft: hasGroup ? '0.5em' : '0px' };
           if (this.state.collapsed) {
             cssStyle.display = 'none';
           }
