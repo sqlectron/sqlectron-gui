@@ -473,6 +473,7 @@ class QueryBrowserContainer extends Component {
         <TabPanel key={queryId}>
           <Query
             ref={`queryBox_${queryId}`}
+            editorName={`querybox${queryId}`}
             client={connections.server.client}
             allowCancel={allowCancel}
             query={query}
@@ -504,7 +505,7 @@ class QueryBrowserContainer extends Component {
     const selectedIndex = queries.queryIds.indexOf(queries.currentQueryId);
     const isTabsFitOnScreen = this.tabListTotalWidthChildren >= this.tabListTotalWidth;
     return (
-      <Tabs onSelect={::this.handleSelectTab} selectedIndex={selectedIndex}>
+      <Tabs onSelect={::this.handleSelectTab} selectedIndex={selectedIndex} forceRenderTabPanel>
         <div id="tabs-nav-wrapper" className="ui pointing secondary menu">
           {isTabsFitOnScreen &&
             <button className="ui icon button"

@@ -58,6 +58,7 @@ export default class Query extends Component {
     onCopyToClipboardClick: PropTypes.func.isRequired,
     onSQLChange: PropTypes.func.isRequired,
     onSelectionChange: PropTypes.func.isRequired,
+    editorName: PropTypes.string.isRequired,
   }
 
   constructor(props, context) {
@@ -271,7 +272,7 @@ export default class Query extends Component {
             <AceEditor
               mode="sql"
               theme="github"
-              name="querybox"
+              name={this.props.editorName}
               height="100%"
               width="100%"
               ref="queryBoxTextarea"
