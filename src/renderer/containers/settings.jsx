@@ -6,10 +6,6 @@ import * as ConfigActions from '../actions/config.js';
 import Checkbox from '../components/checkbox.jsx';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
-import ServerList from '../components/server-list.jsx';
-import ServerModalForm from '../components/server-modal-form.jsx';
-import ServerFilter from '../components/server-filter.jsx';
-import Message from '../components/message.jsx';
 
 require('react-select/dist/react-select.css');
 
@@ -19,7 +15,7 @@ const STYLES = {
 };
 
 
-const BREADCRUMB = [{ icon: 'server', label: 'servers' }];
+const BREADCRUMB = [{ icon: 'settings', label: 'settings' }];
 
 
 class SettingsContainer extends Component {
@@ -42,7 +38,7 @@ class SettingsContainer extends Component {
     if (this.props.config.isSaving &&
       !nextProps.config.isSaving &&
       !nextProps.config.error) {
-      this.props.router.push("/");
+      this.props.router.push('/');
       return;
     }
 
@@ -56,7 +52,7 @@ class SettingsContainer extends Component {
   }
 
   onCancelClick() {
-    this.props.router.push("/");
+    this.props.router.push('/');
   }
 
   highlightError(name) {
@@ -85,14 +81,6 @@ class SettingsContainer extends Component {
     return this.setState(newState);
   }
 
-  renderLogLevelItem({ label, icon }) {
-    return (
-      <span>
-        <i className={`icon ${icon}`}></i> {label}
-      </span>
-    );
-  }
-
   handleOnLogLevelChange(level) {
     this.setState({ log: { level } });
   }
@@ -118,7 +106,6 @@ class SettingsContainer extends Component {
   }
 
   renderActionsPanel() {
-
     return (
       <div className="actions">
 
@@ -138,6 +125,14 @@ class SettingsContainer extends Component {
     );
   }
 
+  renderLogLevelItem({ label, icon }) {
+    return (
+      <span>
+        <i className={`icon ${icon}`}></i> {label}
+      </span>
+    );
+  }
+
   render() {
     const log = this.state.log || {};
     return (
@@ -148,7 +143,6 @@ class SettingsContainer extends Component {
         <div style={STYLES.container}>
 
           <form className="ui form">
-            <h4 className="ui dividing header">Settings</h4>
             <div className="two fields">
               <div className={`field ${this.highlightError('zoomFactor')}`}>
                 <label>Zoom Factor</label>
@@ -205,8 +199,12 @@ class SettingsContainer extends Component {
                       name="log.console"
                       label="Console"
                       defaultChecked={log.console}
-                      onChecked={() => this.handleChange({ target: { name: 'log.console', value: true } })}
-                      onUnchecked={() => this.handleChange({ target: { name: 'log.console', value: false } })} />
+                      onChecked={() => this.handleChange({
+                        target: { name: 'log.console', value: true },
+                      })}
+                      onUnchecked={() => this.handleChange({
+                        target: { name: 'log.console', value: false },
+                      })} />
                     <p className="help">Show logs in the dev tools panel.</p>
                   </div>
 
@@ -215,8 +213,12 @@ class SettingsContainer extends Component {
                       name="log.file"
                       label="File"
                       defaultChecked={log.file}
-                      onChecked={() => this.handleChange({ target: { name: 'log.file', value: true } })}
-                      onUnchecked={() => this.handleChange({ target: { name: 'log.file', value: false } })} />
+                      onChecked={() => this.handleChange({
+                        target: { name: 'log.file', value: true },
+                      })}
+                      onUnchecked={() => this.handleChange({
+                        target: { name: 'log.file', value: false },
+                      })} />
                     <p className="help">Save logs into a file.</p>
                   </div>
                 </div>
@@ -247,17 +249,17 @@ class SettingsContainer extends Component {
                     <Select
                       name="log.level"
                       options={[
-                        { value: 'debug', label: 'Debug', icon: 'bug'},
-                        { value: 'info', label: 'Info', icon: 'info'},
-                        { value: 'warn', label: 'Warn', icon: 'warning sign'},
-                        { value: 'error', label: 'Error',  icon: 'remove circle'},
+                        { value: 'debug', label: 'Debug', icon: 'bug' },
+                        { value: 'info', label: 'Info', icon: 'info' },
+                        { value: 'warn', label: 'Warn', icon: 'warning sign' },
+                        { value: 'error', label: 'Error', icon: 'remove circle' },
                       ]}
                       clearable={false}
                       onChange={::this.handleOnLogLevelChange}
                       optionRenderer={this.renderLogLevelItem}
                       valueRenderer={this.renderLogLevelItem}
                       value={log.level || 'error'} />
-                      <p className="help">Level logging: debug, info, warn, error."error"</p>
+                    <p className="help">Level logging: debug, info, warn, error."error"</p>
                   </div>
                 </div>
               </div>

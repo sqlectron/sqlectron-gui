@@ -1,6 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
-import { config } from '../../browser/remote';
-import { sqlectron } from '../../browser/remote';
+import { config, sqlectron } from '../../browser/remote';
 
 
 export const LOAD_CONFIG_REQUEST = 'LOAD_CONFIG_REQUEST';
@@ -33,7 +32,7 @@ export function saveConfig(configData) {
   return async dispatch => {
     dispatch({ type: SAVE_CONFIG_REQUEST });
     try {
-      const remoteConfig = await sqlectron.config.saveSettings(configData);
+      await sqlectron.config.saveSettings(configData);
       dispatch({ type: SAVE_CONFIG_SUCCESS, config: configData });
     } catch (error) {
       dispatch({ type: SAVE_CONFIG_FAILURE, error });

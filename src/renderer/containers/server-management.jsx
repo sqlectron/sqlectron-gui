@@ -50,7 +50,7 @@ class ServerManagerment extends Component {
   }
 
   onSettingsClick() {
-    this.props.router.push("/settings");
+    this.props.router.push('/settings');
   }
 
   onEditClick(server) {
