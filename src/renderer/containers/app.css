@@ -21,6 +21,13 @@ body {
   color: rgba(0,0,0,.87);
 }
 
+p.help {
+  font-size: 0.8em;
+}
+
+#logLevel .Select-value {
+  padding-top: 0px;
+}
 
 /* Override semantic ui style */
 .ui.secondary.menu {

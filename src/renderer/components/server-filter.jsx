@@ -6,6 +6,7 @@ export default class ServerFilter extends Component {
   static propTypes = {
     onFilterChange: PropTypes.func.isRequired,
     onAddClick: PropTypes.func.isRequired,
+    onSettingsClick: PropTypes.func.isRequired,
   };
 
   componentWillMount () {
@@ -24,6 +25,7 @@ export default class ServerFilter extends Component {
         <i className="search icon"></i>
         <input type="text" placeholder="Search..." onChange={::this.onFilterChange} />
         <button className="ui button green" onClick={::this.props.onAddClick}>Add</button>
+        <button className="ui button" onClick={::this.props.onSettingsClick}>Settings</button>
       </div>
     );
   }

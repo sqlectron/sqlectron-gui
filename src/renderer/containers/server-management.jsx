@@ -49,6 +49,10 @@ class ServerManagerment extends Component {
     dispatch(ServersActions.startEditing());
   }
 
+  onSettingsClick() {
+    this.props.router.push("/settings");
+  }
+
   onEditClick(server) {
     const { dispatch } = this.props;
     dispatch(ServersActions.startEditing(server.id));
@@ -107,7 +111,8 @@ class ServerManagerment extends Component {
         <div style={STYLES.container}>
           <ServerFilter
             onFilterChange={::this.onFilterChange}
-            onAddClick={::this.onAddClick} />
+            onAddClick={::this.onAddClick}
+            onSettingsClick={::this.onSettingsClick} />
 
           {
             connections.error &&
