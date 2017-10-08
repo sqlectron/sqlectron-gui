@@ -21,6 +21,9 @@ body {
   color: rgba(0,0,0,.87);
 }
 
+p.help {
+  font-size: 0.8em;
+}
 
 /* Override semantic ui style */
 .ui.secondary.menu {

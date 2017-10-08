@@ -82,7 +82,7 @@
     "babel-polyfill": "^6.22.0",
     "bunyan": "^1.8.5",
     "lodash.defaultsdeep": "^4.6.0",
-    "sqlectron-core": "^7.9.0"
+    "sqlectron-core": "^7.10.0"
   },
   "devDependencies": {
     "autoprefixer-loader": "^3.2.0",
@@ -126,6 +126,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.groupby": "^4.6.0",
     "lodash.isplainobject": "^4.0.6",
+    "lodash.set": "^4.3.2",
     "lodash.template": "^4.4.0",
     "lodash.trim": "^4.5.1",
     "lodash.union": "^4.6.0",

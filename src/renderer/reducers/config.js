@@ -2,6 +2,9 @@ import * as types from '../actions/config';
 
 
 const INITIAL_STATE = {
+  isSaving: false,
+  isEditing: false,
+  path: null,
   data: null,
   error: null,
 };
@@ -13,11 +16,42 @@ export default function config(state = INITIAL_STATE, action) {
       return {
         ...state,
         data: action.config,
+        path: action.path,
       };
     case types.LOAD_CONFIG_FAILURE: {
       return {
         ...state,
         error: action.error,
+      };
+    }
+    case types.START_EDITING_CONFIG: {
+      return {
+        ...state,
+        isSaving: false,
+        isEditing: true,
+      };
+    }
+    case types.FINISH_EDITING_CONFIG: {
+      return {
+        ...state,
+        isSaving: false,
+        isEditing: false,
+        error: null,
+      };
+    }
+    case types.SAVE_CONFIG_REQUEST: {
+      return {
+        ...state,
+        isSaving: true,
+      };
+    }
+    case types.SAVE_CONFIG_SUCCESS: {
+      return {
+        data: {
+          ...state.data,
+          ...action.config,
+        },
+        isSaving: false,
       };
     }
     default:

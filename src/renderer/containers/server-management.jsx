@@ -3,10 +3,12 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import * as ServersActions from '../actions/servers.js';
 import * as ConnActions from '../actions/connections.js';
+import * as ConfigActions from '../actions/config.js';
 import Header from '../components/header.jsx';
 import Footer from '../components/footer.jsx';
 import ServerList from '../components/server-list.jsx';
 import ServerModalForm from '../components/server-modal-form.jsx';
+import SettingsModalForm from '../components/settings-modal-form.jsx';
 import ServerFilter from '../components/server-filter.jsx';
 import Message from '../components/message.jsx';
 
@@ -25,6 +27,7 @@ class ServerManagerment extends Component {
     status: PropTypes.string.isRequired,
     connections: PropTypes.object.isRequired,
     servers: PropTypes.object.isRequired,
+    config: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     router: PropTypes.object.isRequired,
     children: PropTypes.node,
@@ -47,6 +50,11 @@ class ServerManagerment extends Component {
   onAddClick() {
     const { dispatch } = this.props;
     dispatch(ServersActions.startEditing());
+  }
+
+  onSettingsClick() {
+    const { dispatch } = this.props;
+    dispatch(ConfigActions.startEditing());
   }
 
   onEditClick(server) {
@@ -74,6 +82,16 @@ class ServerManagerment extends Component {
     dispatch(ServersActions.removeServer({ id: servers.editingId }));
   }
 
+  onSettingsSaveClick(config) {
+    const { dispatch } = this.props;
+    dispatch(ConfigActions.saveConfig(config));
+  }
+
+  onSettingsCancelClick() {
+    const { dispatch } = this.props;
+    dispatch(ConfigActions.finisEditing());
+  }
+
   onFilterChange(event) {
     this.setState({ filter: event.target.value });
   }
@@ -85,7 +103,7 @@ class ServerManagerment extends Component {
 
   render() {
     const { filter } = this.state;
-    const { connections, servers, status } = this.props;
+    const { connections, servers, config, status } = this.props;
     const selected = (
       servers.editingId !== null
       ? servers.items.find(srv => srv.id === servers.editingId)
@@ -107,7 +125,8 @@ class ServerManagerment extends Component {
         <div style={STYLES.container}>
           <ServerFilter
             onFilterChange={::this.onFilterChange}
-            onAddClick={::this.onAddClick} />
+            onAddClick={::this.onAddClick}
+            onSettingsClick={::this.onSettingsClick} />
 
           {
             connections.error &&
@@ -131,6 +150,12 @@ class ServerManagerment extends Component {
             onSaveClick={::this.onSaveClick}
             onCancelClick={::this.onCancelClick}
             onRemoveClick={::this.onRemoveClick} />}
+
+          {config.isEditing && <SettingsModalForm
+            config={config}
+            error={config.error}
+            onSaveClick={::this.onSettingsSaveClick}
+            onCancelClick={::this.onSettingsCancelClick} />}
         </div>
         <div style={STYLES.footer}>
           <Footer status={status} />
@@ -145,6 +170,7 @@ function mapStateToProps(state) {
   return {
     connections: state.connections,
     servers: state.servers,
+    config: state.config,
     status: state.status,
   };
 }
