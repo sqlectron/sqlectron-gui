@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import CollapseIcon from './collapse-icon.jsx';
 import TableSubmenu from './table-submenu.jsx';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 import { sqlectron } from '../../browser/remote';
@@ -137,13 +138,7 @@ export default class DatabaseItem extends Component {
       ? () => { onSelectItem(database, item); this.toggleTableCollapse(); }
       : () => {};
 
-    const collapseCssClass = this.state.tableCollapsed ? 'down' : 'right';
-    const collapseIcon = (
-      <i
-        className={`${collapseCssClass} triangle icon`}
-        style={{ float: 'left', margin: '0 0.15em 0 -1em' }}
-      ></i>
-    );
+    const collapseArrowDirection = this.state.tableCollapsed ? 'down' : 'right';
     const tableIcon = (
       <i className="table icon" style={{ float: 'left', margin: '0 0.3em 0 0' }}></i>
     );
@@ -158,7 +153,10 @@ export default class DatabaseItem extends Component {
           className="item"
           onClick={onSingleClick}
           onContextMenu={::this.onContextMenu}>
-          {dbObjectType === 'Table' ? collapseIcon : null}
+          {dbObjectType === 'Table'
+            ? <CollapseIcon arrowDirection={collapseArrowDirection} />
+            : null
+          }
           {dbObjectType === 'Table' ? tableIcon : null}
           {fullName}
         </span>
