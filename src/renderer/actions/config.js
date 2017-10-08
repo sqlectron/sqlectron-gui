@@ -8,6 +8,8 @@ export const LOAD_CONFIG_FAILURE = 'LOAD_CONFIG_FAILURE';
 export const SAVE_CONFIG_REQUEST = 'SAVE_CONFIG_REQUEST';
 export const SAVE_CONFIG_SUCCESS = 'SAVE_CONFIG_SUCCESS';
 export const SAVE_CONFIG_FAILURE = 'SAVE_CONFIG_FAILURE';
+export const START_EDITING_CONFIG = 'START_EDITING_CONFIG';
+export const FINISH_EDITING_CONFIG = 'FINISH_EDITING_CONFIG';
 
 
 export function loadConfig() {
@@ -38,4 +40,14 @@ export function saveConfig(configData) {
       dispatch({ type: SAVE_CONFIG_FAILURE, error });
     }
   };
+}
+
+
+export function startEditing(id) {
+  return { type: START_EDITING_CONFIG, id };
+}
+
+
+export function finisEditing() {
+  return { type: FINISH_EDITING_CONFIG };
 }

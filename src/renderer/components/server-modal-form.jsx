@@ -136,7 +136,7 @@ export default class ServerModalForm extends Component {
         if (!filter[type]) return;
 
         server.filter[type] = {
-          only: (filter[type].only ||[]).filter(val => val),
+          only: (filter[type].only || []).filter(val => val),
           ignore: (filter[type].ignore || []).filter(val => val),
         };
 
@@ -516,6 +516,7 @@ export default class ServerModalForm extends Component {
   }
 
   renderFilterPanel() {
+    /* eslint max-len:0 */
     const isFilterChecked = !!this.state.filter;
     const filter = this.state.filter || {};
 
@@ -535,9 +536,7 @@ export default class ServerModalForm extends Component {
         </div>
         {isFilterChecked &&
           <div>
-            <p>
-            <em>Allow to pre filter the data available in the sidebar. It improves the rendering performance for large servers.<br />Separate values by break line</em>
-            </p>
+            <p><em>Allow to pre filter the data available in the sidebar. It improves the rendering performance for large servers.<br />Separate values by break line</em></p>
             {this.renderFilterPanelItem(isFilterChecked, filter, 'Database', 'database')}
             {this.renderFilterPanelItem(isFilterChecked, filter, 'Schema', 'schema')}
           </div>

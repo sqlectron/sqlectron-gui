@@ -5,7 +5,6 @@ import { Router, Route, hashHistory } from 'react-router';
 import App from './containers/app.jsx';
 import configureStore from './store/configure';
 import ServerManagementContainer from './containers/server-management.jsx';
-import SettingsContainer from './containers/settings.jsx';
 import QueryBrowserContainer from './containers/query-browser.jsx';
 
 
@@ -17,7 +16,6 @@ ReactDOM.render(
     <Router history={hashHistory}>
       <Route component={App}>
         <Route path="/" component={ServerManagementContainer} />
-        <Route path="/settings" component={SettingsContainer} />
         <Route path="/server/:id" component={QueryBrowserContainer} />
       </Route>
     </Router>

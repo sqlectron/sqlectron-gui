@@ -1,31 +1,21 @@
 import React, { Component, PropTypes } from 'react';
+import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
+import set from 'lodash.set';
 import Select from 'react-select';
-import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
-import * as ConfigActions from '../actions/config.js';
-import Checkbox from '../components/checkbox.jsx';
-import Header from '../components/header.jsx';
-import Footer from '../components/footer.jsx';
+import Checkbox from './checkbox.jsx';
+
 
 require('react-select/dist/react-select.css');
-
-const STYLES = {
-  wrapper: { paddingTop: '50px' },
-  container: { padding: '10px 10px 50px 10px' },
-};
+require('./override-select.css');
 
 
-const BREADCRUMB = [{ icon: 'settings', label: 'settings' }];
-
-
-class SettingsContainer extends Component {
+export default class SettingsModalForm extends Component {
   static propTypes = {
-    status: PropTypes.string.isRequired,
-    config: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
-    children: PropTypes.node,
-  };
+    onSaveClick: PropTypes.func.isRequired,
+    onCancelClick: PropTypes.func.isRequired,
+    config: PropTypes.object,
+    error: PropTypes.object,
+  }
 
   constructor(props, context) {
     super(props, context);
@@ -34,58 +24,42 @@ class SettingsContainer extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.config.isSaving &&
-      !nextProps.config.isSaving &&
-      !nextProps.config.error) {
-      this.props.router.push('/');
-      return;
-    }
+  componentDidMount() {
+    $(this.refs.settingsModal).modal({
+      closable: true,
+      detachable: false,
+      allowMultiple: true,
+      observeChanges: true,
+      onHidden: () => {
+        this.props.onCancelClick();
+        return true;
+      },
+      onDeny: () => {
+        this.props.onCancelClick();
+        return true;
+      },
+      onApprove: () => false,
+    }).modal('show');
+  }
 
-    this.setState({ ...nextProps.config.data });
+  componentWillReceiveProps(nextProps) {
+    this.setState({ error: nextProps.error });
+  }
+
+  componentWillUnmount() {
+    $(this.refs.settingsModal).modal('hide');
   }
 
   onSaveClick() {
-    const config = this.mapStatetoConfig(this.state);
-    const { dispatch } = this.props;
-    dispatch(ConfigActions.saveConfig(config));
+    this.props.onSaveClick(this.mapStateToConfig(this.state));
   }
 
-  onCancelClick() {
-    this.props.router.push('/');
+  onDocClick(event) {
+    event.preventDefault();
+    shell.openExternal('https://github.com/sqlectron/sqlectron-gui/blob/master/docs/app/configuration-file.md');
   }
 
-  highlightError(name) {
-    const { error } = this.state;
-    let hasError = !!(error && error[name]);
-    if (error && error.ssh && /^ssh\./.test(name)) {
-      const sshErrors = error.ssh[0].errors[0];
-      const lastName = name.replace(/^ssh\./, '');
-      hasError = !!~Object.keys(sshErrors).indexOf(lastName);
-    }
-    return hasError ? 'error' : '';
-  }
-
-  handleChange(event) {
-    const newState = {};
-    const { target } = event;
-    const value = target.files ? target.files[0].path : target.value;
-    const [name1, name2] = target.name.replace(/^file\./, '').split('.');
-
-    if (name1 === 'log') {
-      newState.log = { ...this.state.log, [name2]: value };
-    } else {
-      newState[name1] = value;
-    }
-
-    return this.setState(newState);
-  }
-
-  handleOnLogLevelChange(level) {
-    this.setState({ log: { level } });
-  }
-
-  mapStatetoConfig(state) {
+  mapStateToConfig(state) {
     const config = {
       zoomFactor: parseFloat(state.zoomFactor) || 1,
       limitQueryDefaultSelectTop: parseInt(state.limitQueryDefaultSelectTop, 10) || 100,
@@ -105,13 +79,51 @@ class SettingsContainer extends Component {
     return config;
   }
 
+  highlightError(name) {
+    const { error } = this.state;
+    let hasError = !!(error && error[name]);
+    if (error && error.log && /^log\./.test(name)) {
+      const logErrors = error.log[0].errors[0];
+      const lastName = name.replace(/^log\./, '');
+      hasError = !!~Object.keys(logErrors).indexOf(lastName);
+    }
+    return hasError ? 'error' : '';
+  }
+
+  handleChange(event) {
+    const newState = {};
+    const { target } = event;
+    const value = target.files ? target.files[0].path : target.value;
+    const name = target.name.replace(/^file\./, '');
+    const [name1, name2] = name.split('.');
+
+    if (name1 && name2) {
+      newState[name1] = { ...this.state[name1] };
+    }
+
+    set(newState, name, value);
+
+    return this.setState(newState);
+  }
+
+  handleOnLogLevelChange(level) {
+    this.setState({ log: { ...this.state.log, level } });
+  }
+
+  renderLogLevelItem({ label, icon }) {
+    return (
+      <span>
+        <i className={`icon ${icon}`}></i> {label}
+      </span>
+    );
+  }
+
   renderActionsPanel() {
     return (
       <div className="actions">
 
         <div className="small ui black deny right labeled icon button"
-          tabIndex="0"
-          onClick={::this.onCancelClick}>
+          tabIndex="0">
           Cancel
           <i className="ban icon"></i>
         </div>
@@ -125,15 +137,8 @@ class SettingsContainer extends Component {
     );
   }
 
-  renderLogLevelItem({ label, icon }) {
-    return (
-      <span>
-        <i className={`icon ${icon}`}></i> {label}
-      </span>
-    );
-  }
-
   renderBasicSettingsPanel() {
+    /* eslint max-len:0 */
     return (
       <div>
         <div className="two fields">
@@ -143,7 +148,7 @@ class SettingsContainer extends Component {
               name="zoomFactor"
               value={this.state.zoomFactor || ''}
               onChange={::this.handleChange} />
-            <p className="help">Changes the zoom factor to the specified factor. Zoom factor is zoom percent divided by 100, so 300% = 3.0.</p>
+            <p className="help">Zoom factor is zoom percent divided by 100, so 300% = 3.0.</p>
           </div>
           <div className={`field ${this.highlightError('limitQueryDefaultSelectTop')}`}>
             <label>Limit of Rows from Select Top Query</label>
@@ -151,8 +156,7 @@ class SettingsContainer extends Component {
               name="limitQueryDefaultSelectTop"
               value={this.state.limitQueryDefaultSelectTop || ''}
               onChange={::this.handleChange} />
-            <p className="help">Change the limit used in the default select.
-            </p>
+            <p className="help">The limit used in the default select from the sidebar context menu.</p>
           </div>
         </div>
 
@@ -237,7 +241,7 @@ class SettingsContainer extends Component {
                     style={{ display: 'none' }} />
                 </label>
               </div>
-              <p className="help">Level logging: debug, info, warn, error "error"</p>
+              <p className="help">Log file path.</p>
             </div>
             <div id="logLevel" className={`field ${this.highlightError('log.level')}`}>
               <label>Level</label>
@@ -254,7 +258,7 @@ class SettingsContainer extends Component {
                 optionRenderer={this.renderLogLevelItem}
                 valueRenderer={this.renderLogLevelItem}
                 value={log.level || 'error'} />
-              <p className="help">Level logging: debug, info, warn, error."error"</p>
+              <p className="help">Level logging: debug, info, warn, error.</p>
             </div>
           </div>
         </div>
@@ -264,31 +268,21 @@ class SettingsContainer extends Component {
 
   render() {
     return (
-      <div style={STYLES.wrapper}>
-        <div style={STYLES.header}>
-          <Header items={BREADCRUMB} />
+      <div id="settings-modal" className="ui modal" ref="settingsModal">
+        <div className="header">
+          Settings
         </div>
-        <div style={STYLES.container}>
+        <div className="content">
           <form className="ui form">
             {this.renderBasicSettingsPanel()}
             {this.renderLoggingSettingsPanel()}
-            {this.renderActionsPanel()}
+            <div className="field">
+              Check out the full settings documentation at <a href="#" onClick={this.onDocClick}>here</a>
+            </div>
           </form>
         </div>
-        <div style={STYLES.footer}>
-          <Footer status={status} />
-        </div>
+        {this.renderActionsPanel()}
       </div>
     );
   }
 }
-
-
-function mapStateToProps(state) {
-  return {
-    config: state.config,
-    status: state.status,
-  };
-}
-
-export default connect(mapStateToProps)(withRouter(SettingsContainer));
