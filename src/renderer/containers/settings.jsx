@@ -269,7 +269,6 @@ class SettingsContainer extends Component {
           <Header items={BREADCRUMB} />
         </div>
         <div style={STYLES.container}>
-
           <form className="ui form">
             {this.renderBasicSettingsPanel()}
             {this.renderLoggingSettingsPanel()}

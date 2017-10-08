@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import set from 'lodash.set';
 import Select from 'react-select';
 import { sqlectron } from '../../browser/remote';
 import ConfirmModal from './confim-modal.jsx';
@@ -114,20 +115,43 @@ export default class ServerModalForm extends Component {
       database: state.database,
       domain: state.domain,
       schema: state.schema || null,
-      // custom data not availbale trough the interface
-      filter: state.filter,
     };
-    if (!this.state.ssh) { return server; }
 
     const { ssh } = state;
-    server.ssh = {
-      host: ssh.host,
-      port: ssh.port || DEFAULT_SSH_PORT,
-      user: ssh.user,
-      password: ssh.password && ssh.password.length ? ssh.password : null,
-      privateKey: ssh.privateKey && ssh.privateKey.length ? ssh.privateKey : null,
-      privateKeyWithPassphrase: !!ssh.privateKeyWithPassphrase,
-    };
+    if (ssh) {
+      server.ssh = {
+        host: ssh.host,
+        port: ssh.port || DEFAULT_SSH_PORT,
+        user: ssh.user,
+        password: ssh.password && ssh.password.length ? ssh.password : null,
+        privateKey: ssh.privateKey && ssh.privateKey.length ? ssh.privateKey : null,
+        privateKeyWithPassphrase: !!ssh.privateKeyWithPassphrase,
+      };
+    }
+
+    const { filter } = state;
+    if (filter) {
+      server.filter = {};
+      const addFilter = (type) => {
+        if (!filter[type]) return;
+
+        server.filter[type] = {
+          only: (filter[type].only ||[]).filter(val => val),
+          ignore: (filter[type].ignore || []).filter(val => val),
+        };
+
+        if (!server.filter[type].only.length && !server.filter[type].ignore.length) {
+          delete server.filter[type];
+        }
+      };
+
+      addFilter('database');
+      addFilter('schema');
+
+      if (!Object.keys(server.filter).length) {
+        delete server.filter;
+      }
+    }
 
     return server;
   }
@@ -155,14 +179,19 @@ export default class ServerModalForm extends Component {
   handleChange(event) {
     const newState = {};
     const { target } = event;
-    const value = target.files ? target.files[0].path : target.value;
-    const [name1, name2] = target.name.replace(/^file\./, '').split('.');
+    let value = target.files ? target.files[0].path : target.value;
+    const name = target.name.replace(/^file\./, '');
+    const [name1, name2] = name.split('.');
 
-    if (name1 === 'ssh') {
-      newState.ssh = { ...this.state.ssh, [name2]: value };
-    } else {
-      newState[name1] = value;
+    if (name1 && name2) {
+      newState[name1] = { ...this.state[name1] };
     }
+
+    if (name1 === 'filter') {
+      value = value.split('\n');
+    }
+
+    set(newState, name, value);
 
     return this.setState(newState);
   }
@@ -454,6 +483,69 @@ export default class ServerModalForm extends Component {
     );
   }
 
+  renderFilterPanelItem(isFilterChecked, filter, label, type) {
+    const filterType = filter[type] || {};
+
+    return (
+      <div className="field">
+        <label>{label}</label>
+        <div className="fields">
+          <div className={`eight wide field ${this.highlightError(`filter.${type}.only`)}`}>
+            <label>Only</label>
+            <textarea
+              name={`filter.${type}.only`}
+              placeholder="Only"
+              rows="3"
+              disabled={!isFilterChecked}
+              value={filterType.only ? filterType.only.join('\n') : ''}
+              onChange={::this.handleChange} />
+          </div>
+          <div className={`eight wide field ${this.highlightError(`filter.${type}.ignore`)}`}>
+            <label>Ignore</label>
+            <textarea
+              name={`filter.${type}.ignore`}
+              placeholder="Ignore"
+              rows="3"
+              disabled={!isFilterChecked}
+              value={filterType.ignore ? filterType.ignore.join('\n') : ''}
+              onChange={::this.handleChange} />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderFilterPanel() {
+    const isFilterChecked = !!this.state.filter;
+    const filter = this.state.filter || {};
+
+    if (this.isFeatureDisabled('server:filter')) {
+      return null;
+    }
+
+    return (
+      <div className="ui segment">
+        <div className="one field">
+          <Checkbox
+            name="filter"
+            label="Filter"
+            defaultChecked={isFilterChecked}
+            onChecked={() => this.setState({ filter: {} })}
+            onUnchecked={() => this.setState({ filter: null })} />
+        </div>
+        {isFilterChecked &&
+          <div>
+            <p>
+            <em>Allow to pre filter the data available in the sidebar. It improves the rendering performance for large servers.<br />Separate values by break line</em>
+            </p>
+            {this.renderFilterPanelItem(isFilterChecked, filter, 'Database', 'database')}
+            {this.renderFilterPanelItem(isFilterChecked, filter, 'Schema', 'schema')}
+          </div>
+        }
+      </div>
+    );
+  }
+
   renderActionsPanel() {
     const { testConnection } = this.props;
     const { isNew, client } = this.state;
@@ -527,6 +619,7 @@ export default class ServerModalForm extends Component {
           <form className="ui form">
             {this.renderBasicPanel()}
             {this.renderSSHPanel()}
+            {this.renderFilterPanel()}
           </form>
         </div>
         {this.renderActionsPanel()}
