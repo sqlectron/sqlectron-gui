@@ -137,6 +137,23 @@ export default class SettingsModalForm extends Component {
     );
   }
 
+  renderSettingsPath() {
+    /* eslint max-len:0 */
+    return (
+      <div className="two fields">
+        <div className="field">
+          <div className="ui label">
+            Path
+            <div className="detail">{this.props.config.path}</div>
+          </div>
+        </div>
+        <div className="field">
+          Check out the full settings documentation at <a href="#" onClick={this.onDocClick}>here</a>
+        </div>
+      </div>
+    );
+  }
+
   renderBasicSettingsPanel() {
     /* eslint max-len:0 */
     return (
@@ -276,9 +293,7 @@ export default class SettingsModalForm extends Component {
           <form className="ui form">
             {this.renderBasicSettingsPanel()}
             {this.renderLoggingSettingsPanel()}
-            <div className="field">
-              Check out the full settings documentation at <a href="#" onClick={this.onDocClick}>here</a>
-            </div>
+            {this.renderSettingsPath()}
           </form>
         </div>
         {this.renderActionsPanel()}

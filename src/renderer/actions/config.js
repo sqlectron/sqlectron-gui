@@ -17,12 +17,13 @@ export function loadConfig() {
     dispatch({ type: LOAD_CONFIG_REQUEST });
     try {
       const forceCleanCache = true;
+      const configPath = await sqlectron.config.path();
       const remoteConfig = await config.get(forceCleanCache);
 
       // Remove any "reference" to the remote IPC object
       const configData = cloneDeep(remoteConfig);
 
-      dispatch({ type: LOAD_CONFIG_SUCCESS, config: configData });
+      dispatch({ type: LOAD_CONFIG_SUCCESS, config: configData, path: configPath });
     } catch (error) {
       dispatch({ type: LOAD_CONFIG_FAILURE, error });
     }

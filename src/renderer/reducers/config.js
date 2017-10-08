@@ -4,6 +4,7 @@ import * as types from '../actions/config';
 const INITIAL_STATE = {
   isSaving: false,
   isEditing: false,
+  path: null,
   data: null,
   error: null,
 };
@@ -15,6 +16,7 @@ export default function config(state = INITIAL_STATE, action) {
       return {
         ...state,
         data: action.config,
+        path: action.path,
       };
     case types.LOAD_CONFIG_FAILURE: {
       return {
