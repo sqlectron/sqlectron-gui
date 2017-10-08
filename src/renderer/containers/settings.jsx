@@ -133,8 +133,136 @@ class SettingsContainer extends Component {
     );
   }
 
-  render() {
+  renderBasicSettingsPanel() {
+    return (
+      <div>
+        <div className="two fields">
+          <div className={`field ${this.highlightError('zoomFactor')}`}>
+            <label>Zoom Factor</label>
+            <input type="number"
+              name="zoomFactor"
+              value={this.state.zoomFactor || ''}
+              onChange={::this.handleChange} />
+            <p className="help">Changes the zoom factor to the specified factor. Zoom factor is zoom percent divided by 100, so 300% = 3.0.</p>
+          </div>
+          <div className={`field ${this.highlightError('limitQueryDefaultSelectTop')}`}>
+            <label>Limit of Rows from Select Top Query</label>
+            <input type="number"
+              name="limitQueryDefaultSelectTop"
+              value={this.state.limitQueryDefaultSelectTop || ''}
+              onChange={::this.handleChange} />
+            <p className="help">Change the limit used in the default select.
+            </p>
+          </div>
+        </div>
+
+        <div className="two fields">
+          <div className="field">
+            <Checkbox
+              name="enabledAutoComplete"
+              label="Enabled Auto Complete"
+              defaultChecked={this.state.enabledAutoComplete}
+              onChecked={() => this.setState({ enabledAutoComplete: true })}
+              onUnchecked={() => this.setState({ enabledAutoComplete: false })} />
+            <p className="help">Enable/Disable auto complete for the query box.</p>
+          </div>
+          <div className="field">
+            <Checkbox
+              name="enabledLiveAutoComplete"
+              label="Enabled Live Auto Complete"
+              defaultChecked={this.state.enabledLiveAutoComplete}
+              onChecked={() => this.setState({ enabledLiveAutoComplete: true })}
+              onUnchecked={() => this.setState({ enabledLiveAutoComplete: false })} />
+            <p className="help">Enable/Disable live auto complete for the query box.</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  renderLoggingSettingsPanel() {
     const log = this.state.log || {};
+    return (
+      <div className="ui segment">
+        <div className="one field">
+          Logging
+        </div>
+        <div>
+          <div className="two fields">
+            <div className="field">
+              <Checkbox
+                name="log.console"
+                label="Console"
+                defaultChecked={log.console}
+                onChecked={() => this.handleChange({
+                  target: { name: 'log.console', value: true },
+                })}
+                onUnchecked={() => this.handleChange({
+                  target: { name: 'log.console', value: false },
+                })} />
+              <p className="help">Show logs in the dev tools panel.</p>
+            </div>
+
+            <div className="field">
+              <Checkbox
+                name="log.file"
+                label="File"
+                defaultChecked={log.file}
+                onChecked={() => this.handleChange({
+                  target: { name: 'log.file', value: true },
+                })}
+                onUnchecked={() => this.handleChange({
+                  target: { name: 'log.file', value: false },
+                })} />
+              <p className="help">Save logs into a file.</p>
+            </div>
+          </div>
+
+          <div className="two fields">
+            <div className={`field ${this.highlightError('log.path')}`}>
+              <label>Path</label>
+              <div className="ui action input">
+                <input type="text"
+                  name="log.path"
+                  placeholder="~/.sqlectron.log"
+                  value={log.path || ''}
+                  onChange={::this.handleChange} />
+                <label htmlFor="file.log.path" className="ui icon button btn-file">
+                  <i className="file outline icon" />
+                  <input
+                    type="file"
+                    id="file.log.path"
+                    name="file.log.path"
+                    onChange={::this.handleChange}
+                    style={{ display: 'none' }} />
+                </label>
+              </div>
+              <p className="help">Level logging: debug, info, warn, error "error"</p>
+            </div>
+            <div id="logLevel" className={`field ${this.highlightError('log.level')}`}>
+              <label>Level</label>
+              <Select
+                name="log.level"
+                options={[
+                  { value: 'debug', label: 'Debug', icon: 'bug' },
+                  { value: 'info', label: 'Info', icon: 'info' },
+                  { value: 'warn', label: 'Warn', icon: 'warning sign' },
+                  { value: 'error', label: 'Error', icon: 'remove circle' },
+                ]}
+                clearable={false}
+                onChange={::this.handleOnLogLevelChange}
+                optionRenderer={this.renderLogLevelItem}
+                valueRenderer={this.renderLogLevelItem}
+                value={log.level || 'error'} />
+              <p className="help">Level logging: debug, info, warn, error."error"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  render() {
     return (
       <div style={STYLES.wrapper}>
         <div style={STYLES.header}>
@@ -143,128 +271,8 @@ class SettingsContainer extends Component {
         <div style={STYLES.container}>
 
           <form className="ui form">
-            <div className="two fields">
-              <div className={`field ${this.highlightError('zoomFactor')}`}>
-                <label>Zoom Factor</label>
-                <input type="number"
-                  name="zoomFactor"
-                  value={this.state.zoomFactor || ''}
-                  onChange={::this.handleChange} />
-                <p className="help">
-                  Change the zoom factor to the specified factor.
-                  Zoom factor is zoom percent divided by 100, so 300% = 3.0.
-                  <a href="https://github.com/electron/electron/blob/master/docs/api/web-frame.md#webframesetzoomfactorfactor">Reference</a>
-                </p>
-              </div>
-              <div className={`field ${this.highlightError('limitQueryDefaultSelectTop')}`}>
-                <label>Limit of Rows from Select Top Query</label>
-                <input type="number"
-                  name="limitQueryDefaultSelectTop"
-                  value={this.state.limitQueryDefaultSelectTop || ''}
-                  onChange={::this.handleChange} />
-                <p className="help">Change the limit used in the default select.
-                </p>
-              </div>
-            </div>
-
-            <div className="two fields">
-              <div className="field">
-                <Checkbox
-                  name="enabledAutoComplete"
-                  label="Enabled Auto Complete"
-                  defaultChecked={this.state.enabledAutoComplete}
-                  onChecked={() => this.setState({ enabledAutoComplete: true })}
-                  onUnchecked={() => this.setState({ enabledAutoComplete: false })} />
-                <p className="help">Enable/Disable auto complete for the query box.</p>
-              </div>
-              <div className="field">
-                <Checkbox
-                  name="enabledLiveAutoComplete"
-                  label="Enabled Live Auto Complete"
-                  defaultChecked={this.state.enabledLiveAutoComplete}
-                  onChecked={() => this.setState({ enabledLiveAutoComplete: true })}
-                  onUnchecked={() => this.setState({ enabledLiveAutoComplete: false })} />
-                <p className="help">Enable/Disable live auto complete for the query box.</p>
-              </div>
-            </div>
-
-            <div className="ui segment">
-              <div className="one field">
-                Logging
-              </div>
-              <div>
-                <div className="two fields">
-                  <div className="field">
-                    <Checkbox
-                      name="log.console"
-                      label="Console"
-                      defaultChecked={log.console}
-                      onChecked={() => this.handleChange({
-                        target: { name: 'log.console', value: true },
-                      })}
-                      onUnchecked={() => this.handleChange({
-                        target: { name: 'log.console', value: false },
-                      })} />
-                    <p className="help">Show logs in the dev tools panel.</p>
-                  </div>
-
-                  <div className="field">
-                    <Checkbox
-                      name="log.file"
-                      label="File"
-                      defaultChecked={log.file}
-                      onChecked={() => this.handleChange({
-                        target: { name: 'log.file', value: true },
-                      })}
-                      onUnchecked={() => this.handleChange({
-                        target: { name: 'log.file', value: false },
-                      })} />
-                    <p className="help">Save logs into a file.</p>
-                  </div>
-                </div>
-
-                <div className="two fields">
-                  <div className={`field ${this.highlightError('log.path')}`}>
-                    <label>Path</label>
-                    <div className="ui action input">
-                      <input type="text"
-                        name="log.path"
-                        placeholder="~/.sqlectron.log"
-                        value={log.path || ''}
-                        onChange={::this.handleChange} />
-                      <label htmlFor="file.log.path" className="ui icon button btn-file">
-                        <i className="file outline icon" />
-                        <input
-                          type="file"
-                          id="file.log.path"
-                          name="file.log.path"
-                          onChange={::this.handleChange}
-                          style={{ display: 'none' }} />
-                      </label>
-                    </div>
-                    <p className="help">Level logging: debug, info, warn, error "error"</p>
-                  </div>
-                  <div id="logLevel" className={`field ${this.highlightError('log.level')}`}>
-                    <label>Level</label>
-                    <Select
-                      name="log.level"
-                      options={[
-                        { value: 'debug', label: 'Debug', icon: 'bug' },
-                        { value: 'info', label: 'Info', icon: 'info' },
-                        { value: 'warn', label: 'Warn', icon: 'warning sign' },
-                        { value: 'error', label: 'Error', icon: 'remove circle' },
-                      ]}
-                      clearable={false}
-                      onChange={::this.handleOnLogLevelChange}
-                      optionRenderer={this.renderLogLevelItem}
-                      valueRenderer={this.renderLogLevelItem}
-                      value={log.level || 'error'} />
-                    <p className="help">Level logging: debug, info, warn, error."error"</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
+            {this.renderBasicSettingsPanel()}
+            {this.renderLoggingSettingsPanel()}
             {this.renderActionsPanel()}
           </form>
         </div>
