@@ -342,7 +342,7 @@ export default class ServerModalForm extends Component {
               onChange={::this.handleChange} />
           </div>
           <div className={`four wide field ${this.highlightError('database')}`}>
-            <label>Database/Keyspace</label>
+            <label>Initial Database/Keyspace</label>
             <div className={this.state.client === 'sqlite' && 'ui action input'}>
               <input type="text"
                 name="database"
@@ -363,7 +363,7 @@ export default class ServerModalForm extends Component {
             </div>
           </div>
           <div className={`four wide field ${this.highlightError('schema')}`}>
-            <label>Schema</label>
+            <label>Initial Schema</label>
             <input type="text"
               name="schema"
               maxLength="100"
