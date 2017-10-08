@@ -47,3 +47,8 @@
   box-sizing: border-box;
   cursor: se-resize;
 }
+
+.react-resizable-handle {
+  height: 100%;
+  cursor: col-resize !important;
+}
