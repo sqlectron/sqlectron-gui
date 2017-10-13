@@ -24,6 +24,10 @@ exports.get = function getConfiguration(cleanCache) {
     devMode: args.indexOf('--dev') !== -1,
   };
 
+  if (args.indexOf('--version') !== -1 || args.indexOf('-v') !== -1) {
+    argsConfig.printVersion = true;
+  }
+
   const basePath = path.resolve(__dirname, '..', '..');
   const packageConfig = readJSON(path.resolve(basePath, 'package.json'));
 
