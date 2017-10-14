@@ -2,11 +2,14 @@
 
 SQLECTRON keeps a configuration file in the directory:
 
-* **MacOS:** `~/Library/Preferences/Sqlectron`
-* **Linux** (`$XDG_CONFIG_HOME` or `~/.config`) + `/Sqlectron`
-* **Windows** (`$LOCALAPPDATA` or `%USERPROFILE%\AppData\Local`) + `\Sqlectron\Config`
+* **macOS:** `~/Library/Preferences/Sqlectron`
+* **Linux:** (`$XDG_CONFIG_HOME` or `~/.config`) + `/Sqlectron`
+* **Windows:** (`$LOCALAPPDATA` or `%USERPROFILE%\AppData\Local`) + `\Sqlectron\Config`
 
-> For older versions it was stored as `.sqlectron.json` at the user's home directory (`~/` osx and linux; `%userprofile%` windows ).
+> For older versions it was stored as `.sqlectron.json` at the user's home directory:
+> * **macOS:** `~/`
+> * **Linux:** `~/`
+> * **Windows:** `%USERPROFILE%`
 
 This configuration is automatically handled by the app. Using default values when is possible and saving automatically changes made to servers through the app. But you can override the default configurations by manually changing these values:
 
@@ -80,4 +83,4 @@ This configuration is automatically handled by the app. Using default values whe
 
 ```
 
-> [Configuration doc from Sqlectron Core](https://github.com/sqlectron/sqlectron-core#configuration)
+[Configuration doc from Sqlectron Core](https://github.com/sqlectron/sqlectron-core#configuration)
