@@ -11,7 +11,7 @@ SQLECTRON keeps a configuration file in the directory:
 > * **Linux:** `~/`
 > * **Windows:** `%USERPROFILE%`
 
-This configuration is automatically handled by the app. Using default values when is possible and saving automatically changes made to servers through the app. But you can override the default configurations by manually changing these values:
+Although is possible to change this file manually. In most cases is better just use the UI since it allows to change any of these settings from there.
 
 ```js
 {
