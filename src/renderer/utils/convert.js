@@ -8,11 +8,13 @@ export function rowValuesToString(row) {
     return rowsValuesToString(row);
   }
 
-  return Object.keys(row).reduce((_row, col) => {
-    const rowData = { ...row };
-    rowData[col] = valueToString(row[col]);
-    return rowData;
-  }, {});
+  const parsedRow = {};
+
+  Object.keys(row).forEach((col) => {
+    parsedRow[col] = valueToString(row[col]);
+  });
+
+  return parsedRow;
 }
 
 
