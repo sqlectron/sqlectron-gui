@@ -305,6 +305,10 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(QueryActions.copyToClipboard(rows, type));
   }
 
+  saveToFile (rows, type) {
+    this.props.dispatch(QueryActions.saveToFile(rows, type));
+  }
+
   handleExecuteQuery (sqlQuery) {
     const currentQuery = this.getCurrentQuery();
     if (!currentQuery) {
@@ -493,6 +497,7 @@ class QueryBrowserContainer extends Component {
             onExecQueryClick={::this.handleExecuteQuery}
             onCancelQueryClick={::this.handleCancelQuery}
             onCopyToClipboardClick={::this.copyToClipboard}
+            onSaveToFileClick={::this.saveToFile}
             onSQLChange={::this.onSQLChange}
             onSelectionChange={::this.onQuerySelectionChange} />
         </TabPanel>

@@ -56,6 +56,7 @@ export default class Query extends Component {
     onExecQueryClick: PropTypes.func.isRequired,
     onCancelQueryClick: PropTypes.func.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
+    onSaveToFileClick: PropTypes.func.isRequired,
     onSQLChange: PropTypes.func.isRequired,
     onSelectionChange: PropTypes.func.isRequired,
     editorName: PropTypes.string.isRequired,
@@ -254,6 +255,7 @@ export default class Query extends Component {
       widthOffset,
       client,
       query,
+      onSaveToFileClick,
       onCopyToClipboardClick,
       onSQLChange,
       allowCancel,
@@ -325,9 +327,11 @@ export default class Query extends Component {
         <QueryResult
           widthOffset={widthOffset}
           heigthOffset={QUERY_EDITOR_HEIGTH}
+          onSaveToFileClick={onSaveToFileClick}
           onCopyToClipboardClick={onCopyToClipboardClick}
           resultItemsPerPage={query.resultItemsPerPage}
           copied={query.copied}
+          saved={query.saved}
           query={query.queryHistory[query.queryHistory.length - 1]}
           results={query.results}
           isExecuting={query.isExecuting}
