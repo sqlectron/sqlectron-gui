@@ -9,8 +9,10 @@ export default class QueryResult extends Component {
     widthOffset: PropTypes.number.isRequired,
     heigthOffset: PropTypes.number.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
+    onSaveToFileClick: PropTypes.func.isRequired,
     resultItemsPerPage: PropTypes.number.isRequired,
     copied: PropTypes.bool,
+    saved: PropTypes.bool,
     query: PropTypes.string,
     results: React.PropTypes.arrayOf(
       React.PropTypes.shape({
@@ -107,9 +109,11 @@ export default class QueryResult extends Component {
         heigthOffset={this.props.heigthOffset}
         resultItemsPerPage={this.props.resultItemsPerPage}
         copied={this.props.copied}
+        saved={this.props.saved}
         fields={fields}
         rows={rows}
         rowCount={rowCount}
+        onSaveToFileClick={this.props.onSaveToFileClick}
         onCopyToClipboardClick={this.props.onCopyToClipboardClick} />
     );
 

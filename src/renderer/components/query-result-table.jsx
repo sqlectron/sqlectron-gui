@@ -17,8 +17,10 @@ export default class QueryResultTable extends Component {
     widthOffset: PropTypes.number.isRequired,
     heigthOffset: PropTypes.number.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
+    onSaveToFileClick: PropTypes.func.isRequired,
     resultItemsPerPage: PropTypes.number.isRequired,
     copied: PropTypes.bool,
+    saved: PropTypes.bool,
     query: PropTypes.string,
     fields: PropTypes.array,
     rows: PropTypes.array,
@@ -50,12 +52,21 @@ export default class QueryResultTable extends Component {
     if (nextProps.copied) {
       this.setState({ showCopied: true });
     }
+
+    if (nextProps.saved) {
+      this.setState({ showSaved: true });
+    }
   }
 
   componentDidUpdate() {
     if (this.state.showCopied) {
       /* eslint react/no-did-update-set-state: 0 */
       setTimeout(() => this.setState({ showCopied: false }), 1000);
+    }
+
+    if (this.state.showSaved) {
+      /* eslint react/no-did-update-set-state: 0 */
+      setTimeout(() => this.setState({ showSaved: false }), 1000);
     }
   }
 
@@ -185,22 +196,38 @@ export default class QueryResultTable extends Component {
   }
 
   renderHeaderTopBar() {
-    const { rows, rowCount, onCopyToClipboardClick } = this.props;
+    const { rows, rowCount, onCopyToClipboardClick, onSaveToFileClick } = this.props;
     const styleCopied = { display: this.state.showCopied ? 'inline-block' : 'none' };
-    const styleButtons = { display: this.state.showCopied ? 'none' : 'inline-block' };
+    const styleSaved = { display: this.state.showSaved ? 'inline-block' : 'none' };
+    const styleCopyButtons = { display: this.state.showCopied ? 'none' : 'inline-block' };
+    const styleSaveButtons = { display: this.state.showSaved ? 'none' : 'inline-block' };
 
     let copyPanel = null;
+    let savePanel = null;
     if (rowCount) {
       copyPanel = (
         <div className="ui small label" title="Copy as" style={{ float: 'right', margin: '3px' }}>
           <i className="copy icon"></i>
           <a className="detail" style={styleCopied}>Copied</a>
           <a className="detail"
-            style={styleButtons}
+            style={styleCopyButtons}
             onClick={() => onCopyToClipboardClick(rows, 'CSV')}>CSV</a>
           <a className="detail"
-            style={styleButtons}
+            style={styleCopyButtons}
             onClick={() => onCopyToClipboardClick(rows, 'JSON')}>JSON</a>
+        </div>
+      );
+
+      savePanel = (
+        <div className="ui small label" title="Save as" style={{ float: 'right', margin: '3px' }}>
+          <i className="save icon"></i>
+          <a className="detail" style={styleSaved}>Saved</a>
+          <a className="detail"
+            style={styleSaveButtons}
+            onClick={() => onSaveToFileClick(rows, 'CSV')}>CSV</a>
+          <a className="detail"
+            style={styleSaveButtons}
+            onClick={() => onSaveToFileClick(rows, 'JSON')}>JSON</a>
         </div>
       );
     }
@@ -212,6 +239,7 @@ export default class QueryResultTable extends Component {
           Rows
           <div className="detail">{rowCount}</div>
         </div>
+        {savePanel}
         {copyPanel}
       </div>
     );

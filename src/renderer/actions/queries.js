@@ -22,6 +22,9 @@ export const CANCEL_QUERY_FAILURE = 'CANCEL_QUERY_FAILURE';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST = 'COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS = 'COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS';
 export const COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE = 'COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE';
+export const SAVE_QUERY_RESULT_TO_FILE_REQUEST = 'SAVE_QUERY_RESULT_TO_FILE_REQUEST';
+export const SAVE_QUERY_RESULT_TO_FILE_SUCCESS = 'SAVE_QUERY_RESULT_TO_FILE_SUCCESS';
+export const SAVE_QUERY_RESULT_TO_FILE_FAILURE = 'SAVE_QUERY_RESULT_TO_FILE_FAILURE';
 export const SAVE_QUERY_REQUEST = 'SAVE_QUERY_REQUEST';
 export const SAVE_QUERY_SUCCESS = 'SAVE_QUERY_SUCCESS';
 export const SAVE_QUERY_FAILURE = 'SAVE_QUERY_FAILURE';
@@ -132,6 +135,34 @@ export function copyToClipboard (rows, type) {
       dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS });
     } catch (error) {
       dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE, error });
+    }
+  };
+}
+
+export function saveToFile (rows, type) {
+  return async dispatch => {
+    dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_REQUEST });
+    try {
+      let value;
+      const filters = [{ name: 'All Files', extensions: ['*'] }];
+      if (type === 'CSV') {
+        value = await stringifyResultToCSV(rows);
+        filters.push({ name: 'CSV', extensions: ['csv'] });
+      } else {
+        // force the next dispatch be separately
+        // handled of the previous one
+        await wait(0);
+        value = JSON.stringify(rows, null, 2);
+        filters.push({ name: 'JSON', extensions: ['json'] });
+      }
+      let filename = await fileHandler.showSaveDialog(filters);
+      if (path.extname(filename) !== `.${type.toLowerCase()}`) {
+        filename += `.${type.toLowerCase()}`;
+      }
+      await fileHandler.saveFile(filename, value);
+      dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_SUCCESS });
+    } catch (error) {
+      dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_FAILURE, error });
     }
   };
 }
