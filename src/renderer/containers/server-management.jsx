@@ -69,7 +69,8 @@ class ServerManagerment extends Component {
 
   onSaveClick(server) {
     const { dispatch, servers } = this.props;
-    dispatch(ServersActions.saveServer({ id: servers.editingId, server }));
+    const id = servers.editingServer && servers.editingServer.id;
+    dispatch(ServersActions.saveServer({ id, server }));
   }
 
   onCancelClick() {
@@ -79,7 +80,8 @@ class ServerManagerment extends Component {
 
   onRemoveClick() {
     const { dispatch, servers } = this.props;
-    dispatch(ServersActions.removeServer({ id: servers.editingId }));
+    const id = servers.editingServer && servers.editingServer.id;
+    dispatch(ServersActions.removeServer({ id }));
   }
 
   onSettingsSaveClick(config) {
@@ -104,11 +106,7 @@ class ServerManagerment extends Component {
   render() {
     const { filter } = this.state;
     const { connections, servers, config, status } = this.props;
-    const selected = (
-      servers.editingId !== null
-      ? servers.items.find(srv => srv.id === servers.editingId)
-      : {}
-    );
+    const selected = servers.editingServer || {};
     const filteredServers = this.filterServers(filter, servers.items);
 
     const testConnection = {

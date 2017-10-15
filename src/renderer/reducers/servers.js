@@ -7,7 +7,7 @@ const INITIAL_STATE = {
   isEditing: false,
   items: [],
   error: null,
-  editingId: null,
+  editingServer: null,
 };
 
 
@@ -23,7 +23,7 @@ export default function servers(state = INITIAL_STATE, action) {
         ...state,
         isSaving: false,
         isEditing: true,
-        editingId: action.id || null,
+        editingServer: action.server || null,
       };
     }
     case types.FINISH_EDITING_SERVER: {
@@ -31,7 +31,7 @@ export default function servers(state = INITIAL_STATE, action) {
         ...state,
         isSaving: false,
         isEditing: false,
-        editingId: null,
+        editingServer: null,
         error: null,
       };
     }
