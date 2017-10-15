@@ -15,7 +15,24 @@ export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
 
 
 export function startEditing(id) {
-  return { type: START_EDITING_SERVER, id };
+  return (dispatch, getState) => {
+    if (!id) {
+      dispatch({ type: START_EDITING_SERVER });
+      return;
+    }
+
+    const { config } = getState();
+    const cryptoSecret = config.data.crypto.secret;
+
+    const server = config.data.servers.find(srv => srv.id === id);
+    if (!server) {
+      return;
+    }
+
+    const decryptedServer = sqlectron.servers.decryptSecrects(server, cryptoSecret);
+
+    dispatch({ type: START_EDITING_SERVER, server: decryptedServer });
+  };
 }
 
 
@@ -65,12 +82,12 @@ export function duplicateServer ({ server }) {
   return async (dispatch, getState) => {
     dispatch({ type: DUPLICATE_SERVER_REQUEST, server });
     try {
-      const { config } = getState();
-      const cryptoSecret = config.data.crypto.secret;
-
-      const newName = await getUniqueName(server, cryptoSecret);
+      const newName = await getUniqueName(server);
       const duplicated = { ...server, name: newName };
       delete duplicated.id;
+
+      const { config } = getState();
+      const cryptoSecret = config.data.crypto.secret;
 
       const data = await sqlectron.servers.addOrUpdate(duplicated, cryptoSecret);
 
@@ -85,8 +102,8 @@ export function duplicateServer ({ server }) {
 }
 
 
-async function getUniqueName(server, cryptoSecret) {
-  const dataServers = await sqlectron.servers.getAll(cryptoSecret);
+async function getUniqueName(server) {
+  const dataServers = await sqlectron.servers.getAll();
   const duplicatedName = (name) => dataServers.some(srv => srv.name === name);
   let currentName = server.name;
   let num = 0;

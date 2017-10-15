@@ -51,11 +51,13 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       const { config } = getState();
       const cryptoSecret = config.data.crypto.secret;
 
-      const servers = await sqlectron.servers.getAll(cryptoSecret);
+      const servers = await sqlectron.servers.getAll();
       server = servers.find(srv => srv.id === id);
       if (!server) {
         throw new Error('Server configuration not found');
       }
+
+      server = sqlectron.servers.decryptSecrects(server, cryptoSecret);
 
       // Terrible workaround to avoid a state issue of data loading from the main process.
       // For some reason chaging a value here in client from a data coming from the main process
