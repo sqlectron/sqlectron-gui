@@ -66,7 +66,7 @@ export default class Query extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
-      wrapEnabled: false
+      wrapEnabled: false,
     };
   }
 
@@ -288,17 +288,16 @@ export default class Query extends Component {
               editorProps={{ $blockScrolling: Infinity }}
               onChange={debounce(onSQLChange, 50)}
               enableBasicAutocompletion
-              enableLiveAutocompletion
-              />
-              <div className="ui secondary menu" style={{ marginTop: 0 }}>
-                <div className="right menu">
-                    <CheckBox
-                      name="wrapQueryContents"
-                      label="Wrap Contents"
-                      onChecked={() => { this.setState({ wrapEnabled: true }) }}
-                      onUnchecked={() => { this.setState({ wrapEnabled: false }) }}/>
-                </div>
+              enableLiveAutocompletion />
+            <div className="ui secondary menu" style={{ marginTop: 0 }}>
+              <div className="right menu">
+                <CheckBox
+                  name="wrapQueryContents"
+                  label="Wrap Contents"
+                  onChecked={() => { this.setState({ wrapEnabled: true }); }}
+                  onUnchecked={() => { this.setState({ wrapEnabled: false }); }} />
               </div>
+            </div>
           </ResizableBox>
           <div className="ui secondary menu" style={{ marginTop: 0 }}>
             {infos &&
