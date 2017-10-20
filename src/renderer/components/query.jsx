@@ -6,6 +6,7 @@ import 'brace/mode/sql';
 import 'brace/theme/github';
 import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
+import CheckBox from './checkbox.jsx';
 import QueryResult from './query-result.jsx';
 import ServerDBClientInfoModal from './server-db-client-info-modal.jsx';
 
@@ -64,7 +65,9 @@ export default class Query extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this.state = {};
+    this.state = {
+      wrapEnabled: false,
+    };
   }
 
   componentDidMount() {
@@ -168,6 +171,14 @@ export default class Query extends Component {
 
   onQueryBoxResize() {
     this.refs.queryBoxTextarea.editor.resize();
+  }
+
+  onWrapContentsChecked() {
+    this.setState({ wrapEnabled: true });
+  }
+
+  onWrapContentsUnchecked() {
+    this.setState({ wrapEnabled: false });
   }
 
   getQueryCompletions(props) {
@@ -275,17 +286,26 @@ export default class Query extends Component {
               mode="sql"
               theme="github"
               name={this.props.editorName}
-              height="100%"
+              height="calc(100% - 15px)"
               width="100%"
               ref="queryBoxTextarea"
               value={query.query}
+              wrapEnabled={this.state.wrapEnabled}
               showPrintMargin={false}
               commands={this.getCommands()}
               editorProps={{ $blockScrolling: Infinity }}
               onChange={debounce(onSQLChange, 50)}
               enableBasicAutocompletion
-              enableLiveAutocompletion
-              />
+              enableLiveAutocompletion />
+            <div className="ui secondary menu" style={{ marginTop: 0 }}>
+              <div className="right menu">
+                <CheckBox
+                  name="wrapQueryContents"
+                  label="Wrap Contents"
+                  onChecked={::this.onWrapContentsChecked}
+                  onUnchecked={::this.onWrapContentsUnchecked} />
+              </div>
+            </div>
           </ResizableBox>
           <div className="ui secondary menu" style={{ marginTop: 0 }}>
             {infos &&
