@@ -173,6 +173,14 @@ export default class Query extends Component {
     this.refs.queryBoxTextarea.editor.resize();
   }
 
+  onWrapContentsChecked() {
+    this.setState({ wrapEnabled: true });
+  }
+
+  onWrapContentsUnchecked() {
+    this.setState({ wrapEnabled: false });
+  }
+
   getQueryCompletions(props) {
     const {
       databases,
@@ -294,8 +302,8 @@ export default class Query extends Component {
                 <CheckBox
                   name="wrapQueryContents"
                   label="Wrap Contents"
-                  onChecked={() => { this.setState({ wrapEnabled: true }); }}
-                  onUnchecked={() => { this.setState({ wrapEnabled: false }); }} />
+                  onChecked={::this.onWrapContentsChecked}
+                  onUnchecked={::this.onWrapContentsUnchecked} />
               </div>
             </div>
           </ResizableBox>
