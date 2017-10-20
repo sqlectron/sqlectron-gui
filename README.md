@@ -20,5 +20,4 @@
 
 #### How to pronounce
 
-It is pronounced "sequelectron" - https://translate.google.com/?source=osdd#en/en/sequelectron
-
+It is pronounced "sequel-eck-tron" - https://translate.google.com/?source=osdd#en/en/sequel-eck-tron
