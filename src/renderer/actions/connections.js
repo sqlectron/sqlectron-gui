@@ -59,8 +59,13 @@ export function restoreStoredQueries(id) {
       const databaseNames = uniq(
         Object.values(storedQueryState.queriesById).map(({ database }) => database)
       );
-      databaseNames.forEach(db => dispatch(connect(id, db)));
-
+      databaseNames.forEach((db, idx) => {
+        if (idx === 0) {
+          dispatch(connect(id, db, false, undefined, true));
+        } else {
+          dispatch(connect(id, db));
+        }
+      });
       dispatch({ type: SET_STORED_QUERIES, storedQueryState });
     } else {
       dispatch(connect(id));
@@ -68,7 +73,8 @@ export function restoreStoredQueries(id) {
   };
 }
 
-export function connect (id, databaseName, reconnecting = false, sshPassphrase) {
+export function connect (id, databaseName, reconnecting = false,
+  sshPassphrase, isServerConnection = false) {
   return async (dispatch, getState) => {
     let server;
     let dbConn;
@@ -100,7 +106,7 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
         server,
         database,
         reconnecting,
-        isServerConnection: !databaseName,
+        isServerConnection: isServerConnection || !databaseName,
       });
 
       if (!serverSession) {
