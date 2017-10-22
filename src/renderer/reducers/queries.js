@@ -25,7 +25,9 @@ export default function (state = INITIAL_STATE, action) {
       };
     }
     case connTypes.CONNECTION_SUCCESS: {
-      if (state.queryIds.length === 0) {
+      const hasOpenTab = Object.values(state.queriesById).find(
+        ({ database }) => database === action.database);
+      if (!hasOpenTab) {
         return addNewQuery(state, action);
       }
 
