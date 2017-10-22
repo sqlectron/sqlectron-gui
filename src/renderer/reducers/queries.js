@@ -18,15 +18,18 @@ export default function (state = INITIAL_STATE, action) {
     case connTypes.CLOSE_CONNECTION: {
       return INITIAL_STATE;
     }
+    case types.SET_STORED_QUERIES: {
+      return {
+        ...INITIAL_STATE,
+        ...action.storedQueryState,
+      };
+    }
     case connTypes.CONNECTION_SUCCESS: {
-      if (action.storedQueryState) {
-        return {
-          ...INITIAL_STATE,
-          ...action.storedQueryState,
-        };
+      if (state.queryIds.length === 0) {
+        return addNewQuery(state, action);
       }
 
-      return addNewQuery(state, action);
+      return state;
     }
     case types.NEW_QUERY: {
       return addNewQuery(state, action);

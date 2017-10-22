@@ -1,3 +1,4 @@
+import { SET_STORED_QUERIES } from '../actions/queries';
 import * as types from '../actions/connections';
 import * as serverTypes from '../actions/servers';
 import { sqlectron } from '../../browser/remote';
@@ -16,6 +17,12 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case SET_STORED_QUERIES: {
+      return {
+        ...INITIAL_STATE,
+        connecting: true,
+      };
+    }
     case types.CONNECTION_REQUEST: {
       const { disabledFeatures } = CLIENTS.find(dbClient => dbClient.key === action.server.client);
       return {
