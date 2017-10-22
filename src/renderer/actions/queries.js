@@ -98,6 +98,7 @@ const updateStoredQuery = async (dispatch, state) => {
       ...currentConfig.queries,
       [selectedServerId]: {
         ...state.queries,
+        selectedQuery: null,
         queriesById: mapValues(
           state.queries.queriesById,
           q => ({ ...q, results: [], error: null })
