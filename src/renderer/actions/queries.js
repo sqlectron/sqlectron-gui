@@ -5,9 +5,12 @@ import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron'; // eslint-disable-line import/no-unresolved
 import { getCurrentDBConn, getDBConnByName } from './connections';
 import { rowsValuesToString } from '../utils/convert';
+import { saveConfig } from './config';
 import * as fileHandler from '../utils/file-handler';
 import wait from '../utils/wait';
-
+import debounce from 'lodash.debounce';
+import getCurrentServerId from '../utils/getCurrentServerId';
+import mapValues from 'lodash.mapvalues';
 
 export const NEW_QUERY = 'NEW_QUERY';
 export const RENAME_QUERY = 'RENAME_QUERY';
@@ -33,7 +36,6 @@ export const OPEN_QUERY_SUCCESS = 'OPEN_QUERY_SUCCESS';
 export const OPEN_QUERY_FAILURE = 'OPEN_QUERY_FAILURE';
 export const UPDATE_QUERY = 'UPDATE_QUERY';
 
-
 export function newQuery (database) {
   return { type: NEW_QUERY, database };
 }
@@ -48,9 +50,11 @@ export function selectQuery (id) {
   return { type: SELECT_QUERY, id };
 }
 
-
 export function removeQuery (id) {
-  return { type: REMOVE_QUERY, id };
+  return (dispatch, getState) => {
+    dispatch({ type: REMOVE_QUERY, id });
+    debouncedUpdateStoredQuery(dispatch, getState());
+  };
 }
 
 
@@ -82,10 +86,35 @@ export function executeDefaultSelectQueryIfNeeded (database, table, schema) {
   };
 }
 
+const updateStoredQuery = async (dispatch, state) => {
+  const selectedServerId = getCurrentServerId(state);
+  const currentConfig = {
+    servers: state.config.data.servers,
+    queries: state.config.data.queries,
+  };
+  const updatedConfig = {
+    ...currentConfig,
+    queries: {
+      ...currentConfig.queries,
+      [selectedServerId]: {
+        ...state.queries,
+        queriesById: mapValues(
+          state.queries.queriesById,
+          q => ({ ...q, results: [], error: null })
+        ),
+      },
+    },
+  };
+  dispatch(saveConfig(updatedConfig));
+};
+
+const debouncedUpdateStoredQuery = debounce(updateStoredQuery, 500);
+
 export function updateQueryIfNeeded (query, selectedQuery) {
   return (dispatch, getState) => {
     if (shouldUpdateQuery(query, selectedQuery, getState())) {
       dispatch(updateQuery(query, selectedQuery));
+      debouncedUpdateStoredQuery(dispatch, getState());
     }
   };
 }
@@ -112,7 +141,8 @@ export function appendQuery (query) {
     const newLine = !currentQuery ? '' : '\n';
     const appendedQuery = `${currentQuery}${newLine}${query}`;
     if (!currentQuery.isExecuting) {
-      dispatch(updateQuery(appendedQuery));
+      dispatch(updateQuery(appendedQuery, currentQuery));
+      debouncedUpdateStoredQuery(dispatch, getState());
     }
   };
 }

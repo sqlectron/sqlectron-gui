@@ -126,6 +126,8 @@
     "lodash.debounce": "^4.0.8",
     "lodash.groupby": "^4.6.0",
     "lodash.isplainobject": "^4.0.6",
+    "lodash.mapvalues": "^4.6.0",
+    "lodash.omit": "^4.5.0",
     "lodash.set": "^4.3.2",
     "lodash.template": "^4.4.0",
     "lodash.trim": "^4.5.1",

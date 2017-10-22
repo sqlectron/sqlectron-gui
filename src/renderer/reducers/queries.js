@@ -1,6 +1,6 @@
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/queries';
-
+import omit from 'lodash.omit';
 
 const INITIAL_STATE = {
   lastCreatedId: 0,
@@ -18,7 +18,16 @@ export default function (state = INITIAL_STATE, action) {
     case connTypes.CLOSE_CONNECTION: {
       return INITIAL_STATE;
     }
-    case connTypes.CONNECTION_SUCCESS:
+    case connTypes.CONNECTION_SUCCESS: {
+      if (action.storedQueryState) {
+        return {
+          ...INITIAL_STATE,
+          ...action.storedQueryState,
+        };
+      }
+
+      return addNewQuery(state, action);
+    }
     case types.NEW_QUERY: {
       return addNewQuery(state, action);
     }
@@ -43,7 +52,8 @@ export default function (state = INITIAL_STATE, action) {
       }
 
       newState.queryIds.splice(index, 1);
-      delete newState.queriesById[state.currentQueryId];
+      newState.queriesById =
+        omit(newState.queriesById, state.currentQueryId);
 
       if (newState.queryIds.length >= 1) {
         return newState;

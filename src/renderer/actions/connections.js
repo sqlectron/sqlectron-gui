@@ -1,5 +1,5 @@
 import { sqlectron } from '../../browser/remote';
-
+import getCurrentServerId from '../utils/getCurrentServerId';
 
 export const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
 export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
@@ -9,7 +9,6 @@ export const CONNECTION_REQUIRE_SSH_PASSPHRASE = 'CONNECTION_REQUIRE_SSH_PASSPHR
 export const TEST_CONNECTION_REQUEST = 'TEST_CONNECTION_REQUEST';
 export const TEST_CONNECTION_SUCCESS = 'TEST_CONNECTION_SUCCESS';
 export const TEST_CONNECTION_FAILURE = 'TEST_CONNECTION_FAILURE';
-
 
 let serverSession;
 export function getCurrentDBConn ({ queries } = {}) {
@@ -39,6 +38,19 @@ export function getDBConnByName(database) {
   return dbConn;
 }
 
+const getStoredQueryState = state => {
+  const currentServerId = getCurrentServerId(state);
+  try {
+    const storedQueryState = state.config.data.queries[currentServerId];
+    if (storedQueryState && Object.keys(storedQueryState).length > 0) {
+      return storedQueryState;
+    }
+
+    return null;
+  } catch (err) {
+    return null;
+  }
+};
 
 export function connect (id, databaseName, reconnecting = false, sshPassphrase) {
   return async (dispatch, getState) => {
@@ -98,7 +110,15 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       dbConn = serverSession.createConnection(database);
       await dbConn.connect();
 
-      dispatch({ type: CONNECTION_SUCCESS, server, database, config, reconnecting });
+      const connectionSuccessAction =
+        { type: CONNECTION_SUCCESS, server, database, config, reconnecting };
+      const storedQueryState = await getStoredQueryState(getState());
+
+      if (storedQueryState) {
+        dispatch({ ...connectionSuccessAction, storedQueryState });
+      } else {
+        dispatch(connectionSuccessAction);
+      }
     } catch (error) {
       dispatch({ type: CONNECTION_FAILURE, server, database, error });
       if (dbConn) {
