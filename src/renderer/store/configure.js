@@ -24,7 +24,8 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
     if (typeof console[method] === 'function') { // eslint-disable-line no-console
       loggerConfig.logger[method] = function levelFn(...args) {
         if (isLogConsoleEnabled) {
-          console[method].apply(console, args); // eslint-disable-line no-console
+          const m = method === 'debug' ? 'log' : method;
+          console[m].apply(console, args); // eslint-disable-line no-console
         }
 
         if (isLogFileEnabled) {
