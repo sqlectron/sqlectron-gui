@@ -613,7 +613,10 @@ class QueryBrowserContainer extends Component {
             onReConnectionClick={::this.onReConnectionClick} />
         </div>
         <div onClick={::this.onCollapseClick} style={STYLES.collapse}>
-          <i className={`${this.state.sidebarCollapsed ? 'right' : 'left'} triangle icon`} style={{ top: 'calc(100vh/2 - 7px)', position: 'absolute', marginLeft: -3 }} />
+          <i
+            className={`${this.state.sidebarCollapsed ? 'right' : 'left'} triangle icon`}
+            style={{ top: 'calc(100vh/2 - 7px)', position: 'absolute', marginLeft: -3 }}
+          />
         </div>
         <div style={STYLES.container}>
           <div id="sidebar" style={{
