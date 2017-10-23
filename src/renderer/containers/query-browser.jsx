@@ -44,8 +44,21 @@ const STYLES = {
     boxSizing: 'border-box',
     padding: '50px 10px 40px 10px',
   },
-  sidebar: {},
+  sidebar: { transition: 'all .2s' },
   content: { flex: 1, overflow: 'auto', paddingLeft: '5px' },
+  collapse: {
+    position: 'fixed',
+    color: '#fff',
+    cursor: 'pointer',
+    width: 10,
+    left: 0,
+    height: '100vh',
+    backgroundColor: 'rgb(102,102,102)',
+    zIndex: 1,
+    MozUserSelect: 'none',
+    WebkitUserSelect: 'none',
+    msUserSelect: 'none',
+  },
   resizeable: { width: 'auto', maxWidth: '100%' },
 };
 
@@ -86,6 +99,7 @@ class QueryBrowserContainer extends Component {
     this.state = {
       tabNavPosition: 0,
       sideBarWidth: SIDEBAR_WIDTH,
+      sidebarCollapsed: false,
     };
     this.menuHandler = new MenuHandler();
   }
@@ -153,6 +167,10 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(
       QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema)
     );
+  }
+
+  onCollapseClick() {
+    this.setState({ sidebarCollapsed: !this.state.sidebarCollapsed });
   }
 
   onPromptCancelClick() {
@@ -594,8 +612,14 @@ class QueryBrowserContainer extends Component {
             onCloseConnectionClick={::this.onCloseConnectionClick}
             onReConnectionClick={::this.onReConnectionClick} />
         </div>
+        <div onClick={::this.onCollapseClick} style={STYLES.collapse}>
+          <i className={`${this.state.sidebarCollapsed ? 'right' : 'left'} triangle icon`} style={{ top: 'calc(100vh/2 - 7px)', position: 'absolute', marginLeft: -3 }} />
+        </div>
         <div style={STYLES.container}>
-          <div id="sidebar" style={STYLES.sidebar}>
+          <div id="sidebar" style={{
+            ...STYLES.sidebar,
+            marginLeft: this.state.sidebarCollapsed ? (- this.state.sideBarWidth) : 0,
+          }}>
             <ResizableBox className="react-resizable react-resizable-ew-resize"
               onResizeStop={(event, { size }) => this.setState({ sideBarWidth: size.width })}
               width={this.state.sideBarWidth || SIDEBAR_WIDTH}
