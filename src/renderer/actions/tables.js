@@ -1,4 +1,4 @@
-import { getCurrentDBConn } from './connections';
+import { getDBConnByName } from './connections';
 
 
 export const FETCH_TABLES_REQUEST = 'FETCH_TABLES_REQUEST';
@@ -31,10 +31,10 @@ function shouldFetchTables (state, database) {
 
 
 function fetchTables (database, filter) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_TABLES_REQUEST, database });
     try {
-      const dbConn = getCurrentDBConn(getState());
+      const dbConn = getDBConnByName(database);
       const tables = await dbConn.listTables(filter);
       dispatch({ type: FETCH_TABLES_SUCCESS, database, tables });
     } catch (error) {
