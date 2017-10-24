@@ -64,6 +64,7 @@ export default function (state = INITIAL_STATE, action) {
         return newState;
       }
 
+      newState.lastCreatedId = 0;
       return addNewQuery(newState, { ...action, database });
     }
     case types.EXECUTE_QUERY_REQUEST: {
