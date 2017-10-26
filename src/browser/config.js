@@ -2,7 +2,7 @@
  * Load app configurations.
  *
  * Since it may be loaded directly from the renderer process,
- * without passing trhough a transpiler, this file must use ES5.
+ * without passing through a transpiler, this file must use ES5.
  */
 
 const fs = require('fs');
