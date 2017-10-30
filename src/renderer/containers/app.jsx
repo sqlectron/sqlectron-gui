@@ -25,6 +25,9 @@ class AppContainer extends Component {
 
   componentDidMount() {
     this.props.dispatch(ConfigActions.loadConfig());
+    // Prevent drag and drop causing redirect
+    document.addEventListener('dragover', this.handleDragOver, false);
+    document.addEventListener('drop', this.handleDrop, false);
   }
 
   componentWillReceiveProps(newProps) {
@@ -37,6 +40,19 @@ class AppContainer extends Component {
       // Required for HiDPI support
       webFrame.setZoomFactor(zoomFactor);
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('dragover', this.handleDragOver, false);
+    document.removeEventListener('drop', this.handleDrop, false);
+  }
+
+  handleDragOver(event) {
+    event.preventDefault();
+  }
+
+  handleDrop(event) {
+    event.preventDefault();
   }
 
   render() {
