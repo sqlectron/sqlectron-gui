@@ -11,7 +11,7 @@ SQLECTRON keeps a configuration file in the directory:
 > * **Linux:** `~/`
 > * **Windows:** `%USERPROFILE%`
 
-Although is possible to change this file manually. In most cases is better just use the UI since it allows to change any of these settings from there.
+Although it is possible to change this file manually, it is usually better to just use the UI since it allows you to change any of these settings from there.
 
 ```js
 {
@@ -56,10 +56,10 @@ Although is possible to change this file manually. In most cases is better just 
   // List of servers
   "servers": [
     {
-      // Is possible add a filter property that will load only
+      // It's possible add a filter property that will load only
       // the data is useful in the sidebar.
-      // Is only possible to filter "database" and "schema".
-      // It accept the filter types: "only" and "ignore".
+      // It's only possible to filter "database" and "schema".
+      // It accepts the filter types: "only" and "ignore".
       "filter": {
         "database": {
           "only": [
