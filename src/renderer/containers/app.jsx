@@ -10,6 +10,8 @@ require('../../../vendor/renderer/lato/latofonts.css');
 require('../../../vendor/renderer/semantic-ui/semantic.css');
 require('./app.css');
 
+const preventDefault = e => e.preventDefault();
+
 class AppContainer extends Component {
   static propTypes = {
     config: PropTypes.object.isRequired,
@@ -26,8 +28,8 @@ class AppContainer extends Component {
   componentDidMount() {
     this.props.dispatch(ConfigActions.loadConfig());
     // Prevent drag and drop causing redirect
-    document.addEventListener('dragover', this.handleDragOver, false);
-    document.addEventListener('drop', this.handleDrop, false);
+    document.addEventListener('dragover', preventDefault, false);
+    document.addEventListener('drop', preventDefault, false);
   }
 
   componentWillReceiveProps(newProps) {
@@ -43,16 +45,8 @@ class AppContainer extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('dragover', this.handleDragOver, false);
-    document.removeEventListener('drop', this.handleDrop, false);
-  }
-
-  handleDragOver(event) {
-    event.preventDefault();
-  }
-
-  handleDrop(event) {
-    event.preventDefault();
+    document.removeEventListener('dragover', preventDefault, false);
+    document.removeEventListener('drop', preventDefault, false);
   }
 
   render() {
