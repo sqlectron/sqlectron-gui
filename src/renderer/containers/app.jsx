@@ -10,6 +10,8 @@ require('../../../vendor/renderer/lato/latofonts.css');
 require('../../../vendor/renderer/semantic-ui/semantic.css');
 require('./app.css');
 
+const preventDefault = e => e.preventDefault();
+
 class AppContainer extends Component {
   static propTypes = {
     config: PropTypes.object.isRequired,
@@ -25,6 +27,9 @@ class AppContainer extends Component {
 
   componentDidMount() {
     this.props.dispatch(ConfigActions.loadConfig());
+    // Prevent drag and drop causing redirect
+    document.addEventListener('dragover', preventDefault, false);
+    document.addEventListener('drop', preventDefault, false);
   }
 
   componentWillReceiveProps(newProps) {
@@ -37,6 +42,11 @@ class AppContainer extends Component {
       // Required for HiDPI support
       webFrame.setZoomFactor(zoomFactor);
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('dragover', preventDefault, false);
+    document.removeEventListener('drop', preventDefault, false);
   }
 
   render() {
