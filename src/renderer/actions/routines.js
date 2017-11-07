@@ -1,4 +1,4 @@
-import { getCurrentDBConn } from './connections';
+import { getDBConnByName } from './connections';
 
 
 export const FETCH_ROUTINES_REQUEST = 'FETCH_ROUTINES_REQUEST';
@@ -24,10 +24,10 @@ function shouldFetchRoutines (state, database) {
 }
 
 function fetchRoutines (database, filter) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_ROUTINES_REQUEST, database });
     try {
-      const dbConn = getCurrentDBConn(getState());
+      const dbConn = getDBConnByName(database);
       const routines = await dbConn.listRoutines(filter);
       dispatch({ type: FETCH_ROUTINES_SUCCESS, database, routines });
     } catch (error) {

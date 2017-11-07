@@ -1,4 +1,4 @@
-import { getCurrentDBConn } from './connections';
+import { getDBConnByName } from './connections';
 
 
 export const FETCH_SCHEMAS_REQUEST = 'FETCH_SCHEMAS_REQUEST';
@@ -24,10 +24,10 @@ function shouldFetchSchemas (state, database) {
 
 
 function fetchSchemas (database) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_SCHEMAS_REQUEST, database });
     try {
-      const dbConn = getCurrentDBConn(getState());
+      const dbConn = getDBConnByName(database);
       const schemas = await dbConn.listSchemas();
       dispatch({ type: FETCH_SCHEMAS_SUCCESS, database, schemas });
     } catch (error) {

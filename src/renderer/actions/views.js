@@ -1,4 +1,4 @@
-import { getCurrentDBConn } from './connections';
+import { getDBConnByName } from './connections';
 
 
 export const FETCH_VIEWS_REQUEST = 'FETCH_VIEWS_REQUEST';
@@ -23,10 +23,10 @@ function shouldFetchViews (state, database) {
 }
 
 function fetchViews (database, filter) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_VIEWS_REQUEST, database });
     try {
-      const dbConn = getCurrentDBConn(getState());
+      const dbConn = getDBConnByName(database);
       const views = await dbConn.listViews(filter);
       dispatch({ type: FETCH_VIEWS_SUCCESS, database, views });
     } catch (error) {
