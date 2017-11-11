@@ -30,7 +30,8 @@ export default class QueryResult extends Component {
     return (
       (!nextProps.isExecuting && this.props.isExecuting) ||
       (nextProps.query !== this.props.query) ||
-      (nextProps.copied && !this.props.copied)
+      (nextProps.copied && !this.props.copied) ||
+      (nextProps.widthOffset !== this.props.widthOffset)
     );
   }
 

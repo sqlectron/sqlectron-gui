@@ -49,6 +49,15 @@ export default class QueryResultTable extends Component {
   componentWillReceiveProps(nextProps) {
     this.resize(nextProps);
 
+    if (nextProps.widthOffset !== this.props.widthOffset) {
+      if (this.rowsGrid) {
+        this.rowsGrid.recomputeGridSize();
+      }
+      if (this.headerGrid) {
+        this.headerGrid.recomputeGridSize();
+      }
+    }
+
     if (nextProps.copied) {
       this.setState({ showCopied: true });
     }
