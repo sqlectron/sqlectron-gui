@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   path: null,
   data: null,
   error: null,
+  isLoaded: false,
 };
 
 
@@ -17,11 +18,13 @@ export default function config(state = INITIAL_STATE, action) {
         ...state,
         data: action.config,
         path: action.path,
+        isLoaded: true,
       };
     case types.LOAD_CONFIG_FAILURE: {
       return {
         ...state,
         error: action.error,
+        isLoaded: true,
       };
     }
     case types.START_EDITING_CONFIG: {

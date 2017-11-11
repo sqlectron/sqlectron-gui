@@ -25,8 +25,11 @@ class AppContainer extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(ConfigActions.loadConfig());
+  }
+
+  componentDidMount() {
     // Prevent drag and drop causing redirect
     document.addEventListener('dragover', preventDefault, false);
     document.addEventListener('drop', preventDefault, false);
@@ -50,10 +53,10 @@ class AppContainer extends Component {
   }
 
   render() {
-    const { children } = this.props;
+    const { children, config } = this.props;
     return (
       <div className="ui">
-        {children}
+        {config.isLoaded ? children : null}
       </div>
     );
   }
