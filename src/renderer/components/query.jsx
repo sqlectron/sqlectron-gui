@@ -312,7 +312,7 @@ export default class Query extends Component {
               <div className="item">
                 <span>
                   <button className="ui icon button small"
-                    title="Query Infomartions"
+                    title="Query Information"
                     onClick={::this.onShowInfoClick}>
                     <i className="icon info"></i>
                   </button>
