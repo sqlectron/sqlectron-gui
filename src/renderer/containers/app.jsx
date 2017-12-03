@@ -38,12 +38,16 @@ class AppContainer extends Component {
   componentWillReceiveProps(newProps) {
     const { config } = newProps;
     if (!config.data) { return; }
-
-    const { zoomFactor } = config.data;
+    const { zoomFactor, enabledDarkTheme } = config.data;
     if (typeof zoomFactor !== 'undefined' && zoomFactor > 0) {
       // Apply the zoom factor
       // Required for HiDPI support
       webFrame.setZoomFactor(zoomFactor);
+    }
+    if (enabledDarkTheme === true) {
+      $('body').addClass('dark-theme');
+    } else {
+      $('body').removeClass('dark-theme');
     }
   }
 
