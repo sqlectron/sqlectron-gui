@@ -542,6 +542,12 @@ body {
 }
 
 /*******************************
+             Themes
+*******************************/
+.dark-theme {
+  background: #C1C1C1;
+}
+/*******************************
              Headers
 *******************************/
 
@@ -734,6 +740,10 @@ input::selection {
   color: rgba(0, 0, 0, 0.8);
 }
 
+.dark-theme .ui.button:hover {
+  background-color: #808080;
+}
+
 .ui.button:hover .icon {
   opacity: 0.85;
 }
@@ -751,6 +761,10 @@ input::selection {
 
 .ui.button:focus .icon {
   opacity: 0.85;
+}
+
+.dark-theme .ui.button:focus {
+  background-color: #808080;
 }
 
 /*--------------
