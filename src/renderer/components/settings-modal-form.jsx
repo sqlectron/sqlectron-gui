@@ -65,6 +65,7 @@ export default class SettingsModalForm extends Component {
       limitQueryDefaultSelectTop: parseInt(state.limitQueryDefaultSelectTop, 10) || 100,
       enabledAutoComplete: state.enabledAutoComplete || false,
       enabledLiveAutoComplete: state.enabledLiveAutoComplete || false,
+      enabledDarkTheme: state.enabledDarkTheme || false,
     };
     if (!this.state.log) { return config; }
 
@@ -177,7 +178,7 @@ export default class SettingsModalForm extends Component {
           </div>
         </div>
 
-        <div className="two fields">
+        <div className="three fields">
           <div className="field">
             <Checkbox
               name="enabledAutoComplete"
@@ -195,6 +196,15 @@ export default class SettingsModalForm extends Component {
               onChecked={() => this.setState({ enabledLiveAutoComplete: true })}
               onUnchecked={() => this.setState({ enabledLiveAutoComplete: false })} />
             <p className="help">Enable/Disable live auto complete for the query box.</p>
+          </div>
+          <div className="field">
+            <Checkbox
+              name="enabledDarkTheme"
+              label="Enable Dark Theme"
+              defaultChecked={this.state.enabledDarkTheme}
+              onChecked={() => this.setState({ enabledDarkTheme: true })}
+              onUnchecked={() => this.setState({ enabledDarkTheme: false })} />
+            <p className="help">Enable/Disable dark theme.</p>
           </div>
         </div>
       </div>
