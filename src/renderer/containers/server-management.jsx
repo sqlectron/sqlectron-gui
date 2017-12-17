@@ -75,7 +75,7 @@ class ServerManagerment extends Component {
 
   onCancelClick() {
     const { dispatch } = this.props;
-    dispatch(ServersActions.finisEditing());
+    dispatch(ServersActions.finishEditing());
   }
 
   onRemoveClick() {
@@ -91,7 +91,7 @@ class ServerManagerment extends Component {
 
   onSettingsCancelClick() {
     const { dispatch } = this.props;
-    dispatch(ConfigActions.finisEditing());
+    dispatch(ConfigActions.finishEditing());
   }
 
   onFilterChange(event) {

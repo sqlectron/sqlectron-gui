@@ -36,7 +36,7 @@ export function startEditing(id) {
 }
 
 
-export function finisEditing() {
+export function finishEditing() {
   return { type: FINISH_EDITING_SERVER };
 }
 
