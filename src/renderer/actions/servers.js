@@ -41,7 +41,7 @@ export function finishEditing() {
 }
 
 
-export function saveServer ({ server, id }) {
+export function saveServer ({ server, id }, onAfterSave) {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_SERVER_REQUEST, server });
     try {
@@ -54,6 +54,9 @@ export function saveServer ({ server, id }) {
         type: SAVE_SERVER_SUCCESS,
         server: convertToPlainObject(data),
       });
+
+
+      onAfterSave();
     } catch (error) {
       dispatch({ type: SAVE_SERVER_FAILURE, error });
     }
@@ -78,7 +81,7 @@ export function removeServer ({ id }) {
 }
 
 
-export function duplicateServer ({ server }) {
+export function duplicateServer ({ server }, onAfterSave) {
   return async (dispatch, getState) => {
     dispatch({ type: DUPLICATE_SERVER_REQUEST, server });
     try {
@@ -95,6 +98,9 @@ export function duplicateServer ({ server }) {
         type: DUPLICATE_SERVER_SUCCESS,
         server: convertToPlainObject(data),
       });
+
+
+      onAfterSave();
     } catch (error) {
       dispatch({ type: DUPLICATE_SERVER_FAILURE, error });
     }
