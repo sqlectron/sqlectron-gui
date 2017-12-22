@@ -40,6 +40,7 @@ export default class ServerModalForm extends Component {
     this.state = {
       ...server,
       isNew: !server.id,
+      showPlainPassword: false,
     };
   }
 
@@ -91,6 +92,10 @@ export default class ServerModalForm extends Component {
 
   onDuplicateClick() {
     this.props.onDuplicateClick(this.mapStateToServer(this.state));
+  }
+
+  onToggleShowPlainPasswordClick() {
+    this.setState({ showPlainPassword: !this.state.showPlainPassword });
   }
 
   isFeatureDisabled(feature) {
@@ -333,13 +338,21 @@ export default class ServerModalForm extends Component {
               onChange={::this.handleChange} />
           </div>
           <div className={`four wide field ${this.highlightError('password')}`}>
-            <label>Password</label>
-            <input type="password"
-              name="password"
-              placeholder="Password"
-              value={this.state.password || ''}
-              disabled={this.isFeatureDisabled('server:password')}
-              onChange={::this.handleChange} />
+            <div>
+              <label>Password</label>
+            </div>
+            <div className="ui action input">
+              <input type={this.state.showPlainPassword ? 'text' : 'password'}
+                name="password"
+                placeholder="Password"
+                value={this.state.password || ''}
+                disabled={this.isFeatureDisabled('server:password')}
+                onChange={::this.handleChange} />
+              <span className="ui icon button"
+                onClick={::this.onToggleShowPlainPasswordClick}>
+                <i className="unhide icon"></i>
+              </span>
+            </div>
           </div>
           <div className={`four wide field ${this.highlightError('database')}`}>
             <label>Initial Database/Keyspace</label>
