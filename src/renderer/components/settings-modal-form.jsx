@@ -182,7 +182,7 @@ export default class SettingsModalForm extends Component {
           <div className="field">
             <Checkbox
               name="enabledAutoComplete"
-              label="Enabled Auto Complete"
+              label="Auto Complete"
               defaultChecked={this.state.enabledAutoComplete}
               onChecked={() => this.setState({ enabledAutoComplete: true })}
               onUnchecked={() => this.setState({ enabledAutoComplete: false })} />
@@ -191,7 +191,7 @@ export default class SettingsModalForm extends Component {
           <div className="field">
             <Checkbox
               name="enabledLiveAutoComplete"
-              label="Enabled Live Auto Complete"
+              label="Live Auto Complete"
               defaultChecked={this.state.enabledLiveAutoComplete}
               onChecked={() => this.setState({ enabledLiveAutoComplete: true })}
               onUnchecked={() => this.setState({ enabledLiveAutoComplete: false })} />
@@ -200,7 +200,7 @@ export default class SettingsModalForm extends Component {
           <div className="field">
             <Checkbox
               name="enabledDarkTheme"
-              label="Enable Dark Theme"
+              label="Dark Theme"
               defaultChecked={this.state.enabledDarkTheme}
               onChecked={() => this.setState({ enabledDarkTheme: true })}
               onUnchecked={() => this.setState({ enabledDarkTheme: false })} />
