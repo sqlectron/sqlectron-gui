@@ -167,7 +167,7 @@ export default class SettingsModalForm extends Component {
             <label>Zoom Factor: {zoomFactorLabel}</label>
             <input type="range"
               min="0.4"
-              max="2"
+              max="3"
               step="0.2"
               name="zoomFactor"
               value={zoomFactor}
