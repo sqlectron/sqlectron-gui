@@ -157,16 +157,22 @@ export default class SettingsModalForm extends Component {
 
   renderBasicSettingsPanel() {
     /* eslint max-len:0 */
+    const { zoomFactor } = this.state;
+    const zoomFactorLabel = `${Math.round(zoomFactor * 100)}%`;
+
     return (
       <div>
         <div className="two fields">
           <div className={`field ${this.highlightError('zoomFactor')}`}>
-            <label>Zoom Factor</label>
-            <input type="number"
+            <label>Zoom Factor: {zoomFactorLabel}</label>
+            <input type="range"
+              min="0.4"
+              max="2"
+              step="0.2"
               name="zoomFactor"
-              value={this.state.zoomFactor || ''}
-              onChange={::this.handleChange} />
-            <p className="help">Zoom factor is zoom percent divided by 100, so 300% = 3.0.</p>
+              value={zoomFactor}
+              onChange={::this.handleChange}
+              style={{ width: '100%', 'margin-top': '10px' }} />
           </div>
           <div className={`field ${this.highlightError('limitQueryDefaultSelectTop')}`}>
             <label>Limit of Rows from Select Top Query</label>
