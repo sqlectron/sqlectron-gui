@@ -1,4 +1,5 @@
 import { sqlectron } from '../../browser/remote';
+import * as ConfigActions from './config.js';
 
 
 export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';
@@ -41,7 +42,7 @@ export function finishEditing() {
 }
 
 
-export function saveServer ({ server, id }, onAfterSave) {
+export function saveServer ({ server, id }) {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_SERVER_REQUEST, server });
     try {
@@ -55,8 +56,7 @@ export function saveServer ({ server, id }, onAfterSave) {
         server: convertToPlainObject(data),
       });
 
-
-      onAfterSave();
+      dispatch(ConfigActions.loadConfig());
     } catch (error) {
       dispatch({ type: SAVE_SERVER_FAILURE, error });
     }
@@ -81,7 +81,7 @@ export function removeServer ({ id }) {
 }
 
 
-export function duplicateServer ({ server }, onAfterSave) {
+export function duplicateServer ({ server }) {
   return async (dispatch, getState) => {
     dispatch({ type: DUPLICATE_SERVER_REQUEST, server });
     try {
@@ -99,8 +99,7 @@ export function duplicateServer ({ server }, onAfterSave) {
         server: convertToPlainObject(data),
       });
 
-
-      onAfterSave();
+      dispatch(ConfigActions.loadConfig());
     } catch (error) {
       dispatch({ type: DUPLICATE_SERVER_FAILURE, error });
     }

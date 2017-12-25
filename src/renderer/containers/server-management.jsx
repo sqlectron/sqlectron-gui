@@ -64,19 +64,13 @@ class ServerManagerment extends Component {
 
   onDuplicateClick(server) {
     const { dispatch } = this.props;
-    const onAfterSave = () => {
-      dispatch(ConfigActions.loadConfig());
-    };
-    dispatch(ServersActions.duplicateServer({ server }, onAfterSave));
+    dispatch(ServersActions.duplicateServer({ server }));
   }
 
   onSaveClick(server) {
     const { dispatch, servers } = this.props;
     const id = servers.editingServer && servers.editingServer.id;
-    const onAfterSave = () => {
-      dispatch(ConfigActions.loadConfig());
-    };
-    dispatch(ServersActions.saveServer({ id, server }, onAfterSave));
+    dispatch(ServersActions.saveServer({ id, server }));
   }
 
   onCancelClick() {
