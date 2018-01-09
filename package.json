@@ -39,7 +39,6 @@
       "target": [
         "deb",
         "rpm",
-        "snap",
         "sh",
         "freebsd",
         "pacman",
@@ -52,6 +51,15 @@
         "nsis",
         "7z",
         "zip"
+      ]
+    }
+  },
+  "build-snap": {
+    "appId": "org.sqlectron.gui",
+    "linux": {
+      "depends": [],
+      "target": [
+        "snap"
       ]
     }
   },
