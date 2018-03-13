@@ -66,6 +66,7 @@ export default class SettingsModalForm extends Component {
       enabledAutoComplete: state.enabledAutoComplete || false,
       enabledLiveAutoComplete: state.enabledLiveAutoComplete || false,
       enabledDarkTheme: state.enabledDarkTheme || false,
+      disabledOpenAnimation: state.disabledOpenAnimation || false,
     };
     if (!this.state.log) { return config; }
 
@@ -184,7 +185,7 @@ export default class SettingsModalForm extends Component {
           </div>
         </div>
 
-        <div className="three fields">
+        <div className="four fields">
           <div className="field">
             <Checkbox
               name="enabledAutoComplete"
@@ -211,6 +212,15 @@ export default class SettingsModalForm extends Component {
               onChecked={() => this.setState({ enabledDarkTheme: true })}
               onUnchecked={() => this.setState({ enabledDarkTheme: false })} />
             <p className="help">Enable/Disable dark theme.</p>
+          </div>
+          <div className="field">
+            <Checkbox
+              name="disabledOpenAnimation"
+              label="Disable Intro"
+              defaultChecked={this.state.disabledOpenAnimation}
+              onChecked={() => this.setState({ disabledOpenAnimation: true })}
+              onUnchecked={() => this.setState({ disabledOpenAnimation: false })} />
+            <p className="help">Enable/Disable the animation shown when the app opens.</p>
           </div>
         </div>
       </div>
