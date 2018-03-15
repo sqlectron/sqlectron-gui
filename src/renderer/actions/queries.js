@@ -118,13 +118,13 @@ export function appendQuery (query) {
 }
 
 
-export function copyToClipboard (rows, type) {
+export function copyToClipboard (rows, type, delimiter) {
   return async dispatch => {
     dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST });
     try {
       let value;
       if (type === 'CSV') {
-        value = await stringifyResultToCSV(rows);
+        value = await stringifyResultToCSV(rows, delimiter);
       } else {
         // force the next dispatch be separately
         // handled of the previous one
@@ -139,14 +139,14 @@ export function copyToClipboard (rows, type) {
   };
 }
 
-export function saveToFile (rows, type) {
+export function saveToFile (rows, type, delimiter) {
   return async dispatch => {
     dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_REQUEST });
     try {
       let value;
       const filters = [{ name: 'All Files', extensions: ['*'] }];
       if (type === 'CSV') {
-        value = await stringifyResultToCSV(rows);
+        value = await stringifyResultToCSV(rows, delimiter);
         filters.push({ name: 'CSV', extensions: ['csv'] });
       } else {
         // force the next dispatch be separately
@@ -273,7 +273,7 @@ export function cancelQuery (queryId) {
 }
 
 
-function stringifyResultToCSV(rows) {
+function stringifyResultToCSV(rows, delimiter) {
   if (!rows.length) {
     return '';
   }
@@ -289,7 +289,7 @@ function stringifyResultToCSV(rows) {
   ];
 
   return new Promise((resolve, reject) => {
-    csvStringify(data, (err, csv) => {
+    csvStringify(data, { delimiter }, (err, csv) => {
       if (err) {
         reject(err);
       } else {
