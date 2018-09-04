@@ -14,6 +14,7 @@ import './query-result-table.scss';
 /* eslint react/sort-comp:0 */
 export default class QueryResultTable extends Component {
   static propTypes = {
+    config: PropTypes.object.isRequired,
     widthOffset: PropTypes.number.isRequired,
     heigthOffset: PropTypes.number.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
@@ -206,6 +207,7 @@ export default class QueryResultTable extends Component {
 
   renderHeaderTopBar() {
     const { rows, rowCount, onCopyToClipboardClick, onSaveToFileClick } = this.props;
+    const csvDelimiter = this.props.config.data.csvDelimiter || ',';
     const styleCopied = { display: this.state.showCopied ? 'inline-block' : 'none' };
     const styleSaved = { display: this.state.showSaved ? 'inline-block' : 'none' };
     const styleCopyButtons = { display: this.state.showCopied ? 'none' : 'inline-block' };
@@ -220,7 +222,7 @@ export default class QueryResultTable extends Component {
           <a className="detail" style={styleCopied}>Copied</a>
           <a className="detail"
             style={styleCopyButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'CSV')}>CSV</a>
+            onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>CSV</a>
           <a className="detail"
             style={styleCopyButtons}
             onClick={() => onCopyToClipboardClick(rows, 'JSON')}>JSON</a>
@@ -233,7 +235,7 @@ export default class QueryResultTable extends Component {
           <a className="detail" style={styleSaved}>Saved</a>
           <a className="detail"
             style={styleSaveButtons}
-            onClick={() => onSaveToFileClick(rows, 'CSV')}>CSV</a>
+            onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>CSV</a>
           <a className="detail"
             style={styleSaveButtons}
             onClick={() => onSaveToFileClick(rows, 'JSON')}>JSON</a>

@@ -75,6 +75,7 @@ const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
 
 class QueryBrowserContainer extends Component {
   static propTypes = {
+    config: PropTypes.object.isRequired,
     connections: PropTypes.object.isRequired,
     status: PropTypes.string.isRequired,
     databases: PropTypes.object.isRequired,
@@ -319,12 +320,12 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(QueryActions.openQuery());
   }
 
-  copyToClipboard (rows, type) {
-    this.props.dispatch(QueryActions.copyToClipboard(rows, type));
+  copyToClipboard (rows, type, delimiter) {
+    this.props.dispatch(QueryActions.copyToClipboard(rows, type, delimiter));
   }
 
-  saveToFile (rows, type) {
-    this.props.dispatch(QueryActions.saveToFile(rows, type));
+  saveToFile (rows, type, delimiter) {
+    this.props.dispatch(QueryActions.saveToFile(rows, type, delimiter));
   }
 
   handleExecuteQuery (sqlQuery) {
@@ -496,6 +497,7 @@ class QueryBrowserContainer extends Component {
           <Query
             ref={`queryBox_${queryId}`}
             editorName={`querybox${queryId}`}
+            config={this.props.config}
             client={connections.server.client}
             allowCancel={allowCancel}
             query={query}
@@ -684,6 +686,7 @@ class QueryBrowserContainer extends Component {
 
 function mapStateToProps (state) {
   const {
+    config,
     connections,
     databases,
     schemas,
@@ -700,6 +703,7 @@ function mapStateToProps (state) {
   } = state;
 
   return {
+    config,
     connections,
     databases,
     schemas,
