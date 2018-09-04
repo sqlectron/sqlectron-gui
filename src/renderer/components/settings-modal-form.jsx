@@ -67,7 +67,7 @@ export default class SettingsModalForm extends Component {
       enabledLiveAutoComplete: state.enabledLiveAutoComplete || false,
       enabledDarkTheme: state.enabledDarkTheme || false,
       disabledOpenAnimation: state.disabledOpenAnimation || false,
-      csvDelimiter: state.csvDelimiter || ','
+      csvDelimiter: state.csvDelimiter || ',',
     };
     if (!this.state.log) { return config; }
 
