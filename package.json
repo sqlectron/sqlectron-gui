@@ -55,10 +55,10 @@
     }
   },
   "scripts": {
-    "postinstall": "install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "dev": "concurrently --names 'webpack,electron' --prefix name 'npm run dev:webpack' 'npm run dev:electron'",
     "dev:webpack": "webpack-dev-server --color --config ./webpack.dev.config.js",
-    "dev:electron": "cross-env DEBUG=spawn-auto-restart node scripts/dev-auto-restart.js | bunyan -o short",
+    "dev:electron": "cross-env DEBUG=spawn-auto-restart node $NODE_DEBUG_OPTION scripts/dev-auto-restart.js | bunyan -o short",
     "lint": "eslint . --ext .js,.jsx",
     "lint:fix": "npm run lint -- --fix",
     "test": "npm run lint",
@@ -106,7 +106,7 @@
     "del": "^2.2.0",
     "denodeify": "^1.2.1",
     "electron": "^1.7.9",
-    "electron-builder": "^11.7.0",
+    "electron-builder": "^20.28.3",
     "eslint": "^2.13.1",
     "eslint-config-airbnb": "^9.0.1",
     "eslint-config-airbnb-base": "^3.0.1",
