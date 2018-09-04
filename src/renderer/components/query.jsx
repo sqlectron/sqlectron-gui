@@ -43,6 +43,7 @@ export default class Query extends Component {
     widthOffset: PropTypes.number.isRequired,
     client: PropTypes.string.isRequired,
     allowCancel: PropTypes.bool.isRequired,
+    config: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
     enabledAutoComplete: PropTypes.bool.isRequired,
     enabledLiveAutoComplete: PropTypes.bool.isRequired,
@@ -263,6 +264,7 @@ export default class Query extends Component {
 
   render() {
     const {
+      config,
       widthOffset,
       client,
       query,
@@ -345,6 +347,7 @@ export default class Query extends Component {
           </div>
         </div>
         <QueryResult
+          config={config}
           widthOffset={widthOffset}
           heigthOffset={QUERY_EDITOR_HEIGTH}
           onSaveToFileClick={onSaveToFileClick}

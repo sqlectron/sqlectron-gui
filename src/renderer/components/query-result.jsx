@@ -6,6 +6,7 @@ import QueryResultTable from './query-result-table.jsx';
 
 export default class QueryResult extends Component {
   static propTypes = {
+    config: PropTypes.object.isRequired,
     widthOffset: PropTypes.number.isRequired,
     heigthOffset: PropTypes.number.isRequired,
     onCopyToClipboardClick: PropTypes.func.isRequired,
@@ -105,6 +106,7 @@ export default class QueryResult extends Component {
 
     const tableResult = (
       <QueryResultTable
+        config={this.props.config}
         key={queryIndex}
         widthOffset={widthOffset}
         heigthOffset={this.props.heigthOffset}

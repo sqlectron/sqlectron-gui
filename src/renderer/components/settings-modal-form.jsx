@@ -67,6 +67,7 @@ export default class SettingsModalForm extends Component {
       enabledLiveAutoComplete: state.enabledLiveAutoComplete || false,
       enabledDarkTheme: state.enabledDarkTheme || false,
       disabledOpenAnimation: state.disabledOpenAnimation || false,
+      csvDelimiter: state.csvDelimiter || ','
     };
     if (!this.state.log) { return config; }
 
@@ -221,6 +222,26 @@ export default class SettingsModalForm extends Component {
               onChecked={() => this.setState({ disabledOpenAnimation: true })}
               onUnchecked={() => this.setState({ disabledOpenAnimation: false })} />
             <p className="help">Enable/Disable the animation shown when the app opens.</p>
+          </div>
+        </div>
+
+        <div className="two fields">
+          <div className="field">
+            <label>Custom CSV Delimiter Character</label>
+            <input type="text"
+              name="csvDelimiter"
+              value={this.state.csvDelimiter || ','}
+              onChange={::this.handleChange} />
+            <p className="help">Characters entered here will override the comma/tab switch.</p>
+          </div>
+          <div className="field">
+            <Checkbox
+              name="use"
+              label="Comma/Tab Delimited Values"
+              defaultChecked={this.state.csvDelimiter === '	'}
+              onChecked={() => this.setState({ csvDelimiter: '	' })}
+              onUnchecked={() => this.setState({ csvDelimiter: ',' })} />
+            <p className="help">Use commas or tabs for exporting CSVs.</p>
           </div>
         </div>
       </div>
