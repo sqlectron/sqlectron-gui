@@ -46,6 +46,10 @@ module.exports = {
         loader: 'url?mimetype=image/png',
       },
       {
+        test: /\.gif$/,
+        loader: 'url?mimetype=image/gif',
+      },
+      {
         test: /\.(?:eot|ttf|woff2?|svg)$/,
         loader: 'file?name=[path][name]-[hash:6].[ext]&context=assets',
       },
