@@ -1,7 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import CollapseIcon from './collapse-icon.jsx';
 import DatabaseItem from './database-item.jsx';
-import groupBy from 'lodash.groupby';
+
+//import groupBy from 'lodash.groupby';
+import _ from 'lodash';
+const groupBy = _.groupBy;
+
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },

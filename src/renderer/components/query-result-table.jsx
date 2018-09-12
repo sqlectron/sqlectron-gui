@@ -1,4 +1,7 @@
-import debounce from 'lodash.debounce';
+//import debounce from 'lodash.debounce';
+import _ from 'lodash';
+const debounce = _.debounce;
+
 import React, { Component, PropTypes } from 'react';
 import { Grid, ScrollSync } from 'react-virtualized';
 import Draggable from 'react-draggable';

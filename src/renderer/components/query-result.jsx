@@ -1,4 +1,7 @@
-import groupBy from 'lodash.groupby';
+//import groupBy from 'lodash.groupby';
+import _ from 'lodash';
+const groupBy = _.groupBy;
+
 import React, { Component, PropTypes } from 'react';
 import Loader from './loader.jsx';
 import Message from './message.jsx';

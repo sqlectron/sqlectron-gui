@@ -1,6 +1,11 @@
 import path from 'path';
-import trim from 'lodash.trim';
-import cloneDeep from 'lodash.clonedeep';
+
+//import trim from 'lodash.trim';
+//import cloneDeep from 'lodash.clonedeep';
+import _ from 'lodash';
+const trim = _.trim;
+const cloneDeep = _.cloneDeep;
+
 import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron'; // eslint-disable-line import/no-unresolved
 import { getCurrentDBConn, getDBConnByName } from './connections';

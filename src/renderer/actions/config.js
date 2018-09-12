@@ -1,4 +1,7 @@
-import cloneDeep from 'lodash.clonedeep';
+//import cloneDeep from 'lodash.clonedeep';
+import _ from 'lodash';
+const cloneDeep = _.cloneDeep;
+
 import { config, sqlectron } from '../../browser/remote';
 
 

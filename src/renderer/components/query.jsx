@@ -1,5 +1,9 @@
 import React, { Component, PropTypes } from 'react';
-import debounce from 'lodash.debounce';
+
+//import debounce from 'lodash.debounce';
+import _ from 'lodash';
+const debounce = _.debounce;
+
 import AceEditor from 'react-ace';
 import ace from 'brace';
 import 'brace/mode/sql';

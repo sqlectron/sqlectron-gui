@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
-import set from 'lodash.set';
+
+//import set from 'lodash.set';
+import _ from 'lodash';
+const set = _.set;
+
 import Select from 'react-select';
 import Checkbox from './checkbox.jsx';
 
