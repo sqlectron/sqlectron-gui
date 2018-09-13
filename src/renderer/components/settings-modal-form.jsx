@@ -186,62 +186,80 @@ export default class SettingsModalForm extends Component {
           </div>
         </div>
 
-        <div className="four fields">
-          <div className="field">
-            <Checkbox
-              name="enabledAutoComplete"
-              label="Auto Complete"
-              defaultChecked={this.state.enabledAutoComplete}
-              onChecked={() => this.setState({ enabledAutoComplete: true })}
-              onUnchecked={() => this.setState({ enabledAutoComplete: false })} />
-            <p className="help">Enable/Disable auto complete for the query box.</p>
+        <div className="ui segment">
+          <div className="one field">
+            UI Preferences
           </div>
-          <div className="field">
-            <Checkbox
-              name="enabledLiveAutoComplete"
-              label="Live Auto Complete"
-              defaultChecked={this.state.enabledLiveAutoComplete}
-              onChecked={() => this.setState({ enabledLiveAutoComplete: true })}
-              onUnchecked={() => this.setState({ enabledLiveAutoComplete: false })} />
-            <p className="help">Enable/Disable live auto complete for the query box.</p>
-          </div>
-          <div className="field">
-            <Checkbox
-              name="enabledDarkTheme"
-              label="Dark Theme"
-              defaultChecked={this.state.enabledDarkTheme}
-              onChecked={() => this.setState({ enabledDarkTheme: true })}
-              onUnchecked={() => this.setState({ enabledDarkTheme: false })} />
-            <p className="help">Enable/Disable dark theme.</p>
-          </div>
-          <div className="field">
-            <Checkbox
-              name="disabledOpenAnimation"
-              label="Disable Intro"
-              defaultChecked={this.state.disabledOpenAnimation}
-              onChecked={() => this.setState({ disabledOpenAnimation: true })}
-              onUnchecked={() => this.setState({ disabledOpenAnimation: false })} />
-            <p className="help">Enable/Disable the animation shown when the app opens.</p>
+          <div className="two fields">
+            <div className="field">
+              <Checkbox
+                name="enabledDarkTheme"
+                label="Dark Theme"
+                defaultChecked={this.state.enabledDarkTheme}
+                onChecked={() => this.setState({ enabledDarkTheme: true })}
+                onUnchecked={() => this.setState({ enabledDarkTheme: false })} />
+              <p className="help">Enable/Disable dark theme.</p>
+            </div>
+            <div className="field">
+              <Checkbox
+                name="disabledOpenAnimation"
+                label="Disable Intro"
+                defaultChecked={this.state.disabledOpenAnimation}
+                onChecked={() => this.setState({ disabledOpenAnimation: true })}
+                onUnchecked={() => this.setState({ disabledOpenAnimation: false })} />
+              <p className="help">Enable/Disable the animation shown when the app opens.</p>
+            </div>
           </div>
         </div>
 
-        <div className="two fields">
-          <div className="field">
-            <label>Custom CSV Delimiter Character</label>
-            <input type="text"
-              name="csvDelimiter"
-              value={this.state.csvDelimiter || ','}
-              onChange={::this.handleChange} />
-            <p className="help">Characters entered here will override the comma/tab switch.</p>
+        <div className="ui segment">
+          <div className="one field">
+            Auto Complete
           </div>
-          <div className="field">
-            <Checkbox
-              name="use"
-              label="Comma/Tab Delimited Values"
-              defaultChecked={this.state.csvDelimiter === '	'}
-              onChecked={() => this.setState({ csvDelimiter: '	' })}
-              onUnchecked={() => this.setState({ csvDelimiter: ',' })} />
-            <p className="help">Use commas or tabs for exporting CSVs.</p>
+          <div className="two fields">
+            <div className="field">
+              <Checkbox
+                name="enabledAutoComplete"
+                label="Auto Complete"
+                defaultChecked={this.state.enabledAutoComplete}
+                onChecked={() => this.setState({ enabledAutoComplete: true })}
+                onUnchecked={() => this.setState({ enabledAutoComplete: false })} />
+              <p className="help">Enable/Disable auto complete for the query box.</p>
+            </div>
+            <div className="field">
+              <Checkbox
+                name="enabledLiveAutoComplete"
+                label="Live Auto Complete"
+                defaultChecked={this.state.enabledLiveAutoComplete}
+                onChecked={() => this.setState({ enabledLiveAutoComplete: true })}
+                onUnchecked={() => this.setState({ enabledLiveAutoComplete: false })} />
+              <p className="help">Enable/Disable live auto complete for the query box.</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="ui segment">
+          <div className="one field">
+            CSV Options
+          </div>
+          <div className="two fields">
+            <div className="field">
+              <label>Custom CSV Delimiter Character</label>
+              <input type="text"
+                name="csvDelimiter"
+                value={this.state.csvDelimiter || ','}
+                onChange={::this.handleChange} />
+              <p className="help">Characters entered here will override the comma/tab switch.</p>
+            </div>
+            <div className="field">
+              <Checkbox
+                name="use"
+                label="Tab Delimited Values"
+                defaultChecked={this.state.csvDelimiter === '  '}
+                onChecked={() => this.setState({ csvDelimiter: '  ' })}
+                onUnchecked={() => this.setState({ csvDelimiter: ',' })} />
+              <p className="help">Use tabs for exporting CSVs when checked.</p>
+            </div>
           </div>
         </div>
       </div>
