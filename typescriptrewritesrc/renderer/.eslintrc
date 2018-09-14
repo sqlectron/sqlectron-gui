@@ -1,0 +1,25 @@
+{
+  "extends": "airbnb",
+  "env": {
+    "browser": true
+  },
+  "rules": {
+    "no-use-before-define": 0,
+    "react/jsx-closing-bracket-location": 0,
+    "react/jsx-first-prop-new-line": 0,
+    "react/jsx-uses-react": 2,
+    "react/jsx-uses-vars": 2,
+    "react/react-in-jsx-scope": 2,
+    "space-before-function-paren": 0,
+    "func-names": 0
+  },
+  "ecmaFeatures": {
+    "jsx": true
+  },
+  "plugins": [
+    "react"
+  ],
+  "globals": {
+    "$": true
+  }
+}

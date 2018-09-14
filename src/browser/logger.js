@@ -1,4 +1,4 @@
-import * as sqlectron from 'sqlectron-core';
+import * as sqlectron from '@armarti/unified-dataloader-core';
 import config from './config';
 
 // Hack solution to ignore console.error from dtrace imported by bunyan

@@ -1,0 +1,10 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "no-use-before-define": 0,
+    "prefer-template": 0
+  }
+}

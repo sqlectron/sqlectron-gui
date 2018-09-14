@@ -34,7 +34,7 @@ Although it is possible to change this file manually, it is usually better to ju
 
   // Manage logging
   // It is disabled by default in production
-  // More details: https://github.com/sqlectron/sqlectron-gui/blob/master/docs/app/logging.md
+  // More details: https://github.com/armarti/sqlectron-gui/blob/master/docs/app/logging.md
   "log": {
     // Show logs in the dev tools panel
     // "false" by default in production
@@ -83,4 +83,4 @@ Although it is possible to change this file manually, it is usually better to ju
 
 ```
 
-[Configuration doc from Sqlectron Core](https://github.com/sqlectron/sqlectron-core#configuration)
+[Configuration doc from Sqlectron Core](https://github.com/armarti/sqlectron-core#configuration)

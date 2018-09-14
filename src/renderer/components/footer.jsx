@@ -12,12 +12,12 @@ const STYLE = {
 
 function onGithubClick(event) {
   event.preventDefault();
-  shell.openExternal('https://github.com/sqlectron/sqlectron-gui');
+  shell.openExternal('https://github.com/armarti/sqlectron-gui');
 }
 
 function onShortcutsClick(event) {
   event.preventDefault();
-  shell.openExternal('https://github.com/sqlectron/sqlectron-gui/wiki/Keyboard-Shortcuts');
+  shell.openExternal('https://github.com/armarti/sqlectron-gui/wiki/Keyboard-Shortcuts');
 }
 
 

@@ -1,0 +1,59 @@
+
+.ReactTabs.react-tabs {
+  width: 100%;
+  position: relative;
+}
+
+.ReactTabs.react-tabs .ReactTabs__TabList {
+  white-space: nowrap;
+}
+
+.ReactTabs.react-tabs .ReactTabs__TabList .ReactTabs__Tab {
+  display: inline-block;
+}
+
+#tabs-nav-wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+#tabs-nav-wrapper > .tabs-container {
+  flex: auto;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding-bottom: 3px;
+}
+
+#tabs-nav-wrapper > .tabs-container > ul {
+  position: relative;
+  margin: 0;
+
+  .item > .button {
+    opacity: 0;
+    transition: opacity .25s ease-in-out;
+    font-size: 0.5em;
+    margin: -0.5em -1em 0 1.5em;
+  }
+
+  .item.active:hover > .button {
+    opacity: 1;
+  }
+}
+
+#tabs-nav-wrapper > button {
+  font-size: 0.75em;
+  margin: 0;
+  border-radius: 0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+#tabs-nav-wrapper button.right.floated.ui.icon.button.mini {
+  font-size: 0.5em;
+  margin-left: 0.5em;
+}
+
+.react-tabs #tabs-nav-wrapper [role=tablist] {
+    border-bottom: none;
+}

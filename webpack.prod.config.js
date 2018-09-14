@@ -1,16 +1,18 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+//const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-require('babel-polyfill');
+//require('babel-polyfill');
 
 module.exports = {
+  mode: 'production',
   devtool: 'eval-source-map',
   target: 'electron-renderer',
   resolve: {
-    extensions: ['', '.js'],
-    modulesDirectories: ['node_modules', 'src/renderer'],
+    extensions: ['*', '.js', '.jsx'],
+    modules: ['node_modules', 'src/renderer'],
   },
   entry: {
     app: './src/renderer/entry.jsx',
@@ -39,52 +41,77 @@ module.exports = {
     filename: '[name].bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|vendor)/,
-        loaders: ['babel'],
+        use: [
+          { loader: 'babel-loader' },
+          //'css-loader'
+        ],
       },
       {
         test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract(
-          'style',
-          'css!sass',
-          'autoprefixer?browsers=last 2 version',
-          'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules')
-        ),
+        use: [
+          //MiniCssExtractPlugin.loader,
+          { loader: MiniCssExtractPlugin.loader },
+          //'style-loader',
+          'css-loader',
+          //{ loader: 'css-loader', options: { importLoaders: 1 } },
+          //{ loader: 'postcss-loader', options: { exec: true } },
+          //'sass-loader',
+        ]
+        /*use: ExtractTextPlugin.extract(
+          {
+            fallback: 'style',
+            //use: 'css!sass',
+            use: 'autoprefixer?browsers=last 2 version'
+          }
+        ),*/
       },
       {
         test: /\.png$/,
-        loader: 'url?mimetype=image/png',
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              mimetype: 'image/png'
+            }
+          }
+        ],
       },
       {
         test: /\.gif$/,
-        loader: 'url?mimetype=image/gif',
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              mimetype: 'image/gif'
+            }
+          }
+        ],
       },
       {
         test: /\.(?:eot|ttf|woff2?|svg)$/,
-        loader: 'file?name=fonts/[name]-[hash:6].[ext]',
-      },
-      {
-        test: /\.json?$/,
-        loader: 'json',
-      },
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: 'fonts/[name]-[hash:6].[ext]'
+          }
+        }
+        ],
+      }
     ],
-    noParse: [/(html2canvas)/],
+    noParse: [
+      /(html2canvas)/
+    ],
   },
+
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(true),
-    new webpack.optimize.DedupePlugin(),
-    new ExtractTextPlugin('[name].bundle.css'),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-    }),
-    new webpack.optimize.UglifyJsPlugin(),
+    //new ExtractTextPlugin('[name].bundle.css'),
+    new MiniCssExtractPlugin({filename: '[name].bundle.css'}),
+    //new webpack.optimize.CommonsChunkPlugin({ name: 'vendor', minChunks: Infinity }),
+    //new webpack.optimize.CommonsChunkPlugin({ name: 'common' }),
     new HtmlWebpackPlugin({
       template: 'src/renderer/index.html',
       chunksSortMode: 'none',
@@ -93,10 +120,24 @@ module.exports = {
       jQuery: 'jquery',
       $: 'jquery',
     }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
+    //new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify('production') }),
     // new BundleAnalyzerPlugin(),
-    new webpack.NoErrorsPlugin(),
+    //new webpack.NoErrorsPlugin()
   ],
+
+  optimization: {
+    minimize: true,
+    runtimeChunk: {
+      name: 'common'
+    },
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        }
+      }
+    }
+  }
 };
