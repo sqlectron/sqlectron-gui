@@ -21,7 +21,7 @@ export async function check(mainWindow, appConfig) {
 
   // give some time to the render process be ready
   setTimeout(
-    () => mainWindow.webContents.send('sqlectron:update-available'),
-    WAIT_2_SECS
+    () => mainWindow.webContents.send('unified-dataloader:update-available'),
+    WAIT_2_SECS,
   );
 }

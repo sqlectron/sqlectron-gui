@@ -1,18 +1,20 @@
-//import debounce from 'lodash.debounce';
+// import debounce from 'lodash.debounce';
 import _ from 'lodash';
-const debounce = _.debounce;
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Grid, ScrollSync } from 'react-virtualized';
 import Draggable from 'react-draggable';
 
-import TableCell from './query-result-table-cell.jsx';
-import PreviewModal from './preview-modal.jsx';
-import { valueToString } from '../utils/convert';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize';
+import TableCell from './query-result-table-cell';
+import PreviewModal from './preview-modal';
+import { valueToString } from '../utils/convert';
 
 import 'react-virtualized/styles.css';
 import './query-result-table.scss';
+
+const debounce = _.debounce;
 
 /* eslint react/sort-comp:0 */
 export default class QueryResultTable extends Component {
@@ -124,11 +126,11 @@ export default class QueryResultTable extends Component {
 
     const autoColumnWidths = fields.map((name, index) => {
       const cellWidth = this.resolveCellWidth(name, fields, rows, averageTableCellWidth);
-      totalColumnWidths = totalColumnWidths + cellWidth;
+      totalColumnWidths += cellWidth;
 
       const isLastColumn = (index + 1) === fields.length;
       if (isLastColumn && totalColumnWidths < tableWidth) {
-        totalColumnWidths = totalColumnWidths - cellWidth;
+        totalColumnWidths -= cellWidth;
         return tableWidth - totalColumnWidths;
       }
 
@@ -151,7 +153,7 @@ export default class QueryResultTable extends Component {
           onStop={handleStop}
           position={{ x: 0, y: 0 }}
           zIndex={999}>
-          <div className="draggable-handle"></div>
+          <div className="draggable-handle" />
         </Draggable>
       );
     }
@@ -209,7 +211,9 @@ export default class QueryResultTable extends Component {
   }
 
   renderHeaderTopBar() {
-    const { rows, rowCount, onCopyToClipboardClick, onSaveToFileClick } = this.props;
+    const {
+      rows, rowCount, onCopyToClipboardClick, onSaveToFileClick,
+    } = this.props;
     const csvDelimiter = this.props.config.data.csvDelimiter || ',';
     const styleCopied = { display: this.state.showCopied ? 'inline-block' : 'none' };
     const styleSaved = { display: this.state.showSaved ? 'inline-block' : 'none' };
@@ -221,27 +225,35 @@ export default class QueryResultTable extends Component {
     if (rowCount) {
       copyPanel = (
         <div className="ui small label" title="Copy as" style={{ float: 'right', margin: '3px' }}>
-          <i className="copy icon"></i>
+          <i className="copy icon" />
           <a className="detail" style={styleCopied}>Copied</a>
           <a className="detail"
             style={styleCopyButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>CSV</a>
+            onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>
+CSV
+          </a>
           <a className="detail"
             style={styleCopyButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'JSON')}>JSON</a>
+            onClick={() => onCopyToClipboardClick(rows, 'JSON')}>
+JSON
+          </a>
         </div>
       );
 
       savePanel = (
         <div className="ui small label" title="Save as" style={{ float: 'right', margin: '3px' }}>
-          <i className="save icon"></i>
+          <i className="save icon" />
           <a className="detail" style={styleSaved}>Saved</a>
           <a className="detail"
             style={styleSaveButtons}
-            onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>CSV</a>
+            onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>
+CSV
+          </a>
           <a className="detail"
             style={styleSaveButtons}
-            onClick={() => onSaveToFileClick(rows, 'JSON')}>JSON</a>
+            onClick={() => onSaveToFileClick(rows, 'JSON')}>
+JSON
+          </a>
         </div>
       );
     }
@@ -249,7 +261,7 @@ export default class QueryResultTable extends Component {
     return (
       <div style={{ background: 'rgba(0, 0, 0, 0.05)', overflow: 'hidden' }}>
         <div className="ui label" style={{ margin: '3px', float: 'left' }}>
-          <i className="table icon"></i>
+          <i className="table icon" />
           Rows
           <div className="detail">{rowCount}</div>
         </div>
@@ -328,7 +340,7 @@ export default class QueryResultTable extends Component {
 
     if (field && columnWidths && columnWidths[field.name] !== undefined) {
       return columnWidths[field.name];
-    } else if (autoColumnWidths && autoColumnWidths[index] !== undefined) {
+    } if (autoColumnWidths && autoColumnWidths[index] !== undefined) {
       return autoColumnWidths[index];
     }
     return 50;
@@ -349,7 +361,7 @@ export default class QueryResultTable extends Component {
     if (rows.length) {
       averageRowsCellWidth = rows
         .slice(0, numRowsToFindAverage)
-        .map(row => {
+        .map((row) => {
           const value = valueToString(row[fieldName]);
           return this.getTextWidth(value, font);
         })

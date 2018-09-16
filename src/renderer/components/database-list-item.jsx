@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import DatabaseListItemMetatada from './database-list-item-metadata.jsx';
 import DatabaseFilter from './database-filter.jsx';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved

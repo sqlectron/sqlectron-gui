@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="gui: debug prod" type="CompoundRunConfigurationType" factoryName="Compound Run Configuration">
+    <toRun type="ChromiumRemoteDebugType" name="gui: debug prod" />
+    <toRun type="BashConfigurationType" name="gui: debug prod (pre)" />
+    <method />
+  </configuration>
+</component>

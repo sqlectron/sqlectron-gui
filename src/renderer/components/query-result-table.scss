@@ -3,7 +3,7 @@
   border-style: solid;
   border-width: 1px;
   box-sizing: border-box;
-  border-radius: .25rem;
+  border-radius: 0.25rem;
 }
 
 .Grid {
@@ -31,9 +31,9 @@
   overflow: hidden !important;
 }
 
-.Grid.grid-body ::-webkit-scrollbar{ display: none }
-.Grid.grid-body:hover { overflow:auto !important; }
-.Grid.grid-body:hover ::-webkit-scrollbar { display: block }
+.Grid.grid-body ::-webkit-scrollbar { display: none; }
+.Grid.grid-body:hover { overflow: auto !important; }
+.Grid.grid-body:hover ::-webkit-scrollbar { display: block; }
 
 .Grid.grid-body > .Grid__innerScrollContainer {
   background: #fff;
@@ -58,6 +58,10 @@
   padding-right: 10px;
 }
 
+.grid-header-row .Grid__cell > .item {
+  border: 1px solid #dadada;
+}
+
 .Grid.grid-header-row .Grid__cell span {
   overflow: hidden;
   width: 100%;
@@ -72,12 +76,8 @@
 .Grid.grid-header-row {
   overflow: hidden !important;
   background: #f9fafb;
-  border: 1px solid rgba(34,36,38,.1);
+  border: 1px solid rgba(34, 36, 38, 0.1);
   border-right: none;
-}
-
-.grid-header-row .Grid__cell > .item {
-  border: 1px solid #dadada;
 }
 
 .Grid .table-cell-type-null {

@@ -1,0 +1,8 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="gui: dev:webpack" type="NodeJSConfigurationType" factoryName="Node.js" application-parameters="--color --config=config/webpack/dev.js" node-parameters="--trace-warnings --require @babel/register" path-to-js-file="node_modules/.bin/webpack-dev-server" working-dir="$PROJECT_DIR$">
+    <EXTENSION ID="com.jetbrains.nodejs.run.NodeJSStartBrowserRunConfigurationExtension">
+      <browser with-js-debugger="true" url="http://localhost:8080/static/index.html" />
+    </EXTENSION>
+    <method />
+  </configuration>
+</component>

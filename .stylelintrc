@@ -1,6 +1,9 @@
 {
-  "extends": "stylelint-config-standard",
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recommended-scss"
+  ],
   "rules": {
-    "no-eol-whitespace": [false, {}]
+    "declaration-block-single-line-max-declarations": 2
   }
 }

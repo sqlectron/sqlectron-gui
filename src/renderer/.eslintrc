@@ -4,6 +4,9 @@
     "browser": true
   },
   "rules": {
+    "jsx-quotes": [1, "prefer-single"],
+    "comma-dangle": 0,
+    "import/no-extraneous-dependencies": 0,
     "no-use-before-define": 0,
     "react/jsx-closing-bracket-location": 0,
     "react/jsx-first-prop-new-line": 0,
@@ -11,10 +14,10 @@
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,
     "space-before-function-paren": 0,
-    "func-names": 0
-  },
-  "ecmaFeatures": {
-    "jsx": true
+    "func-names": 0,
+    "arrow-parens": ["warn", "as-needed"],
+    "brace-style": ["warn", "stroustrup"],
+    "import/newline-after-import": ["warn", { "count": 1 }]
   },
   "plugins": [
     "react"

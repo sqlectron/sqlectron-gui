@@ -1,22 +1,45 @@
 #!/usr/bin/env node
 /* eslint no-var: 0, object-shorthand:0 */
-var fs = require('fs');
-var join = require('path').join;
-var electron = require('electron');
+import fs from 'fs';
+import { join } from 'path';
+import electron from 'electron';
+// import devtoolsInstaller from 'electron-devtools-installer';
+// import { install as devtronInstall } from 'devtron';
 
 
-var main = join(__dirname, '../src/browser/main.js');
-var watch = [
+const main = join(__dirname, '../src/browser/main.js');
+const watch = [
   join(__dirname, '../src/browser'),
 ];
 
-var pathCore = join(__dirname, '../../sqlectron-core/lib');
+const pathCore = join(__dirname, '../../core/lib');
 try {
   fs.accessSync(pathCore, fs.F_OK);
   watch.push(pathCore);
 } catch (err) {
-  console.log('Not watching changes on sqlectron-core');
+  console.log('Not watching changes on unified-dataloader-core');
 }
+
+// https://stackoverflow.com/a/45064488/4106215
+/*
+const installExtensions = async () => {
+  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
+  const extensions = [
+    devtoolsInstaller.REACT_DEVELOPER_TOOLS,
+    devtoolsInstaller.REDUX_DEVTOOLS
+  ];
+  return Promise.all(extensions.map(name => devtoolsInstaller(name, forceDownload)))
+    .catch(console.log);
+};
+
+electron.app.on('ready', async () => {
+  if (process.env.NODE_ENV === 'development') {
+    // await installExtensions();
+    devtronInstall();
+  }
+  // createWindow();
+});
+*/
 
 require('spawn-auto-restart')({
   debug: true,

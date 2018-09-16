@@ -1,6 +1,5 @@
 @import "breakpoint";
 
-
 #server-list {
   /**
    * 1 card per row
@@ -19,7 +18,7 @@
     }
 
     .ui.cards > .card {
-      width: calc( 50%  -  2em );
+      width: calc(50% - 2em);
       margin-left: 1em;
       margin-right: 1em;
     }
@@ -35,15 +34,15 @@
     }
 
     .ui.cards > .card {
-      width: calc( 25%  -  1.5em );
+      width: calc(25% - 1.5em);
       margin-left: 0.75em;
       margin-right: 0.75em;
     }
   }
 
-
   .card .content {
-    .header, .meta {
+    .header,
+    .meta {
       word-break: break-all;
     }
   }

@@ -40,19 +40,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// production config
+// require('@babel/polyfill');
+// require('@babel/register');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
-const { resolve, join } = require('path');
+const { join } = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-const ROOT_DIR = resolve('../..');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const commonConfig = require('./common');
+const vars = require('./vars');
+
+const SRC_DIR = vars.ENABLE_TYPESCRIPT ? vars.TS_SRC : vars.JS_SRC;
 const cssLoaders = [
-  MiniCssExtractPlugin.loader,  // <-- only difference rom dev
-  'style-loader',
+  MiniCssExtractPlugin.loader,
   {
     loader: 'css-loader',
     options: {
@@ -61,10 +62,13 @@ const cssLoaders = [
   }
 ];
 
-module.exports = merge(
+const prod = merge(
   commonConfig,
   {
     mode: 'production',
+    // devtool: 'source-map',
+    // devtool: 'eval',
+    devtool: 'cheap-module-source-map',
     module: {
       rules: [
         {
@@ -73,11 +77,11 @@ module.exports = merge(
         },
         {
           test: /\.scss$/,
-          loaders: cssLoaders.concat({
+          use: cssLoaders.concat({
             loader: 'sass-loader',
             options: {
               includePaths: [
-                'node_modules'  // join(ROOT_DIR, 'node_modules')
+                'node_modules'
               ]
             }
           })
@@ -96,7 +100,7 @@ module.exports = merge(
       ]
     },
     entry: {
-      app: 'src/renderer/entry.jsx',
+      app: `./${SRC_DIR}/renderer/entry.jsx`,
       vendor: [
         // common
         'jquery',
@@ -112,30 +116,31 @@ module.exports = merge(
         'redux',
         'redux-thunk',
         // semantic ui
-        'vendor/renderer/lato/latofonts.css',
-        'vendor/renderer/semantic-ui/semantic.js',
-        'vendor/renderer/semantic-ui/semantic.css'
+        './vendor/renderer/lato/latofonts.css',
+        './vendor/renderer/semantic-ui/semantic.js',
+        './vendor/renderer/semantic-ui/semantic.css'
       ]
     },
     output: {
-      path: join(ROOT_DIR, 'out', 'static'),
+      path: join(vars.ROOT_DIR, 'out', 'static'),
       filename: '[name].bundle.js'
     },
-    devtool: 'source-map',
     plugins: [
       new webpack.optimize.OccurrenceOrderPlugin(true),
-      new webpack.optimize.DedupePlugin(),
       new MiniCssExtractPlugin({ filename: '[name].bundle.css' }),
-      new webpack.optimize.UglifyJsPlugin(),
       new HtmlWebpackPlugin({
-        template: 'src/renderer/index.html',
-        chunksSortMode: 'none'
+        template: `./${SRC_DIR}/renderer/index.html`,
+        chunksSortMode: 'none',
+        minify: true
       }),
-      // new BundleAnalyzerPlugin(),
+      new BundleAnalyzerPlugin({
+        analyzerMode: vars.OPEN_ANALYZER ? 'server' : 'disabled',
+        openAnalyzer: vars.OPEN_ANALYZER
+      }),
     ],
     resolve: {
       alias: {
-        'dtrace-provider': 'empty-shim.js'
+        'dtrace-provider': './empty-shim.js'
       }
     },
     performance: {
@@ -150,8 +155,13 @@ module.exports = merge(
       },
       splitChunks: {
         cacheGroups: {
-          vendor: {
+          common: {
             test: /[\\/]node_modules[\\/]/,
+            /*
+            test: RegExp('node_modules|' + (
+              vars.ENABLE_TYPESCRIPT ? vars.TS_SRC : vars.JS_SRC
+            )),
+            */
             name: 'vendor',
             chunks: 'all'
           }
@@ -160,3 +170,5 @@ module.exports = merge(
     }
   }
 );
+
+module.exports = prod;

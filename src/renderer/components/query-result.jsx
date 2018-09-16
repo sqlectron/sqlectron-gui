@@ -2,7 +2,8 @@
 import _ from 'lodash';
 const groupBy = _.groupBy;
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Loader from './loader.jsx';
 import Message from './message.jsx';
 import QueryResultTable from './query-result-table.jsx';

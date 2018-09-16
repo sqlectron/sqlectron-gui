@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 
 //import set from 'lodash.set';

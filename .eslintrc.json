@@ -2,7 +2,13 @@
   "extends": "airbnb-base",
   "parser": "babel-eslint",
   "rules": {
+    "jsx-quotes": [1, "prefer-single"],
+    "comma-dangle": 0,
+    "import/no-extraneous-dependencies": 0,
     "no-use-before-define": 0,
-    "prefer-template": 0
+    "prefer-template": 0,
+    "array-bracket-spacing": 0,
+    "semi": ["warn", "always"],
+    "arrow-parens": ["warn", "as-needed"]
   }
 }

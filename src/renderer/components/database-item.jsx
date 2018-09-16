@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CollapseIcon from './collapse-icon.jsx';
 import TableSubmenu from './table-submenu.jsx';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved

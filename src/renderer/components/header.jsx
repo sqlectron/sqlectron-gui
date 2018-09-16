@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 
 require('./header.css');

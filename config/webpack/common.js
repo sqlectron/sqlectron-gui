@@ -40,64 +40,87 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// shared config (dev and prod)
-const { resolve } = require('path');
-const { CheckerPlugin, } = require('awesome-typescript-loader');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import webpack from 'webpack';
+import { join } from 'path';
+import { CheckerPlugin } from 'awesome-typescript-loader';
+import StyleLintPlugin from 'stylelint-webpack-plugin';
+import * as vars from './vars';
 
-const ENABLE_TYPESCRIPT = false;
-const ROOT_DIR = resolve('../..');
-const cssLoaders = [
-  'style-loader',
-  {
-    loader: 'css-loader',
-    options: {
-      // https://www.npmjs.com/package/css-loader#importloaders
-      // 0 => no loaders (default)
-      // 1 => postcss-loader
-      // 2 => postcss-loader, sass-loader
-      importLoaders: 1
-    }
-  }
-];
+const dependenciesWithoutEntryPoints = Object.keys(vars.dependencies || {}).filter(vars.filterDepWithoutEntryPoints);
 
-module.exports = {
-  context: ROOT_DIR,
-  devtool: 'eval-source-map',
+const common = {
+  context: vars.ROOT_DIR,
   target: 'electron-renderer',
+  /*externals: {
+    ...dependenciesWithoutEntryPoints,
+    electron: 'require("electron")',
+    child_process: 'require("child_process")',
+    fs: 'require("fs")',
+    path: 'require("path")'
+  },*/
+
+  // https://github.com/webpack/webpack/issues/2010
+  node: {
+    __dirname: false,
+    __filename: false
+  },
+
   resolve: {
-    extensions: ['.js', '.jsx'], // .concat(['.ts', '.tsx']),
+    extensions: ['.js', '.jsx'].concat(vars.ENABLE_TYPESCRIPT ? ['.ts', '.tsx'] : []),
     modules: [
       'node_modules',
-      'src/renderer'
+      join(vars.ENABLE_TYPESCRIPT ? vars.TS_SRC : vars.JS_SRC, 'renderer')
     ]
   },
   module: {
-    rules: [
+    rules: (vars.ENABLE_TYPESCRIPT ? [
       {
-        test: /\.jsx?$/,  // /\.js$/,
-        exclude: /(node_modules|vendor)/,
-        // use: [{ loader: 'babel-loader' }],
-        use: [
-          'babel-loader',
-          'source-map-loader'
-        ]
-      },
-      ENABLE_TYPESCRIPT ? {
         test: /\.tsx?$/,
         use: [
           'babel-loader',
           'awesome-typescript-loader'
         ],
-      } : {},
-      /*{
+      }] : []).concat([
+      {
+        test: /\.jsx?$/,
+        exclude: RegExp('node_modules|vendor|' + (
+          vars.ENABLE_TYPESCRIPT ? vars.JS_SRC : vars.TS_SRC
+        )),
+        use: [
+          'babel-loader',
+          'source-map-loader'
+        ]
+      },
+      {
         test: /\.(jpe?g|png|gif|svg)$/i,
-        loaders: [
-          'file-loader?hash=sha512&digest=hex&name=img/[hash].[ext]',
-          'image-webpack-loader?bypassOnDebug&optipng.optimizationLevel=7&gifsicle.interlaced=false',
-        ],
-      },*/
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              hash: 'sha512',
+              digest: 'hex',
+              name: 'img/[hash].[ext]'
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+              query: {
+                gifsicle: {
+                  interlaced: false
+                },
+                mozjpeg: {
+                  progressive: true
+                },
+                optipng: {
+                  optimizationLevel: 7
+                }
+              }
+            }
+          }
+        ]
+      },
       {
         test: /\.png$/,
         use: [
@@ -120,14 +143,17 @@ module.exports = {
           }
         ]
       }
-    ],
+    ]),
     noParse: [ /html2canvas/ ]
   },
-  plugins: (ENABLE_TYPESCRIPT ? [ new CheckerPlugin() ] : []).concat([
+  plugins: (vars.ENABLE_TYPESCRIPT ? [ new CheckerPlugin() ] : []).concat([
+    // '@babel/polyfill',
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery'
     }),
-    new StyleLintPlugin(),
+    new StyleLintPlugin()
   ])
 };
+
+module.exports = common;

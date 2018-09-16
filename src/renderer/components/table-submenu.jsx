@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },

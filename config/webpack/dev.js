@@ -40,14 +40,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// development config
+// require('@babel/polyfill');
+// require('@babel/register');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
-const { resolve, join } = require('path');
+const { join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const ROOT_DIR = resolve('../..');
 const commonConfig = require('./common');
+const vars = require('./vars');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+
+const SRC_DIR = vars.ENABLE_TYPESCRIPT ? vars.TS_SRC : vars.JS_SRC;
 const cssLoaders = [
   'style-loader',
   {
@@ -57,11 +60,32 @@ const cssLoaders = [
     }
   }
 ];
+const copyFiles = [
+  {
+    from: 'node_modules/devtron/manifest.json',
+    to: 'out/browser/',
+    force: true
+  },
+  {
+    from: 'node_modules/devtron/out/browser-globals.js',
+    to: 'out/browser/out/',
+    force: true
+  }
+];
 
-module.exports = merge(
+const dev = merge(
   commonConfig,
   {
     mode: 'development',
+    devtool: 'cheap-module-eval-source-map',
+    /*
+    externals: [
+      (context, request, callback) => {
+        if (request.match(/devtron/)) { return callback(null, 'commonjs ' + request); }
+        return callback();
+      }
+    ],
+    */
     module: {
       rules: [
         {
@@ -70,8 +94,7 @@ module.exports = merge(
         },
         {
           test: /\.scss$/,
-          // loaders: cssLoaders.concat('sass?includePaths[]=' + join(ROOT_DIR, 'node_modules'))
-          loaders: cssLoaders.concat({
+          use: cssLoaders.concat({
             loader: 'sass-loader',
             options: {
               includePaths: [
@@ -104,11 +127,11 @@ module.exports = merge(
         // bundle the client for hot reloading, only means to
         // only hot reload for successful updates
         'webpack/hot/only-dev-server',
-        'src/renderer/entry.jsx'
+        `./${SRC_DIR}/renderer/entry.jsx`
       ]
     },
     output: {
-      path: join(ROOT_DIR, 'dist'),
+      path: join(vars.ROOT_DIR, 'dist'),
       filename: 'bundle.js',
       publicPath: '/static/'
     },
@@ -116,20 +139,25 @@ module.exports = merge(
       // enable HMR on the server
       hot: true
     },
-    devtool: 'cheap-module-eval-source-map',
     plugins: [
       // enable HMR globally
       new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         hot: true,
-        template: 'src/renderer/index.html'
+        template: `${SRC_DIR}/renderer/index.html`,
+        title: 'HtmlWebpackPlugin title - unified-dataloader-gui'
       }),
-      // prints more readable module names in the browser
-      // console on HMR updates
-      new webpack.NamedModulesPlugin()
+      // new CopyWebpackPlugin(copyFiles, { debug: 'debug' })
     ],
     performance: {
       hints: 'warning'
+    },
+    optimization: {
+      // prints more readable module names in the browser
+      // console on HMR updates
+      namedModules: true
     }
   }
 );
+
+module.exports = dev;

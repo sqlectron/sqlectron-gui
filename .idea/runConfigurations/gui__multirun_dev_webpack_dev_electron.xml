@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="gui: multirun dev:webpack dev:electron" type="Multirun" factoryName="Multirun" singleton="true" separateTabs="false" startOneByOne="false" markFailedProcess="true" hideSuccessProcess="false" delayTime="0">
+    <runConfiguration name="gui: dev:webpack" type="npm" />
+    <runConfiguration name="gui: dev:electron" type="npm" />
+    <method />
+  </configuration>
+</component>

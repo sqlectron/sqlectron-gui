@@ -28,7 +28,7 @@ if (dataConfig.log.file) {
 
 const logger = createLogger(loggerConfig);
 
-// Set custom logger for sqlectron-core
-sqlectron.setLogger((namespace) => logger.child({ namespace: `sqlectron-core:${namespace}` }));
+// Set custom logger for unified-dataloader-core
+sqlectron.setLogger((namespace) => logger.child({ namespace: `unified-dataloader-core:${namespace}` }));
 
 export default (namespace) => logger.child({ namespace });
