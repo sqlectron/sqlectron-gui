@@ -69,6 +69,7 @@ export default class SettingsModalForm extends Component {
       disabledOpenAnimation: state.disabledOpenAnimation || false,
       csvDelimiter: state.csvDelimiter || ',',
       connectionsAsList: state.connectionsAsList || false,
+      customFont: state.customFont || 'Lato',
     };
     if (!this.state.log) { return config; }
 
@@ -219,6 +220,18 @@ export default class SettingsModalForm extends Component {
                   onChecked={() => this.setState({ connectionsAsList: true })}
                   onUnchecked={() => this.setState({ connectionsAsList: false })} />
                 <p className="help">Display saved connections as a list instead of cards.</p>
+              </div>
+            </div>
+            <div>
+              <div className="one fields">
+                <div className={`field ${this.highlightError('customFont')}`}>
+                  <label>Custom Font</label>
+                  <input type="text"
+                    name="customFont"
+                    value={this.state.customFont || 'Lato'}
+                    onChange={::this.handleChange} />
+                  <p className="help">Use a custom font for in-app text and display. Font must be installed to use.</p>
+                </div>
               </div>
             </div>
           </div>
