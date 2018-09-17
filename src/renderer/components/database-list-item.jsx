@@ -218,12 +218,11 @@ export default class DatabaseListItem extends Component {
     return (
       <span
         className="header"
-        onDoubleClick={() => this.onHeaderDoubleClick(database)}
+        onClick={() => this.onHeaderDoubleClick(database)}
         onContextMenu={::this.onContextMenu}
         style={STYLE.database}>
         <i className={`${collapseCssClass} triangle icon`}
-          style={{ cursor: 'pointer' }}
-          onClick={() => this.onHeaderDoubleClick(database)}></i>
+          style={{ cursor: 'pointer' }}></i>
         <i className="database icon"></i>
         {database.name}
       </span>
