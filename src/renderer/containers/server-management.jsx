@@ -137,7 +137,8 @@ class ServerManagerment extends Component {
 
           <ServerList servers={filteredServers}
             onEditClick={::this.onEditClick}
-            onConnectClick={::this.onConnectClick} />
+            onConnectClick={::this.onConnectClick}
+            config={config} />
 
           {servers.isEditing && <ServerModalForm
             server={selected}

@@ -68,6 +68,7 @@ export default class SettingsModalForm extends Component {
       enabledDarkTheme: state.enabledDarkTheme || false,
       disabledOpenAnimation: state.disabledOpenAnimation || false,
       csvDelimiter: state.csvDelimiter || ',',
+      connectionsAsList: state.connectionsAsList || false,
     };
     if (!this.state.log) { return config; }
 
@@ -190,24 +191,35 @@ export default class SettingsModalForm extends Component {
           <div className="one field">
             UI Preferences
           </div>
-          <div className="two fields">
-            <div className="field">
-              <Checkbox
-                name="enabledDarkTheme"
-                label="Dark Theme"
-                defaultChecked={this.state.enabledDarkTheme}
-                onChecked={() => this.setState({ enabledDarkTheme: true })}
-                onUnchecked={() => this.setState({ enabledDarkTheme: false })} />
-              <p className="help">Enable/Disable dark theme.</p>
-            </div>
-            <div className="field">
-              <Checkbox
-                name="disabledOpenAnimation"
-                label="Disable Intro"
-                defaultChecked={this.state.disabledOpenAnimation}
-                onChecked={() => this.setState({ disabledOpenAnimation: true })}
-                onUnchecked={() => this.setState({ disabledOpenAnimation: false })} />
-              <p className="help">Enable/Disable the animation shown when the app opens.</p>
+          <div>
+            <div className="three fields">
+              <div className="field">
+                <Checkbox
+                  name="enabledDarkTheme"
+                  label="Dark Theme"
+                  defaultChecked={this.state.enabledDarkTheme}
+                  onChecked={() => this.setState({ enabledDarkTheme: true })}
+                  onUnchecked={() => this.setState({ enabledDarkTheme: false })} />
+                <p className="help">Enable/Disable dark theme.</p>
+              </div>
+              <div className="field">
+                <Checkbox
+                  name="disabledOpenAnimation"
+                  label="Disable Intro"
+                  defaultChecked={this.state.disabledOpenAnimation}
+                  onChecked={() => this.setState({ disabledOpenAnimation: true })}
+                  onUnchecked={() => this.setState({ disabledOpenAnimation: false })} />
+                <p className="help">Enable/Disable the animation shown when the app opens.</p>
+              </div>
+              <div className="field">
+                <Checkbox
+                  name="connectionsAsList"
+                  label="List Connections"
+                  defaultChecked={this.state.connectionsAsList}
+                  onChecked={() => this.setState({ connectionsAsList: true })}
+                  onUnchecked={() => this.setState({ connectionsAsList: false })} />
+                <p className="help">Display saved connections as a list instead of cards.</p>
+              </div>
             </div>
           </div>
         </div>
