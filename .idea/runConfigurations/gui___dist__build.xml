@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="gui: (dist) build" type="NodeJSConfigurationType" factoryName="Node.js" path-to-js-file="node_modules/electron-builder/out/cli/cli.js" working-dir="$PROJECT_DIR$">
-    <method />
-  </configuration>
-</component>

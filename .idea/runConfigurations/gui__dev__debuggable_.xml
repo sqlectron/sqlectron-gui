@@ -1,7 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="gui: dev (debuggable)" type="Multirun" factoryName="Multirun" singleton="true" separateTabs="false" startOneByOne="false" markFailedProcess="true" hideSuccessProcess="false" delayTime="0">
-    <runConfiguration name="gui: dev:webpack" type="Node.js" />
-    <runConfiguration name="gui: dev:electron" type="Node.js" />
-    <method />
-  </configuration>
-</component>

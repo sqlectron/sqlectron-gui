@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="gui: (compile) rimraf out" type="NodeJSConfigurationType" factoryName="Node.js" application-parameters="out" path-to-js-file="node_modules/rimraf/bin.js" working-dir="$PROJECT_DIR$">
-    <method />
-  </configuration>
-</component>
