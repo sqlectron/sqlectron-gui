@@ -85,7 +85,7 @@
     "dist:winlinux": "yarn run compile && yarn run build:linux && yarn run build:win"
   },
   "dependencies": {
-    "@armarti/unified-dataloader-core": "latest",
+    "@armarti/unified-dataloader-core": "*",
     "axios": "^0.7.0",
     "bunyan": "^1.8.5",
     "electron": "3.0.0-beta.13",

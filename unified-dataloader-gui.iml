@@ -3,10 +3,9 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/src/browser" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/src/renderer" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/vendor/renderer" isTestSource="false" />
-      <excludeFolder url="file://$MODULE_DIR$/cache" />
+      <sourceFolder url="file://$MODULE_DIR$/src/renderer" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/browser" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/dist" />
     </content>
     <orderEntry type="inheritedJdk" />

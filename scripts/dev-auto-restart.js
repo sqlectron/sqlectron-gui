@@ -12,7 +12,7 @@ const watch = [
   join(__dirname, '../src/browser'),
 ];
 
-const pathCore = join(__dirname, '../../core/lib');
+const pathCore = join(__dirname, '../../unified-dataloader-core/lib');
 try {
   fs.accessSync(pathCore, fs.F_OK);
   watch.push(pathCore);
