@@ -30,6 +30,11 @@ export default class DatabaseItem extends Component {
     this.contextMenu = null;
   }
 
+  onSingleClick() {
+    const { onExecuteDefaultQuery, database, item } = this.props;
+    onExecuteDefaultQuery(database, item);
+  }
+
   // Context menu is built dinamically on click (if it does not exist), because building
   // menu onComponentDidMount or onComponentWillMount slows table listing when database
   // has a loads of tables, because menu will be created (unnecessarily) for every table shown
@@ -134,7 +139,7 @@ export default class DatabaseItem extends Component {
   render() {
     const { database, item, style, onSelectItem, dbObjectType } = this.props;
     const hasChildElements = !!onSelectItem;
-    const onSingleClick = hasChildElements
+    const expandChildren = hasChildElements
       ? () => { onSelectItem(database, item); this.toggleTableCollapse(); }
       : () => {};
 
@@ -146,19 +151,21 @@ export default class DatabaseItem extends Component {
     const { schema, name } = item;
     const fullName = schema ? `${schema}.${name}` : name;
 
+
     return (
       <div>
         <span
           style={style}
           className="item"
-          onClick={onSingleClick}
           onContextMenu={::this.onContextMenu}>
           {dbObjectType === 'Table'
-            ? <CollapseIcon arrowDirection={collapseArrowDirection} />
+            ? <CollapseIcon
+              arrowDirection={collapseArrowDirection}
+              expandAction={expandChildren} />
             : null
           }
           {dbObjectType === 'Table' ? tableIcon : null}
-          {fullName}
+          <span onClick={::this.onSingleClick}>{fullName}</span>
         </span>
         {this.renderSubItems(item)}
       </div>
