@@ -1,0 +1,5 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="gui: debug prod (2) - inspect electron node" type="ChromiumRemoteDebugType" factoryName="Chromium Remote" port="9229">
+    <method />
+  </configuration>
+</component>

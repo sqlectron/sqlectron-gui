@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="gui: compile (analyzer)" type="NodeJSConfigurationType" factoryName="Node.js" application-parameters="--progress --display-error-details --config=config/webpack/prod.js" path-to-js-file="node_modules/webpack/bin/webpack.js" working-dir="$PROJECT_DIR$">
+    <envs>
+      <env name="OPEN_ANALYZER" value="true" />
+    </envs>
+    <method>
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="gui: (dist1) (compile1) rimraf out" run_configuration_type="NodeJSConfigurationType" />
+      <option name="RunConfigurationTask" enabled="true" run_configuration_name="gui: (dist2) (compile2) compile:browser" run_configuration_type="NodeJSConfigurationType" />
+    </method>
+  </configuration>
+</component>
