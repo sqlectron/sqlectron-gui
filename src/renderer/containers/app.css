@@ -35,7 +35,7 @@ p.help {
   font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
 }
 
-.ui, .ui.menu, .ui.button {
+.ui, .ui.menu, .ui.button, .ui.list .item .header {
   font-family: inherit;
 }
 
