@@ -20,6 +20,7 @@
     "yarn": ">=1"
   },
   "build": {
+    "electronVersion": "3.0.0-beta.13",
     "appId": "org.unified-dataloader.gui",
     "productName": "unified-dataloader",
     "mac": {
@@ -87,6 +88,7 @@
     "@armarti/unified-dataloader-core": "latest",
     "axios": "^0.7.0",
     "bunyan": "^1.8.5",
+    "electron": "3.0.0-beta.13",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
     "react": "^15",
@@ -117,9 +119,11 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@types/jest": "^23.3.2",
+    "@types/lodash": "^4.14.116",
     "@types/node": "^10.9.4",
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.7",
+    "@types/react-select": "^2.0.3",
     "awesome-typescript-loader": "^5.2.1",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^9.0.0",
@@ -135,7 +139,6 @@
     "del": "^2.2.0",
     "denodeify": "^1.2.1",
     "dom-helpers": "^3.3.1",
-    "electron": "beta",
     "electron-builder": "^20.28.4",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.0",
@@ -164,7 +167,6 @@
     "react-hot-loader": "^4.3.6",
     "react-redux": "^4.0.1",
     "react-resizable": "^1.4.2",
-    "react-router": "~4.3.1",
     "react-router-dom": "^4.3.1",
     "react-select": "^1.3.0",
     "react-tabs": "git+https://github.com/maxcnunes/react-tabs.git#remove-warnings",

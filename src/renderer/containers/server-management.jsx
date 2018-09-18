@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as ServersActions from '../actions/servers.js';
-import * as ConnActions from '../actions/connections.js';
-import * as ConfigActions from '../actions/config.js';
-import Header from '../components/header.jsx';
-import Footer from '../components/footer.jsx';
-import ServerList from '../components/server-list.jsx';
-import ServerModalForm from '../components/server-modal-form.jsx';
-import SettingsModalForm from '../components/settings-modal-form.jsx';
-import ServerFilter from '../components/server-filter.jsx';
-import Message from '../components/message.jsx';
+import * as ServersActions from '../actions/servers';
+import * as ConnActions from '../actions/connections';
+import * as ConfigActions from '../actions/config';
+import Header from '../components/header';
+import Footer from '../components/footer';
+import ServerList from '../components/server-list';
+import ServerModalForm from '../components/server-modal-form';
+import SettingsModalForm from '../components/settings-modal-form';
+import ServerFilter from '../components/server-filter';
+import Message from '../components/message';
 
 
 const STYLES = {
@@ -25,13 +25,16 @@ const BREADCRUMB = [{ icon: 'server', label: 'servers' }];
 
 class ServerManagerment extends Component {
   static propTypes = {
-    status: PropTypes.string.isRequired,
-    connections: PropTypes.object.isRequired,
-    servers: PropTypes.object.isRequired,
-    config: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
     children: PropTypes.node,
+    config: PropTypes.object.isRequired,
+    connections: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object,
+    match: PropTypes.object,
+    servers: PropTypes.object.isRequired,
+    // staticContext: PropTypes,
+    status: PropTypes.string.isRequired
   };
 
   constructor(props, context) {
@@ -40,7 +43,7 @@ class ServerManagerment extends Component {
   }
 
   onConnectClick({ id }) {
-    this.props.router.push(`/server/${id}`);
+    this.props.history.push(`/server/${id}`);
   }
 
   onTestConnectionClick(server) {
@@ -106,7 +109,9 @@ class ServerManagerment extends Component {
 
   render() {
     const { filter } = this.state;
-    const { connections, servers, config, status } = this.props;
+    const {
+      connections, servers, config, status
+    } = this.props;
     const selected = servers.editingServer || {};
     const filteredServers = this.filterServers(filter, servers.items);
 
@@ -128,19 +133,22 @@ class ServerManagerment extends Component {
             onSettingsClick={::this.onSettingsClick} />
 
           {
-            connections.error &&
+            connections.error
+              && (
               <Message
                 closeable
-                title="Connection Error"
+                title='Connection Error'
                 message={connections.error.message}
-                type="error" />
+                type='error' />
+              )
           }
 
           <ServerList servers={filteredServers}
             onEditClick={::this.onEditClick}
             onConnectClick={::this.onConnectClick} />
 
-          {servers.isEditing && <ServerModalForm
+          {servers.isEditing && (
+          <ServerModalForm
             server={selected}
             error={servers.error}
             testConnection={testConnection}
@@ -148,13 +156,16 @@ class ServerManagerment extends Component {
             onDuplicateClick={::this.onDuplicateClick}
             onSaveClick={::this.onSaveClick}
             onCancelClick={::this.onCancelClick}
-            onRemoveClick={::this.onRemoveClick} />}
+            onRemoveClick={::this.onRemoveClick} />
+          )}
 
-          {config.isEditing && <SettingsModalForm
+          {config.isEditing && (
+          <SettingsModalForm
             config={config}
             error={config.error}
             onSaveClick={::this.onSettingsSaveClick}
-            onCancelClick={::this.onSettingsCancelClick} />}
+            onCancelClick={::this.onSettingsCancelClick} />
+          )}
         </div>
         <div style={STYLES.footer}>
           <Footer status={status} />

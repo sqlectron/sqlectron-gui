@@ -1,11 +1,8 @@
-// import debounce from 'lodash.debounce';
-// import union from 'lodash.union';
-import _ from 'lodash';
-
+import { debounce, union } from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
 import {
@@ -24,20 +21,16 @@ import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
 import { fetchTableKeysIfNeeded } from '../actions/keys';
-import DatabaseFilter from '../components/database-filter.jsx';
-import DatabaseList from '../components/database-list.jsx';
-import DatabaseDiagramModal from '../components/database-diagram-modal.jsx';
-import Header from '../components/header.jsx';
-import Footer from '../components/footer.jsx';
-import Query from '../components/query.jsx';
-import Loader from '../components/loader.jsx';
-import PromptModal from '../components/prompt-modal.jsx';
+import DatabaseFilter from '../components/database-filter';
+import DatabaseList from '../components/database-list';
+import DatabaseDiagramModal from '../components/database-diagram-modal';
+import Header from '../components/header';
+import Footer from '../components/footer';
+import Query from '../components/query';
+import Loader from '../components/loader';
+import PromptModal from '../components/prompt-modal';
 import MenuHandler from '../menu-handler';
 import { requireLogos } from '../components/require-context';
-
-const debounce = _.debounce;
-const union = _.union;
-
 
 require('./query-browser.css');
 require('../components/react-resizable.css');

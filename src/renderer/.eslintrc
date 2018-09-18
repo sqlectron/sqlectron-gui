@@ -17,7 +17,8 @@
     "func-names": 0,
     "arrow-parens": ["warn", "as-needed"],
     "brace-style": ["warn", "stroustrup"],
-    "import/newline-after-import": ["warn", { "count": 1 }]
+    "import/newline-after-import": ["warn", { "count": 1 }],
+    "react/no-unused-prop-types": 0
   },
   "plugins": [
     "react"

@@ -111,7 +111,7 @@ const prod = merge(
         'react-dom',
         'react-redux',
         'react-resizable',
-        'react-router',
+        'react-router-dom',
         'react-select',
         'redux',
         'redux-thunk',

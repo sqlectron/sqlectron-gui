@@ -48,60 +48,38 @@ const { join } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commonConfig = require('./common');
 const vars = require('./vars');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
+const HOT_RELOAD_PORT = 8080;
 const SRC_DIR = vars.ENABLE_TYPESCRIPT ? vars.TS_SRC : vars.JS_SRC;
-const cssLoaders = [
-  'style-loader',
-  {
-    loader: 'css-loader',
-    options: {
-      importLoaders: 1
-    }
-  }
-];
-const copyFiles = [
-  {
-    from: 'node_modules/devtron/manifest.json',
-    to: 'out/browser/',
-    force: true
-  },
-  {
-    from: 'node_modules/devtron/out/browser-globals.js',
-    to: 'out/browser/out/',
-    force: true
-  }
-];
 
 const dev = merge(
   commonConfig,
   {
     mode: 'development',
     devtool: 'cheap-module-eval-source-map',
-    /*
-    externals: [
-      (context, request, callback) => {
-        if (request.match(/devtron/)) { return callback(null, 'commonjs ' + request); }
-        return callback();
-      }
-    ],
-    */
     module: {
       rules: [
         {
-          test: /\.css$/,
-          use: cssLoaders
-        },
-        {
-          test: /\.scss$/,
-          use: cssLoaders.concat({
-            loader: 'sass-loader',
-            options: {
-              includePaths: [
-                'node_modules'
-              ]
+          test: /\.s?css$/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+                sourceMap: true
+              }
+            },
+            {
+              loader: 'sass-loader',
+              options: {
+                includePaths: [
+                  'node_modules'
+                ]
+              }
             }
-          })
+          ]
         },
         {
           test: /\.(?:eot|ttf|woff2?|svg)$/,
@@ -123,7 +101,7 @@ const dev = merge(
         'react-hot-loader/patch',
         // bundle the client for webpack-dev-server and connect
         // to the provided endpoint
-        'webpack-dev-server/client?http://localhost:8080',
+        `webpack-dev-server/client?http://localhost:${HOT_RELOAD_PORT}/`,
         // bundle the client for hot reloading, only means to
         // only hot reload for successful updates
         'webpack/hot/only-dev-server',
@@ -137,17 +115,17 @@ const dev = merge(
     },
     devServer: {
       // enable HMR on the server
-      hot: true
+      hot: true,
+      port: HOT_RELOAD_PORT
     },
     plugins: [
-      // enable HMR globally
-      new webpack.HotModuleReplacementPlugin(),
       new HtmlWebpackPlugin({
         hot: true,
         template: `${SRC_DIR}/renderer/index.html`,
         title: 'HtmlWebpackPlugin title - unified-dataloader-gui'
       }),
-      // new CopyWebpackPlugin(copyFiles, { debug: 'debug' })
+      // enable HMR globally
+      new webpack.HotModuleReplacementPlugin()
     ],
     performance: {
       hints: 'warning'

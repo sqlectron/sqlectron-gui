@@ -1,21 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-//import set from 'lodash.set';
-import _ from 'lodash';
-const set = _.set;
-
+import { set } from 'lodash';
 import Select from 'react-select';
 import { sqlectron } from '../../browser/remote';
-import ConfirmModal from './confim-modal.jsx';
-import Message from './message.jsx';
-import Checkbox from './checkbox.jsx';
+import ConfirmModal from './confim-modal';
+import Message from './message';
+import Checkbox from './checkbox';
 import { requireLogos } from './require-context';
-
 
 require('react-select/dist/react-select.css');
 require('./override-select.css');
-
 
 const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
   value: dbClient.key,
@@ -29,15 +23,15 @@ const DEFAULT_SSH_PORT = 22;
 
 export default class ServerModalForm extends Component {
   static propTypes = {
-    onSaveClick: PropTypes.func.isRequired,
-    onCancelClick: PropTypes.func.isRequired,
-    onRemoveClick: PropTypes.func.isRequired,
-    onTestConnectionClick: PropTypes.func.isRequired,
-    onDuplicateClick: PropTypes.func.isRequired,
-    server: PropTypes.object,
     error: PropTypes.object,
-    testConnection: PropTypes.object,
-  }
+    onCancelClick: PropTypes.func.isRequired,
+    onDuplicateClick: PropTypes.func.isRequired,
+    onRemoveClick: PropTypes.func.isRequired,
+    onSaveClick: PropTypes.func.isRequired,
+    onTestConnectionClick: PropTypes.func.isRequired,
+    server: PropTypes.object,
+    testConnection: PropTypes.object
+  };
 
   constructor(props, context) {
     super(props, context);

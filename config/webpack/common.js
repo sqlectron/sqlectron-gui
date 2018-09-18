@@ -121,6 +121,7 @@ const common = {
           }
         ]
       },
+      /*
       {
         test: /\.png$/,
         use: [
@@ -143,6 +144,7 @@ const common = {
           }
         ]
       }
+      */
     ]),
     noParse: [ /html2canvas/ ]
   },

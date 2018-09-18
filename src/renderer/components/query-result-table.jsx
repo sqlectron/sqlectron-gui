@@ -1,5 +1,5 @@
 // import debounce from 'lodash.debounce';
-import _ from 'lodash';
+import { debounce } from 'lodash';
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
@@ -13,8 +13,6 @@ import { valueToString } from '../utils/convert';
 
 import 'react-virtualized/styles.css';
 import './query-result-table.scss';
-
-const debounce = _.debounce;
 
 /* eslint react/sort-comp:0 */
 export default class QueryResultTable extends Component {
@@ -36,7 +34,7 @@ export default class QueryResultTable extends Component {
       PropTypes.array,
       PropTypes.number,
     ]),
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -111,7 +109,7 @@ export default class QueryResultTable extends Component {
     this.resizeTimer = setTimeout(::this.resize, 16);
   }
 
-  getTextWidth(text, font) {
+  static getTextWidth(text, font) {
     // additional spacing
     const padding = 28;
     const element = document.createElement('canvas');
@@ -149,24 +147,24 @@ export default class QueryResultTable extends Component {
     if ((this.props.fields.length - 1) !== params.columnIndex) {
       resizeDrag = (
         <Draggable
-          axis="x"
+          axis='x'
           onStop={handleStop}
           position={{ x: 0, y: 0 }}
           zIndex={999}>
-          <div className="draggable-handle" />
+          <div className='draggable-handle' />
         </Draggable>
       );
     }
 
     return (
-      <div className="item">
+      <div className='item'>
         <span>{field.name}</span>
         {resizeDrag}
       </div>
     );
   }
 
-  renderNoRows() {
+  static renderNoRows() {
     return (
       <div style={{ textAlign: 'center', fontSize: '16px' }}>
         No results found
@@ -224,15 +222,15 @@ export default class QueryResultTable extends Component {
     let savePanel = null;
     if (rowCount) {
       copyPanel = (
-        <div className="ui small label" title="Copy as" style={{ float: 'right', margin: '3px' }}>
-          <i className="copy icon" />
-          <a className="detail" style={styleCopied}>Copied</a>
-          <a className="detail"
+        <div className='ui small label' title='Copy as' style={{ float: 'right', margin: '3px' }}>
+          <i className='copy icon' />
+          <a className='detail' style={styleCopied}>Copied</a>
+          <a className='detail'
             style={styleCopyButtons}
             onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>
 CSV
           </a>
-          <a className="detail"
+          <a className='detail'
             style={styleCopyButtons}
             onClick={() => onCopyToClipboardClick(rows, 'JSON')}>
 JSON
@@ -241,15 +239,15 @@ JSON
       );
 
       savePanel = (
-        <div className="ui small label" title="Save as" style={{ float: 'right', margin: '3px' }}>
-          <i className="save icon" />
-          <a className="detail" style={styleSaved}>Saved</a>
-          <a className="detail"
+        <div className='ui small label' title='Save as' style={{ float: 'right', margin: '3px' }}>
+          <i className='save icon' />
+          <a className='detail' style={styleSaved}>Saved</a>
+          <a className='detail'
             style={styleSaveButtons}
             onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>
 CSV
           </a>
-          <a className="detail"
+          <a className='detail'
             style={styleSaveButtons}
             onClick={() => onSaveToFileClick(rows, 'JSON')}>
 JSON
@@ -260,10 +258,10 @@ JSON
 
     return (
       <div style={{ background: 'rgba(0, 0, 0, 0.05)', overflow: 'hidden' }}>
-        <div className="ui label" style={{ margin: '3px', float: 'left' }}>
-          <i className="table icon" />
+        <div className='ui label' style={{ margin: '3px', float: 'left' }}>
+          <i className='table icon' />
           Rows
-          <div className="detail">{rowCount}</div>
+          <div className='detail'>{rowCount}</div>
         </div>
         {savePanel}
         {copyPanel}
@@ -295,8 +293,10 @@ JSON
 
     return (
       <Grid
-        className="grid-body"
-        ref={(ref) => { this.rowsGrid = ref; }}
+        className='grid-body'
+        ref={ref => {
+          this.rowsGrid = ref;
+        }}
         cellRenderer={::this.renderCell}
         width={tableWidth}
         height={Math.min((tableHeight - headerHeight), fixedHeightRows)}
@@ -306,7 +306,7 @@ JSON
         columnCount={fields.length}
         columnWidth={::this.getColumnWidth}
         rowsCount={rowCount}
-        noContentRenderer={::this.renderNoRows} />
+        noContentRenderer={::QueryResultTable.renderNoRows} />
 
     );
   }
@@ -321,12 +321,14 @@ JSON
 
     return (
       <Grid
-        ref={(ref) => { this.headerGrid = ref; }}
+        ref={ref => {
+          this.headerGrid = ref;
+        }}
         columnWidth={::this.getColumnWidth}
         columnCount={fields.length}
         height={30}
         cellRenderer={::this.renderHeaderCell}
-        className="grid-header-row"
+        className='grid-header-row'
         rowHeight={30}
         rowCount={1}
         width={tableWidth - scrollbarSize()}
@@ -355,15 +357,15 @@ JSON
     const numRowsToFindAverage = rows.length > 30 ? 30 : rows.length;
     const maxWidth = 220;
 
-    const headerWidth = this.getTextWidth(fieldName, `bold ${font}`);
+    const headerWidth = QueryResultTable.getTextWidth(fieldName, `bold ${font}`);
 
     let averageRowsCellWidth = 0;
     if (rows.length) {
       averageRowsCellWidth = rows
         .slice(0, numRowsToFindAverage)
-        .map((row) => {
+        .map(row => {
           const value = valueToString(row[fieldName]);
-          return this.getTextWidth(value, font);
+          return QueryResultTable.getTextWidth(value, font);
         })
         .reduce((prev, curr) => prev + curr, 0) / numRowsToFindAverage;
     }
@@ -398,7 +400,7 @@ JSON
 
         <ScrollSync>
           {({ onScroll, scrollLeft }) => (
-            <div className="grid-query-wrapper">
+            <div className='grid-query-wrapper'>
               {this.renderHeaderTopBar()}
               {this.renderTableHeader(scrollLeft)}
               {this.renderTableBody(onScroll)}

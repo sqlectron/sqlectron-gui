@@ -23,6 +23,7 @@ let windowsNumber = 0;
 
 export function buildNewWindow(app) {
   const appConfig = getConfig();
+  if (devMode) app.commandLine.appendSwitch('remote-debugging-port', '9222');
 
   windowsNumber += 1;
   const mainWindow = new BrowserWindow({
