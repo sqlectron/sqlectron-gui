@@ -17,10 +17,10 @@
   "engineStrict": true,
   "engines": {
     "node": ">=6 <10.2",
-    "yarn": ">=1"
+    "yarn": ">=1.0"
   },
   "build": {
-    "electronVersion": "3.0.0-beta.13",
+    "electronVersion": "3.0.0",
     "appId": "org.unified-dataloader.gui",
     "productName": "unified-dataloader",
     "mac": {
@@ -65,8 +65,11 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "dev": "concurrently --names 'webpack,electron' --prefix name 'yarn run dev:webpack' 'yarn run dev:electron'",
+    "dev:full": "concurrently --names 'databases,devtools,webpack,electron' --prefix name 'yarn run dev:databases' 'yarn run dev:devtools' 'yarn run dev:webpack' 'yarn run dev:electron'",
+    "databases": "docker-compose --file ../../../sqlectron-databases/docker-compose.yml up",
+    "dev:devtools": "yarn run react-devtools",
     "dev:webpack": "cross-env BABEL_CACHE_PATH=./cache/babel-dev-webpack.json node --trace-warnings --require @babel/register node_modules/.bin/webpack-dev-server --color --config=config/webpack/dev.js",
-    "dev:electron": "cross-env DEBUG=spawn-auto-restart node --trace-warnings --require @babel/register  scripts/dev-auto-restart.js | bunyan -o short",
+    "dev:electron": "cross-env DEBUG=spawn-auto-restart node --trace-warnings --require @babel/register scripts/dev-auto-restart.js | bunyan -o short",
     "lint": "eslint . --ext .js,.jsx",
     "lint:fix": "yarn run lint -- --fix",
     "test": "yarn run lint",
@@ -86,12 +89,13 @@
   },
   "dependencies": {
     "@armarti/unified-dataloader-core": "*",
+    "@babel/runtime": "^7.0.0",
     "axios": "^0.7.0",
     "bunyan": "^1.8.5",
-    "electron": "3.0.0-beta.13",
+    "electron": "^3.0.0",
     "history": "^4.7.2",
     "lodash": "^4.17.11",
-    "react": "^15",
+    "react": "^15.0",
     "redux-logger": "^3.0.6"
   },
   "devDependencies": {
@@ -195,5 +199,8 @@
     "webpack-dev-middleware": "^3.2.0",
     "webpack-dev-server": "^3.1.8",
     "webpack-merge": "^4.1.4"
+  },
+  "optionalDependencies": {
+    "react-devtools": "^3.3.4"
   }
 }

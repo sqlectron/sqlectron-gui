@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
     <head>
-      <title>Sqlectron</title>
+      <title>unified-dataloader</title>
       <meta charset="utf-8"/>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-
+      <% if (htmlWebpackPlugin.options.useReactDevtools) { %>
+        <script src="http://localhost:8097"></script>  <!-- react-devtools -->
+      <% console.log("Connect to React Devtools at http://localhost:8097") %>
+      <% } %>
       <style>
         #loading h3 {
           padding: 0;
           font-family: 'Helvetica Neue', Arial, Helvetica, sans-serif;
           font-size: 14px;
           line-height: 30px;
-          color: rgba(0,0,0,.87);
+          color: rgba(0, 0, 0, 0.87);
           position: absolute;
           bottom: 0;
           left: 50%;
@@ -44,14 +47,13 @@
 
         .loading-hidden {
           opacity: 0;
-          transition: opacity .1s ease-out;
+          transition: opacity 0.1s ease-out;
         }
 
         /* Signal Loader: https://www.pexels.com/blog/css-only-loaders */
         #loading-signal {
           box-sizing: initial;
-
-          border: 3px solid #75C4C1;
+          border: 3px solid #75c4c1;
           border-radius: 30px;
           height: 30px;
           left: 50%;
@@ -60,7 +62,6 @@
           position: absolute;
           top: 50%;
           width: 30px;
-
           animation: pulsate 1s ease-out;
           animation-iteration-count: infinite;
           z-index: 100001;
@@ -68,7 +69,7 @@
 
         @keyframes pulsate {
           0% {
-            transform: scale(.1);
+            transform: scale(0.1);
             opacity: 0.0;
           }
           50% {

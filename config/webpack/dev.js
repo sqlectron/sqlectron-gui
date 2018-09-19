@@ -122,7 +122,8 @@ const dev = merge(
       new HtmlWebpackPlugin({
         hot: true,
         template: `${SRC_DIR}/renderer/index.html`,
-        title: 'HtmlWebpackPlugin title - unified-dataloader-gui'
+        title: 'HtmlWebpackPlugin title - unified-dataloader-gui',
+        useReactDevtools: true
       }),
       // enable HMR globally
       new webpack.HotModuleReplacementPlugin()
