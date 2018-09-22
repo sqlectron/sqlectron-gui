@@ -122,4 +122,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(withRouter(AppContainer));
+export default withRouter(connect(mapStateToProps)(AppContainer));

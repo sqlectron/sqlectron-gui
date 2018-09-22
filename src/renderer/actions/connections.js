@@ -133,7 +133,7 @@ export function reconnect (id, database) {
 
 export function test (server) {
   return async (dispatch) => {
-    dispatch({ type: TEST_CONNECTION_REQUEST, server });
+    const s = dispatch({ type: TEST_CONNECTION_REQUEST, server });
     let dbClient;
     try {
       const testServerSession = sqlectron.db.createServer(server);

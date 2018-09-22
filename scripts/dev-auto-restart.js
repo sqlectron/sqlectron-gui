@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /* eslint no-var: 0, object-shorthand:0 */
-import fs from 'fs';
-import { join } from 'path';
-import electron from 'electron';
+var fs = require('fs');
+var join = require('path').join;
+var electron = require('electron');
 // import devtoolsInstaller from 'electron-devtools-installer';
 // import { install as devtronInstall } from 'devtron';
 

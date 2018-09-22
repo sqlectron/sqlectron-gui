@@ -6,10 +6,12 @@ eslint-disable
   import/order,
   import/no-dynamic-require
 */
-import { join, resolve } from 'path';
-import fs from 'fs';
-// const fs = require('fs');
-// const { resolve, join } = require('path');
+// import { join, resolve } from 'path';
+// import fs from 'fs';
+const fs = require('fs');
+const path = require('path');
+const resolve = path.resolve;
+const join = path.join;
 
 const ROOT_DIR = resolve(join(__dirname, '../..'));
 // The dependencies block from vars.ROOT_DIR/package.json
@@ -42,7 +44,7 @@ function filterDepWithoutEntryPoints(dep) {
   }
 }
 
-export {
+module.exports = {
   dependencies,
   filterDepWithoutEntryPoints,
   ROOT_DIR,

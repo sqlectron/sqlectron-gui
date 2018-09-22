@@ -28,7 +28,7 @@ export default class DbMetadataList extends Component {
     onExecuteDefaultQuery: PropTypes.func,
     onSelectItem: PropTypes.func,
     onGetSQLScript: PropTypes.func,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

@@ -107,8 +107,8 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillMount () {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.connect(params.id));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.connect(match.params.id));
   }
 
   componentDidMount() {
@@ -116,12 +116,12 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { dispatch, router, connections } = nextProps;
+    const { dispatch, history, connections } = nextProps;
 
     if (connections.error
        || (!connections.connecting && !connections.server && !connections.waitingSSHPassword)
     ) {
-      router.push('/');
+      history.push('/');
       return;
     }
 
@@ -728,4 +728,4 @@ function mapStateToProps (state) {
 }
 
 
-export default connect(mapStateToProps)(withRouter(QueryBrowserContainer));
+export default withRouter(connect(mapStateToProps)(QueryBrowserContainer));

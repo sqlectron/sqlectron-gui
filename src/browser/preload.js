@@ -8,7 +8,6 @@
 
 var config = require('./config');
 
-
 process.once('loaded', function onLoaded() {
   global.SQLECTRON_CONFIG = config.get();
 });

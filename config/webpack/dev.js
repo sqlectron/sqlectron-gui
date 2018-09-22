@@ -40,24 +40,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-// require('@babel/polyfill');
-// require('@babel/register');
 const merge = require('webpack-merge');
 const webpack = require('webpack');
-const { join } = require('path');
+const join = require('path').join;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const commonConfig = require('./common');
 const vars = require('./vars');
-import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
 const HOT_RELOAD_PORT = 8080;
 const SRC_DIR = vars.ENABLE_TYPESCRIPT ? vars.TS_SRC : vars.JS_SRC;
 
-const dev = merge(
+const dev = merge.smart(
   commonConfig,
   {
     mode: 'development',
-    devtool: 'cheap-module-eval-source-map',
+    // devtool: 'cheap-module-eval-source-map',
+    devtool: 'source-map',
     module: {
       rules: [
         {
@@ -105,7 +103,7 @@ const dev = merge(
         // bundle the client for hot reloading, only means to
         // only hot reload for successful updates
         'webpack/hot/only-dev-server',
-        `./${SRC_DIR}/renderer/entry.jsx`
+        `./${SRC_DIR}/renderer/entry.jsx`,
       ]
     },
     output: {

@@ -2,17 +2,19 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ServerListItem from './server-list-item.jsx';
 import Message from './message.jsx';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
 
 require('./server-list.scss');
 
 
-export default class ServerList extends Component {
+class ServerList extends Component {
   static propTypes = {
     servers: PropTypes.array.isRequired,
     onEditClick: PropTypes.func.isRequired,
     onConnectClick: PropTypes.func.isRequired,
-  }
+  };
 
   groupItemsInRows(items) {
     const itemsPerRow = 4;
@@ -51,3 +53,5 @@ export default class ServerList extends Component {
     );
   }
 }
+
+export default withRouter(ServerList);

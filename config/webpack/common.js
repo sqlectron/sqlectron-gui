@@ -40,11 +40,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-import webpack from 'webpack';
-import { join } from 'path';
-import { CheckerPlugin } from 'awesome-typescript-loader';
-import StyleLintPlugin from 'stylelint-webpack-plugin';
-import * as vars from './vars';
+// import webpack from 'webpack';
+// import { join } from 'path';
+// import { CheckerPlugin } from 'awesome-typescript-loader';
+// import StyleLintPlugin from 'stylelint-webpack-plugin';
+// import * as vars from './vars';
+
+const webpack = require('webpack');
+const join = require('path').join;
+const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+const vars = require('./vars');
 
 const dependenciesWithoutEntryPoints = Object.keys(vars.dependencies || {}).filter(vars.filterDepWithoutEntryPoints);
 

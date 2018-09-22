@@ -22,7 +22,7 @@ export default class DatabaseList extends Component {
     onGetSQLScript: PropTypes.func.isRequired,
     onRefreshDatabase: PropTypes.func.isRequired,
     onShowDiagramModal: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

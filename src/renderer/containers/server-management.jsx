@@ -23,7 +23,7 @@ const STYLES = {
 const BREADCRUMB = [{ icon: 'server', label: 'servers' }];
 
 
-class ServerManagerment extends Component {
+class ServerManagement extends Component {
   static propTypes = {
     children: PropTypes.node,
     config: PropTypes.object.isRequired,
@@ -185,4 +185,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(withRouter(ServerManagerment));
+export default withRouter(connect(mapStateToProps)(ServerManagement));
