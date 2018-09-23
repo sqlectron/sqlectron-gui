@@ -104,7 +104,7 @@ const dev = merge.smart(
         // only hot reload for successful updates
         'webpack/hot/only-dev-server',
         `./${SRC_DIR}/renderer/entry.jsx`,
-      ]
+      ]  // .concat(vars.CORE_DIR ? [vars.CORE_DIR] : [])
     },
     output: {
       path: join(vars.ROOT_DIR, 'dist'),

@@ -15,8 +15,8 @@ export default class TableCell extends Component {
     rowIndex: PropTypes.number.isRequired,
     data: PropTypes.any.isRequired,
     col: PropTypes.string.isRequired,
-    onOpenPreviewClick: PropTypes.func.isRequired,
-  }
+    onOpenPreviewClick: PropTypes.func.isRequired, // key: PropTypes.func.isRequired, style: PropTypes.object
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -42,7 +42,9 @@ export default class TableCell extends Component {
     }
 
     if (this.contextMenu) {
-      this.contextMenu.popup(event.clientX, event.clientY);
+      // https://github.com/electron/electron/blob/master/docs/api/breaking-changes.md#menu
+      this.contextMenu.popup({ x: event.clientX, y: event.clientY });
+      // this.contextMenu.popup(event.clientX, event.clientY);
     }
   }
 

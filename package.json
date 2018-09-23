@@ -64,12 +64,12 @@
   "main": "./out/browser/main.js",
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "dev": "node $NODE_DEBUG_OPTION node_modules/.bin/concurrently --names 'webpack,electron' --prefix name 'yarn run dev:webpack' 'yarn run dev:electron'",
+    "dev": "node node_modules/.bin/concurrently --names 'webpack,electron' --prefix name 'yarn run dev:webpack' 'yarn run dev:electron'",
     "dev:full": "concurrently --names 'databases,devtools,webpack,electron' --prefix name 'yarn run dev:databases' 'yarn run dev:devtools' 'yarn run dev:webpack' 'yarn run dev:electron'",
     "databases": "docker-compose --file ../../../sqlectron-databases/docker-compose.yml up",
     "dev:devtools": "yarn run react-devtools",
-    "dev:webpack": "cross-env BABEL_CACHE_PATH=./cache/babel-dev-webpack.json node --trace-warnings  node_modules/.bin/webpack-dev-server --color --config=config/webpack/dev.js",
-    "dev:electron": "cross-env DEBUG=spawn-auto-restart node --trace-warnings scripts/dev-auto-restart.js | bunyan -o short",
+    "dev:webpack": "node $NODE_DEBUG_OPTION node_modules/.bin/webpack-dev-server --color --config=webpack.dev.config.js",
+    "dev:electron": "DEBUG=spawn-auto-restart node $NODE_DEBUG_OPTION scripts/dev-auto-restart.js | bunyan -o short",
     "lint": "eslint . --ext .js,.jsx",
     "lint:fix": "yarn run lint -- --fix",
     "test": "yarn run lint",
@@ -88,7 +88,7 @@
     "dist:winlinux": "yarn run compile && yarn run build:linux && yarn run build:win"
   },
   "dependencies": {
-    "@armarti/unified-dataloader-core": "*",
+    "@armarti/unified-dataloader-core": ">=0.0.1",
     "@babel/polyfill": "^7.0.0",
     "@babel/runtime": "^7.0.0",
     "axios": "^0.7.0",
@@ -113,6 +113,7 @@
     "@babel/plugin-proposal-logical-assignment-operators": "^7.0.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.0.0",
     "@babel/plugin-proposal-numeric-separator": "^7.0.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-proposal-optional-chaining": "^7.0.0",
     "@babel/plugin-proposal-pipeline-operator": "^7.0.0",
     "@babel/plugin-proposal-throw-expressions": "^7.0.0",

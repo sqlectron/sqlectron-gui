@@ -91,8 +91,8 @@ class QueryBrowserContainer extends Component {
     sqlscripts: PropTypes.object.isRequired,
     keys: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
     children: PropTypes.node,
   };
 
@@ -159,9 +159,9 @@ class QueryBrowserContainer extends Component {
   }
 
   onSelectDatabase(database) {
-    const { dispatch, params } = this.props;
+    const { dispatch, match } = this.props;
 
-    dispatch(ConnActions.connect(params.id, database.name));
+    dispatch(ConnActions.connect(match.params.id, database.name));
   }
 
   onExecuteDefaultQuery(database, table) {
@@ -181,8 +181,8 @@ class QueryBrowserContainer extends Component {
   }
 
   onPromptOKClick(password) {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.connect(params.id, null, false, password));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.connect(match.params.id, null, false, password));
   }
 
   onSelectTable(database, table) {
@@ -217,8 +217,8 @@ class QueryBrowserContainer extends Component {
   }
 
   onReConnectionClick() {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.reconnect(params.id, this.getCurrentQuery().database));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.reconnect(match.params.id, this.getCurrentQuery().database));
   }
 
   onRefreshDatabase(database) {

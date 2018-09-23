@@ -139,7 +139,7 @@ export default class QueryResultTable extends Component {
   }
 
   renderHeaderCell(params) {
-    const field = this.props.fields[params.columnIndex];
+    const field = this.props.fields[params.columnIndex]; // const key = params.key;
     const handleStop = this.handleStop.bind(this, { name: field.name, index: params.columnIndex });
 
     // We don't want the resizable handle on the last column for layout reasons
@@ -297,7 +297,7 @@ JSON
         ref={ref => {
           this.rowsGrid = ref;
         }}
-        cellRenderer={::this.renderCell}
+        cellRenderer={this.createCellRenderer(::this.renderCell)}
         width={tableWidth}
         height={Math.min((tableHeight - headerHeight), fixedHeightRows)}
         rowHeight={rowHeight}
@@ -309,6 +309,23 @@ JSON
         noContentRenderer={::QueryResultTable.renderNoRows} />
 
     );
+  }
+
+  // https://github.com/bvaughn/react-virtualized/blob/master/docs/upgrades/Version8.md
+  // Can be used for Grid, List, or Table
+  createCellRenderer(cellRenderer) {
+    console.warn('cellRenderer udpate needed');
+    return function cellRendererWrapper ({ key, style, ...rest }) {
+      return (
+        <div
+          className='Grid__cell'
+          key={key}
+          style={style}
+        >
+          {cellRenderer(rest)}
+        </div>
+      )
+    }
   }
 
   renderTableHeader(scrollLeft) {
@@ -327,7 +344,7 @@ JSON
         columnWidth={::this.getColumnWidth}
         columnCount={fields.length}
         height={30}
-        cellRenderer={::this.renderHeaderCell}
+        cellRenderer={this.createCellRenderer(::this.renderHeaderCell)}
         className='grid-header-row'
         rowHeight={30}
         rowCount={1}

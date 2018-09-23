@@ -14,7 +14,7 @@ export default class ServerDBClientInfoModal extends Component {
     client: PropTypes.string.isRequired,
     infos: PropTypes.array.isRequired,
     onCloseClick: PropTypes.func.isRequired,
-  }
+  };
 
   componentDidMount() {
     $(this.refs.infoModal).modal({

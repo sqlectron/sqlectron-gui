@@ -16,7 +16,7 @@ export default class TableSubmenu extends Component {
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
     onDoubleClickItem: PropTypes.func,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

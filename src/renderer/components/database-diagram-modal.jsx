@@ -30,7 +30,7 @@ export default class DatabaseDiagramModal extends Component {
     onExportDatabaseDiagram: PropTypes.func.isRequired,
     onOpenDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

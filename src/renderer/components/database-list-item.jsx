@@ -76,7 +76,9 @@ export default class DatabaseListItem extends Component {
   onContextMenu(event) {
     event.preventDefault();
     if (this.contextMenu) {
-      this.contextMenu.popup(event.clientX, event.clientY);
+      // https://github.com/electron/electron/blob/master/docs/api/breaking-changes.md#menu
+      this.contextMenu.popup({ x: event.clientX, y: event.clientY });
+      // this.contextMenu.popup(event.clientX, event.clientY);
     }
   }
 

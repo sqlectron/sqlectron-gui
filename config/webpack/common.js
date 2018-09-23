@@ -75,6 +75,7 @@ const common = {
     extensions: ['.js', '.jsx'].concat(vars.ENABLE_TYPESCRIPT ? ['.ts', '.tsx'] : []),
     modules: [
       'node_modules',
+      // vars.CORE_DIR,
       join(vars.ENABLE_TYPESCRIPT ? vars.TS_SRC : vars.JS_SRC, 'renderer')
     ]
   },
@@ -89,11 +90,24 @@ const common = {
       }] : []).concat([
       {
         test: /\.jsx?$/,
+        /*
+        include: [
+          vars.CORE_DIR,
+          join(vars.ROOT_DIR, vars.JS_SRC)
+        ],
+        */
+        /*
         exclude: RegExp('node_modules|vendor|' + (
           vars.ENABLE_TYPESCRIPT ? vars.JS_SRC : vars.TS_SRC
         )),
+        */
         use: [
-          'babel-loader',
+          {
+            loader: 'babel-loader',
+            options: {
+              compact: false
+            }
+          },
           'source-map-loader'
         ]
       },
