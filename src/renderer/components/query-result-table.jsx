@@ -1,4 +1,3 @@
-// import debounce from 'lodash.debounce';
 import { debounce } from 'lodash';
 
 import React, { Component } from 'react';
@@ -52,23 +51,12 @@ export default class QueryResultTable extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.resize(nextProps);
-
     if (nextProps.widthOffset !== this.props.widthOffset) {
-      if (this.rowsGrid) {
-        this.rowsGrid.recomputeGridSize();
-      }
-      if (this.headerGrid) {
-        this.headerGrid.recomputeGridSize();
-      }
+      if (this.rowsGrid) this.rowsGrid.recomputeGridSize();
+      if (this.headerGrid) this.headerGrid.recomputeGridSize();
     }
-
-    if (nextProps.copied) {
-      this.setState({ showCopied: true });
-    }
-
-    if (nextProps.saved) {
-      this.setState({ showSaved: true });
-    }
+    if (nextProps.copied) this.setState({ showCopied: true });
+    if (nextProps.saved) this.setState({ showSaved: true });
   }
 
   componentDidUpdate() {
@@ -157,7 +145,7 @@ export default class QueryResultTable extends Component {
     }
 
     return (
-      <div className='item'>
+      <div className='Grid__cell' key={params.key} style={params.style}>
         <span>{field.name}</span>
         {resizeDrag}
       </div>
@@ -201,10 +189,7 @@ export default class QueryResultTable extends Component {
     const props = nextProps || this.props;
     const tableWidth = window.innerWidth - (props.widthOffset + 27);
     const tableHeight = window.innerHeight - (props.heigthOffset + 225);
-
-    // trigger columns resize
-    this.autoResizeColumnsWidth(props.fields, props.rows, tableWidth);
-
+    this.autoResizeColumnsWidth(props.fields, props.rows, tableWidth);  // trigger columns resize
     this.setState({ tableWidth, tableHeight });
   }
 
@@ -285,19 +270,16 @@ JSON
   renderTableBody(onScroll) {
     const { rowCount, fields } = this.props;
     const { tableWidth, tableHeight } = this.state;
-
     const headerHeight = 62; // value of 2 headers together
     const scrollBarHeight = 15;
     const rowHeight = 28;
     const fixedHeightRows = ((rowCount || 1) * rowHeight) + scrollBarHeight;
-
     return (
       <Grid
         className='grid-body'
-        ref={ref => {
-          this.rowsGrid = ref;
-        }}
-        cellRenderer={this.createCellRenderer(::this.renderCell)}
+        ref={ref => this.rowsGrid = ref}
+        cellRenderer={::this.renderCell}
+        // cellRenderer={this.createCellRenderer(::this.renderCell)}
         width={tableWidth}
         height={Math.min((tableHeight - headerHeight), fixedHeightRows)}
         rowHeight={rowHeight}
@@ -331,11 +313,7 @@ JSON
   renderTableHeader(scrollLeft) {
     const { fields } = this.props;
     const { tableWidth } = this.state;
-
-    if (!fields.length) {
-      return null;
-    }
-
+    if (!fields.length) return null;
     return (
       <Grid
         ref={ref => {
@@ -344,7 +322,8 @@ JSON
         columnWidth={::this.getColumnWidth}
         columnCount={fields.length}
         height={30}
-        cellRenderer={this.createCellRenderer(::this.renderHeaderCell)}
+        cellRenderer={::this.renderHeaderCell}
+        // cellRenderer={this.createCellRenderer(::this.renderHeaderCell)}
         className='grid-header-row'
         rowHeight={30}
         rowCount={1}
@@ -398,6 +377,8 @@ JSON
     const field = this.props.fields[params.columnIndex];
     return (
       <TableCell
+        key={params.key}
+        style={params.style}
         rowIndex={params.rowIndex}
         data={this.props.rows}
         col={field.name}
@@ -407,10 +388,7 @@ JSON
 
   render() {
     // not completed loaded yet
-    if (!this.state.tableWidth) {
-      return null;
-    }
-
+    if (!this.state.tableWidth) return null;
     return (
       <div>
         {this.renderPreviewModal()}

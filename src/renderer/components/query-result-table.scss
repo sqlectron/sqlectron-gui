@@ -1,7 +1,5 @@
 .grid-query-wrapper {
-  border-color: #d3d3d3;
-  border-style: solid;
-  border-width: 1px;
+  border: 1px solid #d3d3d3;
   box-sizing: border-box;
   border-radius: 0.25rem;
 }
@@ -31,24 +29,28 @@
   overflow: hidden !important;
 }
 
+.Grid__cell {
+  overflow: hidden;
+}
+
+//.Grid__cell > .item {
+//  border: 1px solid #eee;
+//  padding-left: 3px;
+//  text-overflow: ellipsis;
+//  overflow: hidden;
+//  white-space: nowrap;
+//}
+
+.ReactVirtualized__Grid.grid-body > .Grid__cell {
+  border: 1px solid #eee;
+}
+
 .ReactVirtualized__Grid.grid-body ::-webkit-scrollbar { display: none; }
 .ReactVirtualized__Grid.grid-body:hover { overflow: auto !important; }
 .ReactVirtualized__Grid.grid-body:hover ::-webkit-scrollbar { display: block; }
 
 .ReactVirtualized__Grid.grid-body > .Grid__innerScrollContainer {
   background: #fff;
-}
-
-.Grid__cell {
-  overflow: hidden;
-}
-
-.Grid__cell > .item {
-  border: 1px solid #eee;
-  padding-left: 3px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 }
 
 .ReactVirtualized__Grid.grid-header-row .Grid__cell {

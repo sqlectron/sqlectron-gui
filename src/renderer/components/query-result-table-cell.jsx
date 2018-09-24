@@ -15,7 +15,9 @@ export default class TableCell extends Component {
     rowIndex: PropTypes.number.isRequired,
     data: PropTypes.any.isRequired,
     col: PropTypes.string.isRequired,
-    onOpenPreviewClick: PropTypes.func.isRequired, // key: PropTypes.func.isRequired, style: PropTypes.object
+    onOpenPreviewClick: PropTypes.func.isRequired,
+    // key: PropTypes.func.isRequired,
+    style: PropTypes.object
   };
 
   constructor(props, context) {
@@ -60,7 +62,7 @@ export default class TableCell extends Component {
     });
 
     return (
-      <div className="item" onContextMenu={::this.onContextMenu}>
+      <div className={"Grid__cell"} onContextMenu={::this.onContextMenu} style={this.props.style}>
         {
           value === null
             ? <span className={className}>NULL</span>
