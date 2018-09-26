@@ -1,29 +1,21 @@
 {
-  "name": "@armarti/unified-dataloader-gui",
-  "version": "0.0.1",
-  "license": "GPL-3.0-only",
-  "description": "@armarti/unified-dataloader-gui",
-  "author": "Armarti Industries",
+  "name": "Sqlectron",
+  "version": "1.30.0",
+  "description": "A simple and lightweight SQL client with cross database and platform support",
+  "author": {
+    "name": "The Sqlectron Team",
+    "email": "maxcnunes@gmail.com"
+  },
   "main": "./out/browser/main.js",
-  "contributors": [
-    "David Charles Morse <dcmorse@armarti.com>",
-    "The SQLECTRON Team <maxcnunes@gmail.com>"
-  ],
-  "keywords": [],
-  "bugs": "https://github.com/armarti/unified-dataloader-gui/issues",
+  "license": "MIT",
+  "homepage": "https://sqlectron.github.io",
+  "bugs": "https://github.com/sqlectron/sqlectron-gui/issues",
   "repository": {
     "type": "git",
-    "url": "https://github.com/armarti/unified-dataloader-gui"
-  },
-  "engineStrict": true,
-  "engines": {
-    "node": ">=6 <10.2",
-    "yarn": ">=1.0"
+    "url": "https://github.com/sqlectron/sqlectron-gui"
   },
   "build": {
-    "electronVersion": "3.0.0",
-    "appId": "org.unified-dataloader.gui",
-    "productName": "unified-dataloader",
+    "appId": "org.sqlectron.gui",
     "mac": {
       "category": "public.app-category.developer-tools"
     },
@@ -64,8 +56,8 @@
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "dev": "concurrently --names 'webpack,electron' --prefix name 'npm run dev:webpack' 'npm run dev:electron'",
-    "dev:webpack": "webpack-dev-server --color --config ./webpack.dev.config.js",
+    "dev": "node $NODE_DEBUG_OPTION node_modules/.bin/concurrently --names 'webpack,electron' --prefix name 'npm run dev:webpack' 'npm run dev:electron'",
+    "dev:webpack": "webpack-dev-server --port=8081 --color --config ./webpack.dev.config.js",
     "dev:electron": "cross-env DEBUG=spawn-auto-restart node scripts/dev-auto-restart.js | bunyan -o short",
     "lint": "eslint . --ext .js,.jsx",
     "lint:fix": "npm run lint -- --fix",
@@ -84,32 +76,17 @@
     "dist:all-arch": "npm run compile && build --ia32 --x64",
     "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win"
   },
-  "//": [
-    "dependencies",
-    {
-      "@babel/runtime": "^7.0.0",
-      "history": "^4.7.2",
-      "lodash-es": "^4.17.11"
-    },
-    "devDependencies",
-    {
-      "@babel/plugin-transform-runtime": "^7.0.0",
-      "babel-core": "^7.0.0-bridge.0",
-      "del": "^2.2.0",
-      "babel-plugin-lodash": "^3.3.4",
-      "sqlite3": "^4.0.2",
-      "url-loader": "^1.1.1",
-      "webpack-merge": "^4.1.4"
-    }
-  ],
+  "engines": {
+    "node": ">=6 <10.2"
+  },
   "dependencies": {
-    "@armarti/unified-dataloader-core": ">=0.0.1",
     "@babel/polyfill": "^7.0.0",
     "axios": "^0.7.0",
     "bunyan": "^1.8.5",
     "lodash": "^4.17.11",
     "react": "^15.0",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "sqlectron-core": "^8.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",

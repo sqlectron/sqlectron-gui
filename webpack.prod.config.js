@@ -2,13 +2,12 @@ const { join, resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-// const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const ROOT_DIR = resolve(__dirname);
 const SRC_DIR = 'src';
-const OPEN_ANALYZER = true;
+const OPEN_ANALYZER = false;
 
 module.exports = {
   context: ROOT_DIR,
@@ -26,32 +25,7 @@ module.exports = {
       join(SRC_DIR, 'vendor')
     ],
     alias: {
-      'dtrace-provider': './empty-shim.js',
-      // 'lodash': 'lodash-es',
-      //
-      // 'lodash._basetostring': 'lodash-es/_baseToString',
-      // 'lodash._basevalues': 'lodash-es/_baseValues',
-      // 'lodash._getnative': 'lodash-es/_getNative',
-      // 'lodash._isiterateecall': 'lodash-es/_isIterateeCall',
-      // 'lodash._reescape': 'lodash-es/_reEscape',
-      // 'lodash._reevaluate': 'lodash-es/_reEvaluate',
-      // 'lodash._reinterpolate': 'lodash-es/_reInterpolate',
-      // 'lodash._root': 'lodash-es/_root',
-      //
-      // 'lodash.assign': 'lodash-es/assign',
-      // 'lodash.camelcase': 'lodash-es/camelCase',
-      // 'lodash.clonedeep': 'lodash-es/cloneDeep',
-      // 'lodash.debounce': 'lodash-es/debounce',
-      // 'lodash.escape': 'lodash-es/escape',
-      // 'lodash.get': 'lodash-es/get',
-      // 'lodash.isarguments': 'lodash-es/isArguments',
-      // 'lodash.isarray': 'lodash-es/isArray',
-      // 'lodash.isequal': 'lodash-es/isEqual',
-      // 'lodash.keys': 'lodash-es/keys',
-      // 'lodash.mergewith': 'lodash-es/mergeWith',
-      // 'lodash.tail': 'lodash-es/tail',
-      // 'lodash.template': 'lodash-es/template',
-      // 'lodash.templateSettings': 'lodash-es/templateSettings'
+      'dtrace-provider': './empty-shim.js'
     }
   },
   module: {
@@ -175,8 +149,6 @@ module.exports = {
     filename: '[name].bundle.js'
   },
   plugins: [
-    // READ: https://nolanlawson.com/2018/03/20/smaller-lodash-bundles-with-webpack-and-babel/
-    // new LodashModuleReplacementPlugin,
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery'

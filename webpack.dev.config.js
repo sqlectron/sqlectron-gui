@@ -2,7 +2,6 @@ const { join, resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-// const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 
 
@@ -24,35 +23,10 @@ module.exports = {
     modules: [
       'node_modules'
 
-    ],
-    // alias: {
-    //
-    //   'lodash': 'lodash-es',
-    //
-    //   'lodash._basetostring': 'lodash-es/_baseToString',
-    //   'lodash._basevalues': 'lodash-es/_baseValues',
-    //   'lodash._getnative': 'lodash-es/_getNative',
-    //   'lodash._isiterateecall': 'lodash-es/_isIterateeCall',
-    //   'lodash._reescape': 'lodash-es/_reEscape',
-    //   'lodash._reevaluate': 'lodash-es/_reEvaluate',
-    //   'lodash._reinterpolate': 'lodash-es/_reInterpolate',
-    //   'lodash._root': 'lodash-es/_root',
-    //
-    //   'lodash.assign': 'lodash-es/assign',
-    //   'lodash.camelcase': 'lodash-es/camelCase',
-    //   'lodash.clonedeep': 'lodash-es/cloneDeep',
-    //   'lodash.debounce': 'lodash-es/debounce',
-    //   'lodash.escape': 'lodash-es/escape',
-    //   'lodash.get': 'lodash-es/get',
-    //   'lodash.isarguments': 'lodash-es/isArguments',
-    //   'lodash.isarray': 'lodash-es/isArray',
-    //   'lodash.isequal': 'lodash-es/isEqual',
-    //   'lodash.keys': 'lodash-es/keys',
-    //   'lodash.mergewith': 'lodash-es/mergeWith',
-    //   'lodash.tail': 'lodash-es/tail',
-    //   'lodash.template': 'lodash-es/template',
-    //   'lodash.templateSettings': 'lodash-es/templateSettings'
-    // }
+    ]
+
+
+
   },
   module: {
     rules: [
@@ -148,7 +122,7 @@ module.exports = {
       // bundle the client for hot reloading, only means to
       // only hot reload for successful updates
       'webpack/hot/only-dev-server',
-      `./${SRC_DIR}/renderer/entry.jsx`,
+      `./${SRC_DIR}/renderer/entry.jsx`
     ]
   },
   output: {
@@ -170,8 +144,6 @@ module.exports = {
     namedModules: true
   },
   plugins: [
-    // READ: https://nolanlawson.com/2018/03/20/smaller-lodash-bundles-with-webpack-and-babel/
-    // new LodashModuleReplacementPlugin,
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery'
