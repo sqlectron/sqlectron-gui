@@ -3,9 +3,6 @@
 var fs = require('fs');
 var join = require('path').join;
 var electron = require('electron');
-// import devtoolsInstaller from 'electron-devtools-installer';
-// import { install as devtronInstall } from 'devtron';
-
 
 const main = join(__dirname, '../src/browser/main.js');
 const watch = [
@@ -20,26 +17,6 @@ try {
   console.log('Not watching changes on unified-dataloader-core');
 }
 
-// https://stackoverflow.com/a/45064488/4106215
-/*
-const installExtensions = async () => {
-  const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-  const extensions = [
-    devtoolsInstaller.REACT_DEVELOPER_TOOLS,
-    devtoolsInstaller.REDUX_DEVTOOLS
-  ];
-  return Promise.all(extensions.map(name => devtoolsInstaller(name, forceDownload)))
-    .catch(console.log);
-};
-
-electron.app.on('ready', async () => {
-  if (process.env.NODE_ENV === 'development') {
-    // await installExtensions();
-    devtronInstall();
-  }
-  // createWindow();
-});
-*/
 
 require('spawn-auto-restart')({
   debug: true,
