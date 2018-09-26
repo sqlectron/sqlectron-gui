@@ -62,6 +62,7 @@
 
 .ReactVirtualized__Grid.grid-body > .ReactVirtualized__Grid__innerScrollContainer > .Grid__cell {
   border: 1px solid rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
 }
 
 .grid-header-row .Grid__cell > .item {

@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 
-//import set from 'lodash.set';
-import _ from 'lodash';
-const set = _.set;
+import set from 'lodash/set';
 
 import Select from 'react-select';
 import Checkbox from './checkbox.jsx';

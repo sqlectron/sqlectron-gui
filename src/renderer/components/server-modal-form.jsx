@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { set } from 'lodash';
+import set from 'lodash/set';
 import Select from 'react-select';
 import { sqlectron } from '../../browser/remote';
 import ConfirmModal from './confim-modal';

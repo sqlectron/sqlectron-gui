@@ -1,51 +1,66 @@
+const { join, resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-const { resolve, join } = require('path');
-// const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 const StyleLintPlugin = require('stylelint-webpack-plugin');
-// const vars = require('./vars');
+// const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+
+
 
 const ROOT_DIR = resolve(__dirname);
-
-// const dependenciesWithoutEntryPoints = Object.keys(vars.dependencies || {}).filter(vars.filterDepWithoutEntryPoints);
-
 const HOT_RELOAD_PORT = 8080;
-const SRC_DIR = 'src';  // vars.ENABLE_TYPESCRIPT ? vars.TS_SRC : vars.JS_SRC;
+const SRC_DIR = 'src';
 
-
-const common = {
+module.exports = {
   context: ROOT_DIR,
   target: 'electron-renderer',
   mode: 'development',
-  // devtool: 'cheap-module-eval-source-map',
   devtool: 'source-map',
-  // https://github.com/webpack/webpack/issues/2010
-  node: {
+  node: {  // https://github.com/webpack/webpack/issues/2010
     __dirname: false,
     __filename: false
   },
-
-  /*externals: {
-    ...dependenciesWithoutEntryPoints,
-    electron: 'require("electron")',
-    child_process: 'require("child_process")',
-    fs: 'require("fs")',
-    path: 'require("path")'
-  },*/
-
   resolve: {
     extensions: ['.js', '.jsx'],
     modules: [
       'node_modules'
-    ]
+
+    ],
+    // alias: {
+    //
+    //   'lodash': 'lodash-es',
+    //
+    //   'lodash._basetostring': 'lodash-es/_baseToString',
+    //   'lodash._basevalues': 'lodash-es/_baseValues',
+    //   'lodash._getnative': 'lodash-es/_getNative',
+    //   'lodash._isiterateecall': 'lodash-es/_isIterateeCall',
+    //   'lodash._reescape': 'lodash-es/_reEscape',
+    //   'lodash._reevaluate': 'lodash-es/_reEvaluate',
+    //   'lodash._reinterpolate': 'lodash-es/_reInterpolate',
+    //   'lodash._root': 'lodash-es/_root',
+    //
+    //   'lodash.assign': 'lodash-es/assign',
+    //   'lodash.camelcase': 'lodash-es/camelCase',
+    //   'lodash.clonedeep': 'lodash-es/cloneDeep',
+    //   'lodash.debounce': 'lodash-es/debounce',
+    //   'lodash.escape': 'lodash-es/escape',
+    //   'lodash.get': 'lodash-es/get',
+    //   'lodash.isarguments': 'lodash-es/isArguments',
+    //   'lodash.isarray': 'lodash-es/isArray',
+    //   'lodash.isequal': 'lodash-es/isEqual',
+    //   'lodash.keys': 'lodash-es/keys',
+    //   'lodash.mergewith': 'lodash-es/mergeWith',
+    //   'lodash.tail': 'lodash-es/tail',
+    //   'lodash.template': 'lodash-es/template',
+    //   'lodash.templateSettings': 'lodash-es/templateSettings'
+    // }
   },
   module: {
     rules: [
       {
         test: /\.jsx?$/,
         exclude: [
-          /vendor\//,
-          /node_modules/
+          /[\\/]vendor[\\/]/,
+          /[\\/]node_modules[\\/]/
         ],
         use: [
           {
@@ -87,30 +102,6 @@ const common = {
           }
         ]
       },
-      /*
-      {
-        test: /\.png$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              mimetype: 'image/png'
-            }
-          }
-        ]
-      },
-      {
-        test: /\.gif$/,
-        use: [
-          {
-            loader: 'url-loader',
-            options: {
-              mimetype: 'image/gif'
-            }
-          }
-        ]
-      }
-      */
       {
         test: /\.s?css$/,
         use: [
@@ -179,7 +170,8 @@ const common = {
     namedModules: true
   },
   plugins: [
-    // '@babel/polyfill',
+    // READ: https://nolanlawson.com/2018/03/20/smaller-lodash-bundles-with-webpack-and-babel/
+    // new LodashModuleReplacementPlugin,
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery'
@@ -195,5 +187,3 @@ const common = {
     new webpack.HotModuleReplacementPlugin()
   ]
 };
-
-module.exports = common;

@@ -1,5 +1,4 @@
-import { debounce } from 'lodash';
-
+import debounce from 'lodash/debounce';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Grid, ScrollSync } from 'react-virtualized';

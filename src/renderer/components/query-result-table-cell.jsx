@@ -1,7 +1,4 @@
-//import isPlainObject from 'lodash.isplainobject';
-import _ from 'lodash';
-const isPlainObject = _.isPlainObject;
-
+import isPlainObject from 'lodash/isPlainObject';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 import classNames from 'classnames';
 import React, { Component } from 'react';

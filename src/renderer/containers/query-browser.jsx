@@ -1,4 +1,5 @@
-import { debounce, union } from 'lodash';
+import union from 'lodash/union';
+import debounce from 'lodash/debounce';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
