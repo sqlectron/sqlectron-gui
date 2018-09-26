@@ -8,7 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const defaultsDeep = require('lodash/defaultsDeep');
-const sqlectron = require('@armarti/unified-dataloader-core');
+const sqlectron = require('sqlectron-core');
 
 let config;
 

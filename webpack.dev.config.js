@@ -152,7 +152,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       hot: true,
       template: `${SRC_DIR}/renderer/index.html`,
-      title: 'HtmlWebpackPlugin title - unified-dataloader-gui',
+      title: 'Sqlectron',
       useReactDevtools: true
     }),
     // enable HMR globally

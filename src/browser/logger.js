@@ -1,4 +1,4 @@
-import * as sqlectron from '@armarti/unified-dataloader-core';
+import * as sqlectron from 'sqlectron-core';
 import config from './config';
 
 // Hack solution to ignore console.error from dtrace imported by bunyan
@@ -28,7 +28,7 @@ if (dataConfig.log.file) {
 
 const logger = createLogger(loggerConfig);
 
-// Set custom logger for unified-dataloader-core
-sqlectron.setLogger((namespace) => logger.child({ namespace: `unified-dataloader-core:${namespace}` }));
+// Set custom logger for sqlectron-core
+sqlectron.setLogger((namespace) => logger.child({ namespace: `sqlectron-core:${namespace}` }));
 
 export default (namespace) => logger.child({ namespace });
