@@ -1,7 +1,8 @@
-import isPlainObject from 'lodash.isplainobject';
+import isPlainObject from 'lodash/isPlainObject';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 import classNames from 'classnames';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { valueToString } from '../utils/convert';
 
 const { Menu, MenuItem } = remote;
@@ -12,7 +13,9 @@ export default class TableCell extends Component {
     data: PropTypes.any.isRequired,
     col: PropTypes.string.isRequired,
     onOpenPreviewClick: PropTypes.func.isRequired,
-  }
+    // key: PropTypes.func.isRequired,
+    style: PropTypes.object
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -38,7 +41,9 @@ export default class TableCell extends Component {
     }
 
     if (this.contextMenu) {
-      this.contextMenu.popup(event.clientX, event.clientY);
+      // https://github.com/electron/electron/blob/master/docs/api/breaking-changes.md#menu
+      this.contextMenu.popup({ x: event.clientX, y: event.clientY });
+      // this.contextMenu.popup(event.clientX, event.clientY);
     }
   }
 
@@ -54,7 +59,7 @@ export default class TableCell extends Component {
     });
 
     return (
-      <div className="item" onContextMenu={::this.onContextMenu}>
+      <div className={"Grid__cell"} onContextMenu={::this.onContextMenu} style={this.props.style}>
         {
           value === null
             ? <span className={className}>NULL</span>

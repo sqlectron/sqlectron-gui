@@ -1,0 +1,9 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-recommended-scss"
+  ],
+  "rules": {
+    "declaration-block-single-line-max-declarations": 2
+  }
+}

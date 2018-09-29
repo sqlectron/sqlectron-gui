@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import DatabaseListItem from './database-list-item.jsx';
 
 
@@ -21,7 +22,7 @@ export default class DatabaseList extends Component {
     onGetSQLScript: PropTypes.func.isRequired,
     onRefreshDatabase: PropTypes.func.isRequired,
     onShowDiagramModal: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

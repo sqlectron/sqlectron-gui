@@ -1,5 +1,7 @@
-import isPlainObject from 'lodash.isplainobject';
-import React, { Component, PropTypes } from 'react';
+import isPlainObject from 'lodash/isPlainObject';
+
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 

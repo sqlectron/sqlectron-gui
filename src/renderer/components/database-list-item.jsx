@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import DatabaseListItemMetatada from './database-list-item-metadata.jsx';
 import DatabaseFilter from './database-filter.jsx';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
@@ -48,7 +49,7 @@ export default class DatabaseListItem extends Component {
     onGetSQLScript: PropTypes.func.isRequired,
     onRefreshDatabase: PropTypes.func.isRequired,
     onShowDiagramModal: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -75,7 +76,9 @@ export default class DatabaseListItem extends Component {
   onContextMenu(event) {
     event.preventDefault();
     if (this.contextMenu) {
-      this.contextMenu.popup(event.clientX, event.clientY);
+      // https://github.com/electron/electron/blob/master/docs/api/breaking-changes.md#menu
+      this.contextMenu.popup({ x: event.clientX, y: event.clientY });
+      // this.contextMenu.popup(event.clientX, event.clientY);
     }
   }
 

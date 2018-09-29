@@ -114,7 +114,7 @@ export default function (state = INITIAL_STATE, action) {
         copied: true,
       });
     }
-    case types.COPY_QUERY_RESULT_TO_CLIPBOARD_FAIL: {
+    case types.COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE: {
       return changeStateByCurrentQuery(state, {
         error: action.error,
         copied: false,

@@ -1,5 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import debounce from 'lodash.debounce';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import debounce from 'lodash/debounce';
+
 import AceEditor from 'react-ace';
 import ace from 'brace';
 import 'brace/mode/sql';
@@ -22,12 +24,12 @@ const langTools = ace.acequire('ace/ext/language_tools');
 const INFOS = {
   mysql: [
     'MySQL treats commented query as a non select query.' +
-      'So you may see "affected rows" for a commented query.',
+      ' So you may see "affected rows" for a commented query.',
     'Usually executing a single query per tab will give better results.',
   ],
   sqlserver: [
     'MSSQL treats multiple non select queries as a single query result.' +
-      'So you affected rows will show the amount over all queries executed in the same tab.',
+      ' So you affected rows will show the amount over all queries executed in the same tab.',
     'Usually executing a single query per tab will give better results.',
   ],
 };

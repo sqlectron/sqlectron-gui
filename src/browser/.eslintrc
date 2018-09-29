@@ -5,6 +5,7 @@
   },
   "rules": {
     "no-use-before-define": 0,
-    "prefer-template": 0
+    "prefer-template": 0,
+    "arrow-parens": ["warn", "as-needed"]
   }
 }

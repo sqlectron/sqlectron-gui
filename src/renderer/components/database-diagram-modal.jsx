@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import DatabaseDiagram from './database-diagram.jsx';
 import Loader from './loader.jsx';
 
@@ -29,7 +30,7 @@ export default class DatabaseDiagramModal extends Component {
     onExportDatabaseDiagram: PropTypes.func.isRequired,
     onOpenDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

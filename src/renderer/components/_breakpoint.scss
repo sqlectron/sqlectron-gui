@@ -1,7 +1,6 @@
-/*
-  Settings breakpoint mixin
- */
+/* Settings breakpoint mixin */
 @import "~breakpoint-sass";
+
 @include add-breakpoint('bigger than x-small', 512px);
 @include add-breakpoint('bigger than small', 600px);
 @include add-breakpoint('bigger than small-medium', 850px);

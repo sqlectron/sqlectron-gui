@@ -31,7 +31,7 @@
 
   .item > .button {
     opacity: 0;
-    transition: opacity .25s ease-in-out;
+    transition: opacity 0.25s ease-in-out;
     font-size: 0.5em;
     margin: -0.5em -1em 0 1.5em;
   }
@@ -44,9 +44,7 @@
 #tabs-nav-wrapper > button {
   font-size: 0.75em;
   margin: 0;
-  border-radius: 0;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  border-radius: 5px 5px 0 0;
 }
 
 #tabs-nav-wrapper button.right.floated.ui.icon.button.mini {
@@ -55,5 +53,5 @@
 }
 
 .react-tabs #tabs-nav-wrapper [role=tablist] {
-    border-bottom: none;
+  border-bottom: none;
 }

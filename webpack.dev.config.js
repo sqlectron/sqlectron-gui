@@ -1,77 +1,161 @@
-const path = require('path');
-const webpack = require('webpack');
+const { join, resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-require('babel-polyfill');
+const webpack = require('webpack');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+
+
+
+const ROOT_DIR = resolve(__dirname);
+const HOT_RELOAD_PORT = 8080;
+const SRC_DIR = 'src';
 
 module.exports = {
-  debug: true,
-  devtool: 'eval-source-map',
+  context: ROOT_DIR,
   target: 'electron-renderer',
+  mode: 'development',
+  devtool: 'source-map',
+  node: {  // https://github.com/webpack/webpack/issues/2010
+    __dirname: false,
+    __filename: false
+  },
   resolve: {
-    extensions: ['', '.js'],
-    modulesDirectories: ['node_modules', 'src/renderer'],
-    alias: {
-      'dtrace-provider': path.join(__dirname, 'empty-shim.js'),
-    },
-  },
-  entry: {
-    app: [
-      'webpack/hot/dev-server',
-      './src/renderer/entry.jsx',
-    ],
-  },
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/static/',
+    extensions: ['.js', '.jsx'],
+    modules: [
+      'node_modules'
+
+    ]
+
+
+
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        exclude: /(node_modules|vendor)/,
-        loaders: ['babel'],
+        exclude: [
+          /[\\/]vendor[\\/]/,
+          /[\\/]node_modules[\\/]/
+        ],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              compact: false
+            }
+          },
+          'source-map-loader'
+        ]
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              hash: 'sha512',
+              digest: 'hex',
+              name: 'img/[hash].[ext]'
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+              query: {
+                gifsicle: {
+                  interlaced: false
+                },
+                mozjpeg: {
+                  progressive: true
+                },
+                optipng: {
+                  optimizationLevel: 7
+                }
+              }
+            }
+          }
+        ]
       },
       {
         test: /\.s?css$/,
-        loaders: [
-          'style',
-          'css',
-          'autoprefixer?browsers=last 2 version',
-          'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules'),
-        ],
-      },
-      {
-        test: /\.png$/,
-        loader: 'url?mimetype=image/png',
-      },
-      {
-        test: /\.gif$/,
-        loader: 'url?mimetype=image/gif',
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1,
+              sourceMap: true
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: [
+                'node_modules'
+              ]
+            }
+          }
+        ]
       },
       {
         test: /\.(?:eot|ttf|woff2?|svg)$/,
-        loader: 'file?name=[path][name]-[hash:6].[ext]&context=assets',
-      },
-      {
-        test: /\.json?$/,
-        loader: 'json',
-      },
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name]-[hash:6].[ext]',
+              context: 'assets'
+            }
+          }
+        ]
+      }
     ],
-    noParse: [/html2canvas/],
+    noParse: [ /html2canvas/ ]
+  },
+  entry: {
+    app: [
+      // activate HMR for React
+      'react-hot-loader/patch',
+      // bundle the client for webpack-dev-server and connect
+      // to the provided endpoint
+      `webpack-dev-server/client?http://localhost:${HOT_RELOAD_PORT}/`,
+      // bundle the client for hot reloading, only means to
+      // only hot reload for successful updates
+      'webpack/hot/only-dev-server',
+      `./${SRC_DIR}/renderer/entry.jsx`
+    ]
+  },
+  output: {
+    path: join(ROOT_DIR, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
+  },
+  devServer: {
+    // enable HMR on the server
+    hot: true,
+    port: HOT_RELOAD_PORT
+  },
+  performance: {
+    hints: 'warning'
+  },
+  optimization: {
+    // prints more readable module names in the browser
+    // console on HMR updates
+    namedModules: true
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new HtmlWebpackPlugin({
-      hot: true,
-      template: 'src/renderer/index.html',
-    }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('development'),
-    }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
-      $: 'jquery',
+      $: 'jquery'
     }),
-  ],
+    new StyleLintPlugin(),
+    new HtmlWebpackPlugin({
+      hot: true,
+      template: `${SRC_DIR}/renderer/index.html`,
+      title: 'Sqlectron',
+      useReactDevtools: true
+    }),
+    // enable HMR globally
+    new webpack.HotModuleReplacementPlugin()
+  ]
 };

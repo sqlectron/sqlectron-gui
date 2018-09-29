@@ -1,6 +1,6 @@
 import joint from 'jointjs/dist/joint';
-import bindAll from 'lodash.bindall';
-import template from 'lodash.template';
+import bindAll from 'lodash/bindAll';
+import template from 'lodash/template';
 
 
 joint.shapes.sqlectron.TableCell = joint.shapes.basic.Rect.extend({

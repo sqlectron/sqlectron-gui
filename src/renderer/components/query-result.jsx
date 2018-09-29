@@ -1,5 +1,6 @@
-import groupBy from 'lodash.groupby';
-import React, { Component, PropTypes } from 'react';
+import groupBy from 'lodash/groupBy';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Loader from './loader.jsx';
 import Message from './message.jsx';
 import QueryResultTable from './query-result-table.jsx';

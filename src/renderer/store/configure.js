@@ -1,8 +1,8 @@
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
+import { createLogger as createReduxLogger } from 'redux-logger';
 import rootReducer from '../reducers';
 import { createLogger } from '../../browser/remote';
-
 
 const middlewares = [thunkMiddleware];
 
@@ -25,7 +25,7 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
       loggerConfig.logger[method] = function levelFn(...args) {
         if (isLogConsoleEnabled) {
           const m = method === 'debug' ? 'log' : method;
-          console[m].apply(console, args); // eslint-disable-line no-console
+          console[m](...args); // eslint-disable-line no-console
         }
 
         if (isLogFileEnabled) {
@@ -42,7 +42,7 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
     }
   }
 
-  middlewares.push(require('redux-logger')(loggerConfig));
+  middlewares.push(createReduxLogger(loggerConfig));
 }
 
 
@@ -55,9 +55,7 @@ export default function configureStore(initialState) {
   const store = createStoreWithMiddleware(rootReducer, initialState);
 
   if (module.hot) {
-    module.hot.accept('../reducers', () =>
-      store.replaceReducer(require('../reducers').default)
-    );
+    module.hot.accept('../reducers', () => store.replaceReducer(require('../reducers').default));
   }
 
   return store;

@@ -1,19 +1,129 @@
-const path = require('path');
-const webpack = require('webpack');
+const { join, resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-require('babel-polyfill');
+const webpack = require('webpack');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+const ROOT_DIR = resolve(__dirname);
+const SRC_DIR = 'src';
+const OPEN_ANALYZER = false;
 
 module.exports = {
-  devtool: 'eval-source-map',
+  context: ROOT_DIR,
   target: 'electron-renderer',
+  mode: 'production',
+  devtool: 'eval-source-map',
+  node: {  // https://github.com/webpack/webpack/issues/2010
+    __dirname: false,
+    __filename: false
+  },
   resolve: {
-    extensions: ['', '.js'],
-    modulesDirectories: ['node_modules', 'src/renderer'],
+    extensions: ['.js', '.jsx'],
+    modules: [
+      'node_modules',
+      join(SRC_DIR, 'vendor')
+    ],
+    alias: {
+      'dtrace-provider': './empty-shim.js'
+    }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: [
+          /[\\/]vendor[\\/]/,
+          /[\\/]node_modules[\\/]/
+        ],
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              compact: true
+            }
+          },
+          'source-map-loader'
+        ]
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              hash: 'sha512',
+              digest: 'hex',
+              name: 'img/[hash].[ext]'
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              bypassOnDebug: true,
+              query: {
+                gifsicle: {
+                  interlaced: false
+                },
+                mozjpeg: {
+                  progressive: true
+                },
+                optipng: {
+                  optimizationLevel: 7
+                }
+              }
+            }
+          }
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          }
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              includePaths: [
+                /[\\/]node_modules[\\/]/
+              ]
+            }
+          }
+        ]
+      },
+      {
+        test: /\.(?:eot|ttf|woff2?|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'fonts/[name]-[hash:6].[ext]'
+            }
+          }
+        ]
+      }
+    ],
+    noParse: [ /html2canvas/ ]
   },
   entry: {
-    app: './src/renderer/entry.jsx',
+    app: `./${SRC_DIR}/renderer/entry.jsx`,
     vendor: [
       // common
       'jquery',
@@ -24,79 +134,56 @@ module.exports = {
       'react-dom',
       'react-redux',
       'react-resizable',
-      'react-router',
+      'react-router-dom',
       'react-select',
       'redux',
       'redux-thunk',
       // semantic ui
       './vendor/renderer/lato/latofonts.css',
       './vendor/renderer/semantic-ui/semantic.js',
-      './vendor/renderer/semantic-ui/semantic.css',
-    ],
+      './vendor/renderer/semantic-ui/semantic.css'
+    ]
   },
   output: {
-    path: path.join(__dirname, 'out', 'static'),
-    filename: '[name].bundle.js',
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.jsx?$/,
-        exclude: /(node_modules|vendor)/,
-        loaders: ['babel'],
-      },
-      {
-        test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract(
-          'style',
-          'css!sass',
-          'autoprefixer?browsers=last 2 version',
-          'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules')
-        ),
-      },
-      {
-        test: /\.png$/,
-        loader: 'url?mimetype=image/png',
-      },
-      {
-        test: /\.gif$/,
-        loader: 'url?mimetype=image/gif',
-      },
-      {
-        test: /\.(?:eot|ttf|woff2?|svg)$/,
-        loader: 'file?name=fonts/[name]-[hash:6].[ext]',
-      },
-      {
-        test: /\.json?$/,
-        loader: 'json',
-      },
-    ],
-    noParse: [/(html2canvas)/],
+    path: join(ROOT_DIR, 'out', 'static'),
+    filename: '[name].bundle.js'
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(true),
-    new webpack.optimize.DedupePlugin(),
-    new ExtractTextPlugin('[name].bundle.css'),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-    }),
-    new webpack.optimize.UglifyJsPlugin(),
-    new HtmlWebpackPlugin({
-      template: 'src/renderer/index.html',
-      chunksSortMode: 'none',
-    }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
-      $: 'jquery',
+      $: 'jquery'
     }),
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
+    new StyleLintPlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(true),
+    new MiniCssExtractPlugin({ filename: '[name].bundle.css' }),
+    new HtmlWebpackPlugin({
+      template: `./${SRC_DIR}/renderer/index.html`,
+      chunksSortMode: 'none',
+      minify: true
     }),
-    // new BundleAnalyzerPlugin(),
-    new webpack.NoErrorsPlugin(),
+    new BundleAnalyzerPlugin({
+      analyzerMode: OPEN_ANALYZER ? 'server' : 'disabled',
+      openAnalyzer: OPEN_ANALYZER
+    }),
   ],
+  performance: {
+    hints: 'warning',
+    maxEntrypointSize: 250000,
+    maxAssetSize: 250000
+  },
+  optimization: {
+    minimize: true,
+    runtimeChunk: {
+      name: 'common'
+    },
+    splitChunks: {
+      cacheGroups: {
+        common: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        }
+      }
+    }
+  }
 };

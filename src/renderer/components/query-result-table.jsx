@@ -1,12 +1,13 @@
-import debounce from 'lodash.debounce';
-import React, { Component, PropTypes } from 'react';
+import debounce from 'lodash/debounce';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Grid, ScrollSync } from 'react-virtualized';
 import Draggable from 'react-draggable';
 
-import TableCell from './query-result-table-cell.jsx';
-import PreviewModal from './preview-modal.jsx';
-import { valueToString } from '../utils/convert';
 import scrollbarSize from 'dom-helpers/util/scrollbarSize';
+import TableCell from './query-result-table-cell';
+import PreviewModal from './preview-modal';
+import { valueToString } from '../utils/convert';
 
 import 'react-virtualized/styles.css';
 import './query-result-table.scss';
@@ -31,7 +32,7 @@ export default class QueryResultTable extends Component {
       PropTypes.array,
       PropTypes.number,
     ]),
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -49,23 +50,12 @@ export default class QueryResultTable extends Component {
 
   componentWillReceiveProps(nextProps) {
     this.resize(nextProps);
-
     if (nextProps.widthOffset !== this.props.widthOffset) {
-      if (this.rowsGrid) {
-        this.rowsGrid.recomputeGridSize();
-      }
-      if (this.headerGrid) {
-        this.headerGrid.recomputeGridSize();
-      }
+      if (this.rowsGrid) this.rowsGrid.recomputeGridSize();
+      if (this.headerGrid) this.headerGrid.recomputeGridSize();
     }
-
-    if (nextProps.copied) {
-      this.setState({ showCopied: true });
-    }
-
-    if (nextProps.saved) {
-      this.setState({ showSaved: true });
-    }
+    if (nextProps.copied) this.setState({ showCopied: true });
+    if (nextProps.saved) this.setState({ showSaved: true });
   }
 
   componentDidUpdate() {
@@ -106,7 +96,7 @@ export default class QueryResultTable extends Component {
     this.resizeTimer = setTimeout(::this.resize, 16);
   }
 
-  getTextWidth(text, font) {
+  static getTextWidth(text, font) {
     // additional spacing
     const padding = 28;
     const element = document.createElement('canvas');
@@ -121,11 +111,11 @@ export default class QueryResultTable extends Component {
 
     const autoColumnWidths = fields.map((name, index) => {
       const cellWidth = this.resolveCellWidth(name, fields, rows, averageTableCellWidth);
-      totalColumnWidths = totalColumnWidths + cellWidth;
+      totalColumnWidths += cellWidth;
 
       const isLastColumn = (index + 1) === fields.length;
       if (isLastColumn && totalColumnWidths < tableWidth) {
-        totalColumnWidths = totalColumnWidths - cellWidth;
+        totalColumnWidths -= cellWidth;
         return tableWidth - totalColumnWidths;
       }
 
@@ -136,7 +126,7 @@ export default class QueryResultTable extends Component {
   }
 
   renderHeaderCell(params) {
-    const field = this.props.fields[params.columnIndex];
+    const field = this.props.fields[params.columnIndex]; // const key = params.key;
     const handleStop = this.handleStop.bind(this, { name: field.name, index: params.columnIndex });
 
     // We don't want the resizable handle on the last column for layout reasons
@@ -144,24 +134,24 @@ export default class QueryResultTable extends Component {
     if ((this.props.fields.length - 1) !== params.columnIndex) {
       resizeDrag = (
         <Draggable
-          axis="x"
+          axis='x'
           onStop={handleStop}
           position={{ x: 0, y: 0 }}
           zIndex={999}>
-          <div className="draggable-handle"></div>
+          <div className='draggable-handle' />
         </Draggable>
       );
     }
 
     return (
-      <div className="item">
+      <div className='Grid__cell' key={params.key} style={params.style}>
         <span>{field.name}</span>
         {resizeDrag}
       </div>
     );
   }
 
-  renderNoRows() {
+  static renderNoRows() {
     return (
       <div style={{ textAlign: 'center', fontSize: '16px' }}>
         No results found
@@ -198,15 +188,14 @@ export default class QueryResultTable extends Component {
     const props = nextProps || this.props;
     const tableWidth = window.innerWidth - (props.widthOffset + 27);
     const tableHeight = window.innerHeight - (props.heigthOffset + 225);
-
-    // trigger columns resize
-    this.autoResizeColumnsWidth(props.fields, props.rows, tableWidth);
-
+    this.autoResizeColumnsWidth(props.fields, props.rows, tableWidth);  // trigger columns resize
     this.setState({ tableWidth, tableHeight });
   }
 
   renderHeaderTopBar() {
-    const { rows, rowCount, onCopyToClipboardClick, onSaveToFileClick } = this.props;
+    const {
+      rows, rowCount, onCopyToClipboardClick, onSaveToFileClick,
+    } = this.props;
     const csvDelimiter = this.props.config.data.csvDelimiter || ',';
     const styleCopied = { display: this.state.showCopied ? 'inline-block' : 'none' };
     const styleSaved = { display: this.state.showSaved ? 'inline-block' : 'none' };
@@ -217,38 +206,46 @@ export default class QueryResultTable extends Component {
     let savePanel = null;
     if (rowCount) {
       copyPanel = (
-        <div className="ui small label" title="Copy as" style={{ float: 'right', margin: '3px' }}>
-          <i className="copy icon"></i>
-          <a className="detail" style={styleCopied}>Copied</a>
-          <a className="detail"
+        <div className='ui small label' title='Copy as' style={{ float: 'right', margin: '3px' }}>
+          <i className='copy icon' />
+          <a className='detail' style={styleCopied}>Copied</a>
+          <a className='detail'
             style={styleCopyButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>CSV</a>
-          <a className="detail"
+            onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>
+CSV
+          </a>
+          <a className='detail'
             style={styleCopyButtons}
-            onClick={() => onCopyToClipboardClick(rows, 'JSON')}>JSON</a>
+            onClick={() => onCopyToClipboardClick(rows, 'JSON')}>
+JSON
+          </a>
         </div>
       );
 
       savePanel = (
-        <div className="ui small label" title="Save as" style={{ float: 'right', margin: '3px' }}>
-          <i className="save icon"></i>
-          <a className="detail" style={styleSaved}>Saved</a>
-          <a className="detail"
+        <div className='ui small label' title='Save as' style={{ float: 'right', margin: '3px' }}>
+          <i className='save icon' />
+          <a className='detail' style={styleSaved}>Saved</a>
+          <a className='detail'
             style={styleSaveButtons}
-            onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>CSV</a>
-          <a className="detail"
+            onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>
+CSV
+          </a>
+          <a className='detail'
             style={styleSaveButtons}
-            onClick={() => onSaveToFileClick(rows, 'JSON')}>JSON</a>
+            onClick={() => onSaveToFileClick(rows, 'JSON')}>
+JSON
+          </a>
         </div>
       );
     }
 
     return (
       <div style={{ background: 'rgba(0, 0, 0, 0.05)', overflow: 'hidden' }}>
-        <div className="ui label" style={{ margin: '3px', float: 'left' }}>
-          <i className="table icon"></i>
+        <div className='ui label' style={{ margin: '3px', float: 'left' }}>
+          <i className='table icon' />
           Rows
-          <div className="detail">{rowCount}</div>
+          <div className='detail'>{rowCount}</div>
         </div>
         {savePanel}
         {copyPanel}
@@ -272,17 +269,16 @@ export default class QueryResultTable extends Component {
   renderTableBody(onScroll) {
     const { rowCount, fields } = this.props;
     const { tableWidth, tableHeight } = this.state;
-
     const headerHeight = 62; // value of 2 headers together
     const scrollBarHeight = 15;
     const rowHeight = 28;
     const fixedHeightRows = ((rowCount || 1) * rowHeight) + scrollBarHeight;
-
     return (
       <Grid
-        className="grid-body"
-        ref={(ref) => { this.rowsGrid = ref; }}
+        className='grid-body'
+        ref={ref => this.rowsGrid = ref}
         cellRenderer={::this.renderCell}
+        // cellRenderer={this.createCellRenderer(::this.renderCell)}
         width={tableWidth}
         height={Math.min((tableHeight - headerHeight), fixedHeightRows)}
         rowHeight={rowHeight}
@@ -291,27 +287,43 @@ export default class QueryResultTable extends Component {
         columnCount={fields.length}
         columnWidth={::this.getColumnWidth}
         rowsCount={rowCount}
-        noContentRenderer={::this.renderNoRows} />
+        noContentRenderer={::QueryResultTable.renderNoRows} />
 
     );
+  }
+
+  // https://github.com/bvaughn/react-virtualized/blob/master/docs/upgrades/Version8.md
+  // Can be used for Grid, List, or Table
+  createCellRenderer(cellRenderer) {
+    console.warn('cellRenderer udpate needed');
+    return function cellRendererWrapper ({ key, style, ...rest }) {
+      return (
+        <div
+          className='Grid__cell'
+          key={key}
+          style={style}
+        >
+          {cellRenderer(rest)}
+        </div>
+      )
+    }
   }
 
   renderTableHeader(scrollLeft) {
     const { fields } = this.props;
     const { tableWidth } = this.state;
-
-    if (!fields.length) {
-      return null;
-    }
-
+    if (!fields.length) return null;
     return (
       <Grid
-        ref={(ref) => { this.headerGrid = ref; }}
+        ref={ref => {
+          this.headerGrid = ref;
+        }}
         columnWidth={::this.getColumnWidth}
         columnCount={fields.length}
         height={30}
         cellRenderer={::this.renderHeaderCell}
-        className="grid-header-row"
+        // cellRenderer={this.createCellRenderer(::this.renderHeaderCell)}
+        className='grid-header-row'
         rowHeight={30}
         rowCount={1}
         width={tableWidth - scrollbarSize()}
@@ -325,7 +337,7 @@ export default class QueryResultTable extends Component {
 
     if (field && columnWidths && columnWidths[field.name] !== undefined) {
       return columnWidths[field.name];
-    } else if (autoColumnWidths && autoColumnWidths[index] !== undefined) {
+    } if (autoColumnWidths && autoColumnWidths[index] !== undefined) {
       return autoColumnWidths[index];
     }
     return 50;
@@ -340,7 +352,7 @@ export default class QueryResultTable extends Component {
     const numRowsToFindAverage = rows.length > 30 ? 30 : rows.length;
     const maxWidth = 220;
 
-    const headerWidth = this.getTextWidth(fieldName, `bold ${font}`);
+    const headerWidth = QueryResultTable.getTextWidth(fieldName, `bold ${font}`);
 
     let averageRowsCellWidth = 0;
     if (rows.length) {
@@ -348,7 +360,7 @@ export default class QueryResultTable extends Component {
         .slice(0, numRowsToFindAverage)
         .map(row => {
           const value = valueToString(row[fieldName]);
-          return this.getTextWidth(value, font);
+          return QueryResultTable.getTextWidth(value, font);
         })
         .reduce((prev, curr) => prev + curr, 0) / numRowsToFindAverage;
     }
@@ -364,6 +376,8 @@ export default class QueryResultTable extends Component {
     const field = this.props.fields[params.columnIndex];
     return (
       <TableCell
+        key={params.key}
+        style={params.style}
         rowIndex={params.rowIndex}
         data={this.props.rows}
         col={field.name}
@@ -373,17 +387,14 @@ export default class QueryResultTable extends Component {
 
   render() {
     // not completed loaded yet
-    if (!this.state.tableWidth) {
-      return null;
-    }
-
+    if (!this.state.tableWidth) return null;
     return (
       <div>
         {this.renderPreviewModal()}
 
         <ScrollSync>
           {({ onScroll, scrollLeft }) => (
-            <div className="grid-query-wrapper">
+            <div className='grid-query-wrapper'>
               {this.renderHeaderTopBar()}
               {this.renderTableHeader(scrollLeft)}
               {this.renderTableBody(onScroll)}

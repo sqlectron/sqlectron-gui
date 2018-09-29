@@ -1,13 +1,16 @@
-import debounce from 'lodash.debounce';
-import union from 'lodash.union';
-import React, { Component, PropTypes } from 'react';
+import union from 'lodash/union';
+import debounce from 'lodash/debounce';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {
+  Tab, Tabs, TabList, TabPanel,
+} from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
-import * as ConnActions from '../actions/connections.js';
+import * as ConnActions from '../actions/connections';
 import * as QueryActions from '../actions/queries';
 import * as DbAction from '../actions/databases';
 import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
@@ -19,17 +22,16 @@ import { fetchViewsIfNeeded } from '../actions/views';
 import { fetchRoutinesIfNeeded } from '../actions/routines';
 import { getSQLScriptIfNeeded } from '../actions/sqlscripts';
 import { fetchTableKeysIfNeeded } from '../actions/keys';
-import DatabaseFilter from '../components/database-filter.jsx';
-import DatabaseList from '../components/database-list.jsx';
-import DatabaseDiagramModal from '../components/database-diagram-modal.jsx';
-import Header from '../components/header.jsx';
-import Footer from '../components/footer.jsx';
-import Query from '../components/query.jsx';
-import Loader from '../components/loader.jsx';
-import PromptModal from '../components/prompt-modal.jsx';
+import DatabaseFilter from '../components/database-filter';
+import DatabaseList from '../components/database-list';
+import DatabaseDiagramModal from '../components/database-diagram-modal';
+import Header from '../components/header';
+import Footer from '../components/footer';
+import Query from '../components/query';
+import Loader from '../components/loader';
+import PromptModal from '../components/prompt-modal';
 import MenuHandler from '../menu-handler';
 import { requireLogos } from '../components/require-context';
-
 
 require('./query-browser.css');
 require('../components/react-resizable.css');
@@ -90,8 +92,8 @@ class QueryBrowserContainer extends Component {
     sqlscripts: PropTypes.object.isRequired,
     keys: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
     children: PropTypes.node,
   };
 
@@ -106,8 +108,8 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillMount () {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.connect(params.id));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.connect(match.params.id));
   }
 
   componentDidMount() {
@@ -115,12 +117,12 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    const { dispatch, router, connections } = nextProps;
+    const { dispatch, history, connections } = nextProps;
 
-    if (connections.error ||
-       (!connections.connecting && !connections.server && !connections.waitingSSHPassword)
+    if (connections.error
+       || (!connections.connecting && !connections.server && !connections.waitingSSHPassword)
     ) {
-      router.push('/');
+      history.push('/');
       return;
     }
 
@@ -158,15 +160,15 @@ class QueryBrowserContainer extends Component {
   }
 
   onSelectDatabase(database) {
-    const { dispatch, params } = this.props;
+    const { dispatch, match } = this.props;
 
-    dispatch(ConnActions.connect(params.id, database.name));
+    dispatch(ConnActions.connect(match.params.id, database.name));
   }
 
   onExecuteDefaultQuery(database, table) {
     const schema = table.schema || this.props.connections.server.schema;
     this.props.dispatch(
-      QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema)
+      QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema),
     );
   }
 
@@ -180,8 +182,8 @@ class QueryBrowserContainer extends Component {
   }
 
   onPromptOKClick(password) {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.connect(params.id, null, false, password));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.connect(match.params.id, null, false, password));
   }
 
   onSelectTable(database, table) {
@@ -194,7 +196,7 @@ class QueryBrowserContainer extends Component {
   onGetSQLScript(database, item, actionType, objectType) {
     const schema = item.schema || this.props.connections.server.schema;
     this.props.dispatch(
-      getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema)
+      getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema),
     );
   }
 
@@ -216,8 +218,8 @@ class QueryBrowserContainer extends Component {
   }
 
   onReConnectionClick() {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.reconnect(params.id, this.getCurrentQuery().database));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.reconnect(match.params.id, this.getCurrentQuery().database));
   }
 
   onRefreshDatabase(database) {
@@ -429,7 +431,7 @@ class QueryBrowserContainer extends Component {
     const currentDB = this.getCurrentQuery().database;
 
 
-    const menu = queries.queryIds.map(queryId => {
+    const menu = queries.queryIds.map((queryId) => {
       const isCurrentQuery = queryId === queries.currentQueryId;
       const buildContent = () => {
         const isRenaming = this.state.renamingTabQueryId === queryId;
@@ -469,7 +471,7 @@ class QueryBrowserContainer extends Component {
                 const position = this.state.tabNavPosition + 200;
                 this.setState({ tabNavPosition: position > 0 ? 0 : position });
               }, 200)}>
-              <i className="icon remove"></i>
+              <i className="icon remove" />
             </button>
           </div>
         );
@@ -489,7 +491,7 @@ class QueryBrowserContainer extends Component {
 
     const allowCancel = !disabledFeatures || !~disabledFeatures.indexOf('cancelQuery');
 
-    const panels = queries.queryIds.map(queryId => {
+    const panels = queries.queryIds.map((queryId) => {
       const query = queries.queriesById[queryId];
 
       return (
@@ -532,15 +534,17 @@ class QueryBrowserContainer extends Component {
     return (
       <Tabs onSelect={::this.handleSelectTab} selectedIndex={selectedIndex} forceRenderTabPanel>
         <div id="tabs-nav-wrapper" className="ui pointing secondary menu">
-          {isTabsFitOnScreen &&
+          {isTabsFitOnScreen
+            && (
             <button className="ui icon button"
               disabled={this.state.tabNavPosition === 0}
               onClick={() => {
                 const position = this.state.tabNavPosition + 100;
                 this.setState({ tabNavPosition: position > 0 ? 0 : position });
               }}>
-              <i className="left chevron icon"></i>
+              <i className="left chevron icon" />
             </button>
+            )
           }
           <div className="tabs-container">
             <TabList
@@ -550,17 +554,19 @@ class QueryBrowserContainer extends Component {
             </TabList>
           </div>
           <button className="ui basic icon button" onClick={() => this.newTab()}>
-            <i className="plus icon"></i>
+            <i className="plus icon" />
           </button>
-          {isTabsFitOnScreen &&
+          {isTabsFitOnScreen
+            && (
             <button className="ui icon button"
               disabled={this.tabListTotalWidthChildren < this.tabListTotalWidth || isOnMaxPosition}
               onClick={() => {
                 const position = this.state.tabNavPosition - 100;
                 this.setState({ tabNavPosition: position });
               }}>
-              <i className="right chevron icon"></i>
+              <i className="right chevron icon" />
             </button>
+            )
           }
         </div>
         {panels}
@@ -588,7 +594,7 @@ class QueryBrowserContainer extends Component {
       return (
         <PromptModal
           type="password"
-          title={'SSH Private Key Passphrase'}
+          title="SSH Private Key Passphrase"
           message="Enter the private key passphrase:"
           onCancelClick={::this.onPromptCancelClick}
           onOKClick={::this.onPromptOKClick} />
@@ -621,10 +627,11 @@ class QueryBrowserContainer extends Component {
           />
         </div>
         <div style={STYLES.container}>
-          <div id="sidebar" style={{
-            ...STYLES.sidebar,
-            marginLeft: this.state.sidebarCollapsed ? (- this.state.sideBarWidth) : 0,
-          }}>
+          <div id="sidebar"
+            style={{
+              ...STYLES.sidebar,
+              marginLeft: this.state.sidebarCollapsed ? (-this.state.sideBarWidth) : 0,
+            }}>
             <ResizableBox className="react-resizable react-resizable-ew-resize"
               onResizeStop={(event, { size }) => this.setState({ sideBarWidth: size.width })}
               width={this.state.sideBarWidth || SIDEBAR_WIDTH}
@@ -636,7 +643,8 @@ class QueryBrowserContainer extends Component {
                   <b>{connections.server.name}</b>
                   <img
                     title={CLIENTS[connections.server.client].name}
-                    alt={CLIENTS[connections.server.client].name} style={{ width: '2.5em' }}
+                    alt={CLIENTS[connections.server.client].name}
+                    style={{ width: '2.5em' }}
                     className="ui mini left spaced image right"
                     src={CLIENTS[connections.server.client].image} />
                 </div>
@@ -671,7 +679,7 @@ class QueryBrowserContainer extends Component {
             </ResizableBox>
           </div>
           <div style={STYLES.content}>
-              {this.renderTabQueries()}
+            {this.renderTabQueries()}
           </div>
           {this.props.databases.showingDiagram && this.renderDatabaseDiagramModal()}
         </div>
@@ -721,4 +729,4 @@ function mapStateToProps (state) {
 }
 
 
-export default connect(mapStateToProps)(withRouter(QueryBrowserContainer));
+export default withRouter(connect(mapStateToProps)(QueryBrowserContainer));

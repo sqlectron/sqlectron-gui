@@ -1,8 +1,9 @@
 import { webFrame } from 'electron'; // eslint-disable-line import/no-unresolved
-import React, { Component, PropTypes } from 'react';
-import { withRouter } from 'react-router';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as ConfigActions from '../actions/config.js';
+import * as ConfigActions from '../actions/config';
 import imageSrc from './sqlectron.gif';
 
 
@@ -15,10 +16,12 @@ const preventDefault = e => e.preventDefault();
 
 class AppContainer extends Component {
   static propTypes = {
+    children: PropTypes.node,
     config: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
-    children: PropTypes.node,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object,
+    match: PropTypes.object
   };
 
   constructor(props, context) {
@@ -105,7 +108,7 @@ class AppContainer extends Component {
   render() {
     const { children, config } = this.props;
     return (
-      <div className="ui">
+      <div className='ui'>
         {config.isLoaded ? children : null}
       </div>
     );
@@ -119,4 +122,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(withRouter(AppContainer));
+export default withRouter(connect(mapStateToProps)(AppContainer));

@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CollapseIcon from './collapse-icon.jsx';
 import DatabaseItem from './database-item.jsx';
-import groupBy from 'lodash.groupby';
+import groupBy from 'lodash/groupBy';
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
@@ -23,7 +24,7 @@ export default class DbMetadataList extends Component {
     onExecuteDefaultQuery: PropTypes.func,
     onSelectItem: PropTypes.func,
     onGetSQLScript: PropTypes.func,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);

@@ -2,4 +2,3 @@ build/
 dist/
 vendor/
 out/
-/.sqlectron-gui.archive/*

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { sqlectron } from '../../browser/remote';
 
 
@@ -13,7 +14,7 @@ export default class ServerDBClientInfoModal extends Component {
     client: PropTypes.string.isRequired,
     infos: PropTypes.array.isRequired,
     onCloseClick: PropTypes.func.isRequired,
-  }
+  };
 
   componentDidMount() {
     $(this.refs.infoModal).modal({
