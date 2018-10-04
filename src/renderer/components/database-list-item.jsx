@@ -12,7 +12,7 @@ const STYLE = {
     fontSize: '0.85em',
     color: '#636363',
     wordBreak: 'break-all',
-    cursor: 'default',
+    cursor: 'pointer',
     // force menu item go over the parent padding
     // this way allows the whole line be clickable
     position: 'abosolute',
@@ -221,8 +221,7 @@ export default class DatabaseListItem extends Component {
         onClick={() => this.onHeaderDoubleClick(database)}
         onContextMenu={::this.onContextMenu}
         style={STYLE.database}>
-        <i className={`${collapseCssClass} triangle icon`}
-          style={{ cursor: 'pointer' }}></i>
+        <i className={`${collapseCssClass} triangle icon`}></i>
         <i className="database icon"></i>
         {database.name}
       </span>

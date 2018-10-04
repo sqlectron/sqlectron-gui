@@ -9,6 +9,7 @@ const CollapseIcon = ({ arrowDirection, expandAction }) =>
 
 CollapseIcon.propTypes = {
   arrowDirection: PropTypes.string.isRequired,
+  expandAction: PropTypes.func.isRequired,
 };
 
 export default CollapseIcon;
