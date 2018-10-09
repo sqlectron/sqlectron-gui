@@ -104,8 +104,15 @@ class AppContainer extends Component {
 
   render() {
     const { children, config } = this.props;
+    let style = null;
+
+    if (config.isLoaded) {
+      const customFont = config.data.customFont;
+      style = { fontFamily: `'${customFont}', 'Helvetica Neue', Arial, Helvetica, sans-serif` };
+    }
+
     return (
-      <div className="ui">
+      <div className="ui" style={style}>
         {config.isLoaded ? children : null}
       </div>
     );

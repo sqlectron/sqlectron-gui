@@ -336,7 +336,8 @@ export default class QueryResultTable extends Component {
    * It gives a better UX since the column adapts better to the table width.
    */
   resolveCellWidth(fieldName, fields, rows) {
-    const font = '14px \'Lato\', \'Helvetica Neue\', Arial, Helvetica, sans-serif';
+    const { customFont } = this.props.config.data.customFont;
+    const font = `14px '${customFont}', 'Helvetica Neue', Arial, Helvetica, sans-serif`;
     const numRowsToFindAverage = rows.length > 30 ? 30 : rows.length;
     const maxWidth = 220;
 

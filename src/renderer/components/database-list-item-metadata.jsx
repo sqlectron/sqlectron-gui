@@ -62,10 +62,9 @@ export default class DbMetadataList extends Component {
       <span
         title={title}
         className="header clickable"
-        onClick={::this.toggleCollapse}
         style={cssStyle}>
-        <i className={`${cssClass} triangle icon`}></i>
-        {this.props.title}
+        <i className={`${cssClass} triangle icon`} onClick={::this.toggleCollapse}></i>
+        <span>{this.props.title}</span>
       </span>
     );
   }
