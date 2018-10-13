@@ -162,7 +162,7 @@ export default class SettingsModalForm extends Component {
   renderBasicSettingsPanel() {
     /* eslint max-len:0 */
     const { zoomFactor } = this.state;
-    const zoomFactorLabel = `${Math.round(zoomFactor * 100)}%`;
+    const zoomFactorLabel = `${Math.round(Number.parseFloat(zoomFactor) * 100)}%`;
 
     return (
       <div>
