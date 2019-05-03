@@ -107,7 +107,7 @@ class AppContainer extends Component {
     let style = null;
 
     if (config.isLoaded) {
-      const customFont = config.data.customFont;
+      const customFont = config.data.customFont || 'Lato';
       style = { fontFamily: `'${customFont}', 'Helvetica Neue', Arial, Helvetica, sans-serif` };
     }
 
