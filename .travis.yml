@@ -31,7 +31,7 @@ addons:
     - bsdtar
 install:
 - clang --version
-- nvm install 6
+- nvm install 8
 - npm prune
 - npm install
 script:
