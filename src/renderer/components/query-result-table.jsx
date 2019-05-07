@@ -337,7 +337,7 @@ export default class QueryResultTable extends Component {
    */
   resolveCellWidth(fieldName, fields, rows) {
     const customFont = this.props.config.data.customFont || 'Helvetica Neue';
-    const font = `14px '${customFont}' 'Helvetica Neue', Arial, Helvetica, sans-serif`;
+    const font = `14px '${customFont}', 'Helvetica Neue', Arial, Helvetica, sans-serif`;
     const numRowsToFindAverage = rows.length > 30 ? 30 : rows.length;
     const maxWidth = 220;
     const headerWidth = this.getTextWidth(fieldName, `bold ${font}`);
