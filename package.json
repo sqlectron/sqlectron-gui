@@ -131,7 +131,7 @@
     "lodash.trim": "^4.5.1",
     "lodash.union": "^4.6.0",
     "minimist": "^1.2.0",
-    "node-sass": "^3.4.2",
+    "node-sass": "^4.14.0",
     "react": "^15.0.1",
     "react-ace": "3.3.0",
     "react-addons-shallow-compare": "^15.1.0",
