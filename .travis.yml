@@ -13,10 +13,7 @@ cache:
   - node_modules
   - app/node_modules
   - $HOME/.electron
-env:
-  global:
-  # GH_TOKEN
-  - secure: EpeYT6T82lfJrnQn9QwHDxLRx9iT30yQp8NHIs+rH0T7Yxegm6YRHYr8nLOen/Ny+Kyq9qNeW6D3kelkWsfMADXIQKh7n/vSjXb535+iQeMOUSVQu8PKFzkwDLJIbYKRugVZJ2k+nqsBPqbiG5RiV71ztWgxz4GN28nLnJIYhiCA2yCilITS/WcreHUSAjFUWubQQTCptFHTYTvNKxclw9eps6vwPM0/+KSnbM5SD5O14ZtjairSwj72+RjT3WveAznD2nzqjroKd1r2JZPrRIrQUCj8tKJHilYzWW91IgH9FYJKHjO3VSjv1JiiJrO8LTmur9lArbYBA9pJvbCmg7iXYFUAHMlbKs/yRrIwiMOuKvEX6Mw43YG4zz2X+F5oH1tis8+b1kfehL44gfCNEJtfpJRHEvfafm4WZumar0aZV4xVUYkbYuRj07X/+/kn7Zy9M+obZbVaajh3irCSw79ApSZ0lRciYgVbGE7dHsx6u9CKFKOInONowU2koPkfgTneslmbYpyfRUPQTytYkzfjBFOYj3RFd7ruYr+qdt7ouusKjZmRgO6fNNG8+hYynb/grX8di9sxBSXIuh29EFVNY8uXBVKpyMcJ9AN4TZ/PCMjCfPYxMIyPx9YGE2tTalhuQf1YXT8n72MZGW+7DMWdiGBZzHPZJw2tH9oEtU4=
+
 addons:
   apt:
     sources:
@@ -31,7 +28,7 @@ addons:
     - bsdtar
 install:
 - clang --version
-- nvm install 6
+- nvm install 8
 - npm prune
 - npm install
 script:
