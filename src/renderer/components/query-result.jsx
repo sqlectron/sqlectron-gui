@@ -1,8 +1,9 @@
 import groupBy from 'lodash.groupby';
-import React, { Component, PropTypes } from 'react';
-import Loader from './loader.jsx';
-import Message from './message.jsx';
-import QueryResultTable from './query-result-table.jsx';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Loader from './loader';
+import Message from './message';
+import QueryResultTable from './query-result-table';
 
 export default class QueryResult extends Component {
   static propTypes = {
@@ -15,12 +16,12 @@ export default class QueryResult extends Component {
     copied: PropTypes.bool,
     saved: PropTypes.bool,
     query: PropTypes.string,
-    results: React.PropTypes.arrayOf(
-      React.PropTypes.shape({
+    results: PropTypes.arrayOf(
+      PropTypes.shape({
         fields: PropTypes.array,
         rows: PropTypes.array,
-        rowCount: React.PropTypes.number,
-        affectedRows: React.PropTypes.number,
+        rowCount: PropTypes.number,
+        affectedRows: PropTypes.number,
       }),
     ),
     isExecuting: PropTypes.bool,
@@ -29,10 +30,10 @@ export default class QueryResult extends Component {
 
   shouldComponentUpdate(nextProps) {
     return (
-      (!nextProps.isExecuting && this.props.isExecuting) ||
-      (nextProps.query !== this.props.query) ||
-      (nextProps.copied && !this.props.copied) ||
-      (nextProps.widthOffset !== this.props.widthOffset)
+      (!nextProps.isExecuting && this.props.isExecuting)
+      || (nextProps.query !== this.props.query)
+      || (nextProps.copied && !this.props.copied)
+      || (nextProps.widthOffset !== this.props.widthOffset)
     );
   }
 
@@ -82,7 +83,7 @@ export default class QueryResult extends Component {
     }
 
     let msgDuplicatedColumns = null;
-    const groupFields = groupBy(fields, (field) => field.name);
+    const groupFields = groupBy(fields, field => field.name);
     const duplicatedColumns = Object
       .keys(groupFields)
       .filter(field => groupFields[field].length > 1);
@@ -92,9 +93,9 @@ export default class QueryResult extends Component {
           key={`msgDuplicatedColumns-${queryIndex}`}
           type="info"
           message={
-            `Duplicated columns: ${duplicatedColumns.join(', ')}. ` +
-            'It may cause the result in the second column overwriting the first one. ' +
-            'Use an alias to avoid it.'
+            `Duplicated columns: ${duplicatedColumns.join(', ')}. `
+            + 'It may cause the result in the second column overwriting the first one. '
+            + 'Use an alias to avoid it.'
           } />
       );
     }
@@ -132,7 +133,9 @@ export default class QueryResult extends Component {
     return (
       <div key={queryIndex} className="ui segment">
         <div className="ui top left attached label">
-          Query {queryIndex + 1}
+          Query
+          {' '}
+          {queryIndex + 1}
         </div>
         {msgDuplicatedColumns}
         {tableResult}

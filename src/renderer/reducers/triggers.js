@@ -18,7 +18,9 @@ export default function (state = INITIAL_STATE, action) {
         : state;
     }
     case types.FETCH_TRIGGERS_REQUEST: {
-      return { ...state, isFetching: true, didInvalidate: false, error: null };
+      return {
+        ...state, isFetching: true, didInvalidate: false, error: null,
+      };
     }
     case types.FETCH_TRIGGERS_SUCCESS: {
       return {
@@ -49,6 +51,6 @@ export default function (state = INITIAL_STATE, action) {
         didInvalidate: true,
       };
     }
-    default : return state;
+    default: return state;
   }
 }

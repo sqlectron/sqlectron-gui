@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import joint from 'jointjs/dist/joint';
 import './jointjs-diagram-table';
 import './jointjs-diagram-table-cell';
@@ -94,7 +95,7 @@ export default class DatabaseDiagram extends Component {
         currentTable = tableShapes[index];
 
         columnsByTable[table].forEach((column, idx) => {
-          columnKey = tableKeys[table].find((k) => k.columnName === column.name);
+          columnKey = tableKeys[table].find(k => k.columnName === column.name);
 
           newTabCell = new joint.shapes.sqlectron.TableCell({
             position: {
@@ -129,7 +130,7 @@ export default class DatabaseDiagram extends Component {
         currentTable = tableShapes[index];
 
         tableKeys[table].forEach((target) => {
-          targetIndex = tables.findIndex((t) => t === target.referencedTable);
+          targetIndex = tables.findIndex(t => t === target.referencedTable);
           if (targetIndex !== -1) {
             newLink = new joint.dia.Link({
               source: { id: currentTable.id },
@@ -171,17 +172,17 @@ export default class DatabaseDiagram extends Component {
 
       if (biggestCellSize > 100) {
         // resize tables
-        tableShapes.find((shape) => shape.attributes.name === table)
+        tableShapes.find(shape => shape.attributes.name === table)
           .resize(biggestCellSize + 20, (columnsByTable[table].length + 1.5) * 20);
         // resize table cells
-        tableCells.filter((cell) => cell.attributes.tableName === table)
-          .map((cell) => cell.resize(biggestCellSize, 20));
+        tableCells.filter(cell => cell.attributes.tableName === table)
+          .map(cell => cell.resize(biggestCellSize, 20));
       }
     });
   }
 
   render() {
-    if (!!this.state.error) {
+    if (this.state.error) {
       return (
         <div className="ui negative message"
           style={{ textAlign: 'center' }}>
@@ -190,6 +191,6 @@ export default class DatabaseDiagram extends Component {
       );
     }
 
-    return <div ref="diagram" style={this.shouldDisableDiagram()}></div>;
+    return <div ref="diagram" style={this.shouldDisableDiagram()} />;
   }
 }

@@ -1,11 +1,13 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const CollapseIcon = ({ arrowDirection, expandAction }) =>
-  (<i
+const CollapseIcon = ({ arrowDirection, expandAction }) => (
+  <i
     className={`${arrowDirection} triangle icon`}
     style={{ float: 'left', margin: '0 0.15em 0 -1em' }}
     onClick={expandAction}
-  />);
+  />
+);
 
 CollapseIcon.propTypes = {
   arrowDirection: PropTypes.string.isRequired,

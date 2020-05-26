@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { sqlectron } from '../../browser/remote';
 
 
@@ -36,15 +37,21 @@ export default class ServerDBClientInfoModal extends Component {
     return (
       <div id="server-modal" className="ui modal" ref="infoModal">
         <div className="header">
-          {dbClient.name} Query Information
+          {dbClient.name}
+          {' '}
+          Query Information
         </div>
         <div className="content">
-          <p>Some particularities about queries on {dbClient.name} you should know:</p>
+          <p>
+            Some particularities about queries on
+            {dbClient.name}
+            {' '}
+            you should know:
+          </p>
           <div className="ui bulleted list">
             {infos.map((info, idx) => (<div key={idx} className="item">{info}</div>))}
           </div>
-          <ul>
-          </ul>
+          <ul />
         </div>
       </div>
     );

@@ -1,5 +1,6 @@
 import isPlainObject from 'lodash.isplainobject';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 
@@ -53,14 +54,14 @@ export default class PreviewModal extends Component {
   renderMenu() {
     const { selected } = this.state;
     const items = [
-     { type: 'plain', name: 'Plain Text', default: true },
-     { type: 'json', name: 'JSON' },
+      { type: 'plain', name: 'Plain Text', default: true },
+      { type: 'json', name: 'JSON' },
     ];
 
     return (
       <div className="ui fluid two item menu">
         {
-          items.map(item => {
+          items.map((item) => {
             const className = classNames({
               item: true,
               active: (!selected && item.default) || selected === item.type,

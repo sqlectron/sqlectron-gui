@@ -91,16 +91,22 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
 
       dbConn = serverSession.db(database);
       if (dbConn) {
-        dispatch({ type: CONNECTION_SUCCESS, server, database, config, reconnecting });
+        dispatch({
+          type: CONNECTION_SUCCESS, server, database, config, reconnecting,
+        });
         return;
       }
 
       dbConn = serverSession.createConnection(database);
       await dbConn.connect();
 
-      dispatch({ type: CONNECTION_SUCCESS, server, database, config, reconnecting });
+      dispatch({
+        type: CONNECTION_SUCCESS, server, database, config, reconnecting,
+      });
     } catch (error) {
-      dispatch({ type: CONNECTION_FAILURE, server, database, error });
+      dispatch({
+        type: CONNECTION_FAILURE, server, database, error,
+      });
       if (dbConn) {
         dbConn.disconnect();
       }

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { requireLogos } from './require-context';
 import { sqlectron } from '../../browser/remote';
 
@@ -24,20 +25,25 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
       </div>
       <button className="right floated circular ui icon button mini"
         onClick={() => onEditClick(server)}>
-        <i className="icon pencil"></i>
+        <i className="icon pencil" />
       </button>
       <div className="header">
         {server.name}
       </div>
       <div className="meta" style={{ lineHeight: '1.5em', marginTop: '5px', marginLeft: '45px' }}>
         {server.host ? `${server.host}:${server.port}` : server.socketPath}
-        {server.ssh && (<div>via {server.ssh.host}</div>)}
+        {server.ssh && (
+        <div>
+          via
+          {server.ssh.host}
+        </div>
+        )}
       </div>
     </div>
     <div className="ui bottom attached button"
       tabIndex="0"
       onClick={() => onConnectClick(server)}>
-      <i className="plug icon"></i>
+      <i className="plug icon" />
       Connect
     </div>
   </div>

@@ -26,12 +26,14 @@ function shouldFetchTableIndexes (state, database, table) {
 
 
 function fetchTableIndexes (database, table) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_INDEXES_REQUEST, database, table });
     try {
       const dbConn = getDBConnByName(database);
       const indexes = await dbConn.listTableIndexes(table);
-      dispatch({ type: FETCH_INDEXES_SUCCESS, database, table, indexes });
+      dispatch({
+        type: FETCH_INDEXES_SUCCESS, database, table, indexes,
+      });
     } catch (error) {
       dispatch({ type: FETCH_INDEXES_FAILURE, error });
     }

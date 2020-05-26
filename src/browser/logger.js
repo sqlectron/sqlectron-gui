@@ -6,6 +6,7 @@ import config from './config';
 const realConsoleError = console.error;
 console.error = () => {};
 const { createLogger } = require('bunyan');
+
 console.error = realConsoleError;
 
 
@@ -29,6 +30,6 @@ if (dataConfig.log.file) {
 const logger = createLogger(loggerConfig);
 
 // Set custom logger for sqlectron-core
-sqlectron.setLogger((namespace) => logger.child({ namespace: `sqlectron-core:${namespace}` }));
+sqlectron.setLogger(namespace => logger.child({ namespace: `sqlectron-core:${namespace}` }));
 
-export default (namespace) => logger.child({ namespace });
+export default namespace => logger.child({ namespace });

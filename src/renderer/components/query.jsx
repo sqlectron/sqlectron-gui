@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
 import AceEditor from 'react-ace';
 import ace from 'brace';
@@ -6,11 +7,11 @@ import 'brace/mode/sql';
 import 'brace/theme/github';
 import 'brace/ext/language_tools';
 import 'brace/ext/searchbox';
-import CheckBox from './checkbox.jsx';
-import QueryResult from './query-result.jsx';
-import ServerDBClientInfoModal from './server-db-client-info-modal.jsx';
-
 import { ResizableBox } from 'react-resizable';
+import CheckBox from './checkbox';
+import QueryResult from './query-result';
+import ServerDBClientInfoModal from './server-db-client-info-modal';
+
 require('./react-resizable.css');
 require('./override-ace.css');
 
@@ -21,13 +22,13 @@ const langTools = ace.acequire('ace/ext/language_tools');
 
 const INFOS = {
   mysql: [
-    'MySQL treats commented query as a non select query.' +
-      'So you may see "affected rows" for a commented query.',
+    'MySQL treats commented query as a non select query.'
+      + 'So you may see "affected rows" for a commented query.',
     'Usually executing a single query per tab will give better results.',
   ],
   sqlserver: [
-    'MSSQL treats multiple non select queries as a single query result.' +
-      'So you affected rows will show the amount over all queries executed in the same tab.',
+    'MSSQL treats multiple non select queries as a single query result.'
+      + 'So you affected rows will show the amount over all queries executed in the same tab.',
     'Usually executing a single query per tab will give better results.',
   ],
 };
@@ -123,12 +124,12 @@ export default class Query extends Component {
 
     this.refs.queryBoxTextarea.editor.setOption(
       'enableBasicAutocompletion',
-      true
+      true,
     );
 
     this.refs.queryBoxTextarea.editor.setOption(
       'enableLiveAutocompletion',
-      nextProps.enabledLiveAutoComplete
+      nextProps.enabledLiveAutoComplete,
     );
   }
 
@@ -215,7 +216,9 @@ export default class Query extends Component {
       ...mapCompletionTypes(views, 'view'),
       ...mapCompletionTypes(functions, 'function'),
       ...mapCompletionTypes(procedures, 'procedure'),
-    ].map(({ name, type }) => ({ name, value: name, score: 1, meta: type }));
+    ].map(({ name, type }) => ({
+      name, value: name, score: 1, meta: type,
+    }));
   }
 
   getCommands () {
@@ -310,36 +313,44 @@ export default class Query extends Component {
             </div>
           </ResizableBox>
           <div className="ui secondary menu" style={{ marginTop: 0 }}>
-            {infos &&
+            {infos
+              && (
               <div className="item">
                 <span>
                   <button className="ui icon button small"
                     title="Query Information"
                     onClick={::this.onShowInfoClick}>
-                    <i className="icon info"></i>
+                    <i className="icon info" />
                   </button>
                 </span>
               </div>
+              )
             }
             <div className="right menu">
               <div className="item">
                 <div className="ui buttons">
                   <button
                     className={`ui positive button ${query.isExecuting ? 'loading' : ''}`}
-                    onClick={::this.onExecQueryClick}>Execute</button>
-                  <div className="or"></div>
+                    onClick={::this.onExecQueryClick}>
+                    Execute
+                  </button>
+                  <div className="or" />
                   {
                     query.isExecuting && allowCancel
-                    ? (
-                      <button
-                        className={`ui negative button ${query.isCanceling ? 'loading' : ''}`}
-                        onClick={::this.onCancelQueryClick}>Cancel</button>
-                    )
-                    : (
-                      <button
-                        className="ui button"
-                        onClick={::this.onDiscQueryClick}>Discard</button>
-                    )
+                      ? (
+                        <button
+                          className={`ui negative button ${query.isCanceling ? 'loading' : ''}`}
+                          onClick={::this.onCancelQueryClick}>
+                          Cancel
+                        </button>
+                      )
+                      : (
+                        <button
+                          className="ui button"
+                          onClick={::this.onDiscQueryClick}>
+                          Discard
+                        </button>
+                      )
                   }
                 </div>
               </div>
@@ -359,11 +370,13 @@ export default class Query extends Component {
           results={query.results}
           isExecuting={query.isExecuting}
           error={query.error} />
-        {this.state && this.state.infoModalVisible &&
+        {this.state && this.state.infoModalVisible
+          && (
           <ServerDBClientInfoModal
             infos={infos}
             client={client}
             onCloseClick={() => this.setState({ infoModalVisible: false })} />
+          )
         }
       </div>
     );

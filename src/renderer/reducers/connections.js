@@ -2,7 +2,7 @@ import * as types from '../actions/connections';
 import * as serverTypes from '../actions/servers';
 import { sqlectron } from '../../browser/remote';
 
-const CLIENTS = sqlectron.db.CLIENTS;
+const { CLIENTS } = sqlectron.db;
 
 const INITIAL_STATE = {
   connected: false,
@@ -58,7 +58,9 @@ export default function(state = INITIAL_STATE, action) {
     }
     case types.TEST_CONNECTION_FAILURE: {
       if (!isSameTestConnection(state, action)) return state;
-      return { ...state, testConnected: false, testConnecting: false, testError: action.error };
+      return {
+        ...state, testConnected: false, testConnecting: false, testError: action.error,
+      };
     }
     case types.CLOSE_CONNECTION:
     case serverTypes.START_EDITING_SERVER:
@@ -66,7 +68,7 @@ export default function(state = INITIAL_STATE, action) {
       return INITIAL_STATE;
     }
 
-    default : return state;
+    default: return state;
   }
 }
 

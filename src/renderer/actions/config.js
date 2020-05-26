@@ -13,7 +13,7 @@ export const FINISH_EDITING_CONFIG = 'FINISH_EDITING_CONFIG';
 
 
 export function loadConfig() {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: LOAD_CONFIG_REQUEST });
     try {
       const forceCleanCache = true;
@@ -32,7 +32,7 @@ export function loadConfig() {
 
 
 export function saveConfig(configData) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: SAVE_CONFIG_REQUEST });
     try {
       await sqlectron.config.saveSettings(configData);

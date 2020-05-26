@@ -1,15 +1,16 @@
 const path = require('path');
+const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-require('babel-polyfill');
+require('@babel/polyfill');
 
 module.exports = {
-  debug: true,
+  mode: 'development',
   devtool: 'eval-source-map',
   target: 'electron-renderer',
   resolve: {
-    extensions: ['', '.js'],
-    modulesDirectories: ['node_modules', 'src/renderer'],
+    extensions: ['.js', '.jsx'],
+    modules: ['node_modules', 'src/renderer'],
     alias: {
       'dtrace-provider': path.join(__dirname, 'empty-shim.js'),
     },
@@ -26,36 +27,39 @@ module.exports = {
     publicPath: '/static/',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|vendor)/,
-        loaders: ['babel'],
+        use: [{ loader: 'babel-loader' }],
       },
       {
         test: /\.s?css$/,
-        loaders: [
-          'style',
-          'css',
-          'autoprefixer?browsers=last 2 version',
-          'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules'),
+        use: [
+          'style-loader',
+          'css-loader',
+          'postcss-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                includePaths: [path.resolve(__dirname, 'node_modules')],
+              },
+            },
+          },
         ],
       },
       {
         test: /\.png$/,
-        loader: 'url?mimetype=image/png',
+        use: [{ loader: 'url-loader', options: { mimetype: 'image/png' } }],
       },
       {
         test: /\.gif$/,
-        loader: 'url?mimetype=image/gif',
+        use: [{ loader: 'url-loader', options: { mimetype: 'image/gif' } }],
       },
       {
         test: /\.(?:eot|ttf|woff2?|svg)$/,
-        loader: 'file?name=[path][name]-[hash:6].[ext]&context=assets',
-      },
-      {
-        test: /\.json?$/,
-        loader: 'json',
+        use: [{ loader: 'file-loader', options: { name: '[path][name]-[hash:6].[ext]', context: 'assets' } }],
       },
     ],
     noParse: [/html2canvas/],
@@ -72,6 +76,14 @@ module.exports = {
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',
+    }),
+    new webpack.LoaderOptionsPlugin({
+      debug: true,
+      options: {
+        postcss: [
+          autoprefixer(),
+        ],
+      },
     }),
   ],
 };

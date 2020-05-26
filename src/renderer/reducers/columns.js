@@ -75,6 +75,6 @@ export default function (state = INITIAL_STATE, action) {
         didInvalidate: true,
       };
     }
-    default : return state;
+    default: return state;
   }
 }

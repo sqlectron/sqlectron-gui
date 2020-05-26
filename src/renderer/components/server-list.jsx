@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import ServerListCard from './server-list-card.jsx';
-import ServerListItem from './server-list-item.jsx';
-import Message from './message.jsx';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ServerListCard from './server-list-card';
+import ServerListItem from './server-list-item';
+import Message from './message';
 
 
 require('./server-list.scss');
@@ -29,34 +30,36 @@ export default class ServerList extends Component {
   }
 
   renderListOrCards() {
-    const { servers, onEditClick, onConnectClick, config } = this.props;
+    const {
+      servers, onEditClick, onConnectClick, config,
+    } = this.props;
 
     if (config.data.connectionsAsList) {
       return (
         <div className="ui divided items">
-          {servers.map(server =>
+          {servers.map(server => (
             <ServerListItem
               key={server.id}
               onConnectClick={() => onConnectClick(server)}
               onEditClick={() => onEditClick(server)}
               server={server} />
-          )}
+          ))}
         </div>
       );
     }
 
     return (
-      this.groupItemsInRows(servers).map((row, rowIdx) =>
+      this.groupItemsInRows(servers).map((row, rowIdx) => (
         <div key={rowIdx} className="ui cards">
-          {row.map(server =>
+          {row.map(server => (
             <ServerListCard
               key={server.id}
               onConnectClick={() => onConnectClick(server)}
               onEditClick={() => onEditClick(server)}
               server={server} />
-          )}
+          ))}
         </div>
-      )
+      ))
     );
   }
 

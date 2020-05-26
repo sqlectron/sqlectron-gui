@@ -26,12 +26,14 @@ function shouldFetchTableTriggers (state, database, table) {
 
 
 function fetchTableTriggers (database, table, schema) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_TRIGGERS_REQUEST, database, table });
     try {
       const dbConn = getDBConnByName(database);
       const triggers = await dbConn.listTableTriggers(table, schema);
-      dispatch({ type: FETCH_TRIGGERS_SUCCESS, database, table, triggers });
+      dispatch({
+        type: FETCH_TRIGGERS_SUCCESS, database, table, triggers,
+      });
     } catch (error) {
       dispatch({ type: FETCH_TRIGGERS_FAILURE, error });
     }

@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import DatabaseListItemMetatada from './database-list-item-metadata.jsx';
-import DatabaseFilter from './database-filter.jsx';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
+import DatabaseListItemMetatada from './database-list-item-metadata';
+import DatabaseFilter from './database-filter';
 
 
 const { Menu, MenuItem } = remote;
@@ -107,7 +108,9 @@ export default class DatabaseListItem extends Component {
   }
 
   isMetadataLoaded(props) {
-    const { tables, views, functions, procedures } = (props || this.props);
+    const {
+      tables, views, functions, procedures,
+    } = (props || this.props);
     return tables && views && functions && procedures;
   }
 
@@ -221,8 +224,8 @@ export default class DatabaseListItem extends Component {
         onClick={() => this.onHeaderDoubleClick(database)}
         onContextMenu={::this.onContextMenu}
         style={STYLE.database}>
-        <i className={`${collapseCssClass} triangle icon`}></i>
-        <i className="database icon"></i>
+        <i className={`${collapseCssClass} triangle icon`} />
+        <i className="database icon" />
         {database.name}
       </span>
     );

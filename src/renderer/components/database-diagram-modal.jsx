@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
-import DatabaseDiagram from './database-diagram.jsx';
-import Loader from './loader.jsx';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import DatabaseDiagram from './database-diagram';
+import Loader from './loader';
 
 const STYLE = {
   list: {
@@ -110,8 +111,8 @@ export default class DatabaseDiagramModal extends Component {
     return (selectedTables
       && columnsByTable
       && tableKeys
-      && selectedTables.every((t) => Object.keys(columnsByTable).includes(t))
-      && selectedTables.every((t) => Object.keys(tableKeys).includes(t))
+      && selectedTables.every(t => Object.keys(columnsByTable).includes(t))
+      && selectedTables.every(t => Object.keys(tableKeys).includes(t))
     );
   }
 
@@ -121,30 +122,30 @@ export default class DatabaseDiagramModal extends Component {
 
     return (
       <div className="content">
-        <div className="ui middle aligned padded very relaxed stackable grid" >
+        <div className="ui middle aligned padded very relaxed stackable grid">
           <div className="ten wide column">
             <h4 className="ui horizontal divider header">
-              <i className="list icon"></i>
+              <i className="list icon" />
               Select tables to include on diagram
             </h4>
             <div className="ui mini buttons">
               <button className="ui button mini" onClick={::this.onSelectAllTables}>
                 Select All
               </button>
-              <div className="or"></div>
+              <div className="or" />
               <button className="ui button mini" onClick={::this.onDeselectAllTables}>
                 Deselect All
               </button>
             </div>
             <div className="ui list" style={STYLE.list}>
-              {tablesAndViews.map((item) =>
+              {tablesAndViews.map(item => (
                 <div key={item.name} className="item">
                   <div className="ui checkbox">
                     <input id={item.name} type="checkbox" onChange={::this.onCheckBoxesChange} />
                     <label>{item.name}</label>
                   </div>
                 </div>
-              )}
+              ))}
             </div>
             <button
               ref="generateButton"
@@ -161,7 +162,7 @@ export default class DatabaseDiagramModal extends Component {
             <button
               className="fluid ui blue labeled icon button"
               onClick={() => onOpenDatabaseDiagram()}>
-              <i className="folder open outline icon"></i>
+              <i className="folder open outline icon" />
               Open diagram from file
             </button>
           </div>
@@ -210,10 +211,10 @@ export default class DatabaseDiagramModal extends Component {
             onClick={() => onSaveDatabaseDiagram(this.refs.databaseDiagram.graph.toJSON())}>
             Save
           </div>
-          <div className="or"></div>
+          <div className="or" />
           <div className="ui small right labeled icon button simple upward dropdown">
             Export to
-            <i className="caret up icon"></i>
+            <i className="caret up icon" />
             <div className="menu">
               <div className="item"
                 onClick={() => this.onExportDatabaseDiagram('png')}>
@@ -237,10 +238,12 @@ export default class DatabaseDiagramModal extends Component {
     // For more check this issue: https://github.com/clientIO/joint/issues/262
     return (
       <div className="ui modal" ref="diagramModal">
-        {!!this.state.showDatabaseDiagram &&
+        {!!this.state.showDatabaseDiagram
+          && (
           <div className="header">
             Database diagram
           </div>
+          )
         }
         <div className="content">
           {
