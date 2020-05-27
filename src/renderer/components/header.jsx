@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 
 require('./header.css');
@@ -19,7 +20,7 @@ function renderBreadcrumb(items) {
         const isLast = (index !== items.length - 1);
         return (
           <span key={index + label}>
-            <i className={`${icon} icon`}></i>
+            <i className={`${icon} icon`} />
             <a className={`section ${isLast ? 'active' : ''}`}>
               {label}
             </a>
@@ -51,12 +52,12 @@ const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
             <button className="ui button"
               title="Reconnect"
               onClick={onReConnectionClick}>
-              <i className="plug icon"></i>
+              <i className="plug icon" />
             </button>
             <button className="ui icon button"
               title="Close connection"
               onClick={onCloseConnectionClick}>
-              <i className="power icon"></i>
+              <i className="power icon" />
             </button>
           </div>
         </div>

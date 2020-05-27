@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import DatabaseListItem from './database-list-item.jsx';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import DatabaseListItem from './database-list-item';
 
 
 export default class DatabaseList extends Component {
@@ -67,7 +68,7 @@ export default class DatabaseList extends Component {
 
     return (
       <div className="item" style={{ padding: 0 }}>
-      {
+        {
         databases.map(database => (
           <DatabaseListItem
             ref={database.name}

@@ -1,16 +1,17 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import * as ServersActions from '../actions/servers.js';
-import * as ConnActions from '../actions/connections.js';
-import * as ConfigActions from '../actions/config.js';
-import Header from '../components/header.jsx';
-import Footer from '../components/footer.jsx';
-import ServerList from '../components/server-list.jsx';
-import ServerModalForm from '../components/server-modal-form.jsx';
-import SettingsModalForm from '../components/settings-modal-form.jsx';
-import ServerFilter from '../components/server-filter.jsx';
-import Message from '../components/message.jsx';
+import * as ServersActions from '../actions/servers';
+import * as ConnActions from '../actions/connections';
+import * as ConfigActions from '../actions/config';
+import Header from '../components/header';
+import Footer from '../components/footer';
+import ServerList from '../components/server-list';
+import ServerModalForm from '../components/server-modal-form';
+import SettingsModalForm from '../components/settings-modal-form';
+import ServerFilter from '../components/server-filter';
+import Message from '../components/message';
 
 
 const STYLES = {
@@ -105,7 +106,9 @@ class ServerManagerment extends Component {
 
   render() {
     const { filter } = this.state;
-    const { connections, servers, config, status } = this.props;
+    const {
+      connections, servers, config, status,
+    } = this.props;
     const selected = servers.editingServer || {};
     const filteredServers = this.filterServers(filter, servers.items);
 
@@ -127,12 +130,14 @@ class ServerManagerment extends Component {
             onSettingsClick={::this.onSettingsClick} />
 
           {
-            connections.error &&
+            connections.error
+              && (
               <Message
                 closeable
                 title="Connection Error"
                 message={connections.error.message}
                 type="error" />
+              )
           }
 
           <ServerList servers={filteredServers}
@@ -140,7 +145,8 @@ class ServerManagerment extends Component {
             onConnectClick={::this.onConnectClick}
             config={config} />
 
-          {servers.isEditing && <ServerModalForm
+          {servers.isEditing && (
+          <ServerModalForm
             server={selected}
             error={servers.error}
             testConnection={testConnection}
@@ -148,13 +154,16 @@ class ServerManagerment extends Component {
             onDuplicateClick={::this.onDuplicateClick}
             onSaveClick={::this.onSaveClick}
             onCancelClick={::this.onCancelClick}
-            onRemoveClick={::this.onRemoveClick} />}
+            onRemoveClick={::this.onRemoveClick} />
+          )}
 
-          {config.isEditing && <SettingsModalForm
+          {config.isEditing && (
+          <SettingsModalForm
             config={config}
             error={config.error}
             onSaveClick={::this.onSettingsSaveClick}
-            onCancelClick={::this.onSettingsCancelClick} />}
+            onCancelClick={::this.onSettingsCancelClick} />
+          )}
         </div>
         <div style={STYLES.footer}>
           <Footer status={status} />

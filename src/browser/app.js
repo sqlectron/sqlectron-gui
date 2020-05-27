@@ -28,7 +28,7 @@ app.on('ready', () => buildNewWindow(app));
 
 
 // Show only the error description to the user
-process.on('uncaughtException', error => {
+process.on('uncaughtException', (error) => {
   logger.error('uncaughtException', error);
   return dialog.showErrorBox('An error occurred', error.name + ': ' + error.message);
 });

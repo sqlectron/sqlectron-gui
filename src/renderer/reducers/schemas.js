@@ -23,7 +23,9 @@ export default function (state = INITIAL_STATE, action) {
         : state;
     }
     case types.FETCH_SCHEMAS_REQUEST: {
-      return { ...state, isFetching: true, didInvalidate: false, error: null };
+      return {
+        ...state, isFetching: true, didInvalidate: false, error: null,
+      };
     }
     case types.FETCH_SCHEMAS_SUCCESS: {
       return {
@@ -64,6 +66,6 @@ export default function (state = INITIAL_STATE, action) {
         selectedSchemasForDiagram: null,
       };
     }
-    default : return state;
+    default: return state;
   }
 }

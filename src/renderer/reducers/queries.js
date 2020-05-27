@@ -31,7 +31,7 @@ export default function (state = INITIAL_STATE, action) {
     case types.REMOVE_QUERY: {
       const newState = { ...state };
 
-      const database = state.queriesById[state.currentQueryId].database;
+      const { database } = state.queriesById[state.currentQueryId];
       const index = state.queryIds.indexOf(state.currentQueryId);
 
       if (state.length === 1) {
@@ -114,7 +114,7 @@ export default function (state = INITIAL_STATE, action) {
         copied: true,
       });
     }
-    case types.COPY_QUERY_RESULT_TO_CLIPBOARD_FAIL: {
+    case types.COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE: {
       return changeStateByCurrentQuery(state, {
         error: action.error,
         copied: false,
@@ -147,7 +147,7 @@ export default function (state = INITIAL_STATE, action) {
         error: action.error,
       });
     }
-    default : return state;
+    default: return state;
   }
 }
 
@@ -164,14 +164,14 @@ function addNewQuery(state, action) {
     || INITIAL_STATE.resultItemsPerPage
   );
 
-  let enabledAutoComplete = INITIAL_STATE.enabledAutoComplete;
+  let { enabledAutoComplete } = INITIAL_STATE;
   if (action.config && action.config.enabledAutoComplete !== undefined) {
-    enabledAutoComplete = action.config.enabledAutoComplete;
+    ({ enabledAutoComplete } = action.config);
   }
 
-  let enabledLiveAutoComplete = INITIAL_STATE.enabledLiveAutoComplete;
+  let { enabledLiveAutoComplete } = INITIAL_STATE;
   if (action.config && action.config.enabledLiveAutoComplete !== undefined) {
-    enabledLiveAutoComplete = action.config.enabledLiveAutoComplete;
+    ({ enabledLiveAutoComplete } = action.config);
   }
 
   const newId = state.lastCreatedId + 1;
@@ -216,7 +216,7 @@ function changeStateByCurrentQuery(oldFullState, newCurrentQueryState, options =
     oldQueryState.name = createQueryName(
       oldFullState.currentQueryId,
       oldQueryState.database,
-      options.table
+      options.table,
     );
   }
 
@@ -235,7 +235,7 @@ function changeStateByCurrentQuery(oldFullState, newCurrentQueryState, options =
 function createQueryName (id, database, table) {
   return (
     table
-    ? `${database} / ${table} #${id}`
-    : `${database} #${id}`
+      ? `${database} / ${table} #${id}`
+      : `${database} #${id}`
   );
 }

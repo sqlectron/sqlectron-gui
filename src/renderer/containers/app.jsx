@@ -1,12 +1,14 @@
 import { webFrame } from 'electron'; // eslint-disable-line import/no-unresolved
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
-import * as ConfigActions from '../actions/config.js';
+import * as ConfigActions from '../actions/config';
 import imageSrc from './sqlectron.gif';
 
 
 import '../../../vendor/renderer/semantic-ui/semantic';
+
 require('../../../vendor/renderer/lato/latofonts.css');
 require('../../../vendor/renderer/semantic-ui/semantic.css');
 require('./app.css');

@@ -1,5 +1,5 @@
 import { sqlectron } from '../../browser/remote';
-import * as ConfigActions from './config.js';
+import * as ConfigActions from './config';
 
 
 export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';
@@ -65,7 +65,7 @@ export function saveServer ({ server, id }) {
 
 
 export function removeServer ({ id }) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: REMOVE_SERVER_REQUEST, id });
     try {
       await sqlectron.servers.removeById(id);
@@ -109,7 +109,7 @@ export function duplicateServer ({ server }) {
 
 async function getUniqueName(server) {
   const dataServers = await sqlectron.servers.getAll();
-  const duplicatedName = (name) => dataServers.some(srv => srv.name === name);
+  const duplicatedName = name => dataServers.some(srv => srv.name === name);
   let currentName = server.name;
   let num = 0;
   while (duplicatedName(currentName)) {

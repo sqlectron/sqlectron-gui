@@ -1,7 +1,8 @@
 import isPlainObject from 'lodash.isplainobject';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 import classNames from 'classnames';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { valueToString } from '../utils/convert';
 
 const { Menu, MenuItem } = remote;

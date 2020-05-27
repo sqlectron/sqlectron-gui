@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import CollapseIcon from './collapse-icon.jsx';
-import TableSubmenu from './table-submenu.jsx';
-import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { remote } from 'electron';
+import CollapseIcon from './collapse-icon';
+import TableSubmenu from './table-submenu';
 import { sqlectron } from '../../browser/remote';
 
 const Menu = remote.Menu;
@@ -85,7 +86,7 @@ export default class DatabaseItem extends Component {
         DELETE: 'Delete Statement',
       };
 
-      actionTypes.forEach(actionType => {
+      actionTypes.forEach((actionType) => {
         this.contextMenu.append(new MenuItem({
           label: labelsByTypes[actionType],
           click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
@@ -99,7 +100,9 @@ export default class DatabaseItem extends Component {
   }
 
   renderSubItems({ schema, name }) {
-    const { columnsByTable, triggersByTable, indexesByTable, database } = this.props;
+    const {
+      columnsByTable, triggersByTable, indexesByTable, database,
+    } = this.props;
 
     if (!columnsByTable || !columnsByTable[name]) {
       return null;
@@ -137,7 +140,9 @@ export default class DatabaseItem extends Component {
   }
 
   render() {
-    const { database, item, style, onSelectItem, dbObjectType } = this.props;
+    const {
+      database, item, style, onSelectItem, dbObjectType,
+    } = this.props;
     const hasChildElements = !!onSelectItem;
     const expandChildren = hasChildElements
       ? () => { onSelectItem(database, item); this.toggleTableCollapse(); }
@@ -145,7 +150,7 @@ export default class DatabaseItem extends Component {
 
     const collapseArrowDirection = this.state.tableCollapsed ? 'down' : 'right';
     const tableIcon = (
-      <i className="table icon" style={{ float: 'left', margin: '0 0.3em 0 0' }}></i>
+      <i className="table icon" style={{ float: 'left', margin: '0 0.3em 0 0' }} />
     );
 
     const { schema, name } = item;
@@ -159,9 +164,11 @@ export default class DatabaseItem extends Component {
           className="item"
           onContextMenu={::this.onContextMenu}>
           {dbObjectType === 'Table'
-            ? <CollapseIcon
-              arrowDirection={collapseArrowDirection}
-              expandAction={expandChildren} />
+            ? (
+              <CollapseIcon
+                arrowDirection={collapseArrowDirection}
+                expandAction={expandChildren} />
+            )
             : null
           }
           {dbObjectType === 'Table' ? tableIcon : null}

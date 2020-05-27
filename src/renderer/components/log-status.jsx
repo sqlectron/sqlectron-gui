@@ -14,7 +14,7 @@ export default class LogStatus extends Component {
       <a className="ui red label">
         <i className="terminal icon" />
         Log
-        {<div className="detail">{log.level}</div>}
+        <div className="detail">{log.level}</div>
       </a>
     );
   }

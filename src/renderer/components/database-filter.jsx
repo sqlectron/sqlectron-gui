@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 
 export default class DatabaseFilter extends Component {
@@ -27,7 +28,7 @@ export default class DatabaseFilter extends Component {
           ref="searchInput"
           disabled={isFetching}
           onChange={::this.onFilterChange} />
-        <i className="search icon"></i>
+        <i className="search icon" />
       </div>
     );
   }

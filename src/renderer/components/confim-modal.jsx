@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class ServerModalForm extends Component {
   static propTypes = {
@@ -49,11 +49,11 @@ export default class ServerModalForm extends Component {
         <div className="actions">
           <div className="small ui black deny right labeled icon button" tabIndex="0">
             No
-            <i className="ban icon"></i>
+            <i className="ban icon" />
           </div>
           <div className="small ui positive right labeled icon button" tabIndex="0">
             Yes
-            <i className="checkmark icon"></i>
+            <i className="checkmark icon" />
           </div>
         </div>
       </div>
