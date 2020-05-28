@@ -35,7 +35,6 @@
       ]
     },
     "linux": {
-      "depends": [],
       "target": [
         "deb",
         "rpm",
@@ -69,11 +68,11 @@
     "compile": "rimraf out && npm run compile:browser && npm run compile:renderer",
     "compile:browser": "cross-env NODE_ENV=production babel ./src/browser -d out/browser",
     "compile:renderer": "cross-env NODE_ENV=production webpack --progress --display-error-details --config ./webpack.prod.config",
-    "build:osx": "npm run clean:osx && build --osx",
-    "build:linux": "npm run clean:linux && build --linux",
-    "build:win": "npm run clean:win && build --windows",
-    "dist": "npm run compile && build",
-    "dist:all-arch": "npm run compile && build --ia32 --x64",
+    "build:osx": "npm run clean:osx && electron-builder --osx",
+    "build:linux": "npm run clean:linux && electron-builder --linux",
+    "build:win": "npm run clean:win && electron-builder --windows",
+    "dist": "npm run compile && electron-builder",
+    "dist:all-arch": "npm run compile && electron-builder --ia32 --x64",
     "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win"
   },
   "dependencies": {
@@ -108,7 +107,7 @@
     "denodeify": "^1.2.1",
     "dom-helpers": "^5.1.4",
     "electron": "^1.7.9",
-    "electron-builder": "^20.28.3",
+    "electron-builder": "^22.7.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.1",
     "eslint-plugin-import": "^2.20.2",
