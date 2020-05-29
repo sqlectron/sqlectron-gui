@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 
 export default class PromptModal extends Component {
@@ -56,11 +57,11 @@ export default class PromptModal extends Component {
         <div className="actions">
           <div className="small ui black deny right labeled icon button" tabIndex="0">
             Cancel
-            <i className="ban icon"></i>
+            <i className="ban icon" />
           </div>
           <div className="small ui positive right labeled icon button" tabIndex="0">
             OK
-            <i className="checkmark icon"></i>
+            <i className="checkmark icon" />
           </div>
         </div>
       </div>

@@ -1,16 +1,19 @@
 const path = require('path');
+const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
+
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-require('babel-polyfill');
+require('@babel/polyfill');
 
 module.exports = {
+  mode: 'production',
   devtool: 'eval-source-map',
   target: 'electron-renderer',
   resolve: {
-    extensions: ['', '.js'],
-    modulesDirectories: ['node_modules', 'src/renderer'],
+    extensions: ['.js', '.jsx'],
+    modules: ['node_modules', 'src/renderer'],
   },
   entry: {
     app: './src/renderer/entry.jsx',
@@ -39,52 +42,85 @@ module.exports = {
     filename: '[name].bundle.js',
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|vendor)/,
-        loaders: ['babel'],
+        use: [{ loader: 'babel-loader' }],
       },
       {
-        test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract(
-          'style',
-          'css!sass',
-          'autoprefixer?browsers=last 2 version',
-          'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules')
-        ),
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              sassOptions: {
+                includePaths: [path.resolve(__dirname, 'node_modules')],
+              },
+            },
+          },
+          'postcss-loader',
+          /*
+          loader: MiniCssExtractPlugin.loader,
+          options: {
+            // 'style',
+            // 'css!sass',
+            autoprefixer: {
+              browsers: [
+                'last 2 version',
+              ],
+            },
+          },
+          */
+          // 'autoprefixer?browsers=last 2 version',
+          // 'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules'),
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.png$/,
-        loader: 'url?mimetype=image/png',
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              mimetype: 'image/png',
+            },
+          },
+        ],
       },
       {
         test: /\.gif$/,
-        loader: 'url?mimetype=image/gif',
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              mimetype: 'image/gif',
+            },
+          },
+        ],
       },
       {
-        test: /\.(?:eot|ttf|woff2?|svg)$/,
-        loader: 'file?name=fonts/[name]-[hash:6].[ext]',
-      },
-      {
-        test: /\.json?$/,
-        loader: 'json',
+        test: /\.(?:eot|ttf|woff|woff2|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: 'fonts/[name]-[hash:6].[ext]',
+            },
+          },
+        ],
       },
     ],
     noParse: [/(html2canvas)/],
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(true),
-    new webpack.optimize.DedupePlugin(),
-    new ExtractTextPlugin('[name].bundle.css'),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: Infinity,
-    }),
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'common',
-    }),
-    new webpack.optimize.UglifyJsPlugin(),
+    new MiniCssExtractPlugin({ filename: '[name].bundle.css' }),
     new HtmlWebpackPlugin({
       template: 'src/renderer/index.html',
       chunksSortMode: 'none',
@@ -96,7 +132,16 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
-    // new BundleAnalyzerPlugin(),
-    new webpack.NoErrorsPlugin(),
+    // new BundleAnalyzerPlugin()
+    new webpack.LoaderOptionsPlugin({
+      options: {
+        postcss: [
+          autoprefixer(),
+        ],
+      },
+    }),
   ],
+  optimization: {
+    minimize: true,
+  },
 };

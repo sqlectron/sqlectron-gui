@@ -60,7 +60,7 @@ exports.get = function getConfiguration(cleanCache) {
     appConfig,
     packageConfig,
     argsConfig,
-    defaultConfig
+    defaultConfig,
   );
 
   return config;

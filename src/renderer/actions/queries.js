@@ -119,7 +119,7 @@ export function appendQuery (query) {
 
 
 export function copyToClipboard (rows, type, delimiter) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST });
     try {
       let value;
@@ -140,7 +140,7 @@ export function copyToClipboard (rows, type, delimiter) {
 }
 
 export function saveToFile (rows, type, delimiter) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_REQUEST });
     try {
       let value;

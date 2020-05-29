@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Router, Route, hashHistory } from 'react-router';
-import App from './containers/app.jsx';
+import App from './containers/app';
 import configureStore from './store/configure';
-import ServerManagementContainer from './containers/server-management.jsx';
-import QueryBrowserContainer from './containers/query-browser.jsx';
+import ServerManagementContainer from './containers/server-management';
+import QueryBrowserContainer from './containers/query-browser';
 
 
 const store = configureStore();
@@ -20,5 +20,5 @@ ReactDOM.render(
       </Route>
     </Router>
   </Provider>,
-  document.getElementById('content')
+  document.getElementById('content'),
 );

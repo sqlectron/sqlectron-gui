@@ -26,7 +26,9 @@ export default function (state = INITIAL_STATE, action) {
         : state;
     }
     case types.FETCH_DATABASES_REQUEST: {
-      return { ...state, isFetching: true, didInvalidate: false, error: null };
+      return {
+        ...state, isFetching: true, didInvalidate: false, error: null,
+      };
     }
     case types.FETCH_DATABASES_SUCCESS: {
       return {
@@ -104,6 +106,6 @@ export default function (state = INITIAL_STATE, action) {
           .some(({ command }) => COMMANDS_TRIGER_REFRESH.includes(command)),
       };
     }
-    default : return state;
+    default: return state;
   }
 }

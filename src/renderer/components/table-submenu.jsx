@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
@@ -47,7 +48,7 @@ export default class TableSubmenu extends Component {
         className="header clickable"
         onClick={::this.toggleCollapse}
         style={cssStyle}>
-        <i className={`${cssClass} triangle icon`}></i>
+        <i className={`${cssClass} triangle icon`} />
         {this.props.title}
       </span>
     );
@@ -71,7 +72,7 @@ export default class TableSubmenu extends Component {
       cssStyle.display = 'none';
     }
     const columnsIcon = (
-      <i className="columns icon" style={{ float: 'left', margin: '0 0.3em 0 0' }}></i>
+      <i className="columns icon" style={{ float: 'left', margin: '0 0.3em 0 0' }} />
     );
     const styleColumnType = {
       float: 'right',

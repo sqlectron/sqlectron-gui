@@ -47,7 +47,9 @@ function getAlreadyFetchedScript (state, database, item, actionType) {
 
 function getSQLScript (database, item, actionType, objectType, schema) {
   return async (dispatch) => {
-    dispatch({ type: GET_SCRIPT_REQUEST, database, item, actionType, objectType });
+    dispatch({
+      type: GET_SCRIPT_REQUEST, database, item, actionType, objectType,
+    });
     try {
       const dbConn = getDBConnByName(database);
       let script;
@@ -66,7 +68,9 @@ function getSQLScript (database, item, actionType, objectType, schema) {
       } else if (actionType === 'DELETE') {
         script = await dbConn.getTableDeleteScript(item, schema);
       }
-      dispatch({ type: GET_SCRIPT_SUCCESS, database, item, script, actionType, objectType });
+      dispatch({
+        type: GET_SCRIPT_SUCCESS, database, item, script, actionType, objectType,
+      });
       dispatch(appendQuery(script));
     } catch (error) {
       dispatch({ type: GET_SCRIPT_FAILURE, error });

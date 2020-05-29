@@ -78,7 +78,8 @@ export function exportDatabaseDiagram(diagram, imageType) {
       const canvas = await html2canvas(diagram, { background: '#fff' });
       const image = await canvas.toDataURL(`image/${imageType}`);
       const imageData = image.replace(/^data:image\/\w+;base64,/, '');
-      const buff = new Buffer(imageData, 'base64');
+
+      const buff = Buffer.from(imageData, 'base64');
 
       await FileHandler.saveFile(fileName, buff, 'binary');
 

@@ -1,10 +1,11 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import set from 'lodash.set';
 import Select from 'react-select';
 import { sqlectron } from '../../browser/remote';
-import ConfirmModal from './confim-modal.jsx';
-import Message from './message.jsx';
-import Checkbox from './checkbox.jsx';
+import ConfirmModal from './confim-modal';
+import Message from './message';
+import Checkbox from './checkbox';
 import { requireLogos } from './require-context';
 
 
@@ -204,7 +205,9 @@ export default class ServerModalForm extends Component {
   renderClientItem({ label, logo }) {
     return (
       <div>
-        <img alt="logo" src={logo} style={{ width: '16px' }} /> {label}
+        <img alt="logo" src={logo} style={{ width: '16px' }} />
+        {' '}
+        {label}
       </div>
     );
   }
@@ -305,9 +308,9 @@ export default class ServerModalForm extends Component {
                   value={this.state.socketPath || ''}
                   onChange={::this.handleChange}
                   disabled={(
-                    this.state.host ||
-                    this.state.port ||
-                    this.isFeatureDisabled('server:socketPath')
+                    this.state.host
+                    || this.state.port
+                    || this.isFeatureDisabled('server:socketPath')
                   )} />
                 <label htmlFor="file.socketPath" className="ui icon button btn-file">
                   <i className="file outline icon" />
@@ -318,9 +321,9 @@ export default class ServerModalForm extends Component {
                     onChange={::this.handleChange}
                     style={{ display: 'none' }}
                     disabled={(
-                      this.state.host ||
-                      this.state.port ||
-                      this.isFeatureDisabled('server:socketPath')
+                      this.state.host
+                      || this.state.port
+                      || this.isFeatureDisabled('server:socketPath')
                     )} />
                 </label>
               </div>
@@ -350,7 +353,7 @@ export default class ServerModalForm extends Component {
                 onChange={::this.handleChange} />
               <span className="ui icon button"
                 onClick={::this.onToggleShowPlainPasswordClick}>
-                <i className="unhide icon"></i>
+                <i className="unhide icon" />
               </span>
             </div>
           </div>
@@ -362,7 +365,8 @@ export default class ServerModalForm extends Component {
                 placeholder="Database"
                 value={this.state.database || ''}
                 onChange={::this.handleChange} />
-              {this.state.client === 'sqlite' &&
+              {this.state.client === 'sqlite'
+                && (
                 <label htmlFor="file.database" className="ui icon button btn-file">
                   <i className="file outline icon" />
                   <input
@@ -372,6 +376,7 @@ export default class ServerModalForm extends Component {
                     onChange={::this.handleChange}
                     style={{ display: 'none' }} />
                 </label>
+                )
               }
             </div>
           </div>
@@ -408,7 +413,8 @@ export default class ServerModalForm extends Component {
             onChecked={() => this.setState({ ssh: {} })}
             onUnchecked={() => this.setState({ ssh: null })} />
         </div>
-        {isSSHChecked &&
+        {isSSHChecked
+          && (
           <div>
             <div className="field">
               <label>SSH Address</label>
@@ -491,6 +497,7 @@ export default class ServerModalForm extends Component {
               </div>
             </div>
           </div>
+          )
         }
       </div>
     );
@@ -547,12 +554,20 @@ export default class ServerModalForm extends Component {
             onChecked={() => this.setState({ filter: {} })}
             onUnchecked={() => this.setState({ filter: null })} />
         </div>
-        {isFilterChecked &&
+        {isFilterChecked
+          && (
           <div>
-            <p><em>Allow to pre filter the data available in the sidebar. It improves the rendering performance for large servers.<br />Separate values by break line</em></p>
+            <p>
+              <em>
+                Allow to pre filter the data available in the sidebar. It improves the rendering performance for large servers.
+                <br />
+                Separate values by break line
+              </em>
+            </p>
             {this.renderFilterPanelItem(isFilterChecked, filter, 'Database', 'database')}
             {this.renderFilterPanelItem(isFilterChecked, filter, 'Schema', 'schema')}
           </div>
+          )
         }
       </div>
     );
@@ -574,31 +589,35 @@ export default class ServerModalForm extends Component {
           tabIndex="0"
           onClick={::this.onTestConnectionClick}>
           Test
-          <i className="plug icon"></i>
+          <i className="plug icon" />
         </div>
-        {!isNew && <div className={`small ui right labeled icon button ${classStatusButtons}`}
+        {!isNew && (
+        <div className={`small ui right labeled icon button ${classStatusButtons}`}
           tabIndex="0"
           onClick={::this.onDuplicateClick}>
           Duplicate
-          <i className="copy icon"></i>
-        </div>}
+          <i className="copy icon" />
+        </div>
+        )}
         <div className={`small ui black deny right labeled icon button ${classStatusButtons}`}
           tabIndex="0">
           Cancel
-          <i className="ban icon"></i>
+          <i className="ban icon" />
         </div>
         <div className={`small ui green right labeled icon button ${classStatusButtons}`}
           tabIndex="0"
           onClick={::this.onSaveClick}>
           Save
-          <i className="checkmark icon"></i>
+          <i className="checkmark icon" />
         </div>
-        {!isNew && <div className={`small ui red right labeled icon button ${classStatusButtons}`}
+        {!isNew && (
+        <div className={`small ui red right labeled icon button ${classStatusButtons}`}
           tabIndex="0"
           onClick={::this.onRemoveOpenClick}>
           Remove
-          <i className="trash icon"></i>
-        </div>}
+          <i className="trash icon" />
+        </div>
+        )}
       </div>
     );
   }

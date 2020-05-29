@@ -55,6 +55,6 @@ export default function (state = INITIAL_STATE, action) {
         error: action.error,
       };
     }
-    default : return state;
+    default: return state;
   }
 }

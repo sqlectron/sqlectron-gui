@@ -29,7 +29,9 @@ export default function (state = INITIAL_STATE, action) {
       };
     }
     case types.FETCH_TABLES_REQUEST: {
-      return { ...state, isFetching: true, didInvalidate: false, error: null };
+      return {
+        ...state, isFetching: true, didInvalidate: false, error: null,
+      };
     }
     case types.FETCH_TABLES_SUCCESS: {
       return {
@@ -70,6 +72,6 @@ export default function (state = INITIAL_STATE, action) {
         selectedTablesForDiagram: null,
       };
     }
-    default : return state;
+    default: return state;
   }
 }

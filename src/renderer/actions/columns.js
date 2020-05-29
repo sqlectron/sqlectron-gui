@@ -26,12 +26,14 @@ function shouldFetchTableColumns (state, database, table) {
 
 
 function fetchTableColumns (database, table, schema) {
-  return async dispatch => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_COLUMNS_REQUEST, database, table });
     try {
       const dbConn = getDBConnByName(database);
       const columns = await dbConn.listTableColumns(table, schema);
-      dispatch({ type: FETCH_COLUMNS_SUCCESS, database, table, columns });
+      dispatch({
+        type: FETCH_COLUMNS_SUCCESS, database, table, columns,
+      });
     } catch (error) {
       dispatch({ type: FETCH_COLUMNS_FAILURE, error });
     }

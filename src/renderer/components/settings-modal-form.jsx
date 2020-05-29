@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 import set from 'lodash.set';
 import Select from 'react-select';
-import Checkbox from './checkbox.jsx';
+import Checkbox from './checkbox';
 
 
 require('react-select/dist/react-select.css');
@@ -118,7 +119,9 @@ export default class SettingsModalForm extends Component {
   renderLogLevelItem({ label, icon }) {
     return (
       <span>
-        <i className={`icon ${icon}`}></i> {label}
+        <i className={`icon ${icon}`} />
+        {' '}
+        {label}
       </span>
     );
   }
@@ -130,13 +133,13 @@ export default class SettingsModalForm extends Component {
         <div className="small ui black deny right labeled icon button"
           tabIndex="0">
           Cancel
-          <i className="ban icon"></i>
+          <i className="ban icon" />
         </div>
         <div className="small ui green right labeled icon button"
           tabIndex="0"
           onClick={::this.onSaveClick}>
           Save
-          <i className="checkmark icon"></i>
+          <i className="checkmark icon" />
         </div>
       </div>
     );
@@ -153,7 +156,9 @@ export default class SettingsModalForm extends Component {
           </div>
         </div>
         <div className="field">
-          Check out the full settings documentation at <a href="#" onClick={this.onDocClick}>here</a>
+          Check out the full settings documentation at
+          {' '}
+          <a href="#" onClick={this.onDocClick}>here</a>
         </div>
       </div>
     );
@@ -168,7 +173,10 @@ export default class SettingsModalForm extends Component {
       <div>
         <div className="two fields">
           <div className={`field ${this.highlightError('zoomFactor')}`}>
-            <label>Zoom Factor: {zoomFactorLabel}</label>
+            <label>
+              Zoom Factor:
+              {zoomFactorLabel}
+            </label>
             <input type="range"
               min="0.4"
               max="3"

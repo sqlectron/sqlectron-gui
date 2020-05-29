@@ -6,6 +6,7 @@ import * as queriesTypes from '../actions/queries';
 const INITIAL_STATE = '';
 
 
+// eslint-disable-next-line
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST:

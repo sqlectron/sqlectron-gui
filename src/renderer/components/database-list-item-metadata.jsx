@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
-import CollapseIcon from './collapse-icon.jsx';
-import DatabaseItem from './database-item.jsx';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import groupBy from 'lodash.groupby';
+import CollapseIcon from './collapse-icon';
+import DatabaseItem from './database-item';
 
 const STYLE = {
   header: { fontSize: '0.85em', color: '#636363' },
@@ -44,7 +45,8 @@ export default class DbMetadataList extends Component {
     this.setState({
       tableCollapsed: {
         ...this.state.tableCollapsed,
-        [key]: !this.state.tableCollapsed[key] },
+        [key]: !this.state.tableCollapsed[key],
+      },
     });
   }
 
@@ -63,7 +65,7 @@ export default class DbMetadataList extends Component {
         title={title}
         className="header clickable"
         style={cssStyle}>
-        <i className={`${cssClass} triangle icon`} onClick={::this.toggleCollapse}></i>
+        <i className={`${cssClass} triangle icon`} onClick={::this.toggleCollapse} />
         <span>{this.props.title}</span>
       </span>
     );
@@ -92,24 +94,26 @@ export default class DbMetadataList extends Component {
 
     const grouped = groupBy(items, 'schema');
 
-    return Object.keys(grouped).map(key => {
+    return Object.keys(grouped).map((key) => {
       const hasGroup = !(key === 'undefined' || key === undefined || key === '');
       const hasChildren = grouped[key].length;
       const isCollapsed = !this.state.tableCollapsed[key];
       const renderChildren = !hasGroup || (hasChildren && !isCollapsed);
       const collapseArrowDirection = isCollapsed ? 'right' : 'down';
       const header = hasGroup
-        ? <span
-          style={{ ...STYLE.item, cursor: hasChildren ? 'pointer' : 'default' }}
-          className="item"
-          onClick={() => this.handleTableCollapse(key)}>
-          {hasChildren ? <CollapseIcon arrowDirection={collapseArrowDirection} /> : null}
-          {key}
-        </span>
+        ? (
+          <span
+            style={{ ...STYLE.item, cursor: hasChildren ? 'pointer' : 'default' }}
+            className="item"
+            onClick={() => this.handleTableCollapse(key)}>
+            {hasChildren ? <CollapseIcon arrowDirection={collapseArrowDirection} /> : null}
+            {key}
+          </span>
+        )
         : null;
 
       const body = renderChildren
-        ? grouped[key].map(item => {
+        ? grouped[key].map((item) => {
           const hasChildElements = !!onSelectItem;
 
           const cssStyle = { ...STYLE.item, marginLeft: hasGroup ? '0.5em' : '0px' };
@@ -137,13 +141,14 @@ export default class DbMetadataList extends Component {
               onGetSQLScript={onGetSQLScript} />
           );
         })
-      : null;
+        : null;
 
       return (
         <div key={`list-item.${key}.${title}.${database.name}`}>
           {header}
           {body}
-        </div>);
+        </div>
+      );
     });
   }
 

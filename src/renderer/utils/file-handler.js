@@ -19,7 +19,7 @@ export function showSaveDialog(filters) {
 
 export function saveFile(fileName, data, encoding = 'utf8') {
   return new Promise((resolve, reject) => {
-    fs.writeFile(fileName, data, encoding, err => {
+    fs.writeFile(fileName, data, encoding, (err) => {
       if (err) { return reject(err); }
       return resolve();
     });

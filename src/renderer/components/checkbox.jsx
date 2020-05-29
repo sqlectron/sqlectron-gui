@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class Checkbox extends Component {
   static propTypes = {
@@ -17,7 +18,9 @@ export default class Checkbox extends Component {
   }
 
   render () {
-    const { name, label, disabled, defaultChecked } = this.props;
+    const {
+      name, label, disabled, defaultChecked,
+    } = this.props;
     return (
       <div className="ui toggle checkbox" ref="checkbox">
         <input type="checkbox"
