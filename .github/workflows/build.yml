@@ -21,6 +21,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Fix Windows Git EOL
+      if: ${{ matrix.os == 'windows-latest' }}
+      run: git config --global core.autocrlf input
+
     - name: Install Linux Dependencies
       if: ${{ matrix.os == 'ubuntu-latest' }}
       run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
