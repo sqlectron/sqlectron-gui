@@ -1,10 +1,8 @@
-name: Build
+name: Release
 
 on:
-  push:
-    branches: [ '*' ]
-  pull_request:
-    branches: [ '*' ]
+  release:
+    types: [ 'created' ]
 
 jobs:
   build:
@@ -39,4 +37,6 @@ jobs:
 
     - run: npm test
 
-    - run: npm run dist -- --publish never
+    - run: npm run dist
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
