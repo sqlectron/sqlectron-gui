@@ -18,6 +18,9 @@
 * [Terminal](https://github.com/sqlectron/sqlectron-term) - A terminal-based interface of Sqlectron.
 * [Contribute](CONTRIBUTING.md) - Details on how you can contribute to Sqlectron.
 
+__Note__: For Linux users, to use Sqlectron, you will need to install `libgconf` or else the program will crash. To install this dependency, it's usually available via
+package manager as either libgconf-2-4 or gconf2.
+
 #### How to pronounce
 
 It is pronounced "sequel-eck-tron" - https://translate.google.com/?source=osdd#en/en/sequel-eck-tron
