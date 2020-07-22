@@ -1,6 +1,5 @@
 [![Slack Status](https://sqlectron.herokuapp.com/badge.svg)](https://sqlectron.herokuapp.com)
-[![Build Status](https://travis-ci.org/sqlectron/sqlectron-gui.svg?branch=master)](https://travis-ci.org/sqlectron/sqlectron-gui)
-[![Build status](https://ci.appveyor.com/api/projects/status/ajxvrvwqyrc8yr23/branch/master?svg=true)](https://ci.appveyor.com/project/maxcnunes/sqlectron-gui/branch/master)
+[![Build](https://github.com/sqlectron/sqlectron-gui/workflows/Build/badge.svg?branch=master&event=push)](https://github.com/sqlectron/sqlectron-gui/actions?query=workflow%3ABuild+branch%3Amaster)
 
 <p align="center">
   <img src="https://sqlectron.github.io/logos/logo-512.png">
