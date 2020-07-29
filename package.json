@@ -51,6 +51,10 @@
         "7z",
         "zip"
       ]
+    },
+    "publish": {
+      "provider": "github",
+      "releaseType": "release"
     }
   },
   "scripts": {
