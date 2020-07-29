@@ -7,8 +7,8 @@
   A simple and lightweight SQL client with cross database and platform support.
 </p>
 
-#### Demo (version 1.0.0)
-![demo](https://sqlectron.github.io/demos/sqlectron-demo-gui-v1.0.0-small.gif)
+#### Demo (version 1.31.0)
+![demo](https://sqlectron.github.io/demos/sqlectron-demo-gui-v1.31.0-small.gif)
 
 * [Databases](https://github.com/sqlectron/sqlectron-core#current-supported-databases) - List of current supported databases.
 * [Download](https://github.com/sqlectron/sqlectron-gui/releases) - Installers, binaries and source.
