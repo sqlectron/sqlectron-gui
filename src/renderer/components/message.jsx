@@ -10,6 +10,12 @@ export default class Message extends Component {
     preformatted: PropTypes.bool,
   }
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.onClose = this.onClose.bind(this);
+  }
+
   onClose() {
     $(this.refs.message).transition('fade');
   }
@@ -21,7 +27,7 @@ export default class Message extends Component {
     return (
       <div ref="message" className={`ui message ${type || ''}`}>
         {
-          closeable && <i className="close icon" onClick={::this.onClose} />
+          closeable && <i className="close icon" onClick={this.onClose} />
         }
         {
           title && <div className="header">{title}</div>

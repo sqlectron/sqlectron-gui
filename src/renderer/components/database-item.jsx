@@ -29,6 +29,9 @@ export default class DatabaseItem extends Component {
     super(props, context);
     this.state = {};
     this.contextMenu = null;
+
+    this.onContextMenu = this.onContextMenu.bind(this);
+    this.onSingleClick = this.onSingleClick.bind(this);
   }
 
   onSingleClick() {
@@ -36,7 +39,7 @@ export default class DatabaseItem extends Component {
     onExecuteDefaultQuery(database, item);
   }
 
-  // Context menu is built dinamically on click (if it does not exist), because building
+  // Context menu is built dynamically on click (if it does not exist), because building
   // menu onComponentDidMount or onComponentWillMount slows table listing when database
   // has a loads of tables, because menu will be created (unnecessarily) for every table shown
   onContextMenu(event) {
@@ -162,7 +165,7 @@ export default class DatabaseItem extends Component {
         <span
           style={style}
           className="item"
-          onContextMenu={::this.onContextMenu}>
+          onContextMenu={this.onContextMenu}>
           {dbObjectType === 'Table'
             ? (
               <CollapseIcon
@@ -172,7 +175,7 @@ export default class DatabaseItem extends Component {
             : null
           }
           {dbObjectType === 'Table' ? tableIcon : null}
-          <span onClick={::this.onSingleClick}>{fullName}</span>
+          <span onClick={this.onSingleClick}>{fullName}</span>
         </span>
         {this.renderSubItems(item)}
       </div>

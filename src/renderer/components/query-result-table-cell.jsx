@@ -18,6 +18,8 @@ export default class TableCell extends Component {
   constructor(props, context) {
     super(props, context);
     this.contextMenu = null;
+
+    this.onContextMenu = this.onContextMenu.bind(this);
   }
 
   onContextMenu(event) {
@@ -55,7 +57,7 @@ export default class TableCell extends Component {
     });
 
     return (
-      <div className="item" onContextMenu={::this.onContextMenu}>
+      <div className="item" onContextMenu={this.onContextMenu}>
         {
           value === null
             ? <span className={className}>NULL</span>
