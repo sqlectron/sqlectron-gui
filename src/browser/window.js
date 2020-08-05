@@ -34,6 +34,7 @@ export function buildNewWindow(app) {
     minHeight: 350,
     webPreferences: {
       preload: resolve(__dirname, 'preload.js'),
+      nodeIntegration: true,
     },
   });
 
