@@ -76,7 +76,10 @@ export default class DatabaseListItem extends Component {
   onContextMenu(event) {
     event.preventDefault();
     if (this.contextMenu) {
-      this.contextMenu.popup(event.clientX, event.clientY);
+      this.contextMenu.popup({
+        x: event.clientX,
+        y: event.clientY,
+      });
     }
   }
 

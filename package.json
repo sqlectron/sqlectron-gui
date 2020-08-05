@@ -110,7 +110,7 @@
     "del": "^2.2.0",
     "denodeify": "^1.2.1",
     "dom-helpers": "^5.1.4",
-    "electron": "^1.7.9",
+    "electron": "^8.4.1",
     "electron-builder": "^21.2.0",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.1.1",

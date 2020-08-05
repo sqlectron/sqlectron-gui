@@ -46,7 +46,10 @@ export default class DatabaseItem extends Component {
       this.buildContextMenu();
     }
 
-    this.contextMenu.popup(event.clientX, event.clientY);
+    this.contextMenu.popup({
+      x: event.clientX,
+      y: event.clientY,
+    });
   }
 
   buildContextMenu() {
