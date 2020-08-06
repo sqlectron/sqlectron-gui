@@ -106,6 +106,32 @@ class QueryBrowserContainer extends Component {
       sidebarCollapsed: false,
     };
     this.menuHandler = new MenuHandler();
+
+    this.onGenerateDatabaseDiagram = this.onGenerateDatabaseDiagram.bind(this);
+    this.onAddRelatedTables = this.onAddRelatedTables.bind(this);
+    this.onSaveDatabaseDiagram = this.onSaveDatabaseDiagram.bind(this);
+    this.onExportDatabaseDiagram = this.onExportDatabaseDiagram.bind(this);
+    this.onOpenDatabaseDiagram = this.onOpenDatabaseDiagram.bind(this);
+    this.onCloseDiagramModal = this.onCloseDiagramModal.bind(this);
+    this.handleExecuteQuery = this.handleExecuteQuery.bind(this);
+    this.handleCancelQuery = this.handleCancelQuery.bind(this);
+    this.copyToClipboard = this.copyToClipboard.bind(this);
+    this.saveToFile = this.saveToFile.bind(this);
+    this.onSQLChange = this.onSQLChange.bind(this);
+    this.onQuerySelectionChange = this.onQuerySelectionChange.bind(this);
+    this.handleSelectTab = this.handleSelectTab.bind(this);
+    this.onPromptCancelClick = this.onPromptCancelClick.bind(this);
+    this.onPromptOKClick = this.onPromptOKClick.bind(this);
+    this.onCloseConnectionClick = this.onCloseConnectionClick.bind(this);
+    this.onReConnectionClick = this.onReConnectionClick.bind(this);
+    this.onCollapseClick = this.onCollapseClick.bind(this);
+    this.onFilterChange = this.onFilterChange.bind(this);
+    this.onSelectDatabase = this.onSelectDatabase.bind(this);
+    this.onExecuteDefaultQuery = this.onExecuteDefaultQuery.bind(this);
+    this.onSelectTable = this.onSelectTable.bind(this);
+    this.onGetSQLScript = this.onGetSQLScript.bind(this);
+    this.onRefreshDatabase = this.onRefreshDatabase.bind(this);
+    this.onShowDiagramModal = this.onShowDiagramModal.bind(this);
   }
 
   componentWillMount () {
@@ -405,12 +431,12 @@ class QueryBrowserContainer extends Component {
         tableKeys={keys.keysByTable[selectedDB]}
         diagramJSON={databases.diagramJSON}
         isSaving={databases.isSaving}
-        onGenerateDatabaseDiagram={::this.onGenerateDatabaseDiagram}
-        addRelatedTables={::this.onAddRelatedTables}
-        onSaveDatabaseDiagram={::this.onSaveDatabaseDiagram}
-        onExportDatabaseDiagram={::this.onExportDatabaseDiagram}
-        onOpenDatabaseDiagram={::this.onOpenDatabaseDiagram}
-        onClose={::this.onCloseDiagramModal} />
+        onGenerateDatabaseDiagram={this.onGenerateDatabaseDiagram}
+        addRelatedTables={this.onAddRelatedTables}
+        onSaveDatabaseDiagram={this.onSaveDatabaseDiagram}
+        onExportDatabaseDiagram={this.onExportDatabaseDiagram}
+        onOpenDatabaseDiagram={this.onOpenDatabaseDiagram}
+        onClose={this.onCloseDiagramModal} />
     );
   }
 
@@ -517,12 +543,12 @@ class QueryBrowserContainer extends Component {
             functions={routines.functionsByDatabase[query.database]}
             procedures={routines.proceduresByDatabase[query.database]}
             widthOffset={this.state.sideBarWidth}
-            onExecQueryClick={::this.handleExecuteQuery}
-            onCancelQueryClick={::this.handleCancelQuery}
-            onCopyToClipboardClick={::this.copyToClipboard}
-            onSaveToFileClick={::this.saveToFile}
-            onSQLChange={::this.onSQLChange}
-            onSelectionChange={::this.onQuerySelectionChange} />
+            onExecQueryClick={this.handleExecuteQuery}
+            onCancelQueryClick={this.handleCancelQuery}
+            onCopyToClipboardClick={this.copyToClipboard}
+            onSaveToFileClick={this.saveToFile}
+            onSQLChange={this.onSQLChange}
+            onSelectionChange={this.onQuerySelectionChange} />
         </TabPanel>
       );
     });
@@ -533,7 +559,7 @@ class QueryBrowserContainer extends Component {
     const selectedIndex = queries.queryIds.indexOf(queries.currentQueryId);
     const isTabsFitOnScreen = this.tabListTotalWidthChildren >= this.tabListTotalWidth;
     return (
-      <Tabs onSelect={::this.handleSelectTab} selectedIndex={selectedIndex} forceRenderTabPanel>
+      <Tabs onSelect={this.handleSelectTab} selectedIndex={selectedIndex} forceRenderTabPanel>
         <div id="tabs-nav-wrapper" className="ui pointing secondary menu">
           {isTabsFitOnScreen
             && (
@@ -597,8 +623,8 @@ class QueryBrowserContainer extends Component {
           type="password"
           title="SSH Private Key Passphrase"
           message="Enter the private key passphrase:"
-          onCancelClick={::this.onPromptCancelClick}
-          onOKClick={::this.onPromptOKClick} />
+          onCancelClick={this.onPromptCancelClick}
+          onOKClick={this.onPromptOKClick} />
       );
     }
 
@@ -618,10 +644,10 @@ class QueryBrowserContainer extends Component {
         {isLoading && <Loader message={status} type="page" />}
         <div style={STYLES.header}>
           <Header items={breadcrumb}
-            onCloseConnectionClick={::this.onCloseConnectionClick}
-            onReConnectionClick={::this.onReConnectionClick} />
+            onCloseConnectionClick={this.onCloseConnectionClick}
+            onReConnectionClick={this.onReConnectionClick} />
         </div>
-        <div onClick={::this.onCollapseClick} style={STYLES.collapse}>
+        <div onClick={this.onCollapseClick} style={STYLES.collapse}>
           <i
             className={`${this.state.sidebarCollapsed ? 'right' : 'left'} triangle icon`}
             style={{ top: 'calc(100vh/2 - 7px)', position: 'absolute', marginLeft: -3 }}
@@ -654,7 +680,7 @@ class QueryBrowserContainer extends Component {
                     ref="databaseFilter"
                     value={filter}
                     isFetching={databases.isFetching}
-                    onFilterChange={::this.onFilterChange} />
+                    onFilterChange={this.onFilterChange} />
                 </div>
                 <DatabaseList
                   ref="databaseList"
@@ -670,12 +696,12 @@ class QueryBrowserContainer extends Component {
                   viewsByDatabase={views.viewsByDatabase}
                   functionsByDatabase={routines.functionsByDatabase}
                   proceduresByDatabase={routines.proceduresByDatabase}
-                  onSelectDatabase={::this.onSelectDatabase}
-                  onExecuteDefaultQuery={::this.onExecuteDefaultQuery}
-                  onSelectTable={::this.onSelectTable}
-                  onGetSQLScript={::this.onGetSQLScript}
-                  onRefreshDatabase={::this.onRefreshDatabase}
-                  onShowDiagramModal={::this.onShowDiagramModal} />
+                  onSelectDatabase={this.onSelectDatabase}
+                  onExecuteDefaultQuery={this.onExecuteDefaultQuery}
+                  onSelectTable={this.onSelectTable}
+                  onGetSQLScript={this.onGetSQLScript}
+                  onRefreshDatabase={this.onRefreshDatabase}
+                  onShowDiagramModal={this.onShowDiagramModal} />
               </div>
             </ResizableBox>
           </div>

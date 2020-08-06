@@ -37,6 +37,19 @@ class ServerManagerment extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {};
+
+    this.onFilterChange = this.onFilterChange.bind(this);
+    this.onAddClick = this.onAddClick.bind(this);
+    this.onEditClick = this.onEditClick.bind(this);
+    this.onSettingsClick = this.onSettingsClick.bind(this);
+    this.onSettingsSaveClick = this.onSettingsSaveClick.bind(this);
+    this.onSettingsCancelClick = this.onSettingsCancelClick.bind(this);
+    this.onConnectClick = this.onConnectClick.bind(this);
+    this.onTestConnectionClick = this.onTestConnectionClick.bind(this);
+    this.onDuplicateClick = this.onDuplicateClick.bind(this);
+    this.onSaveClick = this.onSaveClick.bind(this);
+    this.onCancelClick = this.onCancelClick.bind(this);
+    this.onRemoveClick = this.onRemoveClick.bind(this);
   }
 
   onConnectClick({ id }) {
@@ -125,9 +138,9 @@ class ServerManagerment extends Component {
         </div>
         <div style={STYLES.container}>
           <ServerFilter
-            onFilterChange={::this.onFilterChange}
-            onAddClick={::this.onAddClick}
-            onSettingsClick={::this.onSettingsClick} />
+            onFilterChange={this.onFilterChange}
+            onAddClick={this.onAddClick}
+            onSettingsClick={this.onSettingsClick} />
 
           {
             connections.error
@@ -141,8 +154,8 @@ class ServerManagerment extends Component {
           }
 
           <ServerList servers={filteredServers}
-            onEditClick={::this.onEditClick}
-            onConnectClick={::this.onConnectClick}
+            onEditClick={this.onEditClick}
+            onConnectClick={this.onConnectClick}
             config={config} />
 
           {servers.isEditing && (
@@ -150,19 +163,19 @@ class ServerManagerment extends Component {
             server={selected}
             error={servers.error}
             testConnection={testConnection}
-            onTestConnectionClick={::this.onTestConnectionClick}
-            onDuplicateClick={::this.onDuplicateClick}
-            onSaveClick={::this.onSaveClick}
-            onCancelClick={::this.onCancelClick}
-            onRemoveClick={::this.onRemoveClick} />
+            onTestConnectionClick={this.onTestConnectionClick}
+            onDuplicateClick={this.onDuplicateClick}
+            onSaveClick={this.onSaveClick}
+            onCancelClick={this.onCancelClick}
+            onRemoveClick={this.onRemoveClick} />
           )}
 
           {config.isEditing && (
           <SettingsModalForm
             config={config}
             error={config.error}
-            onSaveClick={::this.onSettingsSaveClick}
-            onCancelClick={::this.onSettingsCancelClick} />
+            onSaveClick={this.onSettingsSaveClick}
+            onCancelClick={this.onSettingsCancelClick} />
           )}
         </div>
         <div style={STYLES.footer}>

@@ -23,6 +23,10 @@ export default class SettingsModalForm extends Component {
     this.state = {
       ...props.config.data,
     };
+
+    this.onSaveClick = this.onSaveClick.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleOnLogLevelChange = this.handleOnLogLevelChange.bind(this);
   }
 
   componentDidMount() {
@@ -137,7 +141,7 @@ export default class SettingsModalForm extends Component {
         </div>
         <div className="small ui green right labeled icon button"
           tabIndex="0"
-          onClick={::this.onSaveClick}>
+          onClick={this.onSaveClick}>
           Save
           <i className="checkmark icon" />
         </div>
@@ -183,7 +187,7 @@ export default class SettingsModalForm extends Component {
               step="0.2"
               name="zoomFactor"
               value={zoomFactor}
-              onChange={::this.handleChange}
+              onChange={this.handleChange}
               style={{ width: '100%', 'margin-top': '10px' }} />
           </div>
           <div className={`field ${this.highlightError('limitQueryDefaultSelectTop')}`}>
@@ -191,7 +195,7 @@ export default class SettingsModalForm extends Component {
             <input type="number"
               name="limitQueryDefaultSelectTop"
               value={this.state.limitQueryDefaultSelectTop || ''}
-              onChange={::this.handleChange} />
+              onChange={this.handleChange} />
             <p className="help">The limit used in the default select from the sidebar context menu.</p>
           </div>
         </div>
@@ -237,7 +241,7 @@ export default class SettingsModalForm extends Component {
                   <input type="text"
                     name="customFont"
                     value={this.state.customFont || 'Lato'}
-                    onChange={::this.handleChange} />
+                    onChange={this.handleChange} />
                   <p className="help">Use a custom font for in-app text and display. Font must be installed to use.</p>
                 </div>
               </div>
@@ -281,7 +285,7 @@ export default class SettingsModalForm extends Component {
               <input type="text"
                 name="csvDelimiter"
                 value={this.state.csvDelimiter || ','}
-                onChange={::this.handleChange} />
+                onChange={this.handleChange} />
               <p className="help">Characters entered here will override the comma/tab switch.</p>
             </div>
             <div className="field">
@@ -345,14 +349,14 @@ export default class SettingsModalForm extends Component {
                   name="log.path"
                   placeholder="~/.sqlectron.log"
                   value={log.path || ''}
-                  onChange={::this.handleChange} />
+                  onChange={this.handleChange} />
                 <label htmlFor="file.log.path" className="ui icon button btn-file">
                   <i className="file outline icon" />
                   <input
                     type="file"
                     id="file.log.path"
                     name="file.log.path"
-                    onChange={::this.handleChange}
+                    onChange={this.handleChange}
                     style={{ display: 'none' }} />
                 </label>
               </div>
@@ -369,7 +373,7 @@ export default class SettingsModalForm extends Component {
                   { value: 'error', label: 'Error', icon: 'remove circle' },
                 ]}
                 clearable={false}
-                onChange={::this.handleOnLogLevelChange}
+                onChange={this.handleOnLogLevelChange}
                 optionRenderer={this.renderLogLevelItem}
                 valueRenderer={this.renderLogLevelItem}
                 value={log.level || 'error'} />

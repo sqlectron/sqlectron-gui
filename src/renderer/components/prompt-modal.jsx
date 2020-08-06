@@ -11,6 +11,13 @@ export default class PromptModal extends Component {
     type: PropTypes.string.isRequired,
   }
 
+  constructor(props, context) {
+    super(props, context);
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+  }
+
   componentDidMount() {
     $(this.refs.promptModal).modal({
       closable: false,
@@ -51,7 +58,7 @@ export default class PromptModal extends Component {
         <div className="content">
           {message}
           <div className="ui fluid icon input">
-            <input onChange={::this.handleChange} type={type} onKeyPress={::this.handleKeyPress} />
+            <input onChange={this.handleChange} type={type} onKeyPress={this.handleKeyPress} />
           </div>
         </div>
         <div className="actions">

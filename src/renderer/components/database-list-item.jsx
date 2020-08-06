@@ -55,6 +55,9 @@ export default class DatabaseListItem extends Component {
     super(props, context);
     this.state = {};
     this.contextMenu = null;
+
+    this.onFilterChange = this.onFilterChange.bind(this);
+    this.onContextMenu = this.onContextMenu.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -171,7 +174,7 @@ export default class DatabaseListItem extends Component {
             ref="filter"
             value={filter}
             isFetching={!isMetadataLoaded}
-            onFilterChange={::this.onFilterChange} />
+            onFilterChange={this.onFilterChange} />
         </div>
         <DatabaseListItemMetatada
           title="Tables"
@@ -225,7 +228,7 @@ export default class DatabaseListItem extends Component {
       <span
         className="header"
         onClick={() => this.onHeaderDoubleClick(database)}
-        onContextMenu={::this.onContextMenu}
+        onContextMenu={this.onContextMenu}
         style={STYLE.database}>
         <i className={`${collapseCssClass} triangle icon`} />
         <i className="database icon" />

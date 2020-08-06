@@ -29,6 +29,8 @@ export default class DbMetadataList extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = { tableCollapsed: {} };
+
+    this.toggleCollapse = this.toggleCollapse.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -65,7 +67,7 @@ export default class DbMetadataList extends Component {
         title={title}
         className="header clickable"
         style={cssStyle}>
-        <i className={`${cssClass} triangle icon`} onClick={::this.toggleCollapse} />
+        <i className={`${cssClass} triangle icon`} onClick={this.toggleCollapse} />
         <span>{this.props.title}</span>
       </span>
     );
