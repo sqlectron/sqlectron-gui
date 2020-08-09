@@ -1,6 +1,6 @@
 # Run from Source
 
-The Sqlectron developer environment requires Node **(6 or higher)** and NPM.
+The Sqlectron developer environment requires Node **(10 or higher)** and NPM.
 
 **Cloning this project:**
 
