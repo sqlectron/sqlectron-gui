@@ -59,7 +59,7 @@
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
-    "dev": "concurrently --names 'webpack,electron' --prefix name 'npm run dev:webpack' 'npm run dev:electron'",
+    "dev": "concurrently --names \"webpack,electron\" --prefix name \"npm run dev:webpack\" \"npm run dev:electron\"",
     "dev:webpack": "webpack-dev-server --color --config ./webpack.dev.config.js",
     "dev:electron": "cross-env DEBUG=spawn-auto-restart node scripts/dev-auto-restart.js | bunyan -o short",
     "lint": "eslint . --ext .js,.jsx",
