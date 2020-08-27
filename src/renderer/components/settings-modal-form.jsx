@@ -188,7 +188,7 @@ export default class SettingsModalForm extends Component {
               name="zoomFactor"
               value={zoomFactor}
               onChange={this.handleChange}
-              style={{ width: '100%', 'margin-top': '10px' }} />
+              style={{ width: '100%', marginTop: '10px' }} />
           </div>
           <div className={`field ${this.highlightError('limitQueryDefaultSelectTop')}`}>
             <label>Limit of Rows from Select Top Query</label>
