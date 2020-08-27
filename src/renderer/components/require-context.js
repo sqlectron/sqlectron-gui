@@ -1,1 +1,3 @@
-export const requireLogos = require.context('./', false, /server-db-client-.*\.png$/);
+export const requireLogos = ((item) => {
+  return require.context('./', false, /server-db-client-.*\.png$/)(item).default;
+});

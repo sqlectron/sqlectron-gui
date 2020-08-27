@@ -112,7 +112,6 @@ export default class SettingsModalForm extends Component {
     }
 
     set(newState, name, value);
-
     return this.setState(newState);
   }
 

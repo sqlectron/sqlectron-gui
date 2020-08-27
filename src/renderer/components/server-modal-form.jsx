@@ -183,7 +183,8 @@ export default class ServerModalForm extends Component {
     return hasError ? 'error' : '';
   }
 
-  handleOnClientChange(client) {
+  handleOnClientChange(selected) {
+    const client = selected.value || selected;
     this.setState({ client });
 
     const clientConfig = CLIENTS.find(entry => entry.value === client);

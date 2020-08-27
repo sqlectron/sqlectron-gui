@@ -7,9 +7,7 @@ import configureStore from './store/configure';
 import ServerManagementContainer from './containers/server-management';
 import QueryBrowserContainer from './containers/query-browser';
 
-
 const store = configureStore();
-
 
 ReactDOM.render(
   <Provider store={store}>
