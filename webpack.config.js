@@ -7,8 +7,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 require('@babel/polyfill');
 
-module.exports = {
-  mode: 'production',
+const isProd = process.env.NODE_ENV === 'production';
+
+const webpackConfig = {
+  mode: isProd ? 'production' : 'development',
   devtool: 'eval-source-map',
   target: 'electron-renderer',
   resolve: {
@@ -16,30 +18,8 @@ module.exports = {
     modules: ['node_modules', 'src/renderer'],
   },
   entry: {
-    app: './src/renderer/entry.jsx',
-    vendor: [
-      // common
-      'jquery',
-      // react related
-      'classnames',
-      'react',
-      'react-ace',
-      'react-dom',
-      'react-redux',
-      'react-resizable',
-      'react-router',
-      'react-select',
-      'redux',
-      'redux-thunk',
-      // semantic ui
-      './vendor/renderer/lato/latofonts.css',
-      './vendor/renderer/semantic-ui/semantic.js',
-      './vendor/renderer/semantic-ui/semantic.css',
-    ],
   },
   output: {
-    path: path.join(__dirname, 'out', 'static'),
-    filename: '[name].bundle.js',
   },
   module: {
     rules: [
@@ -49,10 +29,11 @@ module.exports = {
         use: [{ loader: 'babel-loader' }],
       },
       {
-        test: /\.scss$/,
+        test: /\.s?css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          isProd ? MiniCssExtractPlugin.loader : 'style-loader',
           'css-loader',
+          'postcss-loader',
           {
             loader: 'sass-loader',
             options: {
@@ -61,26 +42,7 @@ module.exports = {
               },
             },
           },
-          'postcss-loader',
-          /*
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            // 'style',
-            // 'css!sass',
-            autoprefixer: {
-              browsers: [
-                'last 2 version',
-              ],
-            },
-          },
-          */
-          // 'autoprefixer?browsers=last 2 version',
-          // 'sass?includePaths[]=' + path.resolve(__dirname, 'node_modules'),
         ],
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.png$/,
@@ -110,7 +72,8 @@ module.exports = {
           {
             loader: 'file-loader',
             options: {
-              name: 'fonts/[name]-[hash:6].[ext]',
+              name: isProd ? 'fonts/[name]-[hash:6].[ext]' : '[path][name]-[hash:6].[ext]',
+              context: isProd ? 'context' : 'assets',
             },
           },
         ],
@@ -119,21 +82,21 @@ module.exports = {
     noParse: [/(html2canvas)/],
   },
   plugins: [
-    new webpack.optimize.OccurrenceOrderPlugin(true),
-    new MiniCssExtractPlugin({ filename: '[name].bundle.css' }),
     new HtmlWebpackPlugin({
+      hot: !isProd,
       template: 'src/renderer/index.html',
-      chunksSortMode: 'none',
+      chunksSortMode: isProd ? 'none' : 'auto',
     }),
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',
     }),
     new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
+      'process.env.NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
     }),
     // new BundleAnalyzerPlugin()
     new webpack.LoaderOptionsPlugin({
+      debug: !isProd,
       options: {
         postcss: [
           autoprefixer(),
@@ -141,7 +104,61 @@ module.exports = {
       },
     }),
   ],
-  optimization: {
-    minimize: true,
-  },
 };
+
+if (isProd) {
+  webpackConfig.entry = {
+    vendor: [
+      // common
+      'jquery',
+      // react related
+      'classnames',
+      'react',
+      'react-ace',
+      'react-dom',
+      'react-redux',
+      'react-resizable',
+      'react-router',
+      'react-select',
+      'redux',
+      'redux-thunk',
+      // semantic ui
+      './vendor/renderer/lato/latofonts.css',
+      './vendor/renderer/semantic-ui/semantic.js',
+      './vendor/renderer/semantic-ui/semantic.css',
+    ],
+    app: './src/renderer/entry.jsx',
+  };
+
+  webpackConfig.output = {
+    path: path.join(__dirname, 'out', 'static'),
+    filename: '[name].bundle.js',
+  };
+
+  webpackConfig.plugins.push(
+    new MiniCssExtractPlugin({ filename: '[name].bundle.css' }),
+  );
+
+  webpackConfig.optimization = {
+    minimize: true,
+  };
+} else {
+  webpackConfig.resolve.alias = {
+    'dtrace-provider': path.join(__dirname, 'empty-shim.js'),
+  };
+
+  webpackConfig.entry.app = [
+    'webpack/hot/dev-server',
+    './src/renderer/entry.jsx',
+  ];
+
+  webpackConfig.output = {
+    path: path.join(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: '/static/',
+  };
+
+  webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+}
+
+module.exports = webpackConfig;
