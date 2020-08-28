@@ -4,7 +4,7 @@ import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 
 require('./header.css');
 
-const LOGO_PATH = require('./logo-128px.png');
+const LOGO_PATH = require('./logo-128px.png').default;
 
 
 function onSiteClick(event) {
