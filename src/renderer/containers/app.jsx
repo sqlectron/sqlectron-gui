@@ -9,9 +9,10 @@ import imageSrc from './sqlectron.gif';
 
 import '../../../vendor/renderer/semantic-ui/semantic';
 
+require('./app.css');
 require('../../../vendor/renderer/lato/latofonts.css');
 require('../../../vendor/renderer/semantic-ui/semantic.css');
-require('./app.css');
+
 
 const preventDefault = e => e.preventDefault();
 
