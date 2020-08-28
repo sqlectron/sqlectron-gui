@@ -169,7 +169,7 @@ export default class SettingsModalForm extends Component {
 
   renderBasicSettingsPanel() {
     /* eslint max-len:0 */
-    const { zoomFactor } = this.state;
+    const zoomFactor = this.state.zoomFactor || 1;
     const zoomFactorLabel = `${Math.round(Number.parseFloat(zoomFactor) * 100)}%`;
 
     return (
