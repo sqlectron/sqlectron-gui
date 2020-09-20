@@ -20,3 +20,8 @@ npm install
 ```shell
 npm run dev
 ```
+
+Note: Due to timing issues between starting the webpack-dev-server and electron, it
+is probable that on initial start, the electron window will be empty. After waiting
+for webpack to finish building the bundle for the first time, you will need to
+reload the electron window. This can be accomplished using `Shift+Cmd/Ctrl+R`.
