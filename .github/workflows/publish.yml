@@ -35,3 +35,9 @@ jobs:
     - run: npm run dist
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      if: ${{ matrix.os == 'macos-latest' }}
+
+    - run: npm run dist:all-arch
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      if: ${{ matrix.os != 'macos-latest' }}
