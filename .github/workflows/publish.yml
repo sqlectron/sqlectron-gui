@@ -19,7 +19,7 @@ jobs:
     steps:
     - name: Install Linux Dependencies
       if: ${{ matrix.os == 'ubuntu-latest' }}
-      run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar gcc-multilib
+      run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar gcc-multilib g++-multilib
 
     - uses: actions/checkout@v2
 
