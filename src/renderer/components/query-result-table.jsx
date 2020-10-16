@@ -291,7 +291,7 @@ export default class QueryResultTable extends Component {
   }
 
   renderTableBody(onScroll) {
-    const { rowCount, fields } = this.props;
+    const { rowCount, fields, rows } = this.props;
     const { tableWidth, tableHeight } = this.state;
 
     const headerHeight = 62; // value of 2 headers together
@@ -311,9 +311,10 @@ export default class QueryResultTable extends Component {
         rowCount={rowCount}
         columnCount={fields.length}
         columnWidth={this.getColumnWidth}
+        rows={rows}
         rowsCount={rowCount}
-        noContentRenderer={this.renderNoRows} />
-
+        noContentRenderer={this.renderNoRows}
+      />
     );
   }
 
