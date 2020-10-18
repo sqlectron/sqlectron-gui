@@ -97,7 +97,7 @@
     "autoprefixer": "^9.8.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
-    "brace": "^0.7.0",
+    "brace": "^0.11.0",
     "breakpoint-sass": "^2.6.1",
     "classnames": "^2.2.5",
     "concurrently": "^2.2.0",
