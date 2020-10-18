@@ -153,6 +153,24 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
           accelerator: 'Alt+Cmd+I',
           click: (item, win) => win.toggleDevTools(),
         },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Zoom In',
+          accelerator: 'Cmd+=',
+          role: 'zoomin',
+        },
+        {
+          label: 'Zoom Out',
+          accelerator: 'Cmd+-',
+          role: 'zoomout',
+        },
+        {
+          label: 'Reset Zoom',
+          accelerator: 'Cmd+0',
+          role: 'resetzoom',
+        },
       ],
     },
     {
