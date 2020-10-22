@@ -8372,6 +8372,23 @@ $.fn.modal = function(parameters) {
         observeChanges: function() {
           if('MutationObserver' in window) {
             observer = new MutationObserver(function(mutations) {
+              /*
+                >>> SQLECTRON CHANGE: disable refreshing if changed element is "Select" class
+                The "Select" class is coming from React, and with how it functions, it injects
+                a component when the select is "opened". However, this triggers this function
+                with a DOM tree modified, and it attempts to "refresh" the modal, however, this
+                just messes up the `top` CSS for the modal with no benefit, so just ignore
+                refreshing instead.
+              */
+              if (
+                mutations
+                && mutations[0]
+                && mutations[0].target
+                && mutations[0].target.classList
+                && mutations[0].target.classList.contains('Select')
+              ) {
+                return;
+              }
               module.debug('DOM tree modified, refreshing');
               module.refresh();
             });
