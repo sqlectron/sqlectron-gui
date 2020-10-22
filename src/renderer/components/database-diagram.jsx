@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import joint from 'jointjs/dist/joint';
+import * as joint from 'jointjs';
 import './jointjs-diagram-table';
 import './jointjs-diagram-table-cell';
 

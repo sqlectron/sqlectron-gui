@@ -116,7 +116,7 @@
     "html-webpack-plugin": "^4.3.0",
     "html2canvas": "^0.5.0-beta4",
     "imports-loader": "^0.6.5",
-    "jointjs": "^0.9.9",
+    "jointjs": "^2.2.1",
     "jquery": "^3.3.1",
     "json-loader": "^0.5.4",
     "lodash.bindall": "^4.4.0",
