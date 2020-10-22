@@ -104,7 +104,6 @@
     "cross-env": "^7.0.2",
     "css-loader": "^4.2.1",
     "csv-stringify": "^5.5.1",
-    "del": "^2.2.0",
     "denodeify": "^1.2.1",
     "dom-helpers": "^5.1.4",
     "electron": "8.2.5",
