@@ -129,7 +129,6 @@
     "lodash.trim": "^4.5.1",
     "lodash.union": "^4.6.0",
     "mini-css-extract-plugin": "^0.9.0",
-    "minimist": "^1.2.0",
     "node-sass": "^4.14.0",
     "postcss-loader": "^3.0.0",
     "prop-types": "^15.7.2",
