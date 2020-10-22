@@ -132,7 +132,7 @@
     "node-sass": "^4.14.0",
     "postcss-loader": "^3.0.0",
     "prop-types": "^15.7.2",
-    "react": "^15.0.1",
+    "react": "^15.6.2",
     "react-ace": "3.3.0",
     "react-addons-shallow-compare": "^15.1.0",
     "react-dom": "^15.0.1",
