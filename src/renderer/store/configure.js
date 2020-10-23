@@ -1,4 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
+import { createLogger as createReduxLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import { createLogger } from '../../browser/remote';
@@ -42,7 +43,7 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
     }
   }
 
-  middlewares.push(require('redux-logger')(loggerConfig));
+  middlewares.push(createReduxLogger(loggerConfig));
 }
 
 

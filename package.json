@@ -144,7 +144,7 @@
     "react-tabs": "git+https://github.com/maxcnunes/react-tabs.git#remove-warnings",
     "react-virtualized": "^7.3.1",
     "redux": "^3.5.0",
-    "redux-logger": "^2.2.1",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "rimraf": "^3.0.2",
     "sass-loader": "^6.0.7",
