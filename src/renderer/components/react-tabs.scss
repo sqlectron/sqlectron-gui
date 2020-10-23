@@ -1,15 +1,22 @@
-
-.ReactTabs.react-tabs {
+.react-tabs {
   width: 100%;
   position: relative;
 }
 
-.ReactTabs.react-tabs .ReactTabs__TabList {
+.react-tabs .react-tabs__tab-list {
   white-space: nowrap;
 }
 
-.ReactTabs.react-tabs .ReactTabs__TabList .ReactTabs__Tab {
+.react-tabs ul.react-tabs__tab-list > li.react-tabs__tab.item {
   display: inline-block;
+}
+
+.react-tabs__tab-panel {
+  display: none;
+}
+
+.react-tabs__tab-panel--selected {
+  display: block;
 }
 
 #tabs-nav-wrapper {
