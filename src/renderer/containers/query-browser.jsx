@@ -507,7 +507,7 @@ class QueryBrowserContainer extends Component {
       return (
         <Tab key={queryId}
           onDoubleClick={() => this.onTabDoubleClick(queryId)}
-          className={`item ${isCurrentQuery ? 'active' : ''}`}>
+          className={['react-tabs__tab', `item ${isCurrentQuery ? 'active' : ''}`]}>
           {buildContent()}
         </Tab>
       );
@@ -522,7 +522,7 @@ class QueryBrowserContainer extends Component {
       const query = queries.queriesById[queryId];
 
       return (
-        <TabPanel key={queryId}>
+        <TabPanel key={queryId} className={['react-tabs__tab-panel']}>
           <Query
             ref={`queryBox_${queryId}`}
             editorName={`querybox${queryId}`}
@@ -559,7 +559,7 @@ class QueryBrowserContainer extends Component {
     const selectedIndex = queries.queryIds.indexOf(queries.currentQueryId);
     const isTabsFitOnScreen = this.tabListTotalWidthChildren >= this.tabListTotalWidth;
     return (
-      <Tabs onSelect={this.handleSelectTab} selectedIndex={selectedIndex} forceRenderTabPanel>
+      <Tabs className={['react-tabs']} onSelect={this.handleSelectTab} selectedIndex={selectedIndex} forceRenderTabPanel>
         <div id="tabs-nav-wrapper" className="ui pointing secondary menu">
           {isTabsFitOnScreen
             && (
@@ -575,6 +575,7 @@ class QueryBrowserContainer extends Component {
           }
           <div className="tabs-container">
             <TabList
+              className={['react-tabs__tab-list']}
               ref="tabList"
               style={{ left: `${this.state.tabNavPosition}px`, transition: 'left 0.2s linear' }}>
               {menu}
