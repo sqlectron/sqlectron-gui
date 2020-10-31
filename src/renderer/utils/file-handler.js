@@ -6,12 +6,13 @@ export function showSaveDialog(filters) {
   return new Promise((resolve, reject) => {
     remote.dialog.showSaveDialog({
       filters,
-    }, (fileName) => {
-      if (fileName) {
-        return resolve(fileName);
+    }).then((dialogObject) => {
+      if (dialogObject.canceled) {
+        return reject();
       }
-
-      return reject();
+      return resolve(dialogObject.filePath);
+    }).catch((err) => {
+      reject(err);
     });
   });
 }
@@ -33,12 +34,13 @@ export function showOpenDialog(filters, defaultPath) {
       defaultPath,
       filters,
       properties: ['openFile'],
-    }, (fileName) => {
-      if (fileName) {
-        return resolve(fileName);
+    }).then((dialogObject) => {
+      if (dialogObject.canceled || dialogObject.filePaths.length === 0) {
+        return reject();
       }
-
-      return reject();
+      return resolve(dialogObject.filePaths);
+    }).catch((err) => {
+      reject(err);
     });
   });
 }
