@@ -160,11 +160,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
           label: 'Zoom In',
           accelerator: 'Cmd+=',
           role: 'zoomin',
+          click: () => {
+            console.log('zoom in');
+          },
         },
         {
           label: 'Zoom Out',
           accelerator: 'Cmd+-',
           role: 'zoomout',
+          click: () => {
+            console.log('zoom out');
+          },
         },
         {
           label: 'Reset Zoom',

@@ -8,6 +8,8 @@ import imageSrc from './sqlectron.gif';
 
 
 import '../../../vendor/renderer/semantic-ui/semantic';
+import MenuHandler from '../menu-handler';
+import { mapObjectToConfig } from '../utils/config';
 
 require('./app.css');
 require('../../../vendor/renderer/lato/latofonts.css');
@@ -27,6 +29,8 @@ class AppContainer extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {};
+
+    this.menuHandler = new MenuHandler();
   }
 
   componentWillMount() {
@@ -37,6 +41,30 @@ class AppContainer extends Component {
     // Prevent drag and drop causing redirect
     document.addEventListener('dragover', preventDefault, false);
     document.addEventListener('drop', preventDefault, false);
+
+    this.menuHandler.setMenus({
+      'sqlectron:zoom-in': async () => {
+        const { config, dispatch } = this.props;
+        const { data } = config;
+        data.zoomFactor = (data.zoomFactor || 1) + 0.2;
+        await dispatch(ConfigActions.saveConfig(mapObjectToConfig(data)));
+        dispatch(ConfigActions.finishEditing());
+      },
+      'sqlectron:zoom-out': async () => {
+        const { config, dispatch } = this.props;
+        const { data } = config;
+        data.zoomFactor = (data.zoomFactor || 1) - 0.2;
+        await dispatch(ConfigActions.saveConfig(mapObjectToConfig(data)));
+        dispatch(ConfigActions.finishEditing());
+      },
+      'sqlectron:zoom-reset': async () => {
+        const { config, dispatch } = this.props;
+        const { data } = config;
+        data.zoomFactor = 1;
+        await dispatch(ConfigActions.saveConfig(mapObjectToConfig(data)));
+        dispatch(ConfigActions.finishEditing());
+      },
+    });
   }
 
   componentWillReceiveProps(newProps) {
@@ -69,6 +97,7 @@ class AppContainer extends Component {
   componentWillUnmount() {
     document.removeEventListener('dragover', preventDefault, false);
     document.removeEventListener('drop', preventDefault, false);
+    this.menuHandler.removeAllMenus();
   }
 
   // this runs the animated loading
