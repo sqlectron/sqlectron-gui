@@ -42,27 +42,33 @@ class AppContainer extends Component {
     document.addEventListener('dragover', preventDefault, false);
     document.addEventListener('drop', preventDefault, false);
 
+    const updateConfig = async (data) => {
+      const { dispatch } = this.props;
+      await dispatch(ConfigActions.saveConfig(mapObjectToConfig(data)));
+      dispatch(ConfigActions.finishEditing());
+    };
+
     this.menuHandler.setMenus({
       'sqlectron:zoom-in': async () => {
-        const { config, dispatch } = this.props;
+        const { config } = this.props;
+        if (!config.data) { return; }
         const { data } = config;
         data.zoomFactor = (data.zoomFactor || 1) + 0.2;
-        await dispatch(ConfigActions.saveConfig(mapObjectToConfig(data)));
-        dispatch(ConfigActions.finishEditing());
+        updateConfig(data);
       },
       'sqlectron:zoom-out': async () => {
-        const { config, dispatch } = this.props;
+        const { config } = this.props;
+        if (!config.data) { return; }
         const { data } = config;
         data.zoomFactor = (data.zoomFactor || 1) - 0.2;
-        await dispatch(ConfigActions.saveConfig(mapObjectToConfig(data)));
-        dispatch(ConfigActions.finishEditing());
+        updateConfig(data);
       },
       'sqlectron:zoom-reset': async () => {
-        const { config, dispatch } = this.props;
+        const { config } = this.props;
+        if (!config.data) { return; }
         const { data } = config;
         data.zoomFactor = 1;
-        await dispatch(ConfigActions.saveConfig(mapObjectToConfig(data)));
-        dispatch(ConfigActions.finishEditing());
+        updateConfig(data);
       },
     });
   }
