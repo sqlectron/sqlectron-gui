@@ -160,22 +160,18 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
           label: 'Zoom In',
           accelerator: 'Cmd+=',
           role: 'zoomin',
-          click: () => {
-            console.log('zoom in');
-          },
+          click: (item, win) => sendMessage(win, 'sqlectron:zoom-in'),
         },
         {
           label: 'Zoom Out',
           accelerator: 'Cmd+-',
           role: 'zoomout',
-          click: () => {
-            console.log('zoom out');
-          },
+          click: (item, win) => sendMessage(win, 'sqlectron:zoom-out'),
         },
         {
           label: 'Reset Zoom',
           accelerator: 'Cmd+0',
-          role: 'resetzoom',
+          click: (item, win) => sendMessage(win, 'sqlectron:zoom-reset'),
         },
       ],
     },
