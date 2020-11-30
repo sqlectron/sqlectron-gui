@@ -48,7 +48,7 @@ function App() {
   return (
     <Flex direction='column' height='100%'>
       <ConnectionTopbar />
-      <Flex flex={1}>
+      <Flex flex={1} css={{ height: 'calc(100vh - 41px)' }}>
         {/*<Box
           w='80px'
           borderRightWidth='1px'
@@ -58,20 +58,22 @@ function App() {
           <DatabasesSidebar />
         </Box>*/}
         <Box
+          height='100%'
           w='250px'
-          bg='darkThemeApp.barCompoenentBg'
+          bg='darkThemeApp.sidebarPanelBg'
           borderRightWidth='1px'
           borderRightStyle='solid'
           borderRightColor='darkThemeApp.barCompoenentBorderColor'
         >
           <ConnectionSidebar />
         </Box>
-        <Box display='flex' flex='1'>
+        <Box display='flex' flex='1' height='100%'>
           <QuerySection />
         </Box>
         <Box
+          height='100%'
           w='250px'
-          bg='darkThemeApp.barCompoenentBg'
+          bg='darkThemeApp.sidebarPanelBg'
           borderLeftWidth='1px'
           borderLeftStyle='solid'
           borderRightColor='darkThemeApp.barCompoenentBorderColor'

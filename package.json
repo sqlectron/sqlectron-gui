@@ -10,24 +10,31 @@
   "main": "./dist/browser/main.js",
   "homepage": "./",
   "dependencies": {
+    "@babel/cli": "^7.12.8",
     "@reduxjs/toolkit": "^1.2.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "@types/jest": "^24.0.0",
+    "@types/lodash": "^4.14.165",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-redux": "^7.1.7",
     "cross-env": "^7.0.2",
     "electron-is-dev": "^1.2.0",
+    "electron-rebuild": "^2.3.2",
+    "lodash.defaultsdeep": "^4.6.1",
+    "npm": "^6.14.9",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-redux": "^7.2.0",
     "react-scripts": "4.0.0",
+    "sqlectron-core": "^8.3.2",
     "typescript": "~3.8.2"
   },
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "react-start": "react-scripts start",
     "react-build": "react-scripts build",
     "react-test": "react-scripts test --env=jsdom",
@@ -37,9 +44,11 @@
     "build": "yarn react-build && yarn electron-build",
     "start": "concurrently \"yarn dev:renderer\" \"wait-on http://localhost:3000 && yarn dev:electron\"",
     "dev:renderer": "cross-env BROWSER=none yarn react-start",
-    "dev:electron": "cross-env NODE_ENV=development webpack --config webpack/electron.config.js --mode development && electron .",
+    "dev:electron": "yarn build:electron:babel && electron .",
     "storybook": "start-storybook -p 6006 -s public",
-    "build-storybook": "build-storybook -s public"
+    "build-storybook": "build-storybook -s public",
+    "build:electron:webpack": "cross-env NODE_ENV=development webpack --config webpack/electron.config.js --mode development",
+    "build:electron:babel": "babel src/browser --out-dir dist/browser --copy-files --extensions '.ts,.js'"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -24,6 +24,7 @@ export const theme = extendTheme({
     darkThemeApp: {
       barCompoenentBg: '#232424',
       barCompoenentBorderColor: '#1A1B1B',
+      sidebarPanelBg: '#1D1D1F',
       containerBg: '#151616',
       listHoverBg: '#2F3031',
     },

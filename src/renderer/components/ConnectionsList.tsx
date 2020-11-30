@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { ColorModeSwitcher } from './ColorModeSwitcher';
+import React, { useState, useEffect } from 'react';
 import {
   FaTable,
   FaSearch,
@@ -51,8 +50,14 @@ import {
 } from '@chakra-ui/react';
 const showColorModeSwitcher = false;
 
-const connect = () => {
-  window.open('', 'NewConnectionWindowComponent');
+const connect = (server: any) => {
+  console.log('***connecting', server);
+  //window.open('', 'NewConnectionWindowComponent');
+  // @ts-ignore
+  window.sqlectron.db
+    .connect(server.id, server.database, false, '')
+    .then((res: any) => console.log('***connect ok', res))
+    .catch((err: Error) => console.error('***connect error', err));
 };
 
 interface ConnectionsListProps {}
@@ -156,7 +161,7 @@ const ConnectionItem = ({
             aria-label='Edit'
             size='xs'
             icon={<FaPlug />}
-            onClick={connect}
+            onClick={() => connect(item)}
           />
           <IconButton aria-label='Edit' size='xs' icon={<FaEdit />} />
         </HStack>
@@ -165,14 +170,25 @@ const ConnectionItem = ({
   );
 };
 export const ConnectionsList = ({}: ConnectionsListProps) => {
+  const [config, setConfig] = useState(null);
   const bgExpanded = useColorModeValue('gray.100', 'gray.700');
   const bgHover = useColorModeValue('gray.200', 'darkThemeApp.listHoverBg');
 
+  useEffect(() => {
+    // @ts-ignore
+    window.sqlectron.config
+      .load()
+      .then((res: any) => setConfig(res))
+      .catch((err: Error) => console.error(err));
+  }, []);
+
+  // @ts-ignore
+  const servers: any = config && config?.servers;
   const groups = [
     {
       name: 'Production',
       color: 'red',
-      connections: [
+      connections: servers || [
         {
           client: 'MySQL',
           name: 'sqlectron-db',
