@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { theme } from './theme';
 import logo from './logo.svg';
 import { QuerySection } from './components/QuerySection';
 import { ConnectionSidebar } from './components/ConnectionSidebar';
 import { ConnectionTopbar } from './components/ConnectionTopbar';
 import { RecordForm } from './components/RecordForm';
+import { Resizable } from 're-resizable';
 
 //import mysqlLogo from './server-db-client-mysql.png';
 import {
@@ -57,29 +59,53 @@ function App() {
         >
           <DatabasesSidebar />
         </Box>*/}
-        <Box
-          height='100%'
-          w='250px'
-          bg='darkThemeApp.sidebarPanelBg'
-          borderRightWidth='1px'
-          borderRightStyle='solid'
-          borderRightColor='darkThemeApp.barCompoenentBorderColor'
+        <Resizable
+          maxWidth='30%'
+          minWidth='5%'
+          enable={{
+            top: false,
+            right: true,
+            bottom: false,
+            left: false,
+            topRight: false,
+            bottomRight: false,
+            bottomLeft: false,
+            topLeft: false,
+          }}
+          style={{
+            height: '100%',
+            width: '250px',
+            background: theme.colors.darkThemeApp.sidebarPanelBg,
+            borderRight: `1px solid ${theme.colors.darkThemeApp.barCompoenentBorderColor}`,
+          }}
         >
           <ConnectionSidebar />
-        </Box>
+        </Resizable>
         <Box display='flex' flex='1' height='100%'>
           <QuerySection />
         </Box>
-        <Box
-          height='100%'
-          w='250px'
-          bg='darkThemeApp.sidebarPanelBg'
-          borderLeftWidth='1px'
-          borderLeftStyle='solid'
-          borderRightColor='darkThemeApp.barCompoenentBorderColor'
+        <Resizable
+          maxWidth='30%'
+          minWidth='5%'
+          enable={{
+            top: false,
+            right: false,
+            bottom: false,
+            left: true,
+            topRight: false,
+            bottomRight: false,
+            bottomLeft: false,
+            topLeft: false,
+          }}
+          style={{
+            height: '100%',
+            width: '250px',
+            background: theme.colors.darkThemeApp.sidebarPanelBg,
+            borderLeft: `1px solid ${theme.colors.darkThemeApp.barCompoenentBorderColor}`,
+          }}
         >
           <RecordForm />
-        </Box>
+        </Resizable>
       </Flex>
     </Flex>
   );
