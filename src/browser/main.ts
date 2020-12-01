@@ -135,6 +135,10 @@ app.on('ready', () => {
   ipcMain.handle('config.load', () => config.load(true));
   ipcMain.handle('db.listTables', () => core.listTables());
   ipcMain.handle(
+    'db.executeQuery',
+    (event: IpcMainInvokeEvent, query: string) => core.executeQuery(query),
+  );
+  ipcMain.handle(
     'db.connect',
     (
       event: IpcMainInvokeEvent,

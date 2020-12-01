@@ -6,7 +6,6 @@ export const theme = extendTheme({
   //   useSystemColorMode: true,
   //   initialColorMode: 'light',
   // },
-  // Slack: #1B1D21
   colors: {
     gray: {
       50: '#f2f2f2',

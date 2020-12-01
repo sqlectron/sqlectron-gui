@@ -31,6 +31,7 @@ import {
   Link,
   VStack,
   Grid,
+  GridItem,
   Flex,
   Center,
   Accordion,
@@ -48,9 +49,23 @@ const showColorModeSwitcher = false;
 
 function App() {
   return (
-    <Flex direction='column' height='100%'>
-      <ConnectionTopbar />
-      <Flex flex={1} css={{ height: 'calc(100vh - 41px)' }}>
+    <Grid
+      h='100vh'
+      w='100vw'
+      gap={0}
+      templateColumns='min-content auto min-content'
+      templateRows='min-content auto min-content'
+    >
+      <GridItem gridColumn='span 3'>
+        <ConnectionTopbar />
+      </GridItem>
+      <GridItem
+        gridColumn='span 1'
+        css={{
+          overflow: 'hidden',
+          height: '100%',
+        }}
+      >
         {/*<Box
           w='80px'
           borderRightWidth='1px'
@@ -60,8 +75,8 @@ function App() {
           <DatabasesSidebar />
         </Box>*/}
         <Resizable
-          maxWidth='30%'
-          minWidth='5%'
+          minWidth='100px'
+          maxWidth='45vw'
           enable={{
             top: false,
             right: true,
@@ -72,21 +87,37 @@ function App() {
             bottomLeft: false,
             topLeft: false,
           }}
-          style={{
-            height: '100%',
+          defaultSize={{
             width: '250px',
+            height: '100%',
+          }}
+          style={{
             background: theme.colors.darkThemeApp.sidebarPanelBg,
             borderRight: `1px solid ${theme.colors.darkThemeApp.barCompoenentBorderColor}`,
           }}
         >
           <ConnectionSidebar />
         </Resizable>
-        <Box display='flex' flex='1' height='100%'>
-          <QuerySection />
-        </Box>
+      </GridItem>
+      <GridItem
+        gridColumn='span 1'
+        css={{
+          overflow: 'hidden',
+          height: '100%',
+        }}
+      >
+        <QuerySection />
+      </GridItem>
+      <GridItem
+        gridColumn='span 1'
+        css={{
+          overflow: 'hidden',
+          height: '100%',
+        }}
+      >
         <Resizable
-          maxWidth='30%'
-          minWidth='5%'
+          minWidth='100px'
+          maxWidth='45vw'
           enable={{
             top: false,
             right: false,
@@ -97,17 +128,19 @@ function App() {
             bottomLeft: false,
             topLeft: false,
           }}
-          style={{
-            height: '100%',
+          defaultSize={{
             width: '250px',
+            height: '100%',
+          }}
+          style={{
             background: theme.colors.darkThemeApp.sidebarPanelBg,
             borderLeft: `1px solid ${theme.colors.darkThemeApp.barCompoenentBorderColor}`,
           }}
         >
           <RecordForm />
         </Resizable>
-      </Flex>
-    </Flex>
+      </GridItem>
+    </Grid>
   );
 }
 

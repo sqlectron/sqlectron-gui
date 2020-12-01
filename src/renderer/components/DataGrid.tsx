@@ -2,8 +2,11 @@ import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useTable } from 'react-table';
 import { theme } from '../theme';
+import { QueryResult } from '../types/queryResult';
 
-export interface DataGridProps {}
+export interface DataGridProps {
+  queryResult: QueryResult;
+}
 
 const dataItem = {
   id: 1,
@@ -94,21 +97,21 @@ function Table({ columns, data }: { columns: any; data: any }) {
   );
 }
 
-export const DataGrid = ({}: DataGridProps) => {
+export const DataGrid = ({ queryResult }: DataGridProps) => {
   const columns = useMemo(
     () =>
-      Object.keys(dataItem).map((column) => ({
-        Header: column,
-        accessor: column,
+      queryResult.fields.map((column) => ({
+        Header: column.name,
+        accessor: column.name,
       })),
-    [],
+    [queryResult.fields],
   );
 
   return (
     <Styles>
       <div>
         <div>
-          <Table columns={columns} data={data} />
+          <Table columns={columns} data={queryResult.rows} />
         </div>
       </div>
     </Styles>

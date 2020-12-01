@@ -101,3 +101,12 @@ export const listTables = async function () {
   console.log('***listTables result', tables);
   return tables;
 };
+
+export const executeQuery = async function (query: string) {
+  console.log('***executeQuery running...', query);
+  // TODO: Fix this once sqlectron-core has been migrated to typescript
+  // @ts-ignore
+  const rows = await dbConn.executeQuery(query);
+  console.log('***executeQuery result', rows);
+  return rows;
+};

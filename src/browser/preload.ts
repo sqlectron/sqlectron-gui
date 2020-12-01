@@ -11,6 +11,8 @@ contextBridge.exposeInMainWorld('sqlectron', {
   },
   db: {
     listTables: () => ipcRenderer.invoke('db.listTables'),
+    executeQuery: (query: string) =>
+      ipcRenderer.invoke('db.executeQuery', query),
     connect: (
       id: string,
       databaseName: string,

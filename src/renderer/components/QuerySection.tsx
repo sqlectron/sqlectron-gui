@@ -1,4 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useState } from 'react';
+//import PerfectScrollbar from 'react-perfect-scrollbar';
+//import 'react-perfect-scrollbar/dist/css/styles.css';
+import { QueryResult } from '../types/queryResult';
+
 import {
   FaTable,
   FaSearch,
@@ -25,52 +29,49 @@ import {
   TabList,
   TabPanels,
   TabPanel,
-  AvatarGroup,
-  Avatar,
-  FormControl,
-  FormHelperText,
-  FormLabel,
   Textarea,
-  Icon,
-  Text,
-  HStack,
-  Tag,
-  DarkMode,
   IconButton,
-  Stack,
   Button,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  StackDivider,
-  Badge,
   Box,
-  Heading,
-  Link,
-  VStack,
   Grid,
   Flex,
-  Center,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  Divider,
 } from '@chakra-ui/react';
 
 interface QuerySectionProps {}
 
 const QueryContent = ({}) => {
+  const [query, setQuery] = useState('');
+  const [queryResult, setQueryResult] = useState([]);
+
+  const executeQuery = () => {
+    // @ts-ignore
+    window.sqlectron.db
+      .executeQuery(query)
+      .then((res: any) => {
+        console.log('***query result', query, res);
+        setQueryResult(res);
+      })
+      .catch((err: Error) => console.error(err));
+  };
+
   return (
     <>
-      <Box textAlign='left' fontSize='xl' flex={1}>
+      <Grid
+        gap={0}
+        templateColumns='1fr'
+        templateRows='min-content auto'
+        height='100%'
+        css={{ overflow: 'hidden' }}
+      >
         <Box bg='darkThemeApp.containerBg'>
           <Textarea
+            css={{ resize: 'vertical' }}
             border='0'
             height='500px'
             placeholder='Here is a sample placeholder'
             borderRadius='0'
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
           />
           <Flex
             padding='0.5em'
@@ -82,15 +83,17 @@ const QueryContent = ({}) => {
             direction='row-reverse'
             align='center'
           >
-            <Button colorScheme='gray' size='xs'>
+            <Button colorScheme='gray' size='xs' onClick={() => executeQuery()}>
               Run Current
             </Button>
           </Flex>
         </Box>
-        <Box>
-          <DataGrid />
+        <Box css={{ overflow: 'auto' }}>
+          {queryResult.map((queryResult: QueryResult, i: number) => (
+            <DataGrid key={i} queryResult={queryResult} />
+          ))}
         </Box>
-      </Box>
+      </Grid>
       <Flex
         padding='0.5em'
         bg='darkThemeApp.barCompoenentBg'
@@ -126,21 +129,32 @@ const QueryContent = ({}) => {
 
 export const QuerySection = ({}: QuerySectionProps) => {
   return (
-    <Flex direction='column' flex={1}>
+    <Flex direction='column' flex={1} height='100%'>
       <Tabs
         isFitted
         variant='unstyled'
-        css={{ flex: '1', display: 'flex', 'flex-direction': 'column' }}
+        css={{
+          flex: '1',
+          display: 'flex',
+          'flex-direction': 'column',
+          height: '100%',
+        }}
       >
         <TabList mb='sm'>
           <QueryTab index={0}>SQL</QueryTab>
           <QueryTab index={1}>Data Structure</QueryTab>
         </TabList>
         <TabPanels
-          css={{ flex: '1', display: 'flex', 'flex-direction': 'column' }}
+          css={{
+            flex: '1',
+            display: 'flex',
+            'flex-direction': 'column',
+            height: 'calc(100% - 19px)',
+          }}
         >
           <TabPanel
             css={{
+              height: '100%',
               flex: '1',
               display: 'flex',
               'flex-direction': 'column',
@@ -151,6 +165,7 @@ export const QuerySection = ({}: QuerySectionProps) => {
           </TabPanel>
           <TabPanel
             css={{
+              height: '100%',
               flex: '1',
               display: 'flex',
               'flex-direction': 'column',
