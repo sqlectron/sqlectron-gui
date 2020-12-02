@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 //import PerfectScrollbar from 'react-perfect-scrollbar';
 //import 'react-perfect-scrollbar/dist/css/styles.css';
 import { QueryResult } from '../types/queryResult';
@@ -19,8 +19,10 @@ import {
   RiLayoutBottomLine,
   RiLayoutRightLine,
 } from 'react-icons/ri';
+import { QueryEditor } from './QueryEditor';
 import { DataGrid } from './DataGrid';
 import { QueryTab } from './QueryTab';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 //import mysqlLogo from './server-db-client-mysql.png';
 import {
@@ -40,10 +42,14 @@ import {
 interface QuerySectionProps {}
 
 const QueryContent = ({}) => {
-  const [query, setQuery] = useState('');
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>(null);
   const [queryResult, setQueryResult] = useState([]);
 
   const executeQuery = () => {
+    const model = editorRef.current?.getModel();
+    const query = model?.getValue();
+    console.log('***query', query);
+
     // @ts-ignore
     window.sqlectron.db
       .executeQuery(query)
@@ -64,15 +70,7 @@ const QueryContent = ({}) => {
         css={{ overflow: 'hidden' }}
       >
         <Box bg='darkThemeApp.containerBg'>
-          <Textarea
-            css={{ resize: 'vertical' }}
-            border='0'
-            height='500px'
-            placeholder='Here is a sample placeholder'
-            borderRadius='0'
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
+          <QueryEditor ref={editorRef} />
           <Flex
             padding='0.5em'
             bg='darkThemeApp.containerBg'

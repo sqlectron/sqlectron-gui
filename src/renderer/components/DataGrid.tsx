@@ -44,6 +44,7 @@ const Styles = styled.div`
       padding: 0.1rem 0.3rem;
       border-bottom: 1px solid ${theme.colors.gray['900']};
       border-right: 1px solid ${theme.colors.gray['900']};
+      white-space: nowrap;
 
       :last-child {
         border-right: 0;
