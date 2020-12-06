@@ -4,6 +4,7 @@ import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 import set from 'lodash.set';
 import Select from 'react-select';
 import Checkbox from './checkbox';
+import { mapObjectToConfig } from '../utils/config';
 
 
 require('react-select/dist/react-select.css');
@@ -56,37 +57,12 @@ export default class SettingsModalForm extends Component {
   }
 
   onSaveClick() {
-    this.props.onSaveClick(this.mapStateToConfig(this.state));
+    this.props.onSaveClick(mapObjectToConfig(this.state));
   }
 
   onDocClick(event) {
     event.preventDefault();
     shell.openExternal('https://github.com/sqlectron/sqlectron-gui/blob/master/docs/app/configuration-file.md');
-  }
-
-  mapStateToConfig(state) {
-    const config = {
-      zoomFactor: parseFloat(state.zoomFactor) || 1,
-      limitQueryDefaultSelectTop: parseInt(state.limitQueryDefaultSelectTop, 10) || 100,
-      enabledAutoComplete: state.enabledAutoComplete || false,
-      enabledLiveAutoComplete: state.enabledLiveAutoComplete || false,
-      enabledDarkTheme: state.enabledDarkTheme || false,
-      disabledOpenAnimation: state.disabledOpenAnimation || false,
-      csvDelimiter: state.csvDelimiter || ',',
-      connectionsAsList: state.connectionsAsList || false,
-      customFont: state.customFont || 'Lato',
-    };
-    if (!this.state.log) { return config; }
-
-    const { log } = state;
-    config.log = {
-      console: log.console,
-      file: log.file,
-      level: log.level,
-      path: log.path,
-    };
-
-    return config;
   }
 
   highlightError(name) {
