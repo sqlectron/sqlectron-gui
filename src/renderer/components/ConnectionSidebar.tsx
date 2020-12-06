@@ -1,54 +1,61 @@
 import React, { useState, useEffect } from 'react';
 import { theme } from '../theme';
-import {
-  FaTable,
-  FaSearch,
-  FaPlus,
-  FaPlug,
-  FaEdit,
-  FaAngleDown,
-  FaRedo,
-  FaDatabase,
-} from 'react-icons/fa';
-
+import { FaSearch } from 'react-icons/fa';
 import { BsTable } from 'react-icons/bs';
-
-//import mysqlLogo from './server-db-client-mysql.png';
 import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Textarea,
   Icon,
   Text,
   HStack,
-  Tag,
-  DarkMode,
-  IconButton,
-  Stack,
-  Button,
   InputGroup,
   InputLeftElement,
   Input,
-  StackDivider,
-  Badge,
   Box,
-  Heading,
-  Link,
   VStack,
-  Grid,
-  Flex,
-  Center,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  Divider,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 interface ConnectionSidebarProps {}
+
+const Item = ({
+  name,
+  selectedName,
+  onClick,
+}: {
+  name: string;
+  selectedName: string;
+  onClick: () => void;
+}) => {
+  const bgDefault = 'inherit';
+  const bgSelected = '#2C639E';
+  const bgHover = theme.colors.darkThemeApp.listHoverBg;
+  const isSelected = selectedName === name;
+
+  return (
+    <Box
+      as='button'
+      padding='0.1em 1em'
+      borderWidth='1px'
+      borderColor='#1D1D1F'
+      _hover={{
+        background: isSelected ? bgSelected : bgHover,
+      }}
+      onClick={onClick}
+      background={isSelected ? bgSelected : bgDefault}
+    >
+      <HStack align='center'>
+        <Icon as={BsTable} w={3} />
+        <Text
+          fontSize='xs'
+          _hover={{
+            borderColor: 'red',
+          }}
+        >
+          {name}
+        </Text>
+      </HStack>
+    </Box>
+  );
+};
 
 export const ConnectionSidebar = ({}: ConnectionSidebarProps) => {
   const [tables, setTables] = useState([]);
@@ -77,52 +84,25 @@ export const ConnectionSidebar = ({}: ConnectionSidebarProps) => {
       </Box>
       <Box
         marginTop='0'
-        p='0 0.5em 0 0.5em'
+        paddingBottom='1em'
         css={{
           'overflow-y': 'auto',
           'scrollbar-color': '#6C6C6F #232424',
         }}
       >
-        <HStack spacin={0}>
+        <HStack spacin={0} paddingLeft='0.5em'>
           <ChevronDownIcon />
           <Text fontSize='sm'>Tables</Text>
         </HStack>
         <VStack align='left' spacing={0}>
-          {tables.map((table: any) => (
-            <Box
-              as='button'
-              borderRadius='5px'
-              padding='0.1em .5em'
-              borderWidth='1px'
-              borderColor='#1D1D1F'
-              _hover={{
-                borderColor: theme.colors.darkThemeApp.barCompoenentBg,
-              }}
+          {tables.map(({ name }: { name: string }) => (
+            <Item
+              name={name}
+              selectedName={selectedTableName}
               onClick={() => {
-                console.log('***onClick', table);
-                selectTableName(table.name);
+                selectTableName(name);
               }}
-              _active={{
-                background: theme.colors.darkThemeApp.listHoverBg,
-              }}
-              background={
-                selectedTableName === table.name
-                  ? theme.colors.darkThemeApp.listHoverBg
-                  : 'inherit'
-              }
-            >
-              <HStack align='center'>
-                <Icon as={BsTable} w={3} />
-                <Text
-                  fontSize='xs'
-                  _hover={{
-                    borderColor: 'red',
-                  }}
-                >
-                  {table.name}
-                </Text>
-              </HStack>
-            </Box>
+            />
           ))}
         </VStack>
       </Box>
