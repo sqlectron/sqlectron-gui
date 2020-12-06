@@ -1,56 +1,23 @@
-import React, { useMemo } from 'react';
-import {
-  FaTable,
-  FaSearch,
-  FaPlus,
-  FaPlug,
-  FaEdit,
-  FaAngleDown,
-  FaRedo,
-  FaDatabase,
-} from 'react-icons/fa';
-import { AiOutlineConsoleSql } from 'react-icons/ai';
+import React from 'react';
+import { FaPlug, FaRedo, FaDatabase } from 'react-icons/fa';
 
-import { BsTable } from 'react-icons/bs';
-
-//import mysqlLogo from './server-db-client-mysql.png';
 import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Textarea,
   Icon,
   Text,
   HStack,
-  Tag,
-  DarkMode,
   IconButton,
-  Stack,
   Button,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  StackDivider,
-  Badge,
   Box,
-  Heading,
-  Link,
-  VStack,
-  Grid,
-  Flex,
-  Center,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
   Divider,
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
 
-interface ConnectionTopbarProps {}
+interface ConnectionTopbarProps {
+  onDatabaseButtonClick: () => void;
+}
 
-export const ConnectionTopbar = ({}: ConnectionTopbarProps) => {
+export const ConnectionTopbar = ({
+  onDatabaseButtonClick,
+}: ConnectionTopbarProps) => {
   return (
     <Box
       padding='0.5em'
@@ -75,6 +42,7 @@ export const ConnectionTopbar = ({}: ConnectionTopbarProps) => {
         margin='0 .35em'
         icon={<Icon as={FaDatabase} />}
         title='Open a new database'
+        onClick={onDatabaseButtonClick}
       />
       <Button
         bg='none'

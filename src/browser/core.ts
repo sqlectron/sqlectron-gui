@@ -111,3 +111,16 @@ export const executeQuery = async function (query: string) {
   console.log('***executeQuery result', rows);
   return rows;
 };
+
+export const listDatabases = async function () {
+  console.log('***listDatabases fetching...');
+  // TODO: Fix this once sqlectron-core has been migrated to typescript
+  // @ts-ignore
+  const results = await dbConn.executeQuery(`
+    select schema_name as name
+    from information_schema.schemata
+    order by schema_name;
+  `);
+  console.log('***listDatabases result', results[0].rows);
+  return results[0].rows;
+};

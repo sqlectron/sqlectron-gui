@@ -134,6 +134,7 @@ app.on('ready', () => {
   ipcMain.handle('openNewConnectionWindow', async () => 'foo');
   ipcMain.handle('config.load', () => config.load(true));
   ipcMain.handle('db.listTables', () => core.listTables());
+  ipcMain.handle('db.listDatabases', () => core.listDatabases());
   ipcMain.handle(
     'db.executeQuery',
     (event: IpcMainInvokeEvent, query: string) => core.executeQuery(query),

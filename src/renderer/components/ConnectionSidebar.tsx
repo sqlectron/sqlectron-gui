@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { theme } from '../theme';
+import { ListItem } from './ListItem';
 import { FaSearch } from 'react-icons/fa';
 import { BsTable } from 'react-icons/bs';
 import {
-  Icon,
   Text,
   HStack,
   InputGroup,
@@ -15,47 +14,6 @@ import {
 import { ChevronDownIcon } from '@chakra-ui/icons';
 
 interface ConnectionSidebarProps {}
-
-const Item = ({
-  name,
-  selectedName,
-  onClick,
-}: {
-  name: string;
-  selectedName: string;
-  onClick: () => void;
-}) => {
-  const bgDefault = 'inherit';
-  const bgSelected = '#2C639E';
-  const bgHover = theme.colors.darkThemeApp.listHoverBg;
-  const isSelected = selectedName === name;
-
-  return (
-    <Box
-      as='button'
-      padding='0.1em 1em'
-      borderWidth='1px'
-      borderColor='#1D1D1F'
-      _hover={{
-        background: isSelected ? bgSelected : bgHover,
-      }}
-      onClick={onClick}
-      background={isSelected ? bgSelected : bgDefault}
-    >
-      <HStack align='center'>
-        <Icon as={BsTable} w={3} />
-        <Text
-          fontSize='xs'
-          _hover={{
-            borderColor: 'red',
-          }}
-        >
-          {name}
-        </Text>
-      </HStack>
-    </Box>
-  );
-};
 
 export const ConnectionSidebar = ({}: ConnectionSidebarProps) => {
   const [tables, setTables] = useState([]);
@@ -85,9 +43,9 @@ export const ConnectionSidebar = ({}: ConnectionSidebarProps) => {
       <Box
         marginTop='0'
         paddingBottom='1em'
+        className='scrollable'
         css={{
           'overflow-y': 'auto',
-          'scrollbar-color': '#6C6C6F #232424',
         }}
       >
         <HStack spacin={0} paddingLeft='0.5em'>
@@ -96,9 +54,10 @@ export const ConnectionSidebar = ({}: ConnectionSidebarProps) => {
         </HStack>
         <VStack align='left' spacing={0}>
           {tables.map(({ name }: { name: string }) => (
-            <Item
+            <ListItem
               name={name}
               selectedName={selectedTableName}
+              icon={BsTable}
               onClick={() => {
                 selectTableName(name);
               }}

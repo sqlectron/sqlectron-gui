@@ -1,58 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { FaPlug, FaEdit } from 'react-icons/fa';
 import {
-  FaTable,
-  FaSearch,
-  FaPlus,
-  FaPlug,
-  FaEdit,
-  FaAngleDown,
-  FaRedo,
-  FaDatabase,
-} from 'react-icons/fa';
-
-import { BsTable } from 'react-icons/bs';
-
-//import mysqlLogo from './server-db-client-mysql.png';
-import {
-  LightMode,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Textarea,
-  Icon,
   Text,
   HStack,
   Tag,
-  DarkMode,
   IconButton,
-  Stack,
-  Button,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  StackDivider,
   Badge,
   Box,
-  Heading,
-  Link,
   VStack,
-  Grid,
-  GridItem,
   Flex,
-  Center,
   Accordion,
   AccordionItem,
   AccordionButton,
   AccordionIcon,
   AccordionPanel,
-  Divider,
   useColorModeValue,
 } from '@chakra-ui/react';
-const showColorModeSwitcher = false;
 
 const connect = (server: any) => {
   console.log('***connecting', server);
-  //window.open('', 'NewConnectionWindowComponent');
   // @ts-ignore
   window.sqlectron.db
     .connect(server.id, server.database, false, '')
@@ -171,7 +137,6 @@ const ConnectionItem = ({
 };
 export const ConnectionsList = ({}: ConnectionsListProps) => {
   const [config, setConfig] = useState(null);
-  const bgExpanded = useColorModeValue('gray.100', 'gray.700');
   const bgHover = useColorModeValue('gray.200', 'darkThemeApp.listHoverBg');
 
   useEffect(() => {
