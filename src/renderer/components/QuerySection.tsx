@@ -1,18 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Resizable } from 're-resizable';
+import { theme } from '../theme';
+import ReactResizeDetector from 'react-resize-detector';
 //import PerfectScrollbar from 'react-perfect-scrollbar';
 //import 'react-perfect-scrollbar/dist/css/styles.css';
 import { QueryResult } from '../types/queryResult';
-
-import {
-  FaTable,
-  FaSearch,
-  FaPlus,
-  FaPlug,
-  FaEdit,
-  FaAngleDown,
-  FaRedo,
-  FaDatabase,
-} from 'react-icons/fa';
 
 import {
   RiLayoutLeftLine,
@@ -26,20 +18,26 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 //import mysqlLogo from './server-db-client-mysql.png';
 import {
-  Tab,
   Tabs,
   TabList,
   TabPanels,
   TabPanel,
-  Textarea,
   IconButton,
   Button,
   Box,
   Grid,
+  GridItem,
   Flex,
 } from '@chakra-ui/react';
 
 interface QuerySectionProps {}
+
+const onSplitPanelResize = (source: string, width: number, height: number) => {
+  const event = new CustomEvent('queryEditorResize', {
+    detail: { source, width, height },
+  });
+  window.dispatchEvent(event);
+};
 
 const QueryContent = ({}) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>(null);
@@ -65,115 +63,167 @@ const QueryContent = ({}) => {
       <Grid
         gap={0}
         templateColumns='1fr'
-        templateRows='min-content auto'
+        templateRows='min-content auto min-content'
         height='100%'
         css={{ overflow: 'hidden' }}
       >
-        <Box bg='darkThemeApp.containerBg'>
-          <QueryEditor ref={editorRef} />
+        <GridItem
+          bg='darkThemeApp.containerBg'
+          borderBottomWidth='1px'
+          borderBottomStyle='solid'
+          borderBottomColor='gray.700'
+        >
+          <Resizable
+            defaultSize={{
+              width: '100%',
+              height: '50vh',
+            }}
+            onResizeStop={(e, direction, ref, d) => {
+              onSplitPanelResize(
+                'vertical-resize',
+                ref.clientWidth,
+                ref.clientHeight,
+              );
+            }}
+            enable={{
+              top: false,
+              right: false,
+              bottom: true,
+              left: false,
+              topRight: false,
+              bottomRight: false,
+              bottomLeft: false,
+              topLeft: false,
+            }}
+            style={{
+              background: theme.colors.darkThemeApp.containerBg,
+            }}
+          >
+            <Flex direction='column' height='100%'>
+              <Box flex={1}>
+                <QueryEditor ref={editorRef} />
+              </Box>
+              <Flex
+                padding='0.5em'
+                spacing={1}
+                direction='row-reverse'
+                align='center'
+              >
+                <Button
+                  colorScheme='gray'
+                  size='xs'
+                  onClick={() => executeQuery()}
+                >
+                  Run Current
+                </Button>
+              </Flex>
+            </Flex>
+          </Resizable>
+        </GridItem>
+        <GridItem>
+          <Box css={{ overflow: 'auto' }}>
+            {queryResult.map((queryResult: QueryResult, i: number) => (
+              <DataGrid key={i} queryResult={queryResult} />
+            ))}
+          </Box>
+        </GridItem>
+        <GridItem>
           <Flex
             padding='0.5em'
-            bg='darkThemeApp.containerBg'
-            borderBottomWidth='1px'
-            borderBottomStyle='solid'
-            borderBottomColor='gray.700'
+            bg='darkThemeApp.barCompoenentBg'
+            borderTopWidth='1px'
+            borderTopStyle='solid'
+            borderTopColor='gray.700'
             spacing={1}
             direction='row-reverse'
             align='center'
           >
-            <Button colorScheme='gray' size='xs' onClick={() => executeQuery()}>
-              Run Current
-            </Button>
+            <IconButton
+              size='xs'
+              aria-label='Reresh connection'
+              margin='0 .35em'
+              icon={<RiLayoutRightLine />}
+            />
+            <IconButton
+              size='xs'
+              aria-label='Reresh connection'
+              margin='0 .35em'
+              icon={<RiLayoutBottomLine />}
+            />
+            <IconButton
+              size='xs'
+              aria-label='Reresh connection'
+              margin='0 .35em'
+              icon={<RiLayoutLeftLine />}
+            />
           </Flex>
-        </Box>
-        <Box css={{ overflow: 'auto' }}>
-          {queryResult.map((queryResult: QueryResult, i: number) => (
-            <DataGrid key={i} queryResult={queryResult} />
-          ))}
-        </Box>
+        </GridItem>
       </Grid>
-      <Flex
-        padding='0.5em'
-        bg='darkThemeApp.barCompoenentBg'
-        borderTopWidth='1px'
-        borderTopStyle='solid'
-        borderTopColor='gray.700'
-        spacing={1}
-        direction='row-reverse'
-        align='center'
-      >
-        <IconButton
-          size='xs'
-          aria-label='Reresh connection'
-          margin='0 .35em'
-          icon={<RiLayoutRightLine />}
-        />
-        <IconButton
-          size='xs'
-          aria-label='Reresh connection'
-          margin='0 .35em'
-          icon={<RiLayoutBottomLine />}
-        />
-        <IconButton
-          size='xs'
-          aria-label='Reresh connection'
-          margin='0 .35em'
-          icon={<RiLayoutLeftLine />}
-        />
-      </Flex>
     </>
   );
 };
 
 export const QuerySection = ({}: QuerySectionProps) => {
   return (
-    <Flex direction='column' flex={1} height='100%'>
-      <Tabs
-        isFitted
-        variant='unstyled'
-        css={{
-          flex: '1',
-          display: 'flex',
-          'flex-direction': 'column',
-          height: '100%',
-        }}
-      >
-        <TabList mb='sm'>
-          <QueryTab index={0}>SQL</QueryTab>
-          <QueryTab index={1}>Data Structure</QueryTab>
-        </TabList>
-        <TabPanels
-          css={{
-            flex: '1',
-            display: 'flex',
-            'flex-direction': 'column',
-            height: 'calc(100% - 19px)',
-          }}
-        >
-          <TabPanel
+    <ReactResizeDetector
+      handleWidth
+      handleHeight
+      refreshMode='debounce'
+      refreshRate={100}
+      onResize={(width: number, height: number) =>
+        onSplitPanelResize('horizontal-resize', width, height)
+      }
+    >
+      {({ targetRef }: { targetRef: any }) => (
+        <Flex direction='column' flex={1} height='100%' ref={targetRef}>
+          <Tabs
+            isFitted
+            variant='unstyled'
             css={{
-              height: '100%',
               flex: '1',
               display: 'flex',
               'flex-direction': 'column',
-              padding: 0,
-            }}
-          >
-            <QueryContent />
-          </TabPanel>
-          <TabPanel
-            css={{
               height: '100%',
-              flex: '1',
-              display: 'flex',
-              'flex-direction': 'column',
-              padding: 0,
             }}
           >
-            <QueryContent />
-          </TabPanel>
-        </TabPanels>
-      </Tabs>
-    </Flex>
+            <TabList mb='sm'>
+              <QueryTab index={0}>SQL</QueryTab>
+              <QueryTab index={1}>Data Structure</QueryTab>
+            </TabList>
+            <TabPanels
+              css={{
+                flex: '1',
+                display: 'flex',
+                'flex-direction': 'column',
+                height: 'calc(100% - 19px)',
+              }}
+            >
+              <TabPanel
+                css={{
+                  height: '100%',
+                  flex: '1',
+                  display: 'flex',
+                  'flex-direction': 'column',
+                  padding: 0,
+                }}
+              >
+                <QueryContent />
+              </TabPanel>
+              <TabPanel
+                css={{
+                  height: '100%',
+                  flex: '1',
+                  display: 'flex',
+                  'flex-direction': 'column',
+                  padding: 0,
+                }}
+              >
+                <QueryContent />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
+        </Flex>
+      )}
+    </ReactResizeDetector>
   );
 };

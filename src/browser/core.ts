@@ -75,6 +75,7 @@ export const connect = async function (
       reconnecting,
     };
   } catch (error) {
+    console.log('****connect error', error);
     if (dbConn) {
       dbConn.disconnect();
     }

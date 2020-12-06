@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { theme } from './theme';
-import logo from './logo.svg';
 import { QuerySection } from './components/QuerySection';
 import { ConnectionSidebar } from './components/ConnectionSidebar';
 import { ConnectionTopbar } from './components/ConnectionTopbar';
@@ -8,45 +7,11 @@ import { RecordForm } from './components/RecordForm';
 import { Resizable } from 're-resizable';
 
 //import mysqlLogo from './server-db-client-mysql.png';
-import {
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Textarea,
-  Icon,
-  Text,
-  HStack,
-  Tag,
-  DarkMode,
-  IconButton,
-  Stack,
-  Button,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  StackDivider,
-  Badge,
-  Box,
-  Heading,
-  Link,
-  VStack,
-  Grid,
-  GridItem,
-  Flex,
-  Center,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  Divider,
-} from '@chakra-ui/react';
+import { Grid, GridItem } from '@chakra-ui/react';
 
 // Styles
 import './App.css';
-
-const showColorModeSwitcher = false;
-
+// Creates Event when splitter bar is dragged
 function App() {
   return (
     <Grid

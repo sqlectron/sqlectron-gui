@@ -46,7 +46,7 @@ function openWorkspaceWindow() {
   workspaceWindow?.once('ready-to-show', () => workspaceWindow?.maximize());
   workspaceWindow?.loadURL(
     isDev
-      ? 'http://localhost:3000?connection=true'
+      ? 'http://localhost:3333?connection=true'
       : `file://${path.join(__dirname, '../build/renderer/index.html')}`,
   );
 
@@ -118,7 +118,7 @@ function createWindow() {
 
   mainWindow.loadURL(
     isDev
-      ? 'http://localhost:3000'
+      ? 'http://localhost:3333'
       : `file://${path.join(__dirname, '../build/renderer/index.html')}`,
   );
 
