@@ -1,66 +1,13 @@
 import React, { useState } from 'react';
 import { CloseIcon } from '@chakra-ui/icons';
 import {
-  FaTable,
-  FaSearch,
-  FaPlus,
-  FaPlug,
-  FaEdit,
-  FaAngleDown,
-  FaRedo,
-  FaDatabase,
-} from 'react-icons/fa';
-
-import {
-  RiLayoutLeftLine,
-  RiLayoutBottomLine,
-  RiLayoutRightLine,
-} from 'react-icons/ri';
-import { DataGrid } from './DataGrid';
-
-//import mysqlLogo from './server-db-client-mysql.png';
-import {
-  Tab,
-  Tabs,
-  TabList,
-  TabPanels,
-  TabPanel,
-  AvatarGroup,
-  Avatar,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Textarea,
-  Icon,
-  Text,
-  HStack,
-  Tag,
-  DarkMode,
   IconButton,
-  Stack,
-  Button,
-  InputGroup,
-  InputLeftElement,
-  Input,
-  StackDivider,
-  Badge,
   Box,
-  Heading,
-  Link,
-  VStack,
-  Grid,
+  Text,
   Flex,
-  Center,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionIcon,
-  AccordionPanel,
-  Divider,
   chakra,
   useTab,
   useStyles,
-  useStyleConfig,
 } from '@chakra-ui/react';
 
 // @ts-ignore
@@ -79,9 +26,9 @@ export const QueryTab = React.forwardRef((props: any, ref: any) => {
   customStyles.padding = '0.1rem';
   customStyles.background = 'darkThemeApp.barCompoenentBg';
   if (props.index > 0) {
-    customStyles['border-left-width'] = '1px';
-    customStyles['border-left-style'] = 'solid';
-    customStyles['border-left-color'] = '#404040';
+    customStyles.borderLeftWidth = '1px';
+    customStyles.borderLeftStyle = 'solid';
+    customStyles.borderLeftColor = '#404040';
   }
 
   if (isSelected || isShown) {
@@ -101,7 +48,7 @@ export const QueryTab = React.forwardRef((props: any, ref: any) => {
             fontSize='xs'
             isTruncated
             flex={1}
-            css={{ display: 'inline-flex', 'vertical-align': 'middle' }}
+            css={{ display: 'inline-flex', verticalAlign: 'middle' }}
           >
             {tabProps.children}
           </Text>
@@ -110,7 +57,7 @@ export const QueryTab = React.forwardRef((props: any, ref: any) => {
           <IconButton
             aria-label='Reresh connection'
             margin='0 .35em'
-            css={{ background: 'none', 'border-radius': '0.1rem' }}
+            css={{ background: 'none', borderRadius: '0.1rem' }}
             size='xs'
             minWidth='1rem'
             h='1rem'

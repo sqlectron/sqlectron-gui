@@ -1,18 +1,14 @@
 import React from 'react';
-import { theme } from './theme';
-import { QuerySection } from './components/QuerySection';
-import { DatabaseListModal } from './components/DatabaseListModal';
-import { ConnectionSidebar } from './components/ConnectionSidebar';
-import { ConnectionTopbar } from './components/ConnectionTopbar';
-import { RecordForm } from './components/RecordForm';
 import { Resizable } from 're-resizable';
-
+import { theme } from '../theme';
+import { QueryContainer } from '../components/QueryContainer';
+import { DatabaseListModal } from '../components/DatabaseListModal';
+import { ConnectionSidebar } from '../components/ConnectionSidebar';
+import { ConnectionTopbar } from '../components/ConnectionTopbar';
+import { RecordForm } from '../components/RecordForm';
 import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
 
-// Styles
-import './App.css';
-
-function App() {
+function WorkspaceScreen() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -33,14 +29,6 @@ function App() {
             height: '100%',
           }}
         >
-          {/*<Box
-          w='80px'
-          borderRightWidth='1px'
-          borderRightStyle='solid'
-          borderRightColor='gray.700'
-        >
-          <DatabasesSidebar />
-        </Box>*/}
           <Resizable
             minWidth='100px'
             maxWidth='45vw'
@@ -73,7 +61,7 @@ function App() {
             height: '100%',
           }}
         >
-          <QuerySection />
+          <QueryContainer />
         </GridItem>
         <GridItem
           gridColumn='span 1'
@@ -113,4 +101,4 @@ function App() {
   );
 }
 
-export default App;
+export default WorkspaceScreen;

@@ -1,8 +1,7 @@
-import { app, BrowserWindow, ipcMain, IpcMainInvokeEvent } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import isDev from 'electron-is-dev';
-import * as config from './config';
-import * as core from './core';
+import { registerIPCMainHandlers } from './ipcMain';
 
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension: any, REACT_DEVELOPER_TOOLS: any, REDUX_DEVTOOLS: any;
@@ -46,7 +45,7 @@ function openWorkspaceWindow() {
   workspaceWindow?.once('ready-to-show', () => workspaceWindow?.maximize());
   workspaceWindow?.loadURL(
     isDev
-      ? 'http://localhost:3333?connection=true'
+      ? 'http://localhost:3333?connectionWorkspace'
       : `file://${path.join(__dirname, '../build/renderer/index.html')}`,
   );
 
@@ -131,32 +130,7 @@ function createWindow() {
 }
 
 app.on('ready', () => {
-  ipcMain.handle('openNewConnectionWindow', async () => 'foo');
-  ipcMain.handle('config.load', () => config.load(true));
-  ipcMain.handle('db.listTables', () => core.listTables());
-  ipcMain.handle('db.listDatabases', () => core.listDatabases());
-  ipcMain.handle(
-    'db.executeQuery',
-    (event: IpcMainInvokeEvent, query: string) => core.executeQuery(query),
-  );
-  ipcMain.handle(
-    'db.connect',
-    (
-      event: IpcMainInvokeEvent,
-      id: string,
-      databaseName: string,
-      reconnecting: boolean,
-      sshPassphrase: string,
-    ) =>
-      core
-        .connect(id, databaseName, reconnecting, sshPassphrase)
-        .then((res: any) => {
-          if (!res.error) {
-            openWorkspaceWindow();
-          }
-          return res;
-        }),
-  );
+  registerIPCMainHandlers({ openWorkspaceWindow });
 
   createWindow();
 

@@ -1,4 +1,4 @@
-import React, { MutableRefObject, useEffect } from 'react';
+import React, { MutableRefObject } from 'react';
 import MonacoEditor from 'react-monaco-editor';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 

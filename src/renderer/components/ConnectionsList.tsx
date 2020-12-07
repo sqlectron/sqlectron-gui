@@ -26,8 +26,6 @@ const connect = (server: any) => {
     .catch((err: Error) => console.error('***connect error', err));
 };
 
-interface ConnectionsListProps {}
-
 const connectionItems = (
   bgHover: string,
   connections: any,
@@ -64,9 +62,14 @@ const connectionItems = (
       borderBottomStyle='solid'
       borderBottomColor='#393A3A'
     >
-      {connections.map((item: any) => {
+      {connections.map((item: any, index: number) => {
         return (
-          <ConnectionItem bgHover={bgHover} item={item} groupName={groupName} />
+          <ConnectionItem
+            key={index}
+            bgHover={bgHover}
+            item={item}
+            groupName={groupName}
+          />
         );
       })}
     </VStack>
@@ -98,16 +101,16 @@ const ConnectionItem = ({
           paddingRight='2'
           css={{
             width: '100%',
-            'vertical-align': 'middle',
-            'font-size': '0.45em',
+            verticalAlign: 'middle',
+            fontSize: '0.45em',
             display: 'inline-grid',
-            'text-align': 'center',
+            textAlign: 'center',
           }}
         >
           {item.client}
         </Tag>
       </Box>
-      <Box flex={1} css={{ 'min-width': '0px' }}>
+      <Box flex={1} css={{ minWidth: '0px' }}>
         <Text
           fontWeight='semibold'
           letterSpacing='wide'
@@ -135,7 +138,7 @@ const ConnectionItem = ({
     </Flex>
   );
 };
-export const ConnectionsList = ({}: ConnectionsListProps) => {
+export const ConnectionsList = () => {
   const [config, setConfig] = useState(null);
   const bgHover = useColorModeValue('gray.200', 'darkThemeApp.listHoverBg');
 
@@ -196,7 +199,7 @@ export const ConnectionsList = ({}: ConnectionsListProps) => {
     <Accordion
       defaultIndex={[0]}
       size='sm'
-      css={{ 'min-width': '0px' }}
+      css={{ minWidth: '0px' }}
       allowMultiple
     >
       {groups.map((group) => (

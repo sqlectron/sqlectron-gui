@@ -45,7 +45,7 @@ export const ConnectionSidebar = ({}: ConnectionSidebarProps) => {
         paddingBottom='1em'
         className='scrollable'
         css={{
-          'overflow-y': 'auto',
+          overflowY: 'auto',
         }}
       >
         <HStack spacin={0} paddingLeft='0.5em'>
@@ -53,8 +53,9 @@ export const ConnectionSidebar = ({}: ConnectionSidebarProps) => {
           <Text fontSize='sm'>Tables</Text>
         </HStack>
         <VStack align='left' spacing={0}>
-          {tables.map(({ name }: { name: string }) => (
+          {tables.map(({ name }: { name: string }, index: number) => (
             <ListItem
+              key={index}
               name={name}
               selectedName={selectedTableName}
               icon={BsTable}

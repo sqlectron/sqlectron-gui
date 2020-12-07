@@ -124,3 +124,13 @@ export const listDatabases = async function () {
   console.log('***listDatabases result', results[0].rows);
   return results[0].rows;
 };
+
+export const openDatabase = async function (databaseName: string) {
+  console.log('***openDatabase fetching...');
+  // TODO: Fix this once sqlectron-core has been migrated to typescript
+  // @ts-ignore
+  const results = await dbConn.executeQuery(`
+    USE ${databaseName}
+  `);
+  console.log('***openDatabase result', results);
+};

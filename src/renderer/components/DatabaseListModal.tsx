@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { ListItem } from './ListItem';
-import { theme } from '../theme';
 import { FaSearch } from 'react-icons/fa';
 import { FaDatabase } from 'react-icons/fa';
 import {
@@ -12,12 +11,10 @@ import {
   ModalHeader,
   ModalContent,
   ModalBody,
-  ModalFooter,
   Input,
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react';
-import { ChevronDownIcon } from '@chakra-ui/icons';
 
 interface DatabaseListModalProps {
   isOpen: boolean;
@@ -38,16 +35,23 @@ const FilterDatabase = () => {
   );
 };
 
-const DatabaseList = ({ databases }: { databases: any }) => {
+const DatabaseList = ({
+  databases,
+  openDatabase,
+}: {
+  databases: any;
+  openDatabase: (name: string) => void;
+}) => {
   return (
     <VStack spacing={0} align='left' height='100%'>
-      {databases.map(({ name }: { name: string }) => (
+      {databases.map(({ name }: { name: string }, index: number) => (
         <ListItem
+          key={index}
           name={name}
           selectedName={''}
           icon={FaDatabase}
           onClick={() => {
-            //selectTableName(name);
+            openDatabase(name);
           }}
         />
       ))}
@@ -71,6 +75,14 @@ export const DatabaseListModal = ({
   }, []);
   console.log('**databases', databases);
 
+  const openDatabase = (name: string) => {
+    // @ts-ignore
+    window.sqlectron.db
+      .openDatabase(name)
+      .then((res: any) => console.log('***openDatabase res', res))
+      .catch((err: Error) => console.error(err));
+  };
+
   const bg = '#151616';
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -86,7 +98,7 @@ export const DatabaseListModal = ({
         </ModalHeader>
         <ModalBody padding='.1rem 1rem 1rem 1rem'>
           <FilterDatabase />
-          <DatabaseList databases={databases} />
+          <DatabaseList databases={databases} openDatabase={openDatabase} />
         </ModalBody>
       </ModalContent>
     </Modal>

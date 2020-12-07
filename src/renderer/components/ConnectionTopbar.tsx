@@ -21,7 +21,7 @@ export const ConnectionTopbar = ({
   return (
     <Box
       padding='0.5em'
-      css={{ 'justify-content': 'center', display: 'flex' }}
+      css={{ justifyContent: 'center', display: 'flex' }}
       bg='darkThemeApp.barCompoenentBg'
       borderBottomWidth='1px'
       borderBottomStyle='solid'

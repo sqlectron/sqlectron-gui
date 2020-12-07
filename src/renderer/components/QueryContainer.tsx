@@ -1,9 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Resizable } from 're-resizable';
 import { theme } from '../theme';
 import ReactResizeDetector from 'react-resize-detector';
-//import PerfectScrollbar from 'react-perfect-scrollbar';
-//import 'react-perfect-scrollbar/dist/css/styles.css';
 import { QueryResult } from '../types/queryResult';
 
 import {
@@ -16,7 +14,6 @@ import { DataGrid } from './DataGrid';
 import { QueryTab } from './QueryTab';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-//import mysqlLogo from './server-db-client-mysql.png';
 import {
   Tabs,
   TabList,
@@ -30,8 +27,6 @@ import {
   Flex,
 } from '@chakra-ui/react';
 
-interface QuerySectionProps {}
-
 const onSplitPanelResize = (source: string, width: number, height: number) => {
   const event = new CustomEvent('queryEditorResize', {
     detail: { source, width, height },
@@ -39,7 +34,7 @@ const onSplitPanelResize = (source: string, width: number, height: number) => {
   window.dispatchEvent(event);
 };
 
-const QueryContent = ({}) => {
+const QueryContent = () => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>(null);
   const [queryResult, setQueryResult] = useState([]);
 
@@ -163,7 +158,7 @@ const QueryContent = ({}) => {
   );
 };
 
-export const QuerySection = ({}: QuerySectionProps) => {
+export const QueryContainer = () => {
   return (
     <ReactResizeDetector
       handleWidth
@@ -182,7 +177,7 @@ export const QuerySection = ({}: QuerySectionProps) => {
             css={{
               flex: '1',
               display: 'flex',
-              'flex-direction': 'column',
+              flexDirection: 'column',
               height: '100%',
             }}
           >
@@ -194,7 +189,7 @@ export const QuerySection = ({}: QuerySectionProps) => {
               css={{
                 flex: '1',
                 display: 'flex',
-                'flex-direction': 'column',
+                flexDirection: 'column',
                 height: 'calc(100% - 19px)',
               }}
             >
@@ -203,7 +198,7 @@ export const QuerySection = ({}: QuerySectionProps) => {
                   height: '100%',
                   flex: '1',
                   display: 'flex',
-                  'flex-direction': 'column',
+                  flexDirection: 'column',
                   padding: 0,
                 }}
               >
@@ -214,7 +209,7 @@ export const QuerySection = ({}: QuerySectionProps) => {
                   height: '100%',
                   flex: '1',
                   display: 'flex',
-                  'flex-direction': 'column',
+                  flexDirection: 'column',
                   padding: 0,
                 }}
               >
