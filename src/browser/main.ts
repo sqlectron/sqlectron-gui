@@ -1,7 +1,7 @@
 import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import isDev from 'electron-is-dev';
-import { registerIPCMainHandlers } from './ipcMain';
+import { registerIPCMainHandlers, sendConnectEvent } from './ipcMain';
 
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension: any, REACT_DEVELOPER_TOOLS: any, REDUX_DEVTOOLS: any;
@@ -16,12 +16,13 @@ if (isDev) {
 let mainWindow: Electron.BrowserWindow | null;
 let workspaceWindow: Electron.BrowserWindow | null;
 
-function openWorkspaceWindow() {
+function openWorkspaceWindow(serverId: string) {
   if (!mainWindow) {
     throw new Error('mainWindow is null');
   }
 
   if (workspaceWindow) {
+    sendConnectEvent(workspaceWindow as BrowserWindow, serverId);
     console.log(
       'Skipping workspaceWindow creation, there is an instance already open',
     );
@@ -42,8 +43,14 @@ function openWorkspaceWindow() {
     },
   });
 
-  workspaceWindow?.once('ready-to-show', () => workspaceWindow?.maximize());
-  workspaceWindow?.loadURL(
+  workspaceWindow.on('closed', () => (workspaceWindow = null));
+  workspaceWindow.once('ready-to-show', () => workspaceWindow?.maximize());
+  workspaceWindow.webContents.on('did-finish-load', () => {
+    console.log('***finish load');
+    sendConnectEvent(workspaceWindow as BrowserWindow, serverId);
+  });
+
+  workspaceWindow.loadURL(
     isDev
       ? 'http://localhost:3333?connectionWorkspace'
       : `file://${path.join(__dirname, '../build/renderer/index.html')}`,
@@ -51,7 +58,7 @@ function openWorkspaceWindow() {
 
   // Open the DevTools.
   if (isDev) {
-    workspaceWindow?.webContents.openDevTools({ mode: 'detach' });
+    workspaceWindow.webContents.openDevTools({ mode: 'detach' });
   }
 }
 
@@ -103,7 +110,7 @@ function createWindow() {
         win.once('ready-to-show', () => win.maximize());
         win.loadURL(
           isDev
-            ? 'http://localhost:3000?connection=true'
+            ? 'http://localhost:3000?connectionWorkspace'
             : `file://${path.join(__dirname, '../build/renderer/index.html')}`,
         );
         // Open the DevTools.

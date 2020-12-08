@@ -16,14 +16,14 @@ import {
   AccordionPanel,
   useColorModeValue,
 } from '@chakra-ui/react';
+import sqlectron from '../api';
 
-const connect = (server: any) => {
-  console.log('***connecting', server);
-  // @ts-ignore
-  window.sqlectron.db
-    .connect(server.id, server.database, false, '')
-    .then((res: any) => console.log('***connect ok', res))
-    .catch((err: Error) => console.error('***connect error', err));
+const openWorkspaceWindow = (server: any) => {
+  console.log('***openWorkspaceWindow', server);
+  sqlectron
+    .openWorkspaceWindow(server.id)
+    .then((res: any) => console.log('***openWorkspaceWindow ok', res))
+    .catch((err: Error) => console.error('***openWorkspaceWindow error', err));
 };
 
 const connectionItems = (
@@ -130,7 +130,7 @@ const ConnectionItem = ({
             aria-label='Edit'
             size='xs'
             icon={<FaPlug />}
-            onClick={() => connect(item)}
+            onClick={() => openWorkspaceWindow(item)}
           />
           <IconButton aria-label='Edit' size='xs' icon={<FaEdit />} />
         </HStack>

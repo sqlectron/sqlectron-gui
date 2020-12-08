@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Resizable } from 're-resizable';
 import { theme } from '../theme';
 import { QueryContainer } from '../components/QueryContainer';
@@ -6,10 +6,43 @@ import { DatabaseListModal } from '../components/DatabaseListModal';
 import { ConnectionSidebar } from '../components/ConnectionSidebar';
 import { ConnectionTopbar } from '../components/ConnectionTopbar';
 import { RecordForm } from '../components/RecordForm';
-import { Grid, GridItem, useDisclosure } from '@chakra-ui/react';
+import {
+  Grid,
+  GridItem,
+  CircularProgress,
+  Center,
+  useDisclosure,
+} from '@chakra-ui/react';
 
 function WorkspaceScreen() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLoading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // @ts-ignore
+    window.sqlectron.db.onConnection((event: string, serverId: string) => {
+      console.log('****onConnection', { event, serverId });
+      if (event === 'open') {
+        // @ts-ignore
+        window.sqlectron.db
+          .connect(serverId, '', false, '')
+          .then((res: any) => setLoading(false))
+          .catch((err: Error) => {
+            setLoading(false);
+            console.error(err);
+          });
+      }
+    });
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Center height='100vh'>
+        <CircularProgress isIndeterminate color='green.300' />
+      </Center>
+    );
+  }
+
   return (
     <>
       <Grid

@@ -1,13 +1,17 @@
-import { ipcMain, IpcMainInvokeEvent } from 'electron';
+import { ipcMain, IpcMainInvokeEvent, BrowserWindow } from 'electron';
 import * as config from './config';
 import * as core from './core';
 
 export const registerIPCMainHandlers = ({
   openWorkspaceWindow,
 }: {
-  openWorkspaceWindow: () => void;
+  openWorkspaceWindow: (serverId: string) => void;
 }) => {
-  ipcMain.handle('openNewConnectionWindow', async () => 'foo');
+  ipcMain.handle(
+    'openWorkspaceWindow',
+    async (event: IpcMainInvokeEvent, serverId: string) =>
+      openWorkspaceWindow(serverId),
+  );
   ipcMain.handle('config.load', () => config.load(true));
   ipcMain.handle('db.listTables', () => core.listTables());
   ipcMain.handle('db.listDatabases', () => core.listDatabases());
@@ -28,14 +32,11 @@ export const registerIPCMainHandlers = ({
       databaseName: string,
       reconnecting: boolean,
       sshPassphrase: string,
-    ) =>
-      core
-        .connect(id, databaseName, reconnecting, sshPassphrase)
-        .then((res: any) => {
-          if (!res.error) {
-            openWorkspaceWindow();
-          }
-          return res;
-        }),
+    ) => core.connect(id, databaseName, reconnecting, sshPassphrase),
   );
+};
+
+export const sendConnectEvent = (win: BrowserWindow, serverId: string) => {
+  console.log(win, serverId);
+  win.webContents.send('db.connection', 'open', serverId);
 };
