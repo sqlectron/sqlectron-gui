@@ -30,11 +30,6 @@ export const connect = async function (
 
     server = sqlectron.servers.decryptSecrects(server, cryptoSecret);
 
-    // Terrible workaround to avoid a state issue of data loading from the main process.
-    // For some reason changing a value here in client from a data coming from the main process
-    // doesn't have any effect. We need to clone this data and use the new state.
-    server = JSON.parse(JSON.stringify(server));
-
     defaultDatabase = sqlectron.db.CLIENTS.find(
       (c: any) => c.key === server.client,
     ).defaultDatabase;
