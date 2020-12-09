@@ -30,10 +30,9 @@ function openWorkspaceWindow(serverId: string) {
   }
 
   workspaceWindow = new BrowserWindow({
+    show: false,
     parent: mainWindow,
     titleBarStyle: 'hiddenInset',
-    // width: 900,
-    // height: 680,
     webPreferences: {
       nativeWindowOpen: true,
       nodeIntegration: false, // is default value after Electron v5
@@ -42,9 +41,9 @@ function openWorkspaceWindow(serverId: string) {
       preload: path.resolve(__dirname, 'preload.js'),
     },
   });
+  workspaceWindow.maximize();
 
   workspaceWindow.on('closed', () => (workspaceWindow = null));
-  workspaceWindow.once('ready-to-show', () => workspaceWindow?.maximize());
   workspaceWindow.webContents.on('did-finish-load', () => {
     console.log('***finish load');
     sendConnectEvent(workspaceWindow as BrowserWindow, serverId);
@@ -60,6 +59,8 @@ function openWorkspaceWindow(serverId: string) {
   if (isDev) {
     workspaceWindow.webContents.openDevTools({ mode: 'detach' });
   }
+
+  workspaceWindow.show();
 }
 
 function createWindow() {
