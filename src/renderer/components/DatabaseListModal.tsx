@@ -15,6 +15,7 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react';
+import sqlectron from '../api';
 
 interface DatabaseListModalProps {
   isOpen: boolean;
@@ -67,8 +68,7 @@ export const DatabaseListModal = ({
 
   useEffect(() => {
     console.log('**fetching dbs');
-    // @ts-ignore
-    window.sqlectron.db
+    sqlectron.db
       .listDatabases()
       .then((res: any) => setDatabases(res))
       .catch((err: Error) => console.error(err));
@@ -76,8 +76,7 @@ export const DatabaseListModal = ({
   console.log('**databases', databases);
 
   const openDatabase = (name: string) => {
-    // @ts-ignore
-    window.sqlectron.db
+    sqlectron.db
       .openDatabase(name)
       .then((res: any) => console.log('***openDatabase res', res))
       .catch((err: Error) => console.error(err));

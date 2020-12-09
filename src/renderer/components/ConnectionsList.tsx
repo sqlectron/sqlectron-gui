@@ -143,8 +143,7 @@ export const ConnectionsList = () => {
   const bgHover = useColorModeValue('gray.200', 'darkThemeApp.listHoverBg');
 
   useEffect(() => {
-    // @ts-ignore
-    window.sqlectron.config
+    sqlectron.config
       .load()
       .then((res: any) => setConfig(res))
       .catch((err: Error) => console.error(err));

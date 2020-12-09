@@ -13,18 +13,17 @@ import {
   Center,
   useDisclosure,
 } from '@chakra-ui/react';
+import sqlectron from '../api';
 
 function WorkspaceScreen() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
-    // @ts-ignore
-    window.sqlectron.db.onConnection((event: string, serverId: string) => {
+    sqlectron.db.onConnection((event: string, serverId: string) => {
       console.log('****onConnection', { event, serverId });
       if (event === 'open') {
-        // @ts-ignore
-        window.sqlectron.db
+        sqlectron.db
           .connect(serverId, '', false, '')
           .then((res: any) => setLoading(false))
           .catch((err: Error) => {

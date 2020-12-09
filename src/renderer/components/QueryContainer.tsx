@@ -3,6 +3,7 @@ import { Resizable } from 're-resizable';
 import { theme } from '../theme';
 import ReactResizeDetector from 'react-resize-detector';
 import { QueryResult } from '../types/queryResult';
+import sqlectron from '../api';
 
 import {
   RiLayoutLeftLine,
@@ -40,11 +41,10 @@ const QueryContent = () => {
 
   const executeQuery = () => {
     const model = editorRef.current?.getModel();
-    const query = model?.getValue();
+    const query = model?.getValue() as string;
     console.log('***query', query);
 
-    // @ts-ignore
-    window.sqlectron.db
+    sqlectron.db
       .executeQuery(query)
       .then((res: any) => {
         console.log('***query result', query, res);

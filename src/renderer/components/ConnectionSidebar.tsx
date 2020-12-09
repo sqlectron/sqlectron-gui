@@ -12,6 +12,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { ChevronDownIcon } from '@chakra-ui/icons';
+import sqlectron from '../api';
 
 interface ConnectionSidebarProps {}
 
@@ -20,8 +21,7 @@ export const ConnectionSidebar = ({}: ConnectionSidebarProps) => {
   const [selectedTableName, selectTableName] = useState('');
 
   useEffect(() => {
-    // @ts-ignore
-    window.sqlectron.db
+    sqlectron.db
       .listTables()
       .then((res: any) => setTables(res))
       .catch((err: Error) => console.error(err));
