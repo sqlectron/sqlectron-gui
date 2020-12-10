@@ -2,8 +2,20 @@
 // @ts-ignore
 const sqlectron = require('sqlectron-core');
 
-let serverSession: any | null;
+// Reference to current selected server connection
+let serverConnection: any | null;
+
+// Reference to current selected database connection
 let dbConn: any | null;
+
+const serverConnections: {
+  [serverId: string]: {
+    session: any;
+    dbs: {
+      [dbName: string]: any;
+    };
+  };
+} = {};
 
 export const connect = async function (
   id: string,
@@ -35,7 +47,8 @@ export const connect = async function (
     ).defaultDatabase;
     database = databaseName || server.database || defaultDatabase;
 
-    if (!serverSession) {
+    serverConnection = serverConnections[server.id];
+    if (!serverConnection) {
       if (server.ssh) {
         if (
           server.ssh.privateKeyWithPassphrase &&
@@ -49,10 +62,14 @@ export const connect = async function (
           server.ssh.passphrase = sshPassphrase;
         }
       }
-      serverSession = sqlectron.db.createServer(server);
+      serverConnection = {
+        session: sqlectron.db.createServer(server),
+        dbs: {},
+      };
+      serverConnections[server.id] = serverConnection;
     }
 
-    dbConn = serverSession.db(database);
+    dbConn = serverConnection.session.db(database);
     if (dbConn) {
       return {
         server,
@@ -61,7 +78,8 @@ export const connect = async function (
       };
     }
 
-    dbConn = serverSession.createConnection(database);
+    dbConn = serverConnection.session.createConnection(database);
+    serverConnection.dbs[database] = dbConn;
     await dbConn.connect();
 
     return {
@@ -73,6 +91,11 @@ export const connect = async function (
     console.log('****connect error', error);
     if (dbConn) {
       dbConn.disconnect();
+      dbConn = null;
+    }
+
+    if (database && serverConnection && serverConnection.dbs[database]) {
+      delete serverConnection.dbs[database];
     }
 
     // TODO: Close server connection if there are no other connections left

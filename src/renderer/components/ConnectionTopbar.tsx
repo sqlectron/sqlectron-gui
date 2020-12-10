@@ -13,10 +13,14 @@ import {
 
 interface ConnectionTopbarProps {
   onDatabaseButtonClick: () => void;
+  server: any;
+  database: string;
 }
 
 export const ConnectionTopbar = ({
   onDatabaseButtonClick,
+  server,
+  database,
 }: ConnectionTopbarProps) => {
   return (
     <Box
@@ -69,11 +73,11 @@ export const ConnectionTopbar = ({
         </Text>
         <Divider orientation='vertical' />
         <Text fontSize='xs' fontWeight='bold'>
-          MySQL
+          {server.client}
         </Text>
         <Divider orientation='vertical' />
         <Text fontSize='xs' fontWeight='bold'>
-          users-api
+          {database || server.database}
         </Text>
       </HStack>
       <IconButton

@@ -20,6 +20,7 @@ import sqlectron from '../api';
 interface DatabaseListModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onDatabaseClick: (databaseName: string) => void;
 }
 
 const FilterDatabase = () => {
@@ -63,6 +64,7 @@ const DatabaseList = ({
 export const DatabaseListModal = ({
   isOpen,
   onClose,
+  onDatabaseClick,
 }: DatabaseListModalProps) => {
   const [databases, setDatabases] = useState([]);
 
@@ -74,13 +76,6 @@ export const DatabaseListModal = ({
       .catch((err: Error) => console.error(err));
   }, []);
   console.log('**databases', databases);
-
-  const openDatabase = (name: string) => {
-    sqlectron.db
-      .openDatabase(name)
-      .then((res: any) => console.log('***openDatabase res', res))
-      .catch((err: Error) => console.error(err));
-  };
 
   const bg = '#151616';
   return (
@@ -97,7 +92,13 @@ export const DatabaseListModal = ({
         </ModalHeader>
         <ModalBody padding='.1rem 1rem 1rem 1rem'>
           <FilterDatabase />
-          <DatabaseList databases={databases} openDatabase={openDatabase} />
+          <DatabaseList
+            databases={databases}
+            openDatabase={(name: string) => {
+              onClose();
+              onDatabaseClick(name);
+            }}
+          />
         </ModalBody>
       </ModalContent>
     </Modal>

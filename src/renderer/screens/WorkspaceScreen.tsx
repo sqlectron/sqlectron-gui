@@ -18,6 +18,8 @@ import sqlectron from '../api';
 function WorkspaceScreen() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLoading, setLoading] = useState(true);
+  const [server, setServer] = useState<any>(null);
+  const [database, setDatabase] = useState('');
 
   useEffect(() => {
     sqlectron.db.onConnection((event: string, serverId: string) => {
@@ -25,7 +27,11 @@ function WorkspaceScreen() {
       if (event === 'open') {
         sqlectron.db
           .connect(serverId, '', false, '')
-          .then((res: any) => setLoading(false))
+          .then((res: any) => {
+            console.log('**connect res', res);
+            setServer(res.server);
+            setLoading(false);
+          })
           .catch((err: Error) => {
             setLoading(false);
             console.error(err);
@@ -33,6 +39,22 @@ function WorkspaceScreen() {
       }
     });
   }, []);
+
+  const onDatabaseConnectClick = (databaseName: string) => {
+    setLoading(true);
+    setDatabase(databaseName);
+
+    sqlectron.db
+      .connect(server.id, databaseName, false, '')
+      .then((res: any) => {
+        console.log('**connect res', res);
+        setLoading(false);
+      })
+      .catch((err: Error) => {
+        setLoading(false);
+        console.error(err);
+      });
+  };
 
   if (isLoading) {
     return (
@@ -52,7 +74,11 @@ function WorkspaceScreen() {
         templateRows='min-content auto min-content'
       >
         <GridItem gridColumn='span 3'>
-          <ConnectionTopbar onDatabaseButtonClick={onOpen} />
+          <ConnectionTopbar
+            server={server}
+            database={database}
+            onDatabaseButtonClick={onOpen}
+          />
         </GridItem>
         <GridItem
           gridColumn='span 1'
@@ -128,7 +154,11 @@ function WorkspaceScreen() {
           </Resizable>
         </GridItem>
       </Grid>
-      <DatabaseListModal isOpen={isOpen} onClose={onClose} />
+      <DatabaseListModal
+        isOpen={isOpen}
+        onClose={onClose}
+        onDatabaseClick={onDatabaseConnectClick}
+      />
     </>
   );
 }
