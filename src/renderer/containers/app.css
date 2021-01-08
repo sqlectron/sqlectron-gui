@@ -58,32 +58,468 @@ span.clickable {
 ::-webkit-scrollbar-thumb { background: #666; border-radius:5px }
 
 
-/* Dark theme */
-body.dark-theme {
-  filter: invert(100%);
-  background-color: #333;
+/* centralize "or" button */
+.ui.buttons .or:before {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  line-height: 0em !important;
 }
 
-body.dark-theme .Select-control,
-body.dark-theme .ui.form input:not([type]),
-body.dark-theme .ui.form input[type="date"],
-body.dark-theme .ui.form input[type="datetime-local"],
-body.dark-theme .ui.form input[type="email"],
-body.dark-theme .ui.form input[type="number"],
-body.dark-theme .ui.form input[type="password"],
-body.dark-theme .ui.form input[type="search"],
-body.dark-theme .ui.form input[type="tel"],
-body.dark-theme .ui.form input[type="time"],
-body.dark-theme .ui.form input[type="text"],
-body.dark-theme .ui.form input[type="url"] {
+/* Dark theme */
+body.dark-theme {
+  background-color: #252632;
+}
+
+body.dark-theme #header{
+  background-color: #1A1C25;
+}
+
+body.dark-theme #header img {
+  filter: sepia(100%) hue-rotate(190deg) saturate(300%) brightness(200%);
+}
+
+body.dark-theme img {
+  filter: saturate(100%);
+}
+
+body.dark-theme a {
+  color: #6272a4 !important;
+}
+
+body.dark-theme i {
+  color: #6272a4;
+}
+
+body.dark-theme input {
+  color: #FFF !important;
+}
+
+
+body.dark-theme input:not([type]),
+body.dark-theme input[type] {
+  border-color: #000 !important;
+  background-color: #2D303E !important;
+}
+
+body.dark-theme input:not([type]):focus,
+body.dark-theme input[type]:focus {
+  border-color: #6D7DAD !important;
+  background-color: #2D303E !important;
+}
+
+body.dark-theme input:not([type])::placeholder,
+body.dark-theme input[type]::placeholder {
+  color: #6D7DAD !important;
+}
+
+body.dark-theme input:not([type]):focus::placeholder,
+body.dark-theme input[type]:focus::placeholder {
+  color: #6D7DAD !important;
+}
+
+body.dark-theme .ui.button {
+  background-color: #2D303E;
+  color: #6D7DAD;
+}
+
+body.dark-theme .ui.button:hover {
+  background-color: #292c3b;
+}
+
+body.dark-theme .green {
+  background-color: #45db6a !important;
+  color: #FFF !important;
+}
+
+body.dark-theme .green:hover {
+  background-color: #3dc760 !important;
+}
+
+body.dark-theme .card {
+  background-color: #252632 !important;
+  border: 1px #6D7DAD solid !important;
+  box-shadow: none !important;
+  color: #FFF !important;
+}
+
+body.dark-theme .card .attached {
+  margin: 0px !important;
+  width: calc(100%) !important;
+}
+
+body.dark-theme .card div {
+  color: #FFF !important;
+}
+
+/*footer*/
+
+body.dark-theme .ui[class*="bottom fixed"].menu {
+  background-color: #1A1C25;
+}
+
+body.dark-theme .ui.red.label {
+  background-color: #FF5555 !important;
+}
+
+body.dark-theme .ui.red.label:hover {
+  background-color: #d83e3e !important;
+}
+
+body.dark-theme .ui.red.label i {
+  color: #FFF !important;
+}
+
+/*modal*/
+
+body.dark-theme #server-modal .header {
+  background-color: #252632;
+  color: #6D7DAD;
+}
+
+body.dark-theme #server-modal .content {
+  background-color: #252632;
+  color: #6D7DAD;
+}
+
+body.dark-theme #server-modal .content label {
+  color: #6D7DAD;
+}
+
+body.dark-theme #server-modal .content .ui.segment {
+  background-color: #252632;
   border-color: #000;
 }
+
+body.dark-theme .Select-menu-outer {
+  border: 1px solid #6D7DAD !important;
+  border-top-color: #6D7DAD !important;
+}
+
+body.dark-theme .Select-control {
+  background-color: #252632 !important;
+  border-color: #000 !important;
+}
+
+body.dark-theme .is-open .Select-control {
+  border-color: #6D7DAD !important;
+}
+
+body.dark-theme .Select-control div {
+  color: #6D7DAD;
+}
+
+body.dark-theme .Select-control input {
+  display: none !important;
+}
+
+body.dark-theme .Select-menu {
+  background-color: #6D7DAD !important;
+}
+
+body.dark-theme .Select-option {
+  background-color: #252632 !important;
+  color: #6D7DAD;
+}
+
+body.dark-theme .is-selected {
+  background-color: #44475a !important;
+}
+
+body.dark-theme .is-focused {
+  background-color: #5b5e70 !important;
+}
+
+body.dark-theme ::-webkit-scrollbar-track {
+  background: #1A1C25 !important; 
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb {
+  background: #6D7DAD !important; 
+}
+
+body.dark-theme ::-webkit-scrollbar-thumb:hover {
+  background: #6D7DAD !important; 
+}
+
 body.dark-theme .ui.toggle.checkbox .box:before,
 body.dark-theme .ui.toggle.checkbox label:before {
-  border: 1px solid #333;
-  background: #ccc;
+  background: #1A1C25 !important;
 }
-body.dark-theme .ui.toggle.checkbox .box:after,
-body.dark-theme .ui.toggle.checkbox label:after {
-  box-shadow: 0px 1px 2px 0 #333, 0px 0px 0px 1px #333 inset;
+
+body.dark-theme .ui.toggle.checkbox input:checked ~ label:before{
+  background-color: #6D7DAD !important;
+  color: #6D7DAD !important;
+}
+
+body.dark-theme .ui.toggle.checkbox input:checked ~ label {
+  color: #6D7DAD !important;
+}
+
+body.dark-theme #server-modal .actions {
+  background-color: #252632 !important;
+}
+
+body.dark-theme #server-modal .actions .ui.button {
+  background-color: #F8F8F2;
+  color: #333;
+}
+
+body.dark-theme #server-modal .actions .ui.button:hover {
+  background-color: #cfcfcb;
+  color: #333;
+}
+
+body.dark-theme #server-modal .actions .ui.button i {
+  color: #333;
+}
+
+body.dark-theme #server-modal .actions .blue {
+  background-color: #46aac0 !important;
+  color: #FFF !important;
+}
+
+body.dark-theme #server-modal .actions .blue:hover {
+  background-color: #3c94a8 !important;
+}
+
+body.dark-theme #server-modal .actions .blue i {
+  color: #FFF !important;
+}
+
+body.dark-theme #server-modal .actions .black {
+  background-color: #bd93f9 !important;
+  color: #FFF !important;
+}
+
+body.dark-theme #server-modal .actions .black:hover {
+  background-color: #aa83e2 !important;
+}
+
+body.dark-theme #server-modal .actions .black i {
+  color: #FFF !important;
+}
+
+body.dark-theme #server-modal .actions .green {
+  background-color: #45db6a !important;
+  color: #FFF !important;
+}
+
+body.dark-theme #server-modal .actions .green:hover {
+  background-color: #3dc760 !important;
+}
+
+body.dark-theme #server-modal .actions .green i {
+  color: #FFF !important;
+}
+
+body.dark-theme #server-modal .actions .red {
+  background-color: #FF5555 !important;
+  color: #FFF !important;
+}
+
+body.dark-theme #server-modal .actions .red:hover {
+  background-color: #d83e3e !important;
+  color: #FFF !important;
+}
+
+body.dark-theme #server-modal .actions .red i {
+  color: #FFF !important;
+}
+
+body.dark-theme #settings-modal .header {
+  background-color: #252632;
+  color: #6D7DAD;
+}
+
+body.dark-theme #settings-modal .content {
+  background-color: #252632;
+  color: #6D7DAD;
+}
+
+body.dark-theme #settings-modal .content div {
+  background-color: #252632;
+  color: #6D7DAD;
+  border-color: #6D7DAD;
+}
+
+body.dark-theme #settings-modal .content label {
+  color: #6D7DAD;
+}
+
+body.dark-theme #settings-modal .actions {
+  background-color: #252632 !important;
+}
+
+body.dark-theme #settings-modal .actions .black {
+  background-color: #bd93f9 !important;
+  color: #FFF !important;
+}
+
+body.dark-theme #settings-modal .actions .black:hover {
+  background-color: #aa83e2 !important;
+}
+
+body.dark-theme #settings-modal .actions .black i {
+  color: #FFF !important;
+}
+
+body.dark-theme #settings-modal .actions .green {
+  background-color: #45db6a !important;
+  color: #FFF !important;
+}
+
+body.dark-theme #settings-modal .actions .green:hover {
+  background-color: #3dc760 !important;
+}
+
+body.dark-theme #settings-modal .actions .green i {
+  color: #FFF !important;
+}
+
+body.dark-theme .ui.message {
+  background-color: #252632;
+  border: 1px #6D7DAD solid !important;
+}
+
+body.dark-theme .ui.message p {
+  color: #6D7DAD;
+}
+
+/*connected area*/
+
+body.dark-theme #main-collapse {
+  background-color: #252632 !important;
+}
+
+body.dark-theme .ui.basic.buttons .button:focus, .ui.basic.button:focus {
+  background-color: #252632 !important;
+}
+
+body.dark-theme .ui.basic.buttons .button:hover, .ui.basic.button:hover {
+  background-color: #252632 !important;
+}
+
+body.dark-theme .ui.vertical.menu {
+  background-color: #2D303E;
+}
+
+body.dark-theme .ui.vertical.menu div {
+  background-color: #2D303E !important;
+  color: #6D7DAD !important;
+  box-shadow: none !important;
+}
+
+body.dark-theme .ui.vertical.menu span {
+  color: #6D7DAD !important;
+}
+
+body.dark-theme .react-resizable-ew-resize .react-resizable-handle {
+  color: #6D7DAD !important;
+}
+
+body.dark-theme #tabs-nav-wrapper div {
+  color: #6D7DAD !important;
+}
+
+body.dark-theme #tabs-nav-wrapper .ui.button {
+  background-color: #2D303E !important;
+}
+
+body.dark-theme #tabs-nav-wrapper .ui.button:hover {
+  background-color: #292c3b !important;
+}
+
+body.dark-theme #tabs-nav-wrapper button:focus {
+  background-color: #292c3b !important;
+}
+
+body.dark-theme .ui.buttons .ui.positive.button {
+  background-color: #45db6a !important;
+  color: #FFF !important;
+}
+
+body.dark-theme .ui.buttons .ui.positive.button:hover {
+  background-color: #3dc760 !important;
+  color: #FFF !important;
+}
+
+body.dark-theme .ui.buttons .ui.button {
+  background-color: #bd93f9;
+  color: #FFF !important;
+}
+
+body.dark-theme .ui.buttons .ui.button:hover {
+  background-color: #aa83e2;
+  color: #FFF !important;
+}
+
+body.dark-theme .react-resizable.react-resizable-se-resize {
+  background-color: #252632;
+  border: 1px #6D7DAD solid;
+}
+
+body.dark-theme .react-resizable.react-resizable-se-resize div {
+  color: #FFF !important;
+}
+
+body.dark-theme .react-resizable.react-resizable-se-resize span {
+  color: #FFF !important;
+}
+
+body.dark-theme .ace-github {
+  background-color: #252632;
+}
+
+body.dark-theme .ace-github .ace_gutter {
+  background-color: #252632;
+}
+
+body.dark-theme .ace-github .ace_marker-layer .ace_active-line {
+  background-color: #252632;
+}
+
+body.dark-theme .ace_scroller span {
+  color: #6D7DAD !important;
+}
+
+body.dark-theme .ace_scroller span.ace_completion-highlight {
+  color: #FFF !important;
+}
+
+body.dark-theme .ui.toggle.checkbox input ~ label:before{
+  background: #1A1C25 !important;
+  color: #6D7DAD !important;
+}
+
+body.dark-theme .ui.secondary.menu .right.menu .ui.toggle.checkbox * {
+  color: #6D7DAD !important;
+}
+
+body.dark-theme .react-resizable-se-resize .react-resizable-handle {
+  filter: invert(1);
+}
+
+body.dark-theme #query-result {
+  border: 1px #6D7DAD solid;
+  border-radius: .25rem;
+}
+
+body.dark-theme #query-result div {
+  background-color: #292c3b;
+  color: #6D7DAD !important;
+  border-color: #6D7DAD;
+}
+
+body.dark-theme #query-result .ui.label {
+  border: 1px #6D7DAD solid;
+}
+
+body.dark-theme .grid-query-wrapper {
+  border-width: 0 !important;
+}
+
+body.dark-theme .Grid__cell {
+  line-height: 2em !important;
 }
