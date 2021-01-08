@@ -82,7 +82,7 @@
   "dependencies": {
     "@babel/core": "^7.9.6",
     "@babel/polyfill": "^7.8.7",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bunyan": "^1.8.5",
     "core-js": "^3.6.5",
     "lodash.defaultsdeep": "^4.6.0",
