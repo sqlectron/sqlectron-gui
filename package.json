@@ -86,7 +86,7 @@
     "bunyan": "^1.8.5",
     "core-js": "^3.6.5",
     "lodash.defaultsdeep": "^4.6.0",
-    "sqlectron-core": "8.3.2"
+    "sqlectron-core": "9.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -134,7 +134,7 @@
     "prop-types": "^15.7.2",
     "react": "^15.6.2",
     "react-ace": "^7.0.5",
-    "react-addons-shallow-compare": "^15.1.0",
+    "react-addons-shallow-compare": "^15.6.3",
     "react-dom": "^15.0.1",
     "react-draggable": "^3.3.2",
     "react-redux": "^5.1.2",
@@ -148,7 +148,7 @@
     "redux-thunk": "^2.3.0",
     "rimraf": "^3.0.2",
     "sass-loader": "^6.0.7",
-    "spawn-auto-restart": "^2.0.1",
+    "spawn-auto-restart": "^3.0.0",
     "style-loader": "^1.2.1",
     "url-loader": "^4.1.0",
     "webpack": "^4.43.0",
