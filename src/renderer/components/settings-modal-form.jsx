@@ -92,7 +92,7 @@ export default class SettingsModalForm extends Component {
   }
 
   handleOnLogLevelChange(level) {
-    this.setState({ log: { ...this.state.log, level } });
+    this.setState({ log: { ...this.state.log, level: level.value } });
   }
 
   renderLogLevelItem({ label, icon }) {
