@@ -13,6 +13,7 @@ const logger = createLogger('app');
 //   autoSubmit: true
 // });
 
+app.allowRendererProcessReuse = false;
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
