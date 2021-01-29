@@ -206,7 +206,12 @@ export function openQuery () {
 
       const query = await fileHandler.openFile(filename);
 
-      dispatch({ type: OPEN_QUERY_SUCCESS, name, query, filename });
+      dispatch({
+        type: OPEN_QUERY_SUCCESS,
+        name,
+        query,
+        filename,
+      });
     } catch (error) {
       dispatch({ type: OPEN_QUERY_FAILURE, error });
     }
