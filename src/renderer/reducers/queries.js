@@ -139,6 +139,7 @@ export default function (state = INITIAL_STATE, action) {
       return changeStateByCurrentQuery(state, {
         name: action.name,
         query: action.query,
+        filename: action.filename,
       });
     }
     case types.OPEN_QUERY_FAILURE:
