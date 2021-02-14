@@ -278,10 +278,12 @@ export function cancelQuery (queryId) {
 }
 
 
-function stringifyResultToCSV(rows, delimiter) {
-  if (!rows.length) {
+function stringifyResultToCSV(origRows, delimiter) {
+  if (!origRows.length) {
     return '';
   }
+
+  const rows = cloneDeep(origRows);
 
   const header = Object.keys(rows[0]).reduce((_header, col) => {
     _header[col] = col; // eslint-disable-line no-param-reassign
