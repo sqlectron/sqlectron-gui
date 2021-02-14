@@ -53,7 +53,9 @@ class ServerManagerment extends Component {
   }
 
   onConnectClick({ id }) {
-    this.props.router.push(`/server/${id}`);
+    const { dispatch, router } = this.props;
+    dispatch(ConnActions.setConnecting());
+    router.push(`/server/${id}`);
   }
 
   onTestConnectionClick(server) {

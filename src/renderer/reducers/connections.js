@@ -16,10 +16,16 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
+    case types.CONNECTION_SET_CONNECTING: {
+      return {
+        ...INITIAL_STATE,
+        connecting: true,
+      };
+    }
     case types.CONNECTION_REQUEST: {
       const { disabledFeatures } = CLIENTS.find(dbClient => dbClient.key === action.server.client);
       return {
-        ...INITIAL_STATE,
+        ...state,
         server: action.server,
         disabledFeatures: disabledFeatures || [],
       };
