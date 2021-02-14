@@ -6,6 +6,7 @@ export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
 export const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS';
 export const CONNECTION_FAILURE = 'CONNECTION_FAILURE';
 export const CONNECTION_REQUIRE_SSH_PASSPHRASE = 'CONNECTION_REQUIRE_SSH_PASSPHRASE';
+export const CONNECTION_SET_CONNECTING = 'CONNECTION_SET_CONNECTING';
 export const TEST_CONNECTION_REQUEST = 'TEST_CONNECTION_REQUEST';
 export const TEST_CONNECTION_SUCCESS = 'TEST_CONNECTION_SUCCESS';
 export const TEST_CONNECTION_FAILURE = 'TEST_CONNECTION_FAILURE';
@@ -37,6 +38,12 @@ export function getDBConnByName(database) {
   }
 
   return dbConn;
+}
+
+export function setConnecting () {
+  return (dispatch) => {
+    dispatch({ type: CONNECTION_SET_CONNECTING });
+  };
 }
 
 

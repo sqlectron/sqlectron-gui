@@ -90,11 +90,12 @@ class AppContainer extends Component {
     // remove the loading screen quickly if disabled
     const l1 = document.getElementById('loading');
     const l2 = document.getElementById('loading-signal');
-    if (l1 && l2 && disabledOpenAnimation) {
+    const l3 = document.getElementById('loading-started');
+    if (l1 && l2 && l3 && disabledOpenAnimation) {
       l1.remove();
       l2.remove();
     }
-    if (l1 && l2 && !disabledOpenAnimation) {
+    if (l1 && l2 && l3 && !disabledOpenAnimation) {
       this.runLoadingAnimation();
     }
   }
@@ -107,6 +108,8 @@ class AppContainer extends Component {
 
   // this runs the animated loading
   runLoadingAnimation() {
+    document.getElementById('loading-started').remove();
+
     const img = new Image();
 
     img.onload = () => {
