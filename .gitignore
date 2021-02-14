@@ -6,3 +6,7 @@ installers
 npm-debug.log
 .DS_Store
 .tmp
+
+# test files
+*.sqlite3
+*.db
