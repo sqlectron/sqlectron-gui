@@ -9,7 +9,6 @@ import TableCell from './query-result-table-cell';
 import PreviewModal from './preview-modal';
 import { valueToString } from '../utils/convert';
 
-import 'react-virtualized/styles.css';
 import './query-result-table.scss';
 
 // TODO: remove this shim
