@@ -295,31 +295,34 @@ export default class Query extends Component {
             className="react-resizable react-resizable-se-resize ui segment"
             height={QUERY_EDITOR_HEIGTH}
             width={500}
-            onResizeStop={this.onQueryBoxResize}>
-            <AceEditor
-              mode="sql"
-              theme="github"
-              name={this.props.editorName}
-              height="calc(100% - 15px)"
-              width="100%"
-              ref="queryBoxTextarea"
-              value={query.query}
-              wrapEnabled={this.state.wrapEnabled}
-              showPrintMargin={false}
-              commands={this.getCommands()}
-              editorProps={{ $blockScrolling: Infinity }}
-              onChange={debounce(onSQLChange, 50)}
-              enableBasicAutocompletion
-              enableLiveAutocompletion />
-            <div className="ui secondary menu" style={{ marginTop: 0 }}>
-              <div className="right menu">
-                <CheckBox
-                  name="wrapQueryContents"
-                  label="Wrap Contents"
-                  onChecked={this.onWrapContentsChecked}
-                  onUnchecked={this.onWrapContentsUnchecked} />
+            onResizeStop={this.onQueryBoxResize}
+          >
+            <React.Fragment>
+              <AceEditor
+                mode="sql"
+                theme="github"
+                name={this.props.editorName}
+                height="calc(100% - 15px)"
+                width="100%"
+                ref="queryBoxTextarea"
+                value={query.query}
+                wrapEnabled={this.state.wrapEnabled}
+                showPrintMargin={false}
+                commands={this.getCommands()}
+                editorProps={{ $blockScrolling: Infinity }}
+                onChange={debounce(onSQLChange, 50)}
+                enableBasicAutocompletion
+                enableLiveAutocompletion />
+              <div className="ui secondary menu" style={{ marginTop: 0 }}>
+                <div className="right menu">
+                  <CheckBox
+                    name="wrapQueryContents"
+                    label="Wrap Contents"
+                    onChecked={this.onWrapContentsChecked}
+                    onUnchecked={this.onWrapContentsUnchecked} />
+                </div>
               </div>
-            </div>
+            </React.Fragment>
           </ResizableBox>
           <div className="ui secondary menu" style={{ marginTop: 0 }}>
             {infos
