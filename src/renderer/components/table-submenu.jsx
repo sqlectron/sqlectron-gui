@@ -40,7 +40,7 @@ export default class TableSubmenu extends Component {
     const title = this.state.collapsed ? 'Expand' : 'Collapse';
     const cssClass = this.state.collapsed ? 'right' : 'down';
     const cssStyle = { ...STYLE.header };
-    if (!itemsByTable || !itemsByTable[table] || itemsByTable[table].length) {
+    if (!itemsByTable || !itemsByTable[table] || !itemsByTable[table].length) {
       cssStyle.color = 'lightgray';
     }
     return (
