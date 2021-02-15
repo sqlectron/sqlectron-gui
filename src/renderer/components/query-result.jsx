@@ -37,7 +37,7 @@ export default class QueryResult extends Component {
     );
   }
 
-  componentWillUpdate(nextProps) {
+  UNSAFE_componentWillUpdate(nextProps) {
     const renderingResults = !nextProps.isExecuting && this.props.isExecuting;
     if (renderingResults && this.refs.loader) {
       const loader = this.refs.loader.getElementsByClassName('text loader')[0];

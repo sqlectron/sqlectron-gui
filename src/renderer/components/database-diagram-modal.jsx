@@ -56,7 +56,7 @@ export default class DatabaseDiagramModal extends Component {
     }).modal('show');
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.showDiagramIfNeeded(nextProps);
   }
 

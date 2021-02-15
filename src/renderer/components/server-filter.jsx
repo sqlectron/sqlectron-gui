@@ -16,7 +16,7 @@ export default class ServerFilter extends Component {
     this.onFilterChange = this.onFilterChange.bind(this);
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     this.delayedCallback = debounce(this.props.onFilterChange, 200);
   }
 

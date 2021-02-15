@@ -73,7 +73,7 @@ export default class ServerModalForm extends Component {
     }).modal('show');
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({ error: nextProps.error });
   }
 

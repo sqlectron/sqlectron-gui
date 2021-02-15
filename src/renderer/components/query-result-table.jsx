@@ -68,7 +68,7 @@ export default class QueryResultTable extends Component {
     this.resize();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.resize(nextProps);
 
     if (nextProps.widthOffset !== this.props.widthOffset) {

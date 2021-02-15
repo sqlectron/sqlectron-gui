@@ -92,7 +92,7 @@ export default class Query extends Component {
     this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', false);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (!nextProps.enabledAutoComplete) {
       return;
     }

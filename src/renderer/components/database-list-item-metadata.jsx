@@ -33,7 +33,7 @@ export default class DbMetadataList extends Component {
     this.toggleCollapse = this.toggleCollapse.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.state.collapsed === undefined) {
       this.setState({ collapsed: !!nextProps.collapsed });
     }

@@ -32,7 +32,7 @@ class AppContainer extends Component {
     this.menuHandler = new MenuHandler();
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.dispatch(ConfigActions.loadConfig());
   }
 
@@ -72,7 +72,7 @@ class AppContainer extends Component {
     });
   }
 
-  componentWillReceiveProps(newProps) {
+  UNSAFE_componentWillReceiveProps(newProps) {
     const { config } = newProps;
     if (!config.data) { return; }
     const { zoomFactor, enabledDarkTheme, disabledOpenAnimation } = config.data;

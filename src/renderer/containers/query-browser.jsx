@@ -134,7 +134,7 @@ class QueryBrowserContainer extends Component {
     this.onShowDiagramModal = this.onShowDiagramModal.bind(this);
   }
 
-  componentWillMount () {
+  UNSAFE_componentWillMount () {
     const { dispatch, params } = this.props;
     dispatch(ConnActions.connect(params.id));
   }
@@ -143,7 +143,7 @@ class QueryBrowserContainer extends Component {
     this.setMenus();
   }
 
-  componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps (nextProps) {
     const { dispatch, router, connections } = nextProps;
 
     if (connections.error
