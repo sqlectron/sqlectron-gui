@@ -232,15 +232,15 @@ body.dark-theme .is-focused {
 }
 
 body.dark-theme ::-webkit-scrollbar-track {
-  background: #1A1C25 !important; 
+  background: #1A1C25 !important;
 }
 
 body.dark-theme ::-webkit-scrollbar-thumb {
-  background: #6D7DAD !important; 
+  background: #6D7DAD !important;
 }
 
 body.dark-theme ::-webkit-scrollbar-thumb:hover {
-  background: #6D7DAD !important; 
+  background: #6D7DAD !important;
 }
 
 body.dark-theme .ui.toggle.checkbox .box:before,
@@ -520,6 +520,6 @@ body.dark-theme .grid-query-wrapper {
   border-width: 0 !important;
 }
 
-body.dark-theme .Grid__cell {
+body.dark-theme .ReactVirtualized__Grid__cell {
   line-height: 2em !important;
 }

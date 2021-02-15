@@ -12,6 +12,17 @@ import { valueToString } from '../utils/convert';
 import 'react-virtualized/styles.css';
 import './query-result-table.scss';
 
+// TODO: remove this shim
+function createCellRenderer(cellRenderer) {
+  return function cellRendererWrapper({ key, style, ...rest }) {
+    return (
+      <div className="ReactVirtualized__Grid__cell" key={key} style={style}>
+        {cellRenderer(rest)}
+      </div>
+    );
+  };
+}
+
 /* eslint react/sort-comp:0 */
 export default class QueryResultTable extends Component {
   static propTypes = {
@@ -303,7 +314,7 @@ export default class QueryResultTable extends Component {
       <Grid
         className="grid-body"
         ref={(ref) => { this.rowsGrid = ref; }}
-        cellRenderer={this.renderCell}
+        cellRenderer={createCellRenderer(this.renderCell)}
         width={tableWidth}
         height={Math.min((tableHeight - headerHeight), fixedHeightRows)}
         rowHeight={rowHeight}
@@ -332,7 +343,7 @@ export default class QueryResultTable extends Component {
         columnWidth={this.getColumnWidth}
         columnCount={fields.length}
         height={30}
-        cellRenderer={this.renderHeaderCell}
+        cellRenderer={createCellRenderer(this.renderHeaderCell)}
         className="grid-header-row"
         rowHeight={30}
         rowCount={1}
