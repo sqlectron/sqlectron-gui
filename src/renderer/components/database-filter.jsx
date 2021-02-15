@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-
 export default class DatabaseFilter extends Component {
   static propTypes = {
     value: PropTypes.string,

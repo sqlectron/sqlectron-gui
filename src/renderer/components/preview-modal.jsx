@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
-
 export default class PreviewModal extends Component {
   static propTypes = {
     value: PropTypes.oneOfType([

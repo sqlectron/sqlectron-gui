@@ -2,13 +2,11 @@ import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as types from '../actions/triggers';
 
-
 const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
   triggersByTable: {},
 };
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -31,7 +29,7 @@ export default function (state = INITIAL_STATE, action) {
           ...state.triggersByTable,
           [action.database]: {
             ...state.triggersByTable[action.database],
-            [action.table]: action.triggers.map(name => ({ name })),
+            [action.table]: action.triggers.map((name) => ({ name })),
           },
         },
         error: null,

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-
 export default class PromptModal extends Component {
   static propTypes = {
     onCancelClick: PropTypes.func.isRequired,

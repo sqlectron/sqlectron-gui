@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import * as ConfigActions from '../actions/config';
 import imageSrc from './sqlectron.gif';
 
-
 import '../../../vendor/renderer/semantic-ui/semantic';
 import MenuHandler from '../menu-handler';
 import { mapObjectToConfig } from '../utils/config';
@@ -15,7 +14,7 @@ require('../../../vendor/renderer/lato/latofonts.css');
 require('../../../vendor/renderer/semantic-ui/semantic.css');
 require('./app.css');
 
-const preventDefault = e => e.preventDefault();
+const preventDefault = (e) => e.preventDefault();
 
 class AppContainer extends Component {
   static propTypes = {
@@ -158,7 +157,6 @@ class AppContainer extends Component {
     );
   }
 }
-
 
 function mapStateToProps(state) {
   return {

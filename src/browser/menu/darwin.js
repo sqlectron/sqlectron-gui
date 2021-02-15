@@ -222,7 +222,6 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
   ];
 }
 
-
 export function buildTemplateDockMenu(app, buildNewWindow) {
   return [
     { label: 'New Window', click: () => buildNewWindow(app) },

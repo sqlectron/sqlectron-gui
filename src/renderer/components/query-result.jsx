@@ -77,16 +77,16 @@ export default class QueryResult extends Component {
           key={queryIndex}
           preformatted
           title={title}
-          message={rows.map(row => row[title]).join('\n')}
+          message={rows.map((row) => row[title]).join('\n')}
         />
       );
     }
 
     let msgDuplicatedColumns = null;
-    const groupFields = groupBy(fields, field => field.name);
+    const groupFields = groupBy(fields, (field) => field.name);
     const duplicatedColumns = Object
       .keys(groupFields)
-      .filter(field => groupFields[field].length > 1);
+      .filter((field) => groupFields[field].length > 1);
     if (duplicatedColumns.length) {
       msgDuplicatedColumns = (
         <Message
@@ -148,8 +148,8 @@ export default class QueryResult extends Component {
     if (error) {
       if (error.message) {
         const errorBody = Object.keys(error)
-          .filter(key => error[key] && key !== 'message')
-          .map(key => `${key}: ${error[key]}`)
+          .filter((key) => error[key] && key !== 'message')
+          .map((key) => `${key}: ${error[key]}`)
           .join('\n');
 
         return (

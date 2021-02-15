@@ -3,7 +3,6 @@ import * as dbTypes from '../actions/databases';
 import * as queryTypes from '../actions/queries';
 import * as types from '../actions/tables';
 
-
 const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
@@ -11,9 +10,7 @@ const INITIAL_STATE = {
   selectedTablesForDiagram: [],
 };
 
-
 const COMMANDS_TRIGER_REFRESH = ['CREATE_TABLE', 'DROP_TABLE'];
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {

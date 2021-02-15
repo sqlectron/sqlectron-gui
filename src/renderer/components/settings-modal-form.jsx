@@ -6,10 +6,8 @@ import Select from 'react-select';
 import Checkbox from './checkbox';
 import { mapObjectToConfig } from '../utils/config';
 
-
 require('react-select/dist/react-select.css');
 require('./override-select.css');
-
 
 export default class SettingsModalForm extends Component {
   static propTypes = {
@@ -56,6 +54,25 @@ export default class SettingsModalForm extends Component {
     $(this.refs.settingsModal).modal('hide');
   }
 
+  handleChange(event) {
+    const newState = {};
+    const { target } = event;
+    const value = target.files ? target.files[0].path : target.value;
+    const name = target.name.replace(/^file\./, '');
+    const [name1, name2] = name.split('.');
+
+    if (name1 && name2) {
+      newState[name1] = { ...this.state[name1] };
+    }
+
+    set(newState, name, value);
+    return this.setState(newState);
+  }
+
+  handleOnLogLevelChange(level) {
+    this.setState({ log: { ...this.state.log, level: level.value } });
+  }
+
   onSaveClick() {
     this.props.onSaveClick(mapObjectToConfig(this.state));
   }
@@ -74,25 +91,6 @@ export default class SettingsModalForm extends Component {
       hasError = !!~Object.keys(logErrors).indexOf(lastName);
     }
     return hasError ? 'error' : '';
-  }
-
-  handleChange(event) {
-    const newState = {};
-    const { target } = event;
-    const value = target.files ? target.files[0].path : target.value;
-    const name = target.name.replace(/^file\./, '');
-    const [name1, name2] = name.split('.');
-
-    if (name1 && name2) {
-      newState[name1] = { ...this.state[name1] };
-    }
-
-    set(newState, name, value);
-    return this.setState(newState);
-  }
-
-  handleOnLogLevelChange(level) {
-    this.setState({ log: { ...this.state.log, level: level.value } });
   }
 
   renderLogLevelItem({ label, icon }) {

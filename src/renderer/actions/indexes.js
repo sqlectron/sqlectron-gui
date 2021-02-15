@@ -1,10 +1,8 @@
 import { getDBConnByName } from './connections';
 
-
 export const FETCH_INDEXES_REQUEST = 'FETCH_INDEXES_REQUEST';
 export const FETCH_INDEXES_SUCCESS = 'FETCH_INDEXES_SUCCESS';
 export const FETCH_INDEXES_FAILURE = 'FETCH_INDEXES_FAILURE';
-
 
 export function fetchTableIndexesIfNeeded (database, table) {
   return (dispatch, getState) => {
@@ -14,7 +12,6 @@ export function fetchTableIndexesIfNeeded (database, table) {
   };
 }
 
-
 function shouldFetchTableIndexes (state, database, table) {
   const indexes = state.indexes;
   if (!indexes) return true;
@@ -23,7 +20,6 @@ function shouldFetchTableIndexes (state, database, table) {
   if (!indexes.indexesByTable[database][table]) return true;
   return indexes.didInvalidate;
 }
-
 
 function fetchTableIndexes (database, table) {
   return async (dispatch) => {

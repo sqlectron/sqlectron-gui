@@ -1,13 +1,11 @@
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/sqlscripts';
 
-
 const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
   scriptsByObject: {},
 };
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {

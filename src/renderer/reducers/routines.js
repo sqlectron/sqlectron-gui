@@ -2,14 +2,12 @@ import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as types from '../actions/routines';
 
-
 const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
   functionsByDatabase: {},
   proceduresByDatabase: {},
 };
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -30,7 +28,7 @@ export default function (state = INITIAL_STATE, action) {
         didInvalidate: false,
         functionsByDatabase: {
           ...state.functionsByDatabase,
-          [action.database]: action.routines.filter(isFunction).map(routine => ({
+          [action.database]: action.routines.filter(isFunction).map((routine) => ({
             schema: routine.schema,
             name: routine.routineName,
             routineDefinition: routine.routineDefinition,
@@ -38,7 +36,7 @@ export default function (state = INITIAL_STATE, action) {
         },
         proceduresByDatabase: {
           ...state.proceduresByDatabase,
-          [action.database]: action.routines.filter(isProcedure).map(routine => ({
+          [action.database]: action.routines.filter(isProcedure).map((routine) => ({
             schema: routine.schema,
             name: routine.routineName,
             routineDefinition: routine.routineDefinition,

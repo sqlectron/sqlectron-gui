@@ -2,13 +2,11 @@ import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as types from '../actions/columns';
 
-
 const INITIAL_STATE = {
   isFetching: {},
   didInvalidate: false,
   columnsByTable: {},
 };
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -46,7 +44,7 @@ export default function (state = INITIAL_STATE, action) {
           ...state.columnsByTable,
           [action.database]: {
             ...state.columnsByTable[action.database],
-            [action.table]: action.columns.map(column => ({
+            [action.table]: action.columns.map((column) => ({
               name: column.columnName,
               dataType: column.dataType,
             })),

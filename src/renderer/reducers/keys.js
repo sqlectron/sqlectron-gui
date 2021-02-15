@@ -2,13 +2,11 @@ import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as types from '../actions/keys';
 
-
 const INITIAL_STATE = {
   isFetching: {},
   didInvalidate: false,
   keysByTable: {},
 };
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {

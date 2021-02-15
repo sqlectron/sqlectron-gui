@@ -1,7 +1,6 @@
 import * as types from '../actions/servers';
 import * as configTypes from '../actions/config';
 
-
 const INITIAL_STATE = {
   isSaving: false,
   isEditing: false,
@@ -9,7 +8,6 @@ const INITIAL_STATE = {
   error: null,
   editingServer: null,
 };
-
 
 export default function servers(state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -75,10 +73,9 @@ export default function servers(state = INITIAL_STATE, action) {
   }
 }
 
-
 function save(dataItems, server) {
   const items = ([...dataItems] || []);
-  const index = server.id && items.findIndex(srv => srv.id === server.id);
+  const index = server.id && items.findIndex((srv) => srv.id === server.id);
   if (index >= 0) {
     items[index] = server;
   } else {
@@ -87,9 +84,8 @@ function save(dataItems, server) {
   return items;
 }
 
-
 function remove(items, id) {
-  const index = items.findIndex(srv => srv.id === id);
+  const index = items.findIndex((srv) => srv.id === id);
   return [
     ...items.slice(0, index),
     ...items.slice(index + 1),

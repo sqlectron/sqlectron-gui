@@ -8,12 +8,10 @@ import Message from './message';
 import Checkbox from './checkbox';
 import { requireLogos } from './require-context';
 
-
 require('react-select/dist/react-select.css');
 require('./override-select.css');
 
-
-const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
+const CLIENTS = sqlectron.db.CLIENTS.map((dbClient) => ({
   value: dbClient.key,
   logo: requireLogos(`./server-db-client-${dbClient.key}.png`),
   label: dbClient.name,
@@ -81,6 +79,36 @@ export default class ServerModalForm extends Component {
     $(this.refs.serverModal).modal('hide');
   }
 
+  handleOnClientChange(selected) {
+    const client = selected.value || selected;
+    this.setState({ client });
+
+    const clientConfig = CLIENTS.find((entry) => entry.value === client);
+    if (clientConfig && clientConfig.defaultPort) {
+      this.setState({ defaultPort: clientConfig.defaultPort });
+    }
+  }
+
+  handleChange(event) {
+    const newState = {};
+    const { target } = event;
+    let value = target.files ? target.files[0].path : target.value;
+    const name = target.name.replace(/^file\./, '');
+    const [name1, name2] = name.split('.');
+
+    if (name1 && name2) {
+      newState[name1] = { ...this.state[name1] };
+    }
+
+    if (name1 === 'filter') {
+      value = value.split('\n');
+    }
+
+    set(newState, name, value);
+
+    return this.setState(newState);
+  }
+
   onSaveClick() {
     this.props.onSaveClick(this.mapStateToServer(this.state));
   }
@@ -114,7 +142,7 @@ export default class ServerModalForm extends Component {
       return false;
     }
 
-    const dbClient = CLIENTS.find(dbc => dbc.value === this.state.client);
+    const dbClient = CLIENTS.find((dbc) => dbc.value === this.state.client);
     return !!(dbClient.disabledFeatures && ~dbClient.disabledFeatures.indexOf(feature));
   }
 
@@ -152,8 +180,8 @@ export default class ServerModalForm extends Component {
         if (!filter[type]) return;
 
         server.filter[type] = {
-          only: (filter[type].only || []).filter(val => val),
-          ignore: (filter[type].ignore || []).filter(val => val),
+          only: (filter[type].only || []).filter((val) => val),
+          ignore: (filter[type].ignore || []).filter((val) => val),
         };
 
         if (!server.filter[type].only.length && !server.filter[type].ignore.length) {
@@ -181,36 +209,6 @@ export default class ServerModalForm extends Component {
       hasError = !!~Object.keys(sshErrors).indexOf(lastName);
     }
     return hasError ? 'error' : '';
-  }
-
-  handleOnClientChange(selected) {
-    const client = selected.value || selected;
-    this.setState({ client });
-
-    const clientConfig = CLIENTS.find(entry => entry.value === client);
-    if (clientConfig && clientConfig.defaultPort) {
-      this.setState({ defaultPort: clientConfig.defaultPort });
-    }
-  }
-
-  handleChange(event) {
-    const newState = {};
-    const { target } = event;
-    let value = target.files ? target.files[0].path : target.value;
-    const name = target.name.replace(/^file\./, '');
-    const [name1, name2] = name.split('.');
-
-    if (name1 && name2) {
-      newState[name1] = { ...this.state[name1] };
-    }
-
-    if (name1 === 'filter') {
-      value = value.split('\n');
-    }
-
-    set(newState, name, value);
-
-    return this.setState(newState);
   }
 
   renderClientItem({ label, logo }) {
@@ -387,8 +385,7 @@ export default class ServerModalForm extends Component {
                     onChange={this.handleChange}
                     style={{ display: 'none' }} />
                 </label>
-                )
-              }
+                )}
             </div>
           </div>
           <div className={`four wide field ${this.highlightError('schema')}`}>
@@ -508,8 +505,7 @@ export default class ServerModalForm extends Component {
               </div>
             </div>
           </div>
-          )
-        }
+          )}
       </div>
     );
   }
@@ -578,8 +574,7 @@ export default class ServerModalForm extends Component {
             {this.renderFilterPanelItem(isFilterChecked, filter, 'Database', 'database')}
             {this.renderFilterPanelItem(isFilterChecked, filter, 'Schema', 'schema')}
           </div>
-          )
-        }
+          )}
       </div>
     );
   }

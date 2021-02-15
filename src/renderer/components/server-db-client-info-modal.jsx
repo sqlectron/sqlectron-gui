@@ -2,12 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { sqlectron } from '../../browser/remote';
 
-
-const CLIENTS = sqlectron.db.CLIENTS.map(dbClient => ({
+const CLIENTS = sqlectron.db.CLIENTS.map((dbClient) => ({
   key: dbClient.key,
   name: dbClient.name,
 }));
-
 
 export default class ServerDBClientInfoModal extends Component {
   static propTypes = {
@@ -32,7 +30,7 @@ export default class ServerDBClientInfoModal extends Component {
 
   render() {
     const { client, infos } = this.props;
-    const dbClient = CLIENTS.find(item => item.key === client);
+    const dbClient = CLIENTS.find((item) => item.key === client);
 
     return (
       <div id="server-modal" className="ui modal" ref="infoModal">

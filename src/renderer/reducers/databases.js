@@ -2,7 +2,6 @@ import * as connTypes from '../actions/connections';
 import * as queryTypes from '../actions/queries';
 import * as types from '../actions/databases';
 
-
 const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
@@ -14,9 +13,7 @@ const INITIAL_STATE = {
   isSaving: false,
 };
 
-
 const COMMANDS_TRIGER_REFRESH = ['CREATE_DATABASE', 'DROP_DATABASE'];
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -35,7 +32,7 @@ export default function (state = INITIAL_STATE, action) {
         ...state,
         isFetching: false,
         didInvalidate: false,
-        items: action.databases.map(name => ({ name })),
+        items: action.databases.map((name) => ({ name })),
         error: null,
       };
     }

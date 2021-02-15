@@ -7,19 +7,15 @@ import createLogger from './logger';
 
 const logger = createLogger('window');
 
-
 const devMode = (process.argv || []).indexOf('--dev') !== -1;
-
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the javascript object is GCed.
 const WINDOWS = {};
 
-
 // Indicate the number of windows has already been opened.
 // Also used as identifier to for each window.
 let windowsNumber = 0;
-
 
 export function buildNewWindow(app) {
   const appConfig = getConfig();
@@ -52,5 +48,5 @@ export function buildNewWindow(app) {
   }
 
   checkUpdate(mainWindow, appConfig)
-    .catch(err => logger.error('Unable to check for updates', err));
+    .catch((err) => logger.error('Unable to check for updates', err));
 }

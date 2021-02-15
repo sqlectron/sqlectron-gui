@@ -6,12 +6,10 @@ require('./header.css');
 
 const LOGO_PATH = require('./logo-128px.png').default;
 
-
 function onSiteClick(event) {
   event.preventDefault();
   shell.openExternal('https://sqlectron.github.io');
 }
-
 
 function renderBreadcrumb(items) {
   return (
@@ -31,7 +29,6 @@ function renderBreadcrumb(items) {
     </div>
   );
 }
-
 
 const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
   const visibilityButtons = onCloseConnectionClick ? 'visible' : 'hidden';
@@ -66,12 +63,10 @@ const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
   );
 };
 
-
 Header.propTypes = {
   items: PropTypes.array.isRequired,
   onCloseConnectionClick: PropTypes.func,
   onReConnectionClick: PropTypes.func,
 };
-
 
 export default Header;

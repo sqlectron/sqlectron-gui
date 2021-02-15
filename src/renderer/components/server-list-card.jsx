@@ -12,7 +12,6 @@ const ICONS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
   return clients;
 }, {});
 
-
 const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
   <div className="card">
     <div className="content">

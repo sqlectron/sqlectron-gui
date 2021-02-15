@@ -1,6 +1,5 @@
 import * as types from '../actions/config';
 
-
 const INITIAL_STATE = {
   isSaving: false,
   isEditing: false,
@@ -9,7 +8,6 @@ const INITIAL_STATE = {
   error: null,
   isLoaded: false,
 };
-
 
 export default function config(state = INITIAL_STATE, action) {
   switch (action.type) {

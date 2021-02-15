@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 
-
 const log = global.SQLECTRON_CONFIG.log;
-
 
 export default class LogStatus extends Component {
   render() {

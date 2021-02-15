@@ -15,7 +15,6 @@ import indexes from './indexes';
 import sqlscripts from './sqlscripts';
 import keys from './keys';
 
-
 const rootReducer = combineReducers({
   config,
   databases,
@@ -33,6 +32,5 @@ const rootReducer = combineReducers({
   sqlscripts,
   keys,
 });
-
 
 export default rootReducer;

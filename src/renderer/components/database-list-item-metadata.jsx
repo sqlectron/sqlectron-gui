@@ -10,7 +10,6 @@ const STYLE = {
   item: { wordBreak: 'break-all', cursor: 'default' },
 };
 
-
 export default class DbMetadataList extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -39,10 +38,6 @@ export default class DbMetadataList extends Component {
     }
   }
 
-  toggleCollapse() {
-    this.setState({ collapsed: !this.state.collapsed });
-  }
-
   handleTableCollapse(key) {
     this.setState({
       tableCollapsed: {
@@ -50,6 +45,10 @@ export default class DbMetadataList extends Component {
         [key]: !this.state.tableCollapsed[key],
       },
     });
+  }
+
+  toggleCollapse() {
+    this.setState({ collapsed: !this.state.collapsed });
   }
 
   renderHeader() {

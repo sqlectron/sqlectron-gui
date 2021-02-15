@@ -1,16 +1,13 @@
 import { getCurrentDBConn } from './connections';
 
-
 export const FETCH_TABLES_REQUEST = 'FETCH_TABLES_REQUEST';
 export const FETCH_TABLES_SUCCESS = 'FETCH_TABLES_SUCCESS';
 export const FETCH_TABLES_FAILURE = 'FETCH_TABLES_FAILURE';
 export const SELECT_TABLES_FOR_DIAGRAM = 'SELECT_TABLES_FOR_DIAGRAM';
 
-
 export function selectTablesForDiagram(tables) {
   return { type: SELECT_TABLES_FOR_DIAGRAM, tables };
 }
-
 
 export function fetchTablesIfNeeded (database, filter) {
   return (dispatch, getState) => {
@@ -20,7 +17,6 @@ export function fetchTablesIfNeeded (database, filter) {
   };
 }
 
-
 function shouldFetchTables (state, database) {
   const tables = state.tables;
   if (!tables) return true;
@@ -28,7 +24,6 @@ function shouldFetchTables (state, database) {
   if (!tables.itemsByDatabase[database]) return true;
   return tables.didInvalidate;
 }
-
 
 function fetchTables (database, filter) {
   return async (dispatch, getState) => {

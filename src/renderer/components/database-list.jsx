@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DatabaseListItem from './database-list-item';
 
-
 export default class DatabaseList extends Component {
   static propTypes = {
     client: PropTypes.string.isRequired,
@@ -69,7 +68,7 @@ export default class DatabaseList extends Component {
     return (
       <div className="item" style={{ padding: 0 }}>
         {
-        databases.map(database => (
+        databases.map((database) => (
           <DatabaseListItem
             ref={database.name}
             key={database.name}

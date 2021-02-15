@@ -4,7 +4,6 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import { createLogger } from '../../browser/remote';
 
-
 const middlewares = [thunkMiddleware];
 
 /* eslint global-require:0 */
@@ -46,11 +45,9 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
   middlewares.push(createReduxLogger(loggerConfig));
 }
 
-
 const createStoreWithMiddleware = applyMiddleware(
   ...middlewares,
 )(createStore);
-
 
 export default function configureStore(initialState) {
   const store = createStoreWithMiddleware(rootReducer, initialState);

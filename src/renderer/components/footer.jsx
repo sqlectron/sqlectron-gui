@@ -4,12 +4,10 @@ import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
 import UpdateChecker from './update-checker';
 import LogStatus from './log-status';
 
-
 const STYLE = {
   footer: { minHeight: 'auto' },
   status: { paddingLeft: '0.5em' },
 };
-
 
 function onGithubClick(event) {
   event.preventDefault();
@@ -20,7 +18,6 @@ function onShortcutsClick(event) {
   event.preventDefault();
   shell.openExternal('https://github.com/sqlectron/sqlectron-gui/wiki/Keyboard-Shortcuts');
 }
-
 
 const Footer = ({ status }) => (
   <div className="ui bottom fixed menu borderless" style={STYLE.footer}>
@@ -38,10 +35,8 @@ const Footer = ({ status }) => (
   </div>
 );
 
-
 Footer.propTypes = {
   status: PropTypes.string.isRequired,
 };
-
 
 export default Footer;

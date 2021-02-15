@@ -1,10 +1,8 @@
 import { getDBConnByName } from './connections';
 
-
 export const FETCH_COLUMNS_REQUEST = 'FETCH_COLUMNS_REQUEST';
 export const FETCH_COLUMNS_SUCCESS = 'FETCH_COLUMNS_SUCCESS';
 export const FETCH_COLUMNS_FAILURE = 'FETCH_COLUMNS_FAILURE';
-
 
 export function fetchTableColumnsIfNeeded (database, table, schema) {
   return (dispatch, getState) => {
@@ -14,7 +12,6 @@ export function fetchTableColumnsIfNeeded (database, table, schema) {
   };
 }
 
-
 function shouldFetchTableColumns (state, database, table) {
   const columns = state.columns;
   if (!columns) return true;
@@ -23,7 +20,6 @@ function shouldFetchTableColumns (state, database, table) {
   if (!columns.columnsByTable[database][table]) return true;
   return columns.didInvalidate;
 }
-
 
 function fetchTableColumns (database, table, schema) {
   return async (dispatch) => {

@@ -1,10 +1,8 @@
 import { getDBConnByName } from './connections';
 
-
 export const FETCH_TRIGGERS_REQUEST = 'FETCH_TRIGGERS_REQUEST';
 export const FETCH_TRIGGERS_SUCCESS = 'FETCH_TRIGGERS_SUCCESS';
 export const FETCH_TRIGGERS_FAILURE = 'FETCH_TRIGGERS_FAILURE';
-
 
 export function fetchTableTriggersIfNeeded (database, table, schema) {
   return (dispatch, getState) => {
@@ -14,7 +12,6 @@ export function fetchTableTriggersIfNeeded (database, table, schema) {
   };
 }
 
-
 function shouldFetchTableTriggers (state, database, table) {
   const triggers = state.triggers;
   if (!triggers) return true;
@@ -23,7 +20,6 @@ function shouldFetchTableTriggers (state, database, table) {
   if (!triggers.triggersByTable[database][table]) return true;
   return triggers.didInvalidate;
 }
-
 
 function fetchTableTriggers (database, table, schema) {
   return async (dispatch) => {

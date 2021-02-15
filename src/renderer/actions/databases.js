@@ -3,7 +3,6 @@ import html2canvas from 'html2canvas';
 import { getCurrentDBConn } from './connections';
 import * as FileHandler from '../utils/file-handler';
 
-
 export const REFRESH_DATABASES = 'REFRESH_DATABASES';
 export const FETCH_DATABASES_REQUEST = 'FETCH_DATABASES_REQUEST';
 export const FETCH_DATABASES_SUCCESS = 'FETCH_DATABASES_SUCCESS';
@@ -22,11 +21,9 @@ export const EXPORT_DIAGRAM_REQUEST = 'EXPORT_DIAGRAM_REQUEST';
 export const EXPORT_DIAGRAM_SUCCESS = 'EXPORT_DIAGRAM_SUCCESS';
 export const EXPORT_DIAGRAM_FAILURE = 'EXPORT_DIAGRAM_FAILURE';
 
-
 export function filterDatabases(name) {
   return { type: FILTER_DATABASES, name };
 }
-
 
 export function refreshDatabase(name) {
   return { type: REFRESH_DATABASES, name };
@@ -109,7 +106,6 @@ export function openDatabaseDiagram() {
   };
 }
 
-
 export function fetchDatabasesIfNeeded (filter) {
   return (dispatch, getState) => {
     if (shouldFetchDatabases(getState())) {
@@ -118,14 +114,12 @@ export function fetchDatabasesIfNeeded (filter) {
   };
 }
 
-
 function shouldFetchDatabases (state) {
   const databases = state.databases;
   if (!databases) return true;
   if (databases.isFetching) return false;
   return databases.didInvalidate;
 }
-
 
 function fetchDatabases (filter) {
   return async (dispatch, getState) => {

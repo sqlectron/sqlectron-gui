@@ -1,7 +1,6 @@
 import { sqlectron } from '../../browser/remote';
 import * as ConfigActions from './config';
 
-
 export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';
 export const SAVE_SERVER_SUCCESS = 'SAVE_SERVER_SUCCESS';
 export const SAVE_SERVER_FAILURE = 'SAVE_SERVER_FAILURE';
@@ -14,7 +13,6 @@ export const DUPLICATE_SERVER_FAILURE = 'DUPLICATE_SERVER_FAILURE';
 export const START_EDITING_SERVER = 'START_EDITING_SERVER';
 export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
 
-
 export function startEditing(id) {
   return (dispatch, getState) => {
     if (!id) {
@@ -25,7 +23,7 @@ export function startEditing(id) {
     const { config } = getState();
     const cryptoSecret = config.data.crypto.secret;
 
-    const server = config.data.servers.find(srv => srv.id === id);
+    const server = config.data.servers.find((srv) => srv.id === id);
     if (!server) {
       return;
     }
@@ -36,11 +34,9 @@ export function startEditing(id) {
   };
 }
 
-
 export function finishEditing() {
   return { type: FINISH_EDITING_SERVER };
 }
-
 
 export function saveServer ({ server, id }) {
   return async (dispatch, getState) => {
@@ -63,7 +59,6 @@ export function saveServer ({ server, id }) {
   };
 }
 
-
 export function removeServer ({ id }) {
   return async (dispatch) => {
     dispatch({ type: REMOVE_SERVER_REQUEST, id });
@@ -79,7 +74,6 @@ export function removeServer ({ id }) {
     }
   };
 }
-
 
 export function duplicateServer ({ server }) {
   return async (dispatch, getState) => {
@@ -106,10 +100,9 @@ export function duplicateServer ({ server }) {
   };
 }
 
-
 async function getUniqueName(server) {
   const dataServers = await sqlectron.servers.getAll();
-  const duplicatedName = name => dataServers.some(srv => srv.name === name);
+  const duplicatedName = (name) => dataServers.some((srv) => srv.name === name);
   let currentName = server.name;
   let num = 0;
   while (duplicatedName(currentName)) {
@@ -118,7 +111,6 @@ async function getUniqueName(server) {
   }
   return currentName;
 }
-
 
 /**
  * Force the object has the values instead of getter and setter properties.

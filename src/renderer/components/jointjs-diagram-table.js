@@ -2,7 +2,6 @@ import * as joint from 'jointjs';
 import bindAll from 'lodash.bindall';
 import template from 'lodash.template';
 
-
 // Custom joint shape representing table/view object
 joint.shapes.sqlectron = {};
 joint.shapes.sqlectron.Table = joint.shapes.basic.Rect.extend({

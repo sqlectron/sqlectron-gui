@@ -3,7 +3,6 @@ import * as dbTypes from '../actions/databases';
 import * as queryTypes from '../actions/queries';
 import * as types from '../actions/schemas';
 
-
 const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
@@ -11,9 +10,7 @@ const INITIAL_STATE = {
   selectedTablesForDiagram: [],
 };
 
-
 const COMMANDS_TRIGER_REFRESH = ['CREATE_SCHEMA', 'DROP_SCHEMA'];
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -34,7 +31,7 @@ export default function (state = INITIAL_STATE, action) {
         didInvalidate: false,
         itemsByDatabase: {
           ...state.itemsByDatabase,
-          [action.database]: action.schemas.map(name => ({ name })),
+          [action.database]: action.schemas.map((name) => ({ name })),
         },
         error: null,
       };

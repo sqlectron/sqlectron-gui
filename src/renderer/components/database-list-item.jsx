@@ -4,9 +4,7 @@ import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 import DatabaseListItemMetatada from './database-list-item-metadata';
 import DatabaseFilter from './database-filter';
 
-
 const { Menu, MenuItem } = remote;
-
 
 const STYLE = {
   database: {
@@ -29,7 +27,6 @@ const STYLE = {
     backgroundColor: '#F8FFFF',
   },
 };
-
 
 export default class DatabaseListItem extends Component {
   static propTypes = {
@@ -101,7 +98,7 @@ export default class DatabaseListItem extends Component {
 
   filterItems(filterInput, items) {
     const regex = RegExp(filterInput, 'i');
-    return items.filter(item => regex.test(`${item.schema}.${item.name}`));
+    return items.filter((item) => regex.test(`${item.schema}.${item.name}`));
   }
 
   focus() {

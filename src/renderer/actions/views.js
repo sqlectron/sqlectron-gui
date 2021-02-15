@@ -1,10 +1,8 @@
 import { getCurrentDBConn } from './connections';
 
-
 export const FETCH_VIEWS_REQUEST = 'FETCH_VIEWS_REQUEST';
 export const FETCH_VIEWS_SUCCESS = 'FETCH_VIEWS_SUCCESS';
 export const FETCH_VIEWS_FAILURE = 'FETCH_VIEWS_FAILURE';
-
 
 export function fetchViewsIfNeeded (database, filter) {
   return (dispatch, getState) => {

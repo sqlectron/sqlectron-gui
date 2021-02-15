@@ -4,7 +4,6 @@ import createLogger from './logger';
 const logger = createLogger('gh-update-checker');
 const WAIT_2_SECS = 2000;
 
-
 export async function check(mainWindow, appConfig) {
   const currentVersion = `v${appConfig.version}`;
   logger.debug('current version %s', currentVersion);

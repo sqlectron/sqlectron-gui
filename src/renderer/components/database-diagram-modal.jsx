@@ -13,7 +13,6 @@ const STYLE = {
   },
 };
 
-
 export default class DatabaseDiagramModal extends Component {
   static propTypes = {
     database: PropTypes.string,
@@ -86,7 +85,7 @@ export default class DatabaseDiagramModal extends Component {
     const { selectedTables, addRelatedTables } = this.props;
 
     // If all related tables are already on diagram -> no need to reset positions
-    if (relatedTables.every(t => selectedTables.includes(t))) {
+    if (relatedTables.every((t) => selectedTables.includes(t))) {
       return;
     }
 
@@ -117,8 +116,8 @@ export default class DatabaseDiagramModal extends Component {
     return (selectedTables
       && columnsByTable
       && tableKeys
-      && selectedTables.every(t => Object.keys(columnsByTable).includes(t))
-      && selectedTables.every(t => Object.keys(tableKeys).includes(t))
+      && selectedTables.every((t) => Object.keys(columnsByTable).includes(t))
+      && selectedTables.every((t) => Object.keys(tableKeys).includes(t))
     );
   }
 
@@ -144,7 +143,7 @@ export default class DatabaseDiagramModal extends Component {
               </button>
             </div>
             <div className="ui list" style={STYLE.list}>
-              {tablesAndViews.map(item => (
+              {tablesAndViews.map((item) => (
                 <div key={item.name} className="item">
                   <div className="ui checkbox">
                     <input id={item.name} type="checkbox" onChange={this.onCheckBoxesChange} />
@@ -249,8 +248,7 @@ export default class DatabaseDiagramModal extends Component {
           <div className="header">
             Database diagram
           </div>
-          )
-        }
+          )}
         <div className="content">
           {
             !this.state.showDatabaseDiagram

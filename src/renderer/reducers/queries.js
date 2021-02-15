@@ -1,7 +1,6 @@
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/queries';
 
-
 const INITIAL_STATE = {
   lastCreatedId: 0,
   currentQueryId: null,
@@ -11,7 +10,6 @@ const INITIAL_STATE = {
   enabledAutoComplete: true,
   enabledLiveAutoComplete: true,
 };
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -152,7 +150,6 @@ export default function (state = INITIAL_STATE, action) {
   }
 }
 
-
 function addNewQuery(state, action) {
   if (action.reconnecting) {
     return state;
@@ -207,7 +204,6 @@ function addNewQuery(state, action) {
     },
   };
 }
-
 
 function changeStateByCurrentQuery(oldFullState, newCurrentQueryState, options = {}) {
   const oldQueryState = oldFullState.queriesById[oldFullState.currentQueryId];

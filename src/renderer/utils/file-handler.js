@@ -1,7 +1,6 @@
 import fs from 'fs';
 import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
 
-
 export function showSaveDialog(filters) {
   return new Promise((resolve, reject) => {
     remote.dialog.showSaveDialog({
@@ -17,7 +16,6 @@ export function showSaveDialog(filters) {
   });
 }
 
-
 export function saveFile(fileName, data, encoding = 'utf8') {
   return new Promise((resolve, reject) => {
     fs.writeFile(fileName, data, encoding, (err) => {
@@ -26,7 +24,6 @@ export function saveFile(fileName, data, encoding = 'utf8') {
     });
   });
 }
-
 
 export function showOpenDialog(filters, defaultPath) {
   return new Promise((resolve, reject) => {
@@ -44,7 +41,6 @@ export function showOpenDialog(filters, defaultPath) {
     });
   });
 }
-
 
 export function openFile(fileName) {
   return new Promise((resolve, reject) => {

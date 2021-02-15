@@ -1,6 +1,5 @@
 import { sqlectron } from '../../browser/remote';
 
-
 export const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
 export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
 export const CONNECTION_SUCCESS = 'CONNECTION_SUCCESS';
@@ -10,7 +9,6 @@ export const CONNECTION_SET_CONNECTING = 'CONNECTION_SET_CONNECTING';
 export const TEST_CONNECTION_REQUEST = 'TEST_CONNECTION_REQUEST';
 export const TEST_CONNECTION_SUCCESS = 'TEST_CONNECTION_SUCCESS';
 export const TEST_CONNECTION_FAILURE = 'TEST_CONNECTION_FAILURE';
-
 
 let serverSession;
 export function getCurrentDBConn ({ queries } = {}) {
@@ -25,7 +23,6 @@ export function getCurrentDBConn ({ queries } = {}) {
 
   return getDBConnByName(currentQuery.database);
 }
-
 
 export function getDBConnByName(database) {
   if (!serverSession) {
@@ -46,7 +43,6 @@ export function setConnecting () {
   };
 }
 
-
 export function connect (id, databaseName, reconnecting = false, sshPassphrase) {
   return async (dispatch, getState) => {
     let server;
@@ -59,7 +55,7 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       const cryptoSecret = config.data.crypto.secret;
 
       const servers = await sqlectron.servers.getAll();
-      server = servers.find(srv => srv.id === id);
+      server = servers.find((srv) => srv.id === id);
       if (!server) {
         throw new Error('Server configuration not found');
       }
@@ -71,7 +67,7 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       // doesn't have any effect. We need to clone this data and use the new state.
       server = JSON.parse(JSON.stringify(server));
 
-      defaultDatabase = sqlectron.db.CLIENTS.find(c => c.key === server.client).defaultDatabase;
+      defaultDatabase = sqlectron.db.CLIENTS.find((c) => c.key === server.client).defaultDatabase;
       database = databaseName || server.database || defaultDatabase;
 
       dispatch({
@@ -125,7 +121,6 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
   };
 }
 
-
 export function disconnect () {
   if (serverSession) {
     serverSession.end();
@@ -136,20 +131,18 @@ export function disconnect () {
   return { type: CLOSE_CONNECTION };
 }
 
-
 export function reconnect (id, database) {
   serverSession.end();
   serverSession = null;
   return connect(id, database, true);
 }
 
-
 export function test (server) {
   return async (dispatch) => {
     const serverCopy = JSON.parse(JSON.stringify(server));
     if (!serverCopy.database) {
       const defaultDatabase = sqlectron.db.CLIENTS.find(
-        c => c.key === serverCopy.client,
+        (c) => c.key === serverCopy.client,
       ).defaultDatabase;
       serverCopy.database = serverCopy.database || defaultDatabase;
     }

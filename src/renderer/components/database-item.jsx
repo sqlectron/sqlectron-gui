@@ -9,7 +9,6 @@ const Menu = remote.Menu;
 const MenuItem = remote.MenuItem;
 const CLIENTS = sqlectron.db.CLIENTS;
 
-
 export default class DatabaseItem extends Component {
   static propTypes = {
     client: PropTypes.string.isRequired,
@@ -75,7 +74,7 @@ export default class DatabaseItem extends Component {
 
     this.contextMenu.append(new MenuItem({ type: 'separator' }));
 
-    const { disabledFeatures } = CLIENTS.find(dbClient => dbClient.key === client);
+    const { disabledFeatures } = CLIENTS.find((dbClient) => dbClient.key === client);
     if (!disabledFeatures || !disabledFeatures.includes('scriptCreateTable')) {
       this.contextMenu.append(new MenuItem({
         label: 'Create Statement',
@@ -162,7 +161,6 @@ export default class DatabaseItem extends Component {
     const { schema, name } = item;
     const fullName = schema ? `${schema}.${name}` : name;
 
-
     return (
       <div>
         <span
@@ -175,8 +173,7 @@ export default class DatabaseItem extends Component {
                 arrowDirection={collapseArrowDirection}
                 expandAction={expandChildren} />
             )
-            : null
-          }
+            : null}
           {dbObjectType === 'Table' ? tableIcon : null}
           <span onClick={this.onSingleClick}>{fullName}</span>
         </span>

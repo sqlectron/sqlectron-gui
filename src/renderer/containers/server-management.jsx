@@ -13,15 +13,12 @@ import SettingsModalForm from '../components/settings-modal-form';
 import ServerFilter from '../components/server-filter';
 import Message from '../components/message';
 
-
 const STYLES = {
   wrapper: { paddingTop: '50px' },
   container: { padding: '10px 10px 50px 10px' },
 };
 
-
 const BREADCRUMB = [{ icon: 'server', label: 'servers' }];
-
 
 class ServerManagerment extends Component {
   static propTypes = {
@@ -116,7 +113,7 @@ class ServerManagerment extends Component {
 
   filterServers(name, servers) {
     const regex = RegExp(name, 'i');
-    return servers.filter(srv => regex.test(srv.name));
+    return servers.filter((srv) => regex.test(srv.name));
   }
 
   render() {
@@ -187,7 +184,6 @@ class ServerManagerment extends Component {
     );
   }
 }
-
 
 function mapStateToProps(state) {
   return {

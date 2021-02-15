@@ -13,7 +13,6 @@ const INITIAL_STATE = {
   databases: [], // connected databases
 };
 
-
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case types.CONNECTION_SET_CONNECTING: {
@@ -23,7 +22,8 @@ export default function(state = INITIAL_STATE, action) {
       };
     }
     case types.CONNECTION_REQUEST: {
-      const { disabledFeatures } = CLIENTS.find(dbClient => dbClient.key === action.server.client);
+      // eslint-disable-next-line max-len
+      const { disabledFeatures } = CLIENTS.find((dbClient) => dbClient.key === action.server.client);
       return {
         ...state,
         server: action.server,
@@ -77,7 +77,6 @@ export default function(state = INITIAL_STATE, action) {
     default: return state;
   }
 }
-
 
 function isSameTestConnection (state, action) {
   return state.testServer === action.server;

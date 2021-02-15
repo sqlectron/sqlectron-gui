@@ -2,7 +2,6 @@ export function rowsValuesToString(rows) {
   return rows.map(rowValuesToString);
 }
 
-
 export function rowValuesToString(row) {
   if (Array.isArray(row)) {
     return rowsValuesToString(row);
@@ -16,7 +15,6 @@ export function rowValuesToString(row) {
 
   return parsedRow;
 }
-
 
 export function valueToString(value) {
   if (value === null) {

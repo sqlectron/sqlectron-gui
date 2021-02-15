@@ -2,9 +2,7 @@ import * as connTypes from '../actions/connections';
 import * as tablesTypes from '../actions/tables';
 import * as queriesTypes from '../actions/queries';
 
-
 const INITIAL_STATE = '';
-
 
 // eslint-disable-next-line
 export default function (state = INITIAL_STATE, action) {

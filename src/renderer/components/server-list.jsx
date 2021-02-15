@@ -4,9 +4,7 @@ import ServerListCard from './server-list-card';
 import ServerListItem from './server-list-item';
 import Message from './message';
 
-
 require('./server-list.scss');
-
 
 export default class ServerList extends Component {
   static propTypes = {
@@ -37,7 +35,7 @@ export default class ServerList extends Component {
     if (config.data.connectionsAsList) {
       return (
         <div className="ui divided items">
-          {servers.map(server => (
+          {servers.map((server) => (
             <ServerListItem
               key={server.id}
               onConnectClick={() => onConnectClick(server)}
@@ -51,7 +49,7 @@ export default class ServerList extends Component {
     return (
       this.groupItemsInRows(servers).map((row, rowIdx) => (
         <div key={rowIdx} className="ui cards">
-          {row.map(server => (
+          {row.map((server) => (
             <ServerListCard
               key={server.id}
               onConnectClick={() => onConnectClick(server)}

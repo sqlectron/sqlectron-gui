@@ -1,10 +1,8 @@
 import { getCurrentDBConn } from './connections';
 
-
 export const FETCH_ROUTINES_REQUEST = 'FETCH_ROUTINES_REQUEST';
 export const FETCH_ROUTINES_SUCCESS = 'FETCH_ROUTINES_SUCCESS';
 export const FETCH_ROUTINES_FAILURE = 'FETCH_ROUTINES_FAILURE';
-
 
 export function fetchRoutinesIfNeeded (database, filter) {
   return (dispatch, getState) => {

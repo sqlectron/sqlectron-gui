@@ -2,13 +2,11 @@ import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as types from '../actions/indexes';
 
-
 const INITIAL_STATE = {
   isFetching: false,
   didInvalidate: false,
   indexesByTable: {},
 };
-
 
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
@@ -31,7 +29,7 @@ export default function (state = INITIAL_STATE, action) {
           ...state.indexesByTable,
           [action.database]: {
             ...state.indexesByTable[action.database],
-            [action.table]: action.indexes.map(name => ({ name })),
+            [action.table]: action.indexes.map((name) => ({ name })),
           },
         },
         error: null,

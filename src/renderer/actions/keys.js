@@ -1,10 +1,8 @@
 import { getDBConnByName } from './connections';
 
-
 export const FETCH_KEYS_REQUEST = 'FETCH_KEYS_REQUEST';
 export const FETCH_KEYS_SUCCESS = 'FETCH_KEYS_SUCCESS';
 export const FETCH_KEYS_FAILURE = 'FETCH_KEYS_FAILURE';
-
 
 export function fetchTableKeysIfNeeded (database, table, schema) {
   return (dispatch, getState) => {
@@ -14,7 +12,6 @@ export function fetchTableKeysIfNeeded (database, table, schema) {
   };
 }
 
-
 function shouldFetchTableKeys (state, database, table) {
   const keys = state.keys;
   if (!keys) return true;
@@ -23,7 +20,6 @@ function shouldFetchTableKeys (state, database, table) {
   if (!keys.keysByTable[database][table]) return true;
   return keys.didInvalidate;
 }
-
 
 function fetchTableKeys (database, table, schema) {
   return async (dispatch) => {

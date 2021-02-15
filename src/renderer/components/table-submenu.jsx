@@ -7,7 +7,6 @@ const STYLE = {
   item: { wordBreak: 'break-all', cursor: 'default' },
 };
 
-
 export default class TableSubmenu extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
@@ -82,7 +81,7 @@ export default class TableSubmenu extends Component {
       textTransform: 'uppercase',
     };
 
-    return itemsByTable[table].map(item => (
+    return itemsByTable[table].map((item) => (
       <span
         key={item.name}
         title={item.name}

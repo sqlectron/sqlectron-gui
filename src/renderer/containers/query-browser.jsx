@@ -33,7 +33,6 @@ import PromptModal from '../components/prompt-modal';
 import MenuHandler from '../menu-handler';
 import { requireLogos } from '../components/require-context';
 
-
 require('./query-browser.css');
 require('../components/react-resizable.css');
 require('../components/react-tabs.scss');
@@ -65,7 +64,6 @@ const STYLES = {
   resizeable: { width: 'auto', maxWidth: '100%' },
 };
 
-
 const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
   /* eslint no-param-reassign:0 */
   clients[dbClient.key] = {
@@ -74,7 +72,6 @@ const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
   };
   return clients;
 }, {});
-
 
 class QueryBrowserContainer extends Component {
   static propTypes = {
@@ -184,6 +181,29 @@ class QueryBrowserContainer extends Component {
 
   componentWillUnmount() {
     this.menuHandler.removeAllMenus();
+  }
+
+  handleSelectTab(index) {
+    const queryId = this.props.queries.queryIds[index];
+    this.props.dispatch(QueryActions.selectQuery(queryId));
+  }
+
+  handleExecuteQuery (sqlQuery) {
+    const currentQuery = this.getCurrentQuery();
+    if (!currentQuery) {
+      return;
+    }
+
+    this.props.dispatch(QueryActions.executeQueryIfNeeded(sqlQuery, currentQuery.id));
+  }
+
+  handleCancelQuery () {
+    const currentQuery = this.getCurrentQuery();
+    if (!currentQuery) {
+      return;
+    }
+
+    this.props.dispatch(QueryActions.cancelQuery(currentQuery.id));
   }
 
   onSelectDatabase(database) {
@@ -332,11 +352,6 @@ class QueryBrowserContainer extends Component {
     });
   }
 
-  handleSelectTab(index) {
-    const queryId = this.props.queries.queryIds[index];
-    this.props.dispatch(QueryActions.selectQuery(queryId));
-  }
-
   removeQuery(queryId) {
     this.props.dispatch(QueryActions.removeQuery(queryId));
   }
@@ -357,27 +372,9 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(QueryActions.saveToFile(rows, type, delimiter));
   }
 
-  handleExecuteQuery (sqlQuery) {
-    const currentQuery = this.getCurrentQuery();
-    if (!currentQuery) {
-      return;
-    }
-
-    this.props.dispatch(QueryActions.executeQueryIfNeeded(sqlQuery, currentQuery.id));
-  }
-
-  handleCancelQuery () {
-    const currentQuery = this.getCurrentQuery();
-    if (!currentQuery) {
-      return;
-    }
-
-    this.props.dispatch(QueryActions.cancelQuery(currentQuery.id));
-  }
-
   filterDatabases(name, databases) {
     const regex = RegExp(name, 'i');
-    return databases.filter(db => regex.test(db.name));
+    return databases.filter((db) => regex.test(db.name));
   }
 
   focusQuery() {
@@ -457,7 +454,6 @@ class QueryBrowserContainer extends Component {
 
     const currentDB = this.getCurrentQuery().database;
 
-
     const menu = queries.queryIds.map((queryId) => {
       const isCurrentQuery = queryId === queries.currentQueryId;
       const buildContent = () => {
@@ -514,7 +510,7 @@ class QueryBrowserContainer extends Component {
     });
 
     const { disabledFeatures } = sqlectron.db.CLIENTS
-      .find(dbClient => dbClient.key === connections.server.client);
+      .find((dbClient) => dbClient.key === connections.server.client);
 
     const allowCancel = !disabledFeatures || !disabledFeatures.includes('cancelQuery');
 
@@ -571,8 +567,7 @@ class QueryBrowserContainer extends Component {
               }}>
               <i className="left chevron icon" />
             </button>
-            )
-          }
+            )}
           <div className="tabs-container">
             <TabList
               className={['react-tabs__tab-list']}
@@ -594,8 +589,7 @@ class QueryBrowserContainer extends Component {
               }}>
               <i className="right chevron icon" />
             </button>
-            )
-          }
+            )}
         </div>
         {panels}
       </Tabs>
@@ -719,7 +713,6 @@ class QueryBrowserContainer extends Component {
   }
 }
 
-
 function mapStateToProps (state) {
   const {
     config,
@@ -755,6 +748,5 @@ function mapStateToProps (state) {
     status,
   };
 }
-
 
 export default connect(mapStateToProps)(withRouter(QueryBrowserContainer));

@@ -1,11 +1,9 @@
 import { getDBConnByName } from './connections';
 import { appendQuery } from './queries';
 
-
 export const GET_SCRIPT_REQUEST = 'GET_SCRIPT_REQUEST';
 export const GET_SCRIPT_SUCCESS = 'GET_SCRIPT_SUCCESS';
 export const GET_SCRIPT_FAILURE = 'GET_SCRIPT_FAILURE';
-
 
 export function getSQLScriptIfNeeded(database, item, actionType, objectType, schema) {
   return (dispatch, getState) => {
@@ -43,7 +41,6 @@ function isScriptAlreadyFetched (state, database, item, actionType) {
 function getAlreadyFetchedScript (state, database, item, actionType) {
   return state.sqlscripts.scriptsByObject[database][item][actionType];
 }
-
 
 function getSQLScript (database, item, actionType, objectType, schema) {
   return async (dispatch) => {

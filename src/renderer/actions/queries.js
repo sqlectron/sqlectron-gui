@@ -8,7 +8,6 @@ import { rowsValuesToString } from '../utils/convert';
 import * as fileHandler from '../utils/file-handler';
 import wait from '../utils/wait';
 
-
 export const NEW_QUERY = 'NEW_QUERY';
 export const RENAME_QUERY = 'RENAME_QUERY';
 export const SELECT_QUERY = 'SELECT_QUERY';
@@ -33,26 +32,21 @@ export const OPEN_QUERY_SUCCESS = 'OPEN_QUERY_SUCCESS';
 export const OPEN_QUERY_FAILURE = 'OPEN_QUERY_FAILURE';
 export const UPDATE_QUERY = 'UPDATE_QUERY';
 
-
 export function newQuery (database) {
   return { type: NEW_QUERY, database };
 }
-
 
 export function renameQuery (name) {
   return { type: RENAME_QUERY, name };
 }
 
-
 export function selectQuery (id) {
   return { type: SELECT_QUERY, id };
 }
 
-
 export function removeQuery (id) {
   return { type: REMOVE_QUERY, id };
 }
-
 
 export function executeQueryIfNeeded (query, queryId) {
   return (dispatch, getState) => {
@@ -61,7 +55,6 @@ export function executeQueryIfNeeded (query, queryId) {
     }
   };
 }
-
 
 export function executeDefaultSelectQueryIfNeeded (database, table, schema) {
   return async (dispatch, getState) => {
@@ -117,7 +110,6 @@ export function appendQuery (query) {
   };
 }
 
-
 export function copyToClipboard (rows, type, delimiter) {
   return async (dispatch) => {
     dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST });
@@ -166,7 +158,6 @@ export function saveToFile (rows, type, delimiter) {
     }
   };
 }
-
 
 export function saveQuery () {
   return async (dispatch, getState) => {
@@ -218,7 +209,6 @@ export function openQuery () {
   };
 }
 
-
 function shouldExecuteQuery (query, state) {
   const currentQuery = getCurrentQuery(state);
   if (!currentQuery) return true;
@@ -259,7 +249,6 @@ function executeQuery (query, isDefaultSelect = false, dbConnection, queryId) {
   };
 }
 
-
 export function cancelQuery (queryId) {
   return async (dispatch) => {
     dispatch({ type: CANCEL_QUERY_REQUEST, queryId });
@@ -276,7 +265,6 @@ export function cancelQuery (queryId) {
     }
   };
 }
-
 
 function stringifyResultToCSV(origRows, delimiter) {
   if (!origRows.length) {
@@ -305,7 +293,6 @@ function stringifyResultToCSV(origRows, delimiter) {
     });
   });
 }
-
 
 function getCurrentQuery(state) {
   return state.queries.queriesById[state.queries.currentQueryId];

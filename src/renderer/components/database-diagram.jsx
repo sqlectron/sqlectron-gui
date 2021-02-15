@@ -7,7 +7,6 @@ import './jointjs-diagram-table-cell';
 require('jointjs/dist/joint.min.css');
 require('./database-diagram.css');
 
-
 export default class DatabaseDiagram extends Component {
   static propTypes = {
     tables: PropTypes.array,
@@ -51,7 +50,8 @@ export default class DatabaseDiagram extends Component {
 
   onTableRightClick(table) {
     const { tableKeys, addRelatedTables } = this.props;
-    const relatedTables = tableKeys[table].map(k => k.referencedTable).filter(rt => rt !== null);
+    // eslint-disable-next-line max-len
+    const relatedTables = tableKeys[table].map((k) => k.referencedTable).filter((rt) => rt !== null);
     addRelatedTables(relatedTables);
   }
 
@@ -95,7 +95,7 @@ export default class DatabaseDiagram extends Component {
         currentTable = tableShapes[index];
 
         columnsByTable[table].forEach((column, idx) => {
-          columnKey = tableKeys[table].find(k => k.columnName === column.name);
+          columnKey = tableKeys[table].find((k) => k.columnName === column.name);
 
           newTabCell = new joint.shapes.sqlectron.TableCell({
             position: {
@@ -130,7 +130,7 @@ export default class DatabaseDiagram extends Component {
         currentTable = tableShapes[index];
 
         tableKeys[table].forEach((target) => {
-          targetIndex = tables.findIndex(t => t === target.referencedTable);
+          targetIndex = tables.findIndex((t) => t === target.referencedTable);
           if (targetIndex !== -1) {
             newLink = new joint.dia.Link({
               source: { id: currentTable.id },
@@ -172,11 +172,11 @@ export default class DatabaseDiagram extends Component {
 
       if (biggestCellSize > 100) {
         // resize tables
-        tableShapes.find(shape => shape.attributes.name === table)
+        tableShapes.find((shape) => shape.attributes.name === table)
           .resize(biggestCellSize + 20, (columnsByTable[table].length + 1.5) * 20);
         // resize table cells
-        tableCells.filter(cell => cell.attributes.tableName === table)
-          .map(cell => cell.resize(biggestCellSize, 20));
+        tableCells.filter((cell) => cell.attributes.tableName === table)
+          .map((cell) => cell.resize(biggestCellSize, 20));
       }
     });
   }

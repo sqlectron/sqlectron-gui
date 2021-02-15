@@ -6,7 +6,6 @@ function sendMessage(win, message) {
   }
 }
 
-
 export function buildTemplate(app, buildNewWindow, appConfig) {
   return [
     {

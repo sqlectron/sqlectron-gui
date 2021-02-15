@@ -15,10 +15,8 @@ import ServerDBClientInfoModal from './server-db-client-info-modal';
 require('./react-resizable.css');
 require('./override-ace.css');
 
-
 const QUERY_EDITOR_HEIGTH = 200;
 const langTools = ace.acequire('ace/ext/language_tools');
-
 
 const INFOS = {
   mysql: [
@@ -33,11 +31,9 @@ const INFOS = {
   ],
 };
 
-
 const EVENT_KEYS = {
   onSelectionChange: 'changeSelection',
 };
-
 
 export default class Query extends Component {
   static propTypes = {
@@ -297,7 +293,7 @@ export default class Query extends Component {
             width={500}
             onResizeStop={this.onQueryBoxResize}
           >
-            <React.Fragment>
+            <>
               <AceEditor
                 mode="sql"
                 theme="github"
@@ -322,7 +318,7 @@ export default class Query extends Component {
                     onUnchecked={this.onWrapContentsUnchecked} />
                 </div>
               </div>
-            </React.Fragment>
+            </>
           </ResizableBox>
           <div className="ui secondary menu" style={{ marginTop: 0 }}>
             {infos
@@ -336,8 +332,7 @@ export default class Query extends Component {
                   </button>
                 </span>
               </div>
-              )
-            }
+              )}
             <div className="right menu">
               <div className="item">
                 <div className="ui buttons">
@@ -388,8 +383,7 @@ export default class Query extends Component {
             infos={infos}
             client={client}
             onCloseClick={() => this.setState({ infoModalVisible: false })} />
-          )
-        }
+          )}
       </div>
     );
   }

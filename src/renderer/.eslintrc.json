@@ -9,6 +9,11 @@
     }
   },
   "rules": {
+    "camelcase": ["error", {
+      "properties": "never",
+      "ignoreDestructuring": false,
+      "allow": ["^UNSAFE_"]
+    }],
     "no-use-before-define": 0,
     "react/jsx-closing-bracket-location": 0,
     "react/jsx-first-prop-new-line": 0,
@@ -37,6 +42,7 @@
     "react/prefer-stateless-function": 0,
     "react/prop-types": 0,
     "react/require-default-props": 0,
+    "react/static-property-placement": ["error", "static public field"],
     "jsx-a11y/anchor-is-valid": 0,
     "jsx-a11y/no-autofocus": 0,
     "jsx-a11y/click-events-have-key-events": 0,
