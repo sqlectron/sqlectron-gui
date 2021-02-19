@@ -38,7 +38,6 @@
       "target": [
         "deb",
         "rpm",
-        "sh",
         "freebsd",
         "pacman",
         "tar.xz",
