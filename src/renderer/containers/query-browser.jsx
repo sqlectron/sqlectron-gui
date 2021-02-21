@@ -128,6 +128,7 @@ class QueryBrowserContainer extends Component {
     this.onSelectTable = this.onSelectTable.bind(this);
     this.onGetSQLScript = this.onGetSQLScript.bind(this);
     this.onRefreshDatabase = this.onRefreshDatabase.bind(this);
+    this.onOpenTab = this.onOpenTab.bind(this);
     this.onShowDiagramModal = this.onShowDiagramModal.bind(this);
   }
 
@@ -272,6 +273,11 @@ class QueryBrowserContainer extends Component {
   onRefreshDatabase(database) {
     const { dispatch } = this.props;
     dispatch(DbAction.refreshDatabase(database));
+  }
+
+  onOpenTab(database) {
+    const { dispatch } = this.props;
+    dispatch(QueryActions.newQuery(database.name));
   }
 
   onShowDiagramModal(database) {
@@ -696,6 +702,7 @@ class QueryBrowserContainer extends Component {
                   onSelectTable={this.onSelectTable}
                   onGetSQLScript={this.onGetSQLScript}
                   onRefreshDatabase={this.onRefreshDatabase}
+                  onOpenTab={this.onOpenTab}
                   onShowDiagramModal={this.onShowDiagramModal} />
               </div>
             </ResizableBox>
