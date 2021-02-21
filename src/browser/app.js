@@ -24,7 +24,20 @@ app.on('window-all-closed', () => {
 
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
-app.on('ready', () => buildNewWindow(app));
+app.on('ready', async () => {
+  if (process.env.NODE_ENV === 'development') {
+    // eslint-disable-next-line
+    console.log('Loading electron extensions...');
+    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import('electron-devtools-installer');
+    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+      // eslint-disable-next-line no-console
+      .then((name) => console.log(`Added extension: ${name}`))
+      // eslint-disable-next-line no-console
+      .catch((err) => console.error(`Error adding extensions: ${err}`));
+  }
+
+  buildNewWindow(app);
+});
 
 // Show only the error description to the user
 process.on('uncaughtException', (error) => {
