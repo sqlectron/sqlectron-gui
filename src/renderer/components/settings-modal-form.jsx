@@ -128,8 +128,15 @@ export default class SettingsModalForm extends Component {
       <div className="two fields">
         <div className="field">
           <div className="ui label">
-            Path
-            <div className="detail">{this.props.config.path}</div>
+            Config Path
+            <div
+              className="detail"
+              style={{
+                padding: '5px 0',
+              }}
+            >
+              {this.props.config.path}
+            </div>
           </div>
         </div>
         <div className="field">
