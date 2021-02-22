@@ -336,6 +336,7 @@ class QueryBrowserContainer extends Component {
       'sqlectron:new-tab': () => this.newTab(),
       'sqlectron:close-tab': () => this.closeTab(),
       'sqlectron:save-query': () => this.saveQuery(),
+      'sqlectron:save-query-as': () => this.saveQueryAs(),
       'sqlectron:open-query': () => this.openQuery(),
       'sqlectron:query-focus': () => this.focusQuery(),
       'sqlectron:toggle-database-search': () => this.toggleDatabaseSearch(),
@@ -357,7 +358,11 @@ class QueryBrowserContainer extends Component {
   }
 
   saveQuery() {
-    this.props.dispatch(QueryActions.saveQuery());
+    this.props.dispatch(QueryActions.saveQuery(false));
+  }
+
+  saveQueryAs() {
+    this.props.dispatch(QueryActions.saveQuery(true));
   }
 
   openQuery() {

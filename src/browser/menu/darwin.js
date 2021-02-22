@@ -76,6 +76,11 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
           click: (item, win) => sendMessage(win, 'sqlectron:save-query'),
         },
         {
+          label: 'Save Query As',
+          accelerator: 'Shift+Cmd+S',
+          click: (item, win) => sendMessage(win, 'sqlectron:save-query-as'),
+        },
+        {
           label: 'Open Query',
           accelerator: 'Cmd+O',
           click: (item, win) => sendMessage(win, 'sqlectron:open-query'),
