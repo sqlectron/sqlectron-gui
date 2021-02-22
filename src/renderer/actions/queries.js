@@ -176,7 +176,7 @@ export function saveQuery (isSaveAs) {
         { name: 'All Files', extensions: ['*'] },
       ];
 
-      let filename = getFileName(currentQuery, isSaveAs, filters);
+      let filename = await getFileName(currentQuery, isSaveAs, filters);
       if (path.extname(filename) !== '.sql') {
         filename += '.sql';
       }
