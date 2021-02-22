@@ -159,7 +159,14 @@ export function saveToFile (rows, type, delimiter) {
   };
 }
 
-export function saveQuery () {
+async function getFileName (currentQuery, isSaveAs, filters) {
+  if (!isSaveAs && currentQuery.filename) {
+    return currentQuery.filename;
+  }
+  return fileHandler.showSaveDialog(filters);
+}
+
+export function saveQuery (isSaveAs) {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_QUERY_REQUEST });
     try {
@@ -169,7 +176,7 @@ export function saveQuery () {
         { name: 'All Files', extensions: ['*'] },
       ];
 
-      let filename = (currentQuery.filename || await fileHandler.showSaveDialog(filters));
+      let filename = getFileName(currentQuery, isSaveAs, filters);
       if (path.extname(filename) !== '.sql') {
         filename += '.sql';
       }
