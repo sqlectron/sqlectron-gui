@@ -20,6 +20,7 @@ export default class DatabaseList extends Component {
     onSelectTable: PropTypes.func.isRequired,
     onGetSQLScript: PropTypes.func.isRequired,
     onRefreshDatabase: PropTypes.func.isRequired,
+    onOpenTab: PropTypes.func.isRequired,
     onShowDiagramModal: PropTypes.func.isRequired,
   }
 
@@ -49,6 +50,7 @@ export default class DatabaseList extends Component {
       onSelectDatabase,
       onGetSQLScript,
       onRefreshDatabase,
+      onOpenTab,
       onShowDiagramModal,
       currentDB,
     } = this.props;
@@ -87,6 +89,7 @@ export default class DatabaseList extends Component {
             onSelectDatabase={onSelectDatabase}
             onGetSQLScript={onGetSQLScript}
             onRefreshDatabase={onRefreshDatabase}
+            onOpenTab={onOpenTab}
             onShowDiagramModal={onShowDiagramModal} />
         ))
       }
