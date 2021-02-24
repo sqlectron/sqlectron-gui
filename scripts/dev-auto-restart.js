@@ -5,9 +5,7 @@ var join = require('path').join;
 var electron = require('electron');
 
 var main = join(__dirname, '../src/browser/main.js');
-var watch = [
-  join(__dirname, '../src/browser'),
-];
+var watch = [join(__dirname, '../src/browser')];
 
 var pathCore = join(__dirname, '../../sqlectron-core/lib');
 try {

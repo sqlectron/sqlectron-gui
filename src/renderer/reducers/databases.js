@@ -18,13 +18,14 @@ const COMMANDS_TRIGER_REFRESH = ['CREATE_DATABASE', 'DROP_DATABASE'];
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
-      return action.isServerConnection
-        ? { ...INITIAL_STATE, didInvalidate: true }
-        : state;
+      return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
     }
     case types.FETCH_DATABASES_REQUEST: {
       return {
-        ...state, isFetching: true, didInvalidate: false, error: null,
+        ...state,
+        isFetching: true,
+        didInvalidate: false,
+        error: null,
       };
     }
     case types.FETCH_DATABASES_SUCCESS: {
@@ -99,10 +100,12 @@ export default function (state = INITIAL_STATE, action) {
     case queryTypes.EXECUTE_QUERY_SUCCESS: {
       return {
         ...state,
-        didInvalidate: action.results
-          .some(({ command }) => COMMANDS_TRIGER_REFRESH.includes(command)),
+        didInvalidate: action.results.some(({ command }) =>
+          COMMANDS_TRIGER_REFRESH.includes(command)
+        ),
       };
     }
-    default: return state;
+    default:
+      return state;
   }
 }

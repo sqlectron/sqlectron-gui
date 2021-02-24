@@ -20,13 +20,13 @@ const langTools = ace.acequire('ace/ext/language_tools');
 
 const INFOS = {
   mysql: [
-    'MySQL treats commented query as a non select query.'
-      + 'So you may see "affected rows" for a commented query.',
+    'MySQL treats commented query as a non select query.' +
+      'So you may see "affected rows" for a commented query.',
     'Usually executing a single query per tab will give better results.',
   ],
   sqlserver: [
-    'MSSQL treats multiple non select queries as a single query result.'
-      + 'So you affected rows will show the amount over all queries executed in the same tab.',
+    'MSSQL treats multiple non select queries as a single query result.' +
+      'So you affected rows will show the amount over all queries executed in the same tab.',
     'Usually executing a single query per tab will give better results.',
   ],
 };
@@ -59,7 +59,7 @@ export default class Query extends Component {
     onSQLChange: PropTypes.func.isRequired,
     onSelectionChange: PropTypes.func.isRequired,
     editorName: PropTypes.string.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -80,7 +80,7 @@ export default class Query extends Component {
   componentDidMount() {
     this.refs.queryBoxTextarea.editor.on(
       EVENT_KEYS.onSelectionChange,
-      debounce(this.onSelectionChange, 100),
+      debounce(this.onSelectionChange, 100)
     );
 
     // init with the auto complete disabled
@@ -93,18 +93,17 @@ export default class Query extends Component {
       return;
     }
 
-    const isMetadataChanged = (
-      ((nextProps.tables || []).length !== (this.props.tables || []).length)
-      || ((nextProps.views || []).length !== (this.props.views || []).length)
-      || ((nextProps.functions || []).length !== (this.props.functions || []).length)
-      || ((nextProps.procedures || []).length !== (this.props.procedures || []).length)
-      || (Object.keys(nextProps.columnsByTable || {}).length
-          !== Object.keys(this.props.columnsByTable || []).length)
-      || (Object.keys(nextProps.triggersByTable || {}).length
-          !== Object.keys(this.props.triggersByTable || []).length)
-      || (Object.keys(nextProps.indexesByTable || {}).length
-          !== Object.keys(this.props.indexesByTable || []).length)
-    );
+    const isMetadataChanged =
+      (nextProps.tables || []).length !== (this.props.tables || []).length ||
+      (nextProps.views || []).length !== (this.props.views || []).length ||
+      (nextProps.functions || []).length !== (this.props.functions || []).length ||
+      (nextProps.procedures || []).length !== (this.props.procedures || []).length ||
+      Object.keys(nextProps.columnsByTable || {}).length !==
+        Object.keys(this.props.columnsByTable || []).length ||
+      Object.keys(nextProps.triggersByTable || {}).length !==
+        Object.keys(this.props.triggersByTable || []).length ||
+      Object.keys(nextProps.indexesByTable || {}).length !==
+        Object.keys(this.props.indexesByTable || []).length;
 
     if (!isMetadataChanged) {
       return;
@@ -127,14 +126,11 @@ export default class Query extends Component {
       customCompleter,
     ];
 
-    this.refs.queryBoxTextarea.editor.setOption(
-      'enableBasicAutocompletion',
-      true,
-    );
+    this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', true);
 
     this.refs.queryBoxTextarea.editor.setOption(
       'enableLiveAutocompletion',
-      nextProps.enabledLiveAutoComplete,
+      nextProps.enabledLiveAutoComplete
     );
   }
 
@@ -148,14 +144,14 @@ export default class Query extends Component {
   componentWillUnmount() {
     this.refs.queryBoxTextarea.editor.removeListener(
       EVENT_KEYS.onSelectionChange,
-      this.onSelectionChange,
+      this.onSelectionChange
     );
   }
 
   onSelectionChange() {
     this.props.onSelectionChange(
       this.props.query.query,
-      this.refs.queryBoxTextarea.editor.getCopyText(),
+      this.refs.queryBoxTextarea.editor.getCopyText()
     );
   }
 
@@ -204,8 +200,7 @@ export default class Query extends Component {
     const mapCompletionTypes = (items, type) => {
       let result = items;
       if (!Array.isArray(items)) {
-        result = Object.keys(items || {})
-          .reduce((all, name) => all.concat(items[name]), []);
+        result = Object.keys(items || {}).reduce((all, name) => all.concat(items[name]), []);
       }
 
       return (result || []).map(({ name }) => ({ name, type }));
@@ -222,11 +217,14 @@ export default class Query extends Component {
       ...mapCompletionTypes(functions, 'function'),
       ...mapCompletionTypes(procedures, 'procedure'),
     ].map(({ name, type }) => ({
-      name, value: name, score: 1, meta: type,
+      name,
+      value: name,
+      score: 1,
+      meta: type,
     }));
   }
 
-  getCommands () {
+  getCommands() {
     return [
       {
         name: 'increaseFontSize',
@@ -291,8 +289,7 @@ export default class Query extends Component {
             className="react-resizable react-resizable-se-resize ui segment"
             height={QUERY_EDITOR_HEIGTH}
             width={500}
-            onResizeStop={this.onQueryBoxResize}
-          >
+            onResizeStop={this.onQueryBoxResize}>
             <>
               <AceEditor
                 mode="sql"
@@ -308,31 +305,33 @@ export default class Query extends Component {
                 editorProps={{ $blockScrolling: Infinity }}
                 onChange={debounce(onSQLChange, 50)}
                 enableBasicAutocompletion
-                enableLiveAutocompletion />
+                enableLiveAutocompletion
+              />
               <div className="ui secondary menu" style={{ marginTop: 0 }}>
                 <div className="right menu">
                   <CheckBox
                     name="wrapQueryContents"
                     label="Wrap Contents"
                     onChecked={this.onWrapContentsChecked}
-                    onUnchecked={this.onWrapContentsUnchecked} />
+                    onUnchecked={this.onWrapContentsUnchecked}
+                  />
                 </div>
               </div>
             </>
           </ResizableBox>
           <div className="ui secondary menu" style={{ marginTop: 0 }}>
-            {infos
-              && (
+            {infos && (
               <div className="item">
                 <span>
-                  <button className="ui icon button small"
+                  <button
+                    className="ui icon button small"
                     title="Query Information"
                     onClick={this.onShowInfoClick}>
                     <i className="icon info" />
                   </button>
                 </span>
               </div>
-              )}
+            )}
             <div className="right menu">
               <div className="item">
                 <div className="ui buttons">
@@ -342,23 +341,17 @@ export default class Query extends Component {
                     Execute
                   </button>
                   <div className="or" />
-                  {
-                    query.isExecuting && allowCancel
-                      ? (
-                        <button
-                          className={`ui negative button ${query.isCanceling ? 'loading' : ''}`}
-                          onClick={this.onCancelQueryClick}>
-                          Cancel
-                        </button>
-                      )
-                      : (
-                        <button
-                          className="ui button"
-                          onClick={this.onDiscQueryClick}>
-                          Discard
-                        </button>
-                      )
-                  }
+                  {query.isExecuting && allowCancel ? (
+                    <button
+                      className={`ui negative button ${query.isCanceling ? 'loading' : ''}`}
+                      onClick={this.onCancelQueryClick}>
+                      Cancel
+                    </button>
+                  ) : (
+                    <button className="ui button" onClick={this.onDiscQueryClick}>
+                      Discard
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -376,14 +369,15 @@ export default class Query extends Component {
           query={query.queryHistory[query.queryHistory.length - 1]}
           results={query.results}
           isExecuting={query.isExecuting}
-          error={query.error} />
-        {this.state && this.state.infoModalVisible
-          && (
+          error={query.error}
+        />
+        {this.state && this.state.infoModalVisible && (
           <ServerDBClientInfoModal
             infos={infos}
             client={client}
-            onCloseClick={() => this.setState({ infoModalVisible: false })} />
-          )}
+            onCloseClick={() => this.setState({ infoModalVisible: false })}
+          />
+        )}
       </div>
     );
   }

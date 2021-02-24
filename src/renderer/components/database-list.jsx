@@ -22,7 +22,7 @@ export default class DatabaseList extends Component {
     onRefreshDatabase: PropTypes.func.isRequired,
     onOpenTab: PropTypes.func.isRequired,
     onShowDiagramModal: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -56,21 +56,16 @@ export default class DatabaseList extends Component {
     } = this.props;
 
     if (isFetching) {
-      return (
-        <div className="ui grey item">Loading...</div>
-      );
+      return <div className="ui grey item">Loading...</div>;
     }
 
     if (!databases.length) {
-      return (
-        <div className="ui grey item">No results found</div>
-      );
+      return <div className="ui grey item">No results found</div>;
     }
 
     return (
       <div className="item" style={{ padding: 0 }}>
-        {
-        databases.map((database) => (
+        {databases.map((database) => (
           <DatabaseListItem
             ref={database.name}
             key={database.name}
@@ -90,9 +85,9 @@ export default class DatabaseList extends Component {
             onGetSQLScript={onGetSQLScript}
             onRefreshDatabase={onRefreshDatabase}
             onOpenTab={onOpenTab}
-            onShowDiagramModal={onShowDiagramModal} />
-        ))
-      }
+            onShowDiagramModal={onShowDiagramModal}
+          />
+        ))}
       </div>
     );
   }

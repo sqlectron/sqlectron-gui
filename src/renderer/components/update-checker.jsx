@@ -1,4 +1,4 @@
-import { ipcRenderer, shell } from 'electron'; // eslint-disable-line import/no-unresolved
+import { ipcRenderer, shell } from 'electron';
 import React, { Component } from 'react';
 
 const EVENT_KEY = 'sqlectron:update-available';
@@ -31,7 +31,9 @@ export default class UpdateChecker extends Component {
 
   render() {
     const isVisible = this.state && this.state.isVisible;
-    if (!isVisible) { return null; }
+    if (!isVisible) {
+      return null;
+    }
 
     // TODO: show the latest avaible version
     // const currentVersion = `v${PACKAGE_JSON.version}`;

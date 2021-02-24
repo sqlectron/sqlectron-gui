@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# Run linters
+npx --no-install lint-staged
+
+# Run test
+npm test

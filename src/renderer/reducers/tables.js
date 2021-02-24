@@ -15,9 +15,7 @@ const COMMANDS_TRIGER_REFRESH = ['CREATE_TABLE', 'DROP_TABLE'];
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
-      return action.isServerConnection
-        ? { ...INITIAL_STATE, didInvalidate: true }
-        : state;
+      return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
     }
     case types.SELECT_TABLES_FOR_DIAGRAM: {
       return {
@@ -27,7 +25,10 @@ export default function (state = INITIAL_STATE, action) {
     }
     case types.FETCH_TABLES_REQUEST: {
       return {
-        ...state, isFetching: true, didInvalidate: false, error: null,
+        ...state,
+        isFetching: true,
+        didInvalidate: false,
+        error: null,
       };
     }
     case types.FETCH_TABLES_SUCCESS: {
@@ -53,8 +54,9 @@ export default function (state = INITIAL_STATE, action) {
     case queryTypes.EXECUTE_QUERY_SUCCESS: {
       return {
         ...state,
-        didInvalidate: action.results
-          .some(({ command }) => COMMANDS_TRIGER_REFRESH.includes(command)),
+        didInvalidate: action.results.some(({ command }) =>
+          COMMANDS_TRIGER_REFRESH.includes(command)
+        ),
       };
     }
     case dbTypes.REFRESH_DATABASES: {
@@ -69,6 +71,7 @@ export default function (state = INITIAL_STATE, action) {
         selectedTablesForDiagram: null,
       };
     }
-    default: return state;
+    default:
+      return state;
   }
 }

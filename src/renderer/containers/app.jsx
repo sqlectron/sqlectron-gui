@@ -1,4 +1,4 @@
-import { webFrame } from 'electron'; // eslint-disable-line import/no-unresolved
+import { webFrame } from 'electron';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -49,21 +49,27 @@ class AppContainer extends Component {
     this.menuHandler.setMenus({
       'sqlectron:zoom-in': async () => {
         const { config } = this.props;
-        if (!config.data) { return; }
+        if (!config.data) {
+          return;
+        }
         const { data } = config;
         data.zoomFactor = (data.zoomFactor || 1) + 0.2;
         updateConfig(data);
       },
       'sqlectron:zoom-out': async () => {
         const { config } = this.props;
-        if (!config.data) { return; }
+        if (!config.data) {
+          return;
+        }
         const { data } = config;
         data.zoomFactor = (data.zoomFactor || 1) - 0.2;
         updateConfig(data);
       },
       'sqlectron:zoom-reset': async () => {
         const { config } = this.props;
-        if (!config.data) { return; }
+        if (!config.data) {
+          return;
+        }
         const { data } = config;
         data.zoomFactor = 1;
         updateConfig(data);
@@ -73,7 +79,9 @@ class AppContainer extends Component {
 
   UNSAFE_componentWillReceiveProps(newProps) {
     const { config } = newProps;
-    if (!config.data) { return; }
+    if (!config.data) {
+      return;
+    }
     const { zoomFactor, enabledDarkTheme, disabledOpenAnimation } = config.data;
     if (typeof zoomFactor !== 'undefined' && zoomFactor > 0) {
       // Apply the zoom factor

@@ -11,9 +11,7 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
-      return action.isServerConnection
-        ? { ...INITIAL_STATE, didInvalidate: true }
-        : state;
+      return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
     }
     case types.FETCH_KEYS_REQUEST: {
       return {
@@ -70,6 +68,7 @@ export default function (state = INITIAL_STATE, action) {
         didInvalidate: true,
       };
     }
-    default: return state;
+    default:
+      return state;
   }
 }

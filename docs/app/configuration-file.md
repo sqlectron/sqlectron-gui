@@ -2,14 +2,15 @@
 
 SQLECTRON keeps a configuration file in the directory:
 
-* **macOS:** `~/Library/Preferences/Sqlectron`
-* **Linux:** (`$XDG_CONFIG_HOME` or `~/.config`) + `/Sqlectron`
-* **Windows:** (`$LOCALAPPDATA` or `%USERPROFILE%\AppData\Local`) + `\Sqlectron\Config`
+- **macOS:** `~/Library/Preferences/Sqlectron`
+- **Linux:** (`$XDG_CONFIG_HOME` or `~/.config`) + `/Sqlectron`
+- **Windows:** (`$LOCALAPPDATA` or `%USERPROFILE%\AppData\Local`) + `\Sqlectron\Config`
 
 > For older versions it was stored as `.sqlectron.json` at the user's home directory:
-> * **macOS:** `~/`
-> * **Linux:** `~/`
-> * **Windows:** `%USERPROFILE%`
+>
+> - **macOS:** `~/`
+> - **Linux:** `~/`
+> - **Windows:** `%USERPROFILE%`
 
 Although it is possible to change this file manually, it is usually better to just use the UI since it allows you to change any of these settings from there.
 

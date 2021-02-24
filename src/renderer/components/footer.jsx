@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
+import { shell } from 'electron';
 import UpdateChecker from './update-checker';
 import LogStatus from './log-status';
 
@@ -27,7 +27,9 @@ const Footer = ({ status }) => (
         <LogStatus />
         <UpdateChecker />
       </div>
-      <a href="#" className="item" onClick={onGithubClick}>Github</a>
+      <a href="#" className="item" onClick={onGithubClick}>
+        Github
+      </a>
       <a href="#" className="item" title="Keyboard Shortcuts" onClick={onShortcutsClick}>
         <i className="keyboard icon" />
       </a>

@@ -1,13 +1,15 @@
 {
-  "extends": "airbnb-base",
-  "env": {
-    "node": true
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2020
   },
+  "extends": ["eslint:recommended", "prettier"],
+  "plugins": ["prettier"],
   "rules": {
-    "no-use-before-define": 0,
-    "prefer-template": 0,
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}],
-
-    "import/prefer-default-export": 0
+    "prettier/prettier": ["error"]
+  },
+  "env": {
+    "node": true,
+    "mocha": true
   }
 }

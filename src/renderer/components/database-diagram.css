@@ -1,10 +1,11 @@
 /* Disable removing links between objects */
 .link-tools .tool-remove {
-  display: none
+  display: none;
 }
 
 /* Make custom element appear above jointjs generic rect */
-.sqlectron-table, .sqlectron-table-cell {
+.sqlectron-table,
+.sqlectron-table-cell {
   position: absolute;
   /* Make sure events are propagated to the JointJS element so, e.g. dragging works.*/
   pointer-events: none;
@@ -32,7 +33,7 @@
 
 /* Disable disconnecting links from elements */
 .marker-arrowheads {
-  display: none
+  display: none;
 }
 
 .ui.simple.upward.dropdown > .menu {

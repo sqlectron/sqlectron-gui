@@ -1,9 +1,15 @@
 {
-  "extends": "airbnb-base",
-  "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "extends": ["eslint:recommended", "prettier"],
+  "plugins": ["prettier"],
   "rules": {
-    "no-use-before-define": 0,
-    "prefer-template": 0,
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
+    "prettier/prettier": ["error"]
+  },
+  "env": {
+    "es2017": true,
+    "node": true,
+    "mocha": true
   }
 }

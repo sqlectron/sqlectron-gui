@@ -5,12 +5,15 @@ import template from 'lodash.template';
 // Custom joint shape representing table/view object
 joint.shapes.sqlectron = {};
 joint.shapes.sqlectron.Table = joint.shapes.basic.Rect.extend({
-  defaults: joint.util.deepSupplement({
-    type: 'sqlectron.Table',
-    attrs: {
-      rect: { stroke: 'none', 'fill-opacity': 0 },
+  defaults: joint.util.deepSupplement(
+    {
+      type: 'sqlectron.Table',
+      attrs: {
+        rect: { stroke: 'none', 'fill-opacity': 0 },
+      },
     },
-  }, joint.shapes.basic.Rect.prototype.defaults),
+    joint.shapes.basic.Rect.prototype.defaults
+  ),
 });
 
 joint.shapes.sqlectron.TableView = joint.dia.ElementView.extend({

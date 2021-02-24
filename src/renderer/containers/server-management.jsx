@@ -118,9 +118,7 @@ class ServerManagerment extends Component {
 
   render() {
     const { filter } = this.state;
-    const {
-      connections, servers, config, status,
-    } = this.props;
+    const { connections, servers, config, status } = this.props;
     const selected = servers.editingServer || {};
     const filteredServers = this.filterServers(filter, servers.items);
 
@@ -139,42 +137,45 @@ class ServerManagerment extends Component {
           <ServerFilter
             onFilterChange={this.onFilterChange}
             onAddClick={this.onAddClick}
-            onSettingsClick={this.onSettingsClick} />
+            onSettingsClick={this.onSettingsClick}
+          />
 
-          {
-            connections.error
-              && (
-              <Message
-                closeable
-                title="Connection Error"
-                message={connections.error.message}
-                type="error" />
-              )
-          }
+          {connections.error && (
+            <Message
+              closeable
+              title="Connection Error"
+              message={connections.error.message}
+              type="error"
+            />
+          )}
 
-          <ServerList servers={filteredServers}
+          <ServerList
+            servers={filteredServers}
             onEditClick={this.onEditClick}
             onConnectClick={this.onConnectClick}
-            config={config} />
+            config={config}
+          />
 
           {servers.isEditing && (
-          <ServerModalForm
-            server={selected}
-            error={servers.error}
-            testConnection={testConnection}
-            onTestConnectionClick={this.onTestConnectionClick}
-            onDuplicateClick={this.onDuplicateClick}
-            onSaveClick={this.onSaveClick}
-            onCancelClick={this.onCancelClick}
-            onRemoveClick={this.onRemoveClick} />
+            <ServerModalForm
+              server={selected}
+              error={servers.error}
+              testConnection={testConnection}
+              onTestConnectionClick={this.onTestConnectionClick}
+              onDuplicateClick={this.onDuplicateClick}
+              onSaveClick={this.onSaveClick}
+              onCancelClick={this.onCancelClick}
+              onRemoveClick={this.onRemoveClick}
+            />
           )}
 
           {config.isEditing && (
-          <SettingsModalForm
-            config={config}
-            error={config.error}
-            onSaveClick={this.onSettingsSaveClick}
-            onCancelClick={this.onSettingsCancelClick} />
+            <SettingsModalForm
+              config={config}
+              error={config.error}
+              onSaveClick={this.onSettingsSaveClick}
+              onCancelClick={this.onSettingsCancelClick}
+            />
           )}
         </div>
         <div style={STYLES.footer}>

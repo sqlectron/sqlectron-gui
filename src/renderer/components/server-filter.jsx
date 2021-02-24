@@ -15,23 +15,28 @@ export default class ServerFilter extends Component {
     this.onFilterChange = this.onFilterChange.bind(this);
   }
 
-  UNSAFE_componentWillMount () {
+  UNSAFE_componentWillMount() {
     this.delayedCallback = debounce(this.props.onFilterChange, 200);
   }
 
-  onFilterChange (event) {
+  onFilterChange(event) {
     event.persist();
     this.delayedCallback(event);
   }
 
-  render () {
+  render() {
     return (
-      <div className="ui small action left icon input fluid"
+      <div
+        className="ui small action left icon input fluid"
         style={{ marginBottom: '1em', fontSize: '0.8em' }}>
         <i className="search icon" />
         <input type="text" placeholder="Search..." onChange={this.onFilterChange} />
-        <button className="ui button green" onClick={this.props.onAddClick}>Add</button>
-        <button className="ui button" onClick={this.props.onSettingsClick}>Settings</button>
+        <button className="ui button green" onClick={this.props.onAddClick}>
+          Add
+        </button>
+        <button className="ui button" onClick={this.props.onSettingsClick}>
+          Settings
+        </button>
       </div>
     );
   }

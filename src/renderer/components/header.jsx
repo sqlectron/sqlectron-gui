@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
+import { shell } from 'electron';
 
 require('./header.css');
 
@@ -15,13 +15,11 @@ function renderBreadcrumb(items) {
   return (
     <div className="ui breadcrumb" style={{ margin: '0 auto' }}>
       {items.map(({ icon, label }, index) => {
-        const isLast = (index !== items.length - 1);
+        const isLast = index !== items.length - 1;
         return (
           <span key={index + label}>
             <i className={`${icon} icon`} />
-            <a className={`section ${isLast ? 'active' : ''}`}>
-              {label}
-            </a>
+            <a className={`section ${isLast ? 'active' : ''}`}>{label}</a>
             {isLast && <div className="divider"> / </div>}
           </span>
         );
@@ -46,12 +44,11 @@ const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
       <div className="right menu" style={{ visibility: visibilityButtons }}>
         <div className="item borderless" style={styleItem}>
           <div className="ui mini basic icon buttons">
-            <button className="ui button"
-              title="Reconnect"
-              onClick={onReConnectionClick}>
+            <button className="ui button" title="Reconnect" onClick={onReConnectionClick}>
               <i className="plug icon" />
             </button>
-            <button className="ui icon button"
+            <button
+              className="ui icon button"
               title="Close connection"
               onClick={onCloseConnectionClick}>
               <i className="power icon" />

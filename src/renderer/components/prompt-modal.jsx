@@ -8,7 +8,7 @@ export default class PromptModal extends Component {
     title: PropTypes.string.isRequired,
     message: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -18,18 +18,20 @@ export default class PromptModal extends Component {
   }
 
   componentDidMount() {
-    $(this.refs.promptModal).modal({
-      closable: false,
-      detachable: false,
-      onDeny: () => {
-        this.props.onCancelClick();
-        return true;
-      },
-      onApprove: () => {
-        this.props.onOKClick(this.state.value);
-        return true;
-      },
-    }).modal('show');
+    $(this.refs.promptModal)
+      .modal({
+        closable: false,
+        detachable: false,
+        onDeny: () => {
+          this.props.onCancelClick();
+          return true;
+        },
+        onApprove: () => {
+          this.props.onOKClick(this.state.value);
+          return true;
+        },
+      })
+      .modal('show');
   }
 
   componentWillUnmount() {
@@ -51,9 +53,7 @@ export default class PromptModal extends Component {
 
     return (
       <div className="ui modal" ref="promptModal">
-        <div className="header">
-          {title}
-        </div>
+        <div className="header">{title}</div>
         <div className="content">
           {message}
           <div className="ui fluid icon input">

@@ -12,16 +12,18 @@ export default class ServerDBClientInfoModal extends Component {
     client: PropTypes.string.isRequired,
     infos: PropTypes.array.isRequired,
     onCloseClick: PropTypes.func.isRequired,
-  }
+  };
 
   componentDidMount() {
-    $(this.refs.infoModal).modal({
-      closable: true,
-      detachable: false,
-      allowMultiple: true,
-      observeChanges: true,
-      onHidden: () => this.props.onCloseClick(),
-    }).modal('show');
+    $(this.refs.infoModal)
+      .modal({
+        closable: true,
+        detachable: false,
+        allowMultiple: true,
+        observeChanges: true,
+        onHidden: () => this.props.onCloseClick(),
+      })
+      .modal('show');
   }
 
   componentWillUnmount() {
@@ -34,20 +36,18 @@ export default class ServerDBClientInfoModal extends Component {
 
     return (
       <div id="server-modal" className="ui modal" ref="infoModal">
-        <div className="header">
-          {dbClient.name}
-          {' '}
-          Query Information
-        </div>
+        <div className="header">{dbClient.name} Query Information</div>
         <div className="content">
           <p>
             Some particularities about queries on
-            {dbClient.name}
-            {' '}
-            you should know:
+            {dbClient.name} you should know:
           </p>
           <div className="ui bulleted list">
-            {infos.map((info, idx) => (<div key={idx} className="item">{info}</div>))}
+            {infos.map((info, idx) => (
+              <div key={idx} className="item">
+                {info}
+              </div>
+            ))}
           </div>
           <ul />
         </div>

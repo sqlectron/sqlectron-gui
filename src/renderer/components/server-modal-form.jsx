@@ -31,7 +31,7 @@ export default class ServerModalForm extends Component {
     server: PropTypes.object,
     error: PropTypes.object,
     testConnection: PropTypes.object,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -54,21 +54,23 @@ export default class ServerModalForm extends Component {
   }
 
   componentDidMount() {
-    $(this.refs.serverModal).modal({
-      closable: true,
-      detachable: false,
-      allowMultiple: true,
-      observeChanges: true,
-      onHidden: () => {
-        this.props.onCancelClick();
-        return true;
-      },
-      onDeny: () => {
-        this.props.onCancelClick();
-        return true;
-      },
-      onApprove: () => false,
-    }).modal('show');
+    $(this.refs.serverModal)
+      .modal({
+        closable: true,
+        detachable: false,
+        allowMultiple: true,
+        observeChanges: true,
+        onHidden: () => {
+          this.props.onCancelClick();
+          return true;
+        },
+        onDeny: () => {
+          this.props.onCancelClick();
+          return true;
+        },
+        onApprove: () => false,
+      })
+      .modal('show');
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -214,9 +216,7 @@ export default class ServerModalForm extends Component {
   renderClientItem({ label, logo }) {
     return (
       <div>
-        <img alt="logo" src={logo} style={{ width: '16px' }} />
-        {' '}
-        {label}
+        <img alt="logo" src={logo} style={{ width: '16px' }} /> {label}
       </div>
     );
   }
@@ -230,7 +230,8 @@ export default class ServerModalForm extends Component {
           closeable
           title="Connection Error"
           message={testConnection.error.message}
-          type="error" />
+          type="error"
+        />
       );
     }
 
@@ -240,7 +241,8 @@ export default class ServerModalForm extends Component {
           closeable
           title="Connection Test"
           message="Successfully connected"
-          type="success" />
+          type="success"
+        />
       );
     }
 
@@ -253,11 +255,13 @@ export default class ServerModalForm extends Component {
         <div className="fields">
           <div className={`nine wide field ${this.highlightError('name')}`}>
             <label>Name</label>
-            <input type="text"
+            <input
+              type="text"
               name="name"
               placeholder="Name"
               value={this.state.name || ''}
-              onChange={this.handleChange} />
+              onChange={this.handleChange}
+            />
           </div>
           <div className={`six wide field ${this.highlightError('client')}`}>
             <label>Database Type</label>
@@ -269,7 +273,8 @@ export default class ServerModalForm extends Component {
               onChange={this.handleOnClientChange}
               optionRenderer={this.renderClientItem}
               valueRenderer={this.renderClientItem}
-              value={this.state.client} />
+              value={this.state.client}
+            />
           </div>
           <div className="one field" style={{ paddingTop: '2em' }}>
             <Checkbox
@@ -278,49 +283,58 @@ export default class ServerModalForm extends Component {
               disabled={this.isFeatureDisabled('server:ssl')}
               defaultChecked={this.state.ssl}
               onChecked={() => this.setState({ ssl: true })}
-              onUnchecked={() => this.setState({ ssl: false })} />
+              onUnchecked={() => this.setState({ ssl: false })}
+            />
           </div>
         </div>
         <div className="field">
           <label>Server Address</label>
           <div className="fields">
             <div className={`five wide field ${this.highlightError('host')}`}>
-              <input type="text"
+              <input
+                type="text"
                 name="host"
                 placeholder="Host"
                 value={this.state.host || ''}
                 onChange={this.handleChange}
-                disabled={this.isFeatureDisabled('server:host') || this.state.socketPath} />
+                disabled={this.isFeatureDisabled('server:host') || this.state.socketPath}
+              />
             </div>
             <div className={`two wide field ${this.highlightError('port')}`}>
-              <input type="number"
+              <input
+                type="number"
                 name="port"
                 maxLength="5"
                 placeholder="Port"
                 value={this.state.port || this.state.defaultPort || ''}
                 onChange={this.handleChange}
-                disabled={this.isFeatureDisabled('server:port') || this.state.socketPath} />
+                disabled={this.isFeatureDisabled('server:port') || this.state.socketPath}
+              />
             </div>
             <div className={`four wide field ${this.highlightError('domain')}`}>
-              <input type="text"
+              <input
+                type="text"
                 name="domain"
                 placeholder="Domain"
                 value={this.state.domain || ''}
                 disabled={this.isFeatureDisabled('server:domain')}
-                onChange={this.handleChange} />
+                onChange={this.handleChange}
+              />
             </div>
             <div className={`five wide field ${this.highlightError('socketPath')}`}>
               <div className="ui action input">
-                <input type="text"
+                <input
+                  type="text"
                   name="socketPath"
                   placeholder="Unix socket path"
                   value={this.state.socketPath || ''}
                   onChange={this.handleChange}
-                  disabled={(
-                    this.state.host
-                    || this.state.port
-                    || this.isFeatureDisabled('server:socketPath')
-                  )} />
+                  disabled={
+                    this.state.host ||
+                    this.state.port ||
+                    this.isFeatureDisabled('server:socketPath')
+                  }
+                />
                 <label htmlFor="file.socketPath" className="ui icon button btn-file">
                   <i className="file outline icon" />
                   <input
@@ -329,11 +343,12 @@ export default class ServerModalForm extends Component {
                     name="file.socketPath"
                     onChange={this.handleChange}
                     style={{ display: 'none' }}
-                    disabled={(
-                      this.state.host
-                      || this.state.port
-                      || this.isFeatureDisabled('server:socketPath')
-                    )} />
+                    disabled={
+                      this.state.host ||
+                      this.state.port ||
+                      this.isFeatureDisabled('server:socketPath')
+                    }
+                  />
                 </label>
               </div>
             </div>
@@ -342,26 +357,29 @@ export default class ServerModalForm extends Component {
         <div className="fields">
           <div className={`four wide field ${this.highlightError('user')}`}>
             <label>User</label>
-            <input type="text"
+            <input
+              type="text"
               name="user"
               placeholder="User"
               value={this.state.user || ''}
               disabled={this.isFeatureDisabled('server:user')}
-              onChange={this.handleChange} />
+              onChange={this.handleChange}
+            />
           </div>
           <div className={`four wide field ${this.highlightError('password')}`}>
             <div>
               <label>Password</label>
             </div>
             <div className="ui action input">
-              <input type={this.state.showPlainPassword ? 'text' : 'password'}
+              <input
+                type={this.state.showPlainPassword ? 'text' : 'password'}
                 name="password"
                 placeholder="Password"
                 value={this.state.password || ''}
                 disabled={this.isFeatureDisabled('server:password')}
-                onChange={this.handleChange} />
-              <span className="ui icon button"
-                onClick={this.onToggleShowPlainPasswordClick}>
+                onChange={this.handleChange}
+              />
+              <span className="ui icon button" onClick={this.onToggleShowPlainPasswordClick}>
                 <i className="unhide icon" />
               </span>
             </div>
@@ -369,13 +387,14 @@ export default class ServerModalForm extends Component {
           <div className={`four wide field ${this.highlightError('database')}`}>
             <label>Initial Database/Keyspace</label>
             <div className={this.state.client === 'sqlite' && 'ui action input'}>
-              <input type="text"
+              <input
+                type="text"
                 name="database"
                 placeholder="Database"
                 value={this.state.database || ''}
-                onChange={this.handleChange} />
-              {this.state.client === 'sqlite'
-                && (
+                onChange={this.handleChange}
+              />
+              {this.state.client === 'sqlite' && (
                 <label htmlFor="file.database" className="ui icon button btn-file">
                   <i className="file outline icon" />
                   <input
@@ -383,20 +402,23 @@ export default class ServerModalForm extends Component {
                     id="file.database"
                     name="file.database"
                     onChange={this.handleChange}
-                    style={{ display: 'none' }} />
+                    style={{ display: 'none' }}
+                  />
                 </label>
-                )}
+              )}
             </div>
           </div>
           <div className={`four wide field ${this.highlightError('schema')}`}>
             <label>Initial Schema</label>
-            <input type="text"
+            <input
+              type="text"
               name="schema"
               maxLength="100"
               placeholder="Schema"
               disabled={this.isFeatureDisabled('server:schema')}
               value={this.state.schema || ''}
-              onChange={this.handleChange} />
+              onChange={this.handleChange}
+            />
           </div>
         </div>
       </div>
@@ -419,61 +441,71 @@ export default class ServerModalForm extends Component {
             label="SSH Tunnel"
             defaultChecked={isSSHChecked}
             onChecked={() => this.setState({ ssh: {} })}
-            onUnchecked={() => this.setState({ ssh: null })} />
+            onUnchecked={() => this.setState({ ssh: null })}
+          />
         </div>
-        {isSSHChecked
-          && (
+        {isSSHChecked && (
           <div>
             <div className="field">
               <label>SSH Address</label>
               <div className="fields">
                 <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
-                  <input type="text"
+                  <input
+                    type="text"
                     name="ssh.host"
                     placeholder="Host"
                     disabled={!isSSHChecked}
                     value={ssh.host || ''}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
                 <div className={`three wide field ${this.highlightError('ssh.port')}`}>
-                  <input type="number"
+                  <input
+                    type="number"
                     name="ssh.port"
                     maxLength="5"
                     placeholder="Port"
                     disabled={!isSSHChecked}
                     value={ssh.port || DEFAULT_SSH_PORT}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                 </div>
               </div>
             </div>
             <div className="fields">
               <div className={`four wide field ${this.highlightError('ssh.user')}`}>
                 <label>User</label>
-                <input type="text"
+                <input
+                  type="text"
                   name="ssh.user"
                   placeholder="User"
                   disabled={!isSSHChecked}
                   value={ssh.user || ''}
-                  onChange={this.handleChange} />
+                  onChange={this.handleChange}
+                />
               </div>
               <div className={`four wide field ${this.highlightError('ssh.password')}`}>
                 <label>Password</label>
-                <input type="password"
+                <input
+                  type="password"
                   name="ssh.password"
                   placeholder="Password"
-                  disabled={(!isSSHChecked || ssh.privateKey)}
+                  disabled={!isSSHChecked || ssh.privateKey}
                   value={ssh.password || ''}
-                  onChange={this.handleChange} />
+                  onChange={this.handleChange}
+                />
               </div>
               <div className={`five wide field ${this.highlightError('ssh.privateKey')}`}>
                 <label>Private Key</label>
                 <div className="ui action input">
-                  <input type="text"
+                  <input
+                    type="text"
                     name="ssh.privateKey"
                     placeholder="~/.ssh/id_rsa"
-                    disabled={(!isSSHChecked || ssh.password)}
+                    disabled={!isSSHChecked || ssh.password}
                     value={ssh.privateKey || ''}
-                    onChange={this.handleChange} />
+                    onChange={this.handleChange}
+                  />
                   <label htmlFor="file.ssh.privateKey" className="ui icon button btn-file">
                     <i className="file outline icon" />
                     <input
@@ -481,8 +513,9 @@ export default class ServerModalForm extends Component {
                       id="file.ssh.privateKey"
                       name="file.ssh.privateKey"
                       onChange={this.handleChange}
-                      disabled={(!isSSHChecked || ssh.password)}
-                      style={{ display: 'none' }} />
+                      disabled={!isSSHChecked || ssh.password}
+                      style={{ display: 'none' }}
+                    />
                   </label>
                 </div>
               </div>
@@ -501,11 +534,12 @@ export default class ServerModalForm extends Component {
                     const stateSSH = this.state.ssh ? { ...this.state.ssh } : {};
                     stateSSH.privateKeyWithPassphrase = false;
                     this.setState({ ssh: stateSSH });
-                  }} />
+                  }}
+                />
               </div>
             </div>
           </div>
-          )}
+        )}
       </div>
     );
   }
@@ -525,7 +559,8 @@ export default class ServerModalForm extends Component {
               rows="3"
               disabled={!isFilterChecked}
               value={filterType.only ? filterType.only.join('\n') : ''}
-              onChange={this.handleChange} />
+              onChange={this.handleChange}
+            />
           </div>
           <div className={`eight wide field ${this.highlightError(`filter.${type}.ignore`)}`}>
             <label>Ignore</label>
@@ -535,7 +570,8 @@ export default class ServerModalForm extends Component {
               rows="3"
               disabled={!isFilterChecked}
               value={filterType.ignore ? filterType.ignore.join('\n') : ''}
-              onChange={this.handleChange} />
+              onChange={this.handleChange}
+            />
           </div>
         </div>
       </div>
@@ -559,14 +595,15 @@ export default class ServerModalForm extends Component {
             label="Filter"
             defaultChecked={isFilterChecked}
             onChecked={() => this.setState({ filter: {} })}
-            onUnchecked={() => this.setState({ filter: null })} />
+            onUnchecked={() => this.setState({ filter: null })}
+          />
         </div>
-        {isFilterChecked
-          && (
+        {isFilterChecked && (
           <div>
             <p>
               <em>
-                Allow to pre filter the data available in the sidebar. It improves the rendering performance for large servers.
+                Allow to pre filter the data available in the sidebar. It improves the rendering
+                performance for large servers.
                 <br />
                 Separate values by break line
               </em>
@@ -574,7 +611,7 @@ export default class ServerModalForm extends Component {
             {this.renderFilterPanelItem(isFilterChecked, filter, 'Database', 'database')}
             {this.renderFilterPanelItem(isFilterChecked, filter, 'Schema', 'schema')}
           </div>
-          )}
+        )}
       </div>
     );
   }
@@ -591,38 +628,43 @@ export default class ServerModalForm extends Component {
 
     return (
       <div className="actions">
-        <div className={`small ui blue right labeled icon button ${classStatusTestButton}`}
+        <div
+          className={`small ui blue right labeled icon button ${classStatusTestButton}`}
           tabIndex="0"
           onClick={this.onTestConnectionClick}>
           Test
           <i className="plug icon" />
         </div>
         {!isNew && (
-        <div className={`small ui right labeled icon button ${classStatusButtons}`}
-          tabIndex="0"
-          onClick={this.onDuplicateClick}>
-          Duplicate
-          <i className="copy icon" />
-        </div>
+          <div
+            className={`small ui right labeled icon button ${classStatusButtons}`}
+            tabIndex="0"
+            onClick={this.onDuplicateClick}>
+            Duplicate
+            <i className="copy icon" />
+          </div>
         )}
-        <div className={`small ui black deny right labeled icon button ${classStatusButtons}`}
+        <div
+          className={`small ui black deny right labeled icon button ${classStatusButtons}`}
           tabIndex="0">
           Cancel
           <i className="ban icon" />
         </div>
-        <div className={`small ui green right labeled icon button ${classStatusButtons}`}
+        <div
+          className={`small ui green right labeled icon button ${classStatusButtons}`}
           tabIndex="0"
           onClick={this.onSaveClick}>
           Save
           <i className="checkmark icon" />
         </div>
         {!isNew && (
-        <div className={`small ui red right labeled icon button ${classStatusButtons}`}
-          tabIndex="0"
-          onClick={this.onRemoveOpenClick}>
-          Remove
-          <i className="trash icon" />
-        </div>
+          <div
+            className={`small ui red right labeled icon button ${classStatusButtons}`}
+            tabIndex="0"
+            onClick={this.onRemoveOpenClick}>
+            Remove
+            <i className="trash icon" />
+          </div>
         )}
       </div>
     );
@@ -641,16 +683,15 @@ export default class ServerModalForm extends Component {
         title={`Delete ${this.state.name}`}
         message="Are you sure you want to remove this server connection?"
         onCancelClick={this.onRemoveCancelClick}
-        onRemoveClick={this.onRemoveConfirmClick} />
+        onRemoveClick={this.onRemoveConfirmClick}
+      />
     );
   }
 
   render() {
     return (
       <div id="server-modal" className="ui modal" ref="serverModal">
-        <div className="header">
-          Server Information
-        </div>
+        <div className="header">Server Information</div>
         <div className="content">
           {this.renderMessage()}
           <form className="ui form">

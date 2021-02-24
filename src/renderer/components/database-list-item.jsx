@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
+import { remote } from 'electron';
 import DatabaseListItemMetatada from './database-list-item-metadata';
 import DatabaseFilter from './database-filter';
 
@@ -47,7 +47,7 @@ export default class DatabaseListItem extends Component {
     onRefreshDatabase: PropTypes.func.isRequired,
     onOpenTab: PropTypes.func.isRequired,
     onShowDiagramModal: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -64,18 +64,24 @@ export default class DatabaseListItem extends Component {
     }
 
     this.contextMenu = new Menu();
-    this.contextMenu.append(new MenuItem({
-      label: 'Refresh Database',
-      click: this.props.onRefreshDatabase.bind(this, nextProps.database),
-    }));
-    this.contextMenu.append(new MenuItem({
-      label: 'Open Tab',
-      click: this.props.onOpenTab.bind(this, nextProps.database),
-    }));
-    this.contextMenu.append(new MenuItem({
-      label: 'Show Database Diagram',
-      click: this.props.onShowDiagramModal.bind(this, nextProps.database),
-    }));
+    this.contextMenu.append(
+      new MenuItem({
+        label: 'Refresh Database',
+        click: this.props.onRefreshDatabase.bind(this, nextProps.database),
+      })
+    );
+    this.contextMenu.append(
+      new MenuItem({
+        label: 'Open Tab',
+        click: this.props.onOpenTab.bind(this, nextProps.database),
+      })
+    );
+    this.contextMenu.append(
+      new MenuItem({
+        label: 'Show Database Diagram',
+        click: this.props.onShowDiagramModal.bind(this, nextProps.database),
+      })
+    );
   }
 
   onContextMenu(event) {
@@ -116,9 +122,7 @@ export default class DatabaseListItem extends Component {
   }
 
   isMetadataLoaded(props) {
-    const {
-      tables, views, functions, procedures,
-    } = (props || this.props);
+    const { tables, views, functions, procedures } = props || this.props;
     return tables && views && functions && procedures;
   }
 
@@ -161,10 +165,7 @@ export default class DatabaseListItem extends Component {
     const loadingContent = (
       <div className="ui list">
         <div className="item">
-          <DatabaseFilter
-            isFetching
-            placeholder="Loading..."
-            onFilterChange={() => {}} />
+          <DatabaseFilter isFetching placeholder="Loading..." onFilterChange={() => {}} />
         </div>
       </div>
     );
@@ -176,7 +177,8 @@ export default class DatabaseListItem extends Component {
             ref="filter"
             value={filter}
             isFetching={!isMetadataLoaded}
-            onFilterChange={this.onFilterChange} />
+            onFilterChange={this.onFilterChange}
+          />
         </div>
         <DatabaseListItemMetatada
           title="Tables"
@@ -188,7 +190,8 @@ export default class DatabaseListItem extends Component {
           database={database}
           onExecuteDefaultQuery={onExecuteDefaultQuery}
           onSelectItem={onSelectTable}
-          onGetSQLScript={onGetSQLScript} />
+          onGetSQLScript={onGetSQLScript}
+        />
         <DatabaseListItemMetatada
           collapsed
           title="Views"
@@ -196,29 +199,28 @@ export default class DatabaseListItem extends Component {
           items={filteredViews || views}
           database={database}
           onExecuteDefaultQuery={onExecuteDefaultQuery}
-          onGetSQLScript={onGetSQLScript} />
+          onGetSQLScript={onGetSQLScript}
+        />
         <DatabaseListItemMetatada
           collapsed
           title="Functions"
           client={client}
           items={filteredFunctions || functions}
           database={database}
-          onGetSQLScript={onGetSQLScript} />
+          onGetSQLScript={onGetSQLScript}
+        />
         <DatabaseListItemMetatada
           collapsed
           title="Procedures"
           client={client}
           items={filteredProcedures || procedures}
           database={database}
-          onGetSQLScript={onGetSQLScript} />
+          onGetSQLScript={onGetSQLScript}
+        />
       </div>
     );
 
-    return (
-      isCurrentDB && !isMetadataLoaded
-        ? loadingContent
-        : fullConent
-    );
+    return isCurrentDB && !isMetadataLoaded ? loadingContent : fullConent;
   }
 
   renderHeader(isMetadataLoaded) {

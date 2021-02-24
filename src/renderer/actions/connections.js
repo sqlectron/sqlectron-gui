@@ -11,7 +11,7 @@ export const TEST_CONNECTION_SUCCESS = 'TEST_CONNECTION_SUCCESS';
 export const TEST_CONNECTION_FAILURE = 'TEST_CONNECTION_FAILURE';
 
 let serverSession;
-export function getCurrentDBConn ({ queries } = {}) {
+export function getCurrentDBConn({ queries } = {}) {
   if (!serverSession) {
     throw new Error('There is no server available');
   }
@@ -37,13 +37,13 @@ export function getDBConnByName(database) {
   return dbConn;
 }
 
-export function setConnecting () {
+export function setConnecting() {
   return (dispatch) => {
     dispatch({ type: CONNECTION_SET_CONNECTING });
   };
 }
 
-export function connect (id, databaseName, reconnecting = false, sshPassphrase) {
+export function connect(id, databaseName, reconnecting = false, sshPassphrase) {
   return async (dispatch, getState) => {
     let server;
     let dbConn;
@@ -95,7 +95,11 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       dbConn = serverSession.db(database);
       if (dbConn) {
         dispatch({
-          type: CONNECTION_SUCCESS, server, database, config, reconnecting,
+          type: CONNECTION_SUCCESS,
+          server,
+          database,
+          config,
+          reconnecting,
         });
         return;
       }
@@ -104,11 +108,18 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
       await dbConn.connect();
 
       dispatch({
-        type: CONNECTION_SUCCESS, server, database, config, reconnecting,
+        type: CONNECTION_SUCCESS,
+        server,
+        database,
+        config,
+        reconnecting,
       });
     } catch (error) {
       dispatch({
-        type: CONNECTION_FAILURE, server, database, error,
+        type: CONNECTION_FAILURE,
+        server,
+        database,
+        error,
       });
       if (dbConn) {
         dbConn.disconnect();
@@ -121,7 +132,7 @@ export function connect (id, databaseName, reconnecting = false, sshPassphrase) 
   };
 }
 
-export function disconnect () {
+export function disconnect() {
   if (serverSession) {
     serverSession.end();
   }
@@ -131,19 +142,18 @@ export function disconnect () {
   return { type: CLOSE_CONNECTION };
 }
 
-export function reconnect (id, database) {
+export function reconnect(id, database) {
   serverSession.end();
   serverSession = null;
   return connect(id, database, true);
 }
 
-export function test (server) {
+export function test(server) {
   return async (dispatch) => {
     const serverCopy = JSON.parse(JSON.stringify(server));
     if (!serverCopy.database) {
-      const defaultDatabase = sqlectron.db.CLIENTS.find(
-        (c) => c.key === serverCopy.client,
-      ).defaultDatabase;
+      const defaultDatabase = sqlectron.db.CLIENTS.find((c) => c.key === serverCopy.client)
+        .defaultDatabase;
       serverCopy.database = serverCopy.database || defaultDatabase;
     }
     dispatch({ type: TEST_CONNECTION_REQUEST, serverCopy });

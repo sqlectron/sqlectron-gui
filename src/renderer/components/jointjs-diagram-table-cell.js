@@ -3,12 +3,15 @@ import bindAll from 'lodash.bindall';
 import template from 'lodash.template';
 
 joint.shapes.sqlectron.TableCell = joint.shapes.basic.Rect.extend({
-  defaults: joint.util.deepSupplement({
-    type: 'sqlectron.TableCell',
-    attrs: {
-      rect: { stroke: 'none', 'fill-opacity': 0, style: { 'pointer-events': 'none' } },
+  defaults: joint.util.deepSupplement(
+    {
+      type: 'sqlectron.TableCell',
+      attrs: {
+        rect: { stroke: 'none', 'fill-opacity': 0, style: { 'pointer-events': 'none' } },
+      },
     },
-  }, joint.shapes.basic.Rect.prototype.defaults),
+    joint.shapes.basic.Rect.prototype.defaults
+  ),
 });
 
 joint.shapes.sqlectron.TableCellView = joint.dia.ElementView.extend({

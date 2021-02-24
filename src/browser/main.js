@@ -10,8 +10,8 @@ if (configData.printVersion) {
 }
 
 if (
-  configData.limitQueryDefaultSelectTop !== undefined
-  && configData.limitQueryDefaultSelectTop !== null
+  configData.limitQueryDefaultSelectTop !== undefined &&
+  configData.limitQueryDefaultSelectTop !== null
 ) {
   sqlectron.setSelectLimit();
 }

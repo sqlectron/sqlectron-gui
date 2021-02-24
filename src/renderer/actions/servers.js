@@ -38,7 +38,7 @@ export function finishEditing() {
   return { type: FINISH_EDITING_SERVER };
 }
 
-export function saveServer ({ server, id }) {
+export function saveServer({ server, id }) {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_SERVER_REQUEST, server });
     try {
@@ -59,7 +59,7 @@ export function saveServer ({ server, id }) {
   };
 }
 
-export function removeServer ({ id }) {
+export function removeServer({ id }) {
   return async (dispatch) => {
     dispatch({ type: REMOVE_SERVER_REQUEST, id });
     try {
@@ -75,7 +75,7 @@ export function removeServer ({ id }) {
   };
 }
 
-export function duplicateServer ({ server }) {
+export function duplicateServer({ server }) {
   return async (dispatch, getState) => {
     dispatch({ type: DUPLICATE_SERVER_REQUEST, server });
     try {

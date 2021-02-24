@@ -1,4 +1,4 @@
-import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
+import { shell } from 'electron';
 
 function sendMessage(win, message) {
   if (win) {
@@ -228,7 +228,5 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
 }
 
 export function buildTemplateDockMenu(app, buildNewWindow) {
-  return [
-    { label: 'New Window', click: () => buildNewWindow(app) },
-  ];
+  return [{ label: 'New Window', click: () => buildNewWindow(app) }];
 }

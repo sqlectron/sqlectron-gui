@@ -1,4 +1,5 @@
-import { app, dialog } from 'electron'; // eslint-disable-line import/no-unresolved
+import { app, dialog } from 'electron';
+
 import createLogger from './logger';
 import { buildNewWindow } from './window';
 
@@ -28,7 +29,9 @@ app.on('ready', async () => {
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line
     console.log('Loading electron extensions...');
-    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import('electron-devtools-installer');
+    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import(
+      'electron-devtools-installer'
+    );
     installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
       // eslint-disable-next-line no-console
       .then((name) => console.log(`Added extension: ${name}`))

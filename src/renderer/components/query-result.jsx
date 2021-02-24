@@ -22,18 +22,18 @@ export default class QueryResult extends Component {
         rows: PropTypes.array,
         rowCount: PropTypes.number,
         affectedRows: PropTypes.number,
-      }),
+      })
     ),
     isExecuting: PropTypes.bool,
     error: PropTypes.object,
-  }
+  };
 
   shouldComponentUpdate(nextProps) {
     return (
-      (!nextProps.isExecuting && this.props.isExecuting)
-      || (nextProps.query !== this.props.query)
-      || (nextProps.copied && !this.props.copied)
-      || (nextProps.widthOffset !== this.props.widthOffset)
+      (!nextProps.isExecuting && this.props.isExecuting) ||
+      nextProps.query !== this.props.query ||
+      (nextProps.copied && !this.props.copied) ||
+      nextProps.widthOffset !== this.props.widthOffset
     );
   }
 
@@ -66,7 +66,8 @@ export default class QueryResult extends Component {
         <Message
           key={`msgAffectedRows-${queryIndex}`}
           message={`Query executed successfully. ${msgAffectedRows}`}
-          type="success" />
+          type="success"
+        />
       );
     }
 
@@ -84,19 +85,20 @@ export default class QueryResult extends Component {
 
     let msgDuplicatedColumns = null;
     const groupFields = groupBy(fields, (field) => field.name);
-    const duplicatedColumns = Object
-      .keys(groupFields)
-      .filter((field) => groupFields[field].length > 1);
+    const duplicatedColumns = Object.keys(groupFields).filter(
+      (field) => groupFields[field].length > 1
+    );
     if (duplicatedColumns.length) {
       msgDuplicatedColumns = (
         <Message
           key={`msgDuplicatedColumns-${queryIndex}`}
           type="info"
           message={
-            `Duplicated columns: ${duplicatedColumns.join(', ')}. `
-            + 'It may cause the result in the second column overwriting the first one. '
-            + 'Use an alias to avoid it.'
-          } />
+            `Duplicated columns: ${duplicatedColumns.join(', ')}. ` +
+            'It may cause the result in the second column overwriting the first one. ' +
+            'Use an alias to avoid it.'
+          }
+        />
       );
     }
 
@@ -118,7 +120,8 @@ export default class QueryResult extends Component {
         rows={rows}
         rowCount={rowCount}
         onSaveToFileClick={this.props.onSaveToFileClick}
-        onCopyToClipboardClick={this.props.onCopyToClipboardClick} />
+        onCopyToClipboardClick={this.props.onCopyToClipboardClick}
+      />
     );
 
     if (totalQueries === 1) {
@@ -132,11 +135,7 @@ export default class QueryResult extends Component {
 
     return (
       <div key={queryIndex} className="ui segment">
-        <div className="ui top left attached label">
-          Query
-          {' '}
-          {queryIndex + 1}
-        </div>
+        <div className="ui top left attached label">Query {queryIndex + 1}</div>
         {msgDuplicatedColumns}
         {tableResult}
       </div>
@@ -152,14 +151,7 @@ export default class QueryResult extends Component {
           .map((key) => `${key}: ${error[key]}`)
           .join('\n');
 
-        return (
-          <Message
-            preformatted
-            type="negative"
-            title={error.message}
-            message={errorBody}
-          />
-        );
+        return <Message preformatted type="negative" title={error.message} message={errorBody} />;
       }
       return <pre>{JSON.stringify(error, null, 2)}</pre>;
     }
@@ -179,14 +171,14 @@ export default class QueryResult extends Component {
     const totalQueries = results.length;
     return (
       <div id="query-result">
-        {
-          results.map((result, idx) => this.renderQueryResult({
+        {results.map((result, idx) =>
+          this.renderQueryResult({
             ...result,
             totalQueries,
             queryIndex: idx,
             isMultipleResults: results.length > 1,
-          }))
-        }
+          })
+        )}
       </div>
     );
   }

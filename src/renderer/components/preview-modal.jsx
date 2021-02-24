@@ -5,12 +5,9 @@ import classNames from 'classnames';
 
 export default class PreviewModal extends Component {
   static propTypes = {
-    value: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.object,
-    ]),
+    value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     onCloseClick: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -18,15 +15,17 @@ export default class PreviewModal extends Component {
   }
 
   componentDidMount() {
-    $(this.refs.previewModal).modal({
-      context: 'body',
-      closable: false,
-      detachable: false,
-      onDeny: () => {
-        this.props.onCloseClick();
-        return true;
-      },
-    }).modal('show');
+    $(this.refs.previewModal)
+      .modal({
+        context: 'body',
+        closable: false,
+        detachable: false,
+        onDeny: () => {
+          this.props.onCloseClick();
+          return true;
+        },
+      })
+      .modal('show');
   }
 
   componentWillUnmount() {
@@ -41,9 +40,12 @@ export default class PreviewModal extends Component {
     const { value } = this.props;
     try {
       switch (type) {
-        case 'plain': return isPlainObject(value) ? JSON.stringify(value) : value;
-        case 'json': return <pre>{JSON.stringify(value, null, 2)}</pre>;
-        default: return value;
+        case 'plain':
+          return isPlainObject(value) ? JSON.stringify(value) : value;
+        case 'json':
+          return <pre>{JSON.stringify(value, null, 2)}</pre>;
+        default:
+          return value;
       }
     } catch (err) {
       return 'Not valid format';
@@ -59,23 +61,19 @@ export default class PreviewModal extends Component {
 
     return (
       <div className="ui fluid two item menu">
-        {
-          items.map((item) => {
-            const className = classNames({
-              item: true,
-              active: (!selected && item.default) || selected === item.type,
-            });
+        {items.map((item) => {
+          const className = classNames({
+            item: true,
+            active: (!selected && item.default) || selected === item.type,
+          });
 
-            /* eslint react/jsx-no-bind:0 */
-            return (
-              <a key={item.type}
-                onClick={this.onClick.bind(this, item.type)}
-                className={className}>
-                {item.name}
-              </a>
-            );
-          })
-        }
+          /* eslint react/jsx-no-bind:0 */
+          return (
+            <a key={item.type} onClick={this.onClick.bind(this, item.type)} className={className}>
+              {item.name}
+            </a>
+          );
+        })}
       </div>
     );
   }
@@ -85,15 +83,11 @@ export default class PreviewModal extends Component {
     const previewValue = this.getPreviewValue(selected);
     return (
       <div className="ui modal" ref="previewModal">
-        <div className="header">
-          Content Preview
-        </div>
+        <div className="header">Content Preview</div>
         <div className="content">
           {this.renderMenu()}
           <div className="ui segment">
-            <div style={{ maxHeight: '500px', overflowY: 'scroll' }}>
-              {previewValue}
-            </div>
+            <div style={{ maxHeight: '500px', overflowY: 'scroll' }}>{previewValue}</div>
           </div>
         </div>
         <div className="actions">

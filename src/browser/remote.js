@@ -1,4 +1,4 @@
-import { remote } from 'electron'; // eslint-disable-line import/no-unresolved
+import { remote } from 'electron';
 
 /**
  * Exposes to the renderer process any used API running on main process

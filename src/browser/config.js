@@ -19,7 +19,7 @@ exports.get = function getConfiguration(cleanCache) {
     return config;
   }
 
-  const args = (process.argv || []);
+  const args = process.argv || [];
   const argsConfig = {
     devMode: args.indexOf('--dev') !== -1,
   };
@@ -55,13 +55,7 @@ exports.get = function getConfiguration(cleanCache) {
     },
   };
 
-  config = defaultsDeep(
-    cryptoConfig,
-    appConfig,
-    packageConfig,
-    argsConfig,
-    defaultConfig,
-  );
+  config = defaultsDeep(cryptoConfig, appConfig, packageConfig, argsConfig, defaultConfig);
 
   return config;
 };

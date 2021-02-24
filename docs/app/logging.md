@@ -41,6 +41,7 @@ See the logs with a better output through bunyan CLI
 ```
 tail -f ~/.sqlectron.log | bunyan -o short
 ```
+
 or
 
 ```
