@@ -2,6 +2,18 @@ import { app, BrowserWindow } from 'electron';
 import path from 'path';
 import isDev from 'electron-is-dev';
 import { registerIPCMainHandlers, sendConnectEvent } from './ipcMain';
+import TabStore from './tabStore';
+
+// const storeUserPreferences = new Store({
+//   // We'll call our data file 'user-preferences'
+//   configName: 'user-preferences',
+//   defaults: {
+//     // 800x600 is the default size of our window
+//     windowBounds: { width: 800, height: 600 }
+//   }
+// });
+
+const tabStore = new TabStore();
 
 // Conditionally include the dev tools installer to load React Dev Tools
 let installExtension: any, REACT_DEVELOPER_TOOLS: any, REDUX_DEVTOOLS: any;
@@ -138,7 +150,7 @@ function createWindow() {
 }
 
 app.on('ready', () => {
-  registerIPCMainHandlers({ openWorkspaceWindow });
+  registerIPCMainHandlers({ openWorkspaceWindow, tabStore });
 
   createWindow();
 

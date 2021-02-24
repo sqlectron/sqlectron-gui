@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Resizable } from 're-resizable';
 import { theme } from '../theme';
 import ReactResizeDetector from 'react-resize-detector';
 import { QueryResult } from '../types/queryResult';
+import { Tab } from '../../shared/types/tab';
 import sqlectron from '../api';
 
 import {
@@ -28,16 +29,43 @@ import {
   Flex,
 } from '@chakra-ui/react';
 
-const onSplitPanelResize = (source: string, width: number, height: number) => {
+const onSplitPanelResize = (
+  source: string,
+  width: number,
+  height: number,
+  selectedTabId: string,
+) => {
   const event = new CustomEvent('queryEditorResize', {
-    detail: { source, width, height },
+    detail: { source, width, height, selectedTabId },
   });
   window.dispatchEvent(event);
 };
 
-const QueryContent = () => {
+interface QueryContentProps {
+  tab: Tab;
+  selectedTabId: string;
+}
+
+const QueryContent = ({ tab, selectedTabId }: QueryContentProps) => {
   const editorRef = useRef<monaco.editor.IStandaloneCodeEditor>(null);
+  const [queryContent, setQueryContent] = useState('');
   const [queryResult, setQueryResult] = useState([]);
+  console.log('***QueryContent', { queryContent, queryResult });
+
+  useEffect(() => {
+    sqlectron.tabStore
+      .loadTabContent(tab)
+      .then((content: string | undefined) => {
+        console.log('***loaded tab content', content);
+        setQueryContent(content || '');
+      })
+      .catch((err: Error) => console.error(err));
+  }, [tab]);
+
+  const recordTabStateOnQueryChange = (content: string) => {
+    console.log('***recordTabStateOnQueryChange', tab);
+    sqlectron.tabStore.saveTabContent(tab, content);
+  };
 
   const executeQuery = () => {
     const model = editorRef.current?.getModel();
@@ -78,6 +106,7 @@ const QueryContent = () => {
                 'vertical-resize',
                 ref.clientWidth,
                 ref.clientHeight,
+                selectedTabId,
               );
             }}
             enable={{
@@ -96,7 +125,12 @@ const QueryContent = () => {
           >
             <Flex direction='column' height='100%'>
               <Box flex={1}>
-                <QueryEditor ref={editorRef} />
+                <QueryEditor
+                  ref={editorRef}
+                  tabId={tab.id}
+                  value={queryContent}
+                  onChange={recordTabStateOnQueryChange}
+                />
               </Box>
               <Flex
                 padding='0.5em'
@@ -158,7 +192,28 @@ const QueryContent = () => {
   );
 };
 
-export const QueryContainer = () => {
+interface QueryContainerProps {
+  serverId: string;
+  databaseName: string;
+  tabs: Array<Tab>;
+  onTabCloseClick: (tab: Tab) => void;
+}
+
+export const QueryContainer = ({
+  serverId,
+  databaseName,
+  tabs,
+  onTabCloseClick,
+}: QueryContainerProps) => {
+  const [selectedTabId, setSelectedTabId] = useState(
+    tabs.length > 0 ? tabs[0].id : '',
+  );
+  console.log(
+    '***QueryContainer selectedTabId',
+    selectedTabId,
+    tabs.length > 0 ? tabs[0].id : '',
+  );
+
   return (
     <ReactResizeDetector
       handleWidth
@@ -166,7 +221,7 @@ export const QueryContainer = () => {
       refreshMode='debounce'
       refreshRate={100}
       onResize={(width: number, height: number) =>
-        onSplitPanelResize('horizontal-resize', width, height)
+        onSplitPanelResize('horizontal-resize', width, height, selectedTabId)
       }
     >
       {({ targetRef }: { targetRef: any }) => (
@@ -182,8 +237,17 @@ export const QueryContainer = () => {
             }}
           >
             <TabList mb='sm'>
-              <QueryTab index={0}>SQL</QueryTab>
-              <QueryTab index={1}>Data Structure</QueryTab>
+              {tabs.map((tab: Tab, index: number) => (
+                <QueryTab
+                  key={tab.id}
+                  id={tab.id}
+                  index={index}
+                  onTabSelect={(id: string) => setSelectedTabId(tab.id)}
+                  onTabCloseClick={() => onTabCloseClick(tab)}
+                >
+                  {tab.name}
+                </QueryTab>
+              ))}
             </TabList>
             <TabPanels
               css={{
@@ -193,28 +257,20 @@ export const QueryContainer = () => {
                 height: 'calc(100% - 19px)',
               }}
             >
-              <TabPanel
-                css={{
-                  height: '100%',
-                  flex: '1',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  padding: 0,
-                }}
-              >
-                <QueryContent />
-              </TabPanel>
-              <TabPanel
-                css={{
-                  height: '100%',
-                  flex: '1',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  padding: 0,
-                }}
-              >
-                <QueryContent />
-              </TabPanel>
+              {tabs.map((tab: Tab, index: number) => (
+                <TabPanel
+                  key={tab.id}
+                  css={{
+                    height: '100%',
+                    flex: '1',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    padding: 0,
+                  }}
+                >
+                  <QueryContent tab={tab} selectedTabId={selectedTabId} />
+                </TabPanel>
+              ))}
             </TabPanels>
           </Tabs>
         </Flex>

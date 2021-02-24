@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Resizable } from 're-resizable';
+import { Tab } from '../../shared/types/tab';
 import { theme } from '../theme';
 import { QueryContainer } from '../components/QueryContainer';
 import { DatabaseListModal } from '../components/DatabaseListModal';
@@ -21,6 +22,8 @@ function WorkspaceScreen() {
   const [server, setServer] = useState<any>(null);
   const [database, setDatabase] = useState('');
 
+  const serverId = server?.id;
+
   useEffect(() => {
     sqlectron.db.onConnection((event: string, serverId: string) => {
       console.log('****onConnection', { event, serverId });
@@ -30,6 +33,7 @@ function WorkspaceScreen() {
           .then((res: any) => {
             console.log('**connect res', res);
             setServer(res.server);
+            setDatabase(res.server.database);
             setLoading(false);
           })
           .catch((err: Error) => {
@@ -56,6 +60,54 @@ function WorkspaceScreen() {
       });
   };
 
+  const [tabs, setTabs] = useState<Array<Tab>>([]);
+  useEffect(() => {
+    if (!serverId) {
+      return;
+    }
+
+    sqlectron.tabStore
+      .loadTabs(serverId, database)
+      .then((tabs: Array<Tab>) => {
+        console.log('***loaded tabs', tabs);
+        setTabs(tabs);
+      })
+      .catch((err: Error) => console.error(err));
+  }, [serverId, database]);
+
+  const onSQLButtonClick = () => {
+    //setLoading(true);
+
+    sqlectron.tabStore
+      .createTab(server.id, database, 'sql')
+      .then((tab: Tab) => {
+        console.log('**created tab', tab);
+        //setLoading(false);
+        setTabs(tabs.concat([tab]));
+      })
+      .catch((err: Error) => {
+        //setLoading(false);
+        console.error(err);
+      });
+  };
+
+  const onTabCloseClick = (tab: Tab) => {
+    //setLoading(true);
+
+    sqlectron.tabStore
+      .removeTab(tab)
+      .then(() => sqlectron.tabStore.loadTabs(serverId, database))
+      .then((tabs: Array<Tab>) => {
+        console.log('**removed tab', tab);
+        //setLoading(false);
+        setTabs(tabs);
+      })
+      .catch((err: Error) => {
+        //setLoading(false);
+        console.error(err);
+      });
+  };
+
   if (isLoading) {
     return (
       <Center height='100vh'>
@@ -78,6 +130,7 @@ function WorkspaceScreen() {
             server={server}
             database={database}
             onDatabaseButtonClick={onOpen}
+            onSQLButtonClick={onSQLButtonClick}
           />
         </GridItem>
         <GridItem
@@ -119,7 +172,14 @@ function WorkspaceScreen() {
             height: '100%',
           }}
         >
-          <QueryContainer />
+          {tabs.length > 0 && (
+            <QueryContainer
+              serverId={server.id}
+              databaseName={database}
+              tabs={tabs}
+              onTabCloseClick={onTabCloseClick}
+            />
+          )}
         </GridItem>
         <GridItem
           gridColumn='span 1'

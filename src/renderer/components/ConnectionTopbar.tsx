@@ -13,12 +13,14 @@ import {
 
 interface ConnectionTopbarProps {
   onDatabaseButtonClick: () => void;
+  onSQLButtonClick: () => void;
   server: any;
   database: string;
 }
 
 export const ConnectionTopbar = ({
   onDatabaseButtonClick,
+  onSQLButtonClick,
   server,
   database,
 }: ConnectionTopbarProps) => {
@@ -54,6 +56,7 @@ export const ConnectionTopbar = ({
         aria-label='SQL'
         margin='0 .35em'
         title='Open a new SQL editor'
+        onClick={onSQLButtonClick}
       >
         SQL
       </Button>
@@ -77,7 +80,7 @@ export const ConnectionTopbar = ({
         </Text>
         <Divider orientation='vertical' />
         <Text fontSize='xs' fontWeight='bold'>
-          {database || server.database}
+          {database}
         </Text>
       </HStack>
       <IconButton

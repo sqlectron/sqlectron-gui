@@ -1,8 +1,13 @@
 import React, { MutableRefObject } from 'react';
 import MonacoEditor from 'react-monaco-editor';
+import { useDebouncedCallback } from 'use-debounce';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
-export interface QueryEditorProps {}
+export interface QueryEditorProps {
+  tabId: string;
+  onChange: (content: string) => void;
+  value: string;
+}
 
 declare global {
   interface Window {
@@ -14,6 +19,16 @@ export const QueryEditor = React.forwardRef<
   monaco.editor.IStandaloneCodeEditor,
   QueryEditorProps
 >((props, editorRef) => {
+  // Debounce callback
+  const debounced = useDebouncedCallback(
+    // function
+    (value: string) => {
+      props.onChange(value);
+    },
+    // delay in ms
+    1000,
+  );
+
   const getEditor = () =>
     editorRef as MutableRefObject<monaco.editor.IStandaloneCodeEditor>;
 
@@ -62,7 +77,8 @@ export const QueryEditor = React.forwardRef<
 
     editor.focus();
 
-    interface resizeDaveEvent {
+    interface resizedEvent {
+      selectedTabId: string;
       width: number;
       height: number;
       source: 'horizontal-resize' | 'vertical-resize';
@@ -71,7 +87,30 @@ export const QueryEditor = React.forwardRef<
     // Handle resizing of the editor based on the split panels and the window resizing.
     // The bult-in editor option "automaticLayout" doesn't work properly with our layout.
     window.addEventListener('queryEditorResize', ((event: CustomEvent) => {
-      const data = event.detail as resizeDaveEvent;
+      const data = event.detail as resizedEvent;
+      if (
+        data.source === 'vertical-resize' &&
+        data.selectedTabId !== props.tabId
+      ) {
+        console.log('SKIP1 queryEditorResize data', props.tabId, data);
+        return;
+      }
+
+      if (!data.width) {
+        console.log('SKIP2 queryEditorResize data', props.tabId, data);
+        editor.layout();
+        return;
+      }
+
+      console.log('UPDATE queryEditorResize data', props.tabId, data);
+      editor.layout({
+        width: data.width,
+        height:
+          data.source === 'horizontal-resize'
+            ? editor.getContentHeight()
+            : data.height,
+      });
+
       editor.layout({
         width: data.width,
         height:
@@ -95,6 +134,8 @@ export const QueryEditor = React.forwardRef<
       options={options}
       editorWillMount={editorWillMount}
       editorDidMount={editorDidMount}
+      value={props.value}
+      onChange={(value) => debounced.callback(value)}
     />
   );
 });

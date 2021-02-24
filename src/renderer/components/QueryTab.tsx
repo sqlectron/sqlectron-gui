@@ -14,10 +14,12 @@ import {
 const StyledTab = chakra('button', { themeKey: 'Tabs.Tab' });
 
 export const QueryTab = React.forwardRef((props: any, ref: any) => {
+  const { onTabSelect, onTabCloseClick, ...tabOwnProps } = props;
+
   const [isShown, setIsShown] = useState(false);
 
   // 2. Reuse the `useTab` hook
-  const tabProps = useTab(props);
+  const tabProps = useTab(tabOwnProps);
   const isSelected = !!tabProps['aria-selected'];
 
   // 3. Hook into the Tabs `size`, `variant`, props
@@ -42,7 +44,7 @@ export const QueryTab = React.forwardRef((props: any, ref: any) => {
       onMouseEnter={() => setIsShown(true)}
       onMouseLeave={() => setIsShown(false)}
     >
-      <Flex>
+      <Flex onClick={() => onTabSelect(props.id)}>
         <Box flex={1}>
           <Text
             fontSize='xs'
@@ -55,7 +57,7 @@ export const QueryTab = React.forwardRef((props: any, ref: any) => {
         </Box>
         <Box as='span' css={{ visibility: isShown ? 'visible' : 'hidden' }}>
           <IconButton
-            aria-label='Reresh connection'
+            aria-label='Close tab'
             margin='0 .35em'
             css={{ background: 'none', borderRadius: '0.1rem' }}
             size='xs'
@@ -63,6 +65,7 @@ export const QueryTab = React.forwardRef((props: any, ref: any) => {
             h='1rem'
             p='0.5rem 0'
             icon={<CloseIcon w={2} h={2} />}
+            onClick={onTabCloseClick}
           />
         </Box>
       </Flex>
