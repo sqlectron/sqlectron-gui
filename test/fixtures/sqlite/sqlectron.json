@@ -1,0 +1,33 @@
+{
+  "log": {
+    "console": true,
+    "file": false,
+    "level": "debug",
+    "path": "sqlectron.log"
+  },
+  "zoomFactor": 1,
+  "limitQueryDefaultSelectTop": 101,
+  "servers": [
+    {
+      "id": "4049d963-e198-489f-a0d8-a083f0a57102",
+      "name": "sqlite-test",
+      "client": "sqlite",
+      "ssl": false,
+      "host": null,
+      "socketPath": null,
+      "user": null,
+      "password": null,
+      "database": "fixtures/sqlite/test.db",
+      "schema": null,
+      "encrypted": true
+    }
+  ],
+  "enabledAutoComplete": true,
+  "enabledLiveAutoComplete": false,
+  "queries": {},
+  "enabledDarkTheme": false,
+  "disabledOpenAnimation": false,
+  "csvDelimiter": ",",
+  "connectionsAsList": false,
+  "customFont": "Lato"
+}

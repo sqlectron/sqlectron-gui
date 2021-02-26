@@ -12,16 +12,20 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      node-version: 10.x
+      node-version: 14
+      # Display must be available globally for linux to know where xvfb is
+      DISPLAY: :0
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest]
 
     steps:
     - name: Install Linux Dependencies
       if: ${{ matrix.os == 'ubuntu-latest' }}
-      run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
+      run: |
+        sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
 
     - uses: actions/checkout@v2
 
@@ -32,11 +36,28 @@ jobs:
 
     - run: npm ci
 
-    - run: npm run lint
+    # - run: npm run lint
+    # - run: npm run format:check
 
-    - run: npm run format:check
+    # - name: Setup xvfb (Linux)
+    #   if: runner.os == 'Linux'
+    #   run: |
+    #     sudo apt-get install -y xvfb libxkbcommon-x11-0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-randr0 libxcb-render-util0 libxcb-xinerama0 libxcb-xinput0 libxcb-xfixes0
+    #     # start xvfb in the background
+    #     sudo /usr/bin/Xvfb $DISPLAY -screen 0 1280x1024x24 &
 
-    - run: npm test
+    # - name: Run e2e test
+    #   if: runner.os == 'Linux'
+    #   run: |
+    #     npm run compile
+    #     xvfb-run --auto-servernum npm run test:e2e
+    #     # xvfb-run --auto-servernum --server-args="-screen 0 1280x960x24" -- bash -c "ulimit -c unlimited && npm run test:e2e"
+
+    - run: npm run compile
+    - name: Run headless test
+      uses: GabrielBB/xvfb-action@v1
+      with:
+        run: npm run test:e2e
 
     - run: npm run dist -- --publish never
 
