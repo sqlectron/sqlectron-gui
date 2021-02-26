@@ -29,7 +29,7 @@ import Query from '../components/query';
 import Loader from '../components/loader';
 import PromptModal from '../components/prompt-modal';
 import MenuHandler from '../menu-handler';
-import { requireLogos } from '../components/require-context';
+import { requireClientLogo } from '../components/require-context';
 
 require('./query-browser.css');
 require('../components/react-resizable.css');
@@ -66,7 +66,7 @@ const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
   /* eslint no-param-reassign:0 */
   clients[dbClient.key] = {
     title: dbClient.name,
-    image: requireLogos(`./server-db-client-${dbClient.key}.png`),
+    image: requireClientLogo(dbClient.key),
   };
   return clients;
 }, {});

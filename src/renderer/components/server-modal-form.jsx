@@ -6,14 +6,14 @@ import { sqlectron } from '../../browser/remote';
 import ConfirmModal from './confim-modal';
 import Message from './message';
 import Checkbox from './checkbox';
-import { requireLogos } from './require-context';
+import { requireClientLogo } from './require-context';
 
 require('react-select/dist/react-select.css');
 require('./override-select.css');
 
 const CLIENTS = sqlectron.db.CLIENTS.map((dbClient) => ({
   value: dbClient.key,
-  logo: requireLogos(`./server-db-client-${dbClient.key}.png`),
+  logo: requireClientLogo(dbClient.key),
   label: dbClient.name,
   defaultPort: dbClient.defaultPort,
   disabledFeatures: dbClient.disabledFeatures,
