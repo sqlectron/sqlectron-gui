@@ -15,7 +15,7 @@ Please try to [write great commit messages](http://chris.beams.io/posts/git-comm
 There are numerous benefits to great commit messages
 
 - They allow Sqlectron users to easily understand the consequences of updating to a newer version
-- They help contributors understand what is going on with the codebase, allowing features and fixes to be dueveloped faster
+- They help contributors understand what is going on with the codebase, allowing features and fixes to be developed faster
 - They save maintainers time when compiling the changelog for a new release
 
 If you're already a few commits in by the time you read this, you can still [change your commit messages](https://help.github.com/articles/changing-a-commit-message/).
@@ -36,8 +36,6 @@ The ESLint test will be run before unit tests in the CI environment, your build 
 npm run lint
 ```
 
-> Document based on [Sinon's CONTRIBUTING.md](https://github.com/sinonjs/sinon/blob/master/CONTRIBUTING.md).
-
 ### Testing
 
 #### E2E Testing
@@ -55,3 +53,5 @@ Running in development mode:
 npm run dev:webpack
 npm run test:e2e:dev
 ```
+
+> Document based on [Sinon's CONTRIBUTING.md](https://github.com/sinonjs/sinon/blob/master/CONTRIBUTING.md).

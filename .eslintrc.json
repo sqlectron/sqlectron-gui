@@ -10,6 +10,6 @@
   "env": {
     "es2017": true,
     "node": true,
-    "jest": true
+    "mocha": true
   }
 }

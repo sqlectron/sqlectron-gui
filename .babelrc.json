@@ -10,8 +10,7 @@
         "corejs": { "version": 3, "proposals": true }
       }
     ],
-    "@babel/preset-react",
-    "@babel/preset-typescript"
+    "@babel/preset-react"
   ],
   "env": {
     "production": {

@@ -1,6 +1,7 @@
+const fs = require('fs');
+const { expect } = require('chai');
 const path = require('path');
 const sqlite3 = require('sqlite3').verbose();
-const fs = require('fs');
 
 const helper = require('./helper');
 
@@ -29,7 +30,7 @@ function setupDB() {
 }
 
 describe('Sqlite', function () {
-  beforeAll(async () => {
+  before(async () => {
     const { app, mainWindow } = await helper.startApp({
       sqlectronHome: path.join(__dirname, '../fixtures/sqlite'),
     });
@@ -39,15 +40,19 @@ describe('Sqlite', function () {
     this.db = setupDB();
   });
 
-  afterAll(async () => {
+  after(async () => {
     await helper.endApp(this.app);
     this.db.close();
   });
 
-  test('Connect DB', async () => {
-    await expect(this.mainWindow).toEqualText('#server-list .header', 'sqlite-test');
-    // await expect(this.mainWindow).not.toHaveSelector('#server-list .meta');
-    await expect(this.mainWindow).toEqualText('#server-list .attached.button', 'Connect');
+  it('Connect DB', async () => {
+    await this.mainWindow.waitForSelector('#server-list');
+
+    const list = await this.mainWindow.$$('#server-list .header');
+    expect(list).to.have.lengthOf(1);
+
+    await helper.expectToEqualText(this.mainWindow, '#server-list .header', 'sqlite-test');
+    await helper.expectToEqualText(this.mainWindow, '#server-list .attached.button', 'Connect');
 
     // TODO: It requires latest version of Chrome to work.
     // Which means it will only work once Electron has been upgraded.

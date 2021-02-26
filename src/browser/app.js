@@ -25,7 +25,7 @@ app.on('window-all-closed', () => {
 
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
-app.on('ready', async () => {
+app.whenReady().then(async () => {
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line
     console.log('Loading electron extensions...');
