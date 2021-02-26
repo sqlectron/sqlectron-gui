@@ -47,7 +47,7 @@ export function buildNewWindow(app) {
   // Emitted when the window is closed.
   mainWindow.on('closed', () => delete WINDOWS[windowsNumber]);
 
-  if (devMode) {
+  if (devMode || process.env.DEV_TOOLS === 'true') {
     mainWindow.openDevTools();
   }
 

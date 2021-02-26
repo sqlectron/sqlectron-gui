@@ -44,7 +44,7 @@ Running in production mode:
 
 ```
 npm run compile
-npm run test:e2e
+DEV_TOOLS=true npm run test:e2e
 ```
 
 Running in development mode:
