@@ -4,7 +4,7 @@ export const FETCH_VIEWS_REQUEST = 'FETCH_VIEWS_REQUEST';
 export const FETCH_VIEWS_SUCCESS = 'FETCH_VIEWS_SUCCESS';
 export const FETCH_VIEWS_FAILURE = 'FETCH_VIEWS_FAILURE';
 
-export function fetchViewsIfNeeded (database, filter) {
+export function fetchViewsIfNeeded(database, filter) {
   return (dispatch, getState) => {
     if (shouldFetchViews(getState(), database)) {
       dispatch(fetchViews(database, filter));
@@ -12,7 +12,7 @@ export function fetchViewsIfNeeded (database, filter) {
   };
 }
 
-function shouldFetchViews (state, database) {
+function shouldFetchViews(state, database) {
   const views = state.views;
   if (!views) return true;
   if (views.isFetching) return false;
@@ -20,7 +20,7 @@ function shouldFetchViews (state, database) {
   return views.didInvalidate;
 }
 
-function fetchViews (database, filter) {
+function fetchViews(database, filter) {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_VIEWS_REQUEST, database });
     try {

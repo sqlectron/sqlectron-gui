@@ -15,22 +15,20 @@ const ICONS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
 const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
   <div className="item">
     <div className="middle aligned content">
-      <div className="left floated"
-        style={{ padding: '1em' }}>
-        <img alt="client"
-          className="ui tiny image"
-          style={{}}
-          src={ICONS[server.client]} />
+      <div className="left floated" style={{ padding: '1em' }}>
+        <img alt="client" className="ui tiny image" style={{}} src={ICONS[server.client]} />
       </div>
       <div className="right floated">
         <div style={{ padding: '0 0 3em' }}>
-          <button className="right floated circular ui icon button mini"
+          <button
+            className="right floated circular ui icon button mini"
             onClick={() => onEditClick(server)}>
             <i className="icon pencil" />
           </button>
         </div>
         <div>
-          <button className="ui button"
+          <button
+            className="ui button"
             tabIndex="0"
             onClick={() => onConnectClick(server)}
             style={{ verticalAlign: 'middle' }}>
@@ -42,16 +40,14 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
         </div>
       </div>
       <div>
-        <div className="header">
-          {server.name}
-        </div>
+        <div className="header">{server.name}</div>
         <div className="meta" style={{ lineHeight: '1.5em', marginTop: '5px' }}>
           {server.host ? `${server.host}:${server.port}` : server.socketPath}
           {server.ssh && (
-          <div>
-            via
-            {server.ssh.host}
-          </div>
+            <div>
+              via
+              {server.ssh.host}
+            </div>
           )}
         </div>
       </div>

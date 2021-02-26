@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { BrowserWindow } from 'electron'; // eslint-disable-line import/no-unresolved
+import { BrowserWindow } from 'electron';
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
 import { get as getConfig } from './config';
@@ -37,7 +37,7 @@ export function buildNewWindow(app) {
   attachMenuToWindow(app, buildNewWindow, appConfig);
 
   // and load the index.html of the app.
-  const entryBasePath = devMode ? 'http://localhost:8080' : ('file://' + resolve(__dirname, '..'));
+  const entryBasePath = devMode ? 'http://localhost:8080' : 'file://' + resolve(__dirname, '..');
   mainWindow.loadURL(entryBasePath + '/static/index.html');
 
   // Emitted when the window is closed.
@@ -47,6 +47,7 @@ export function buildNewWindow(app) {
     mainWindow.openDevTools();
   }
 
-  checkUpdate(mainWindow, appConfig)
-    .catch((err) => logger.error('Unable to check for updates', err));
+  checkUpdate(mainWindow, appConfig).catch((err) =>
+    logger.error('Unable to check for updates', err)
+  );
 }

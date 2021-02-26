@@ -6,9 +6,7 @@ import ReactDOM from 'react-dom';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
-import {
-  Tab, Tabs, TabList, TabPanel,
-} from 'react-tabs';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { sqlectron } from '../../browser/remote';
 import * as ConnActions from '../actions/connections';
 import * as QueryActions from '../actions/queries';
@@ -132,7 +130,7 @@ class QueryBrowserContainer extends Component {
     this.onShowDiagramModal = this.onShowDiagramModal.bind(this);
   }
 
-  UNSAFE_componentWillMount () {
+  UNSAFE_componentWillMount() {
     const { dispatch, params } = this.props;
     dispatch(ConnActions.connect(params.id));
   }
@@ -141,11 +139,12 @@ class QueryBrowserContainer extends Component {
     this.setMenus();
   }
 
-  UNSAFE_componentWillReceiveProps (nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { dispatch, router, connections } = nextProps;
 
-    if (connections.error
-       || (!connections.connecting && !connections.server && !connections.waitingSSHPassword)
+    if (
+      connections.error ||
+      (!connections.connecting && !connections.server && !connections.waitingSSHPassword)
     ) {
       router.push('/');
       return;
@@ -189,7 +188,7 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(QueryActions.selectQuery(queryId));
   }
 
-  handleExecuteQuery (sqlQuery) {
+  handleExecuteQuery(sqlQuery) {
     const currentQuery = this.getCurrentQuery();
     if (!currentQuery) {
       return;
@@ -198,7 +197,7 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(QueryActions.executeQueryIfNeeded(sqlQuery, currentQuery.id));
   }
 
-  handleCancelQuery () {
+  handleCancelQuery() {
     const currentQuery = this.getCurrentQuery();
     if (!currentQuery) {
       return;
@@ -216,7 +215,7 @@ class QueryBrowserContainer extends Component {
   onExecuteDefaultQuery(database, table) {
     const schema = table.schema || this.props.connections.server.schema;
     this.props.dispatch(
-      QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema),
+      QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema)
     );
   }
 
@@ -244,19 +243,19 @@ class QueryBrowserContainer extends Component {
   onGetSQLScript(database, item, actionType, objectType) {
     const schema = item.schema || this.props.connections.server.schema;
     this.props.dispatch(
-      getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema),
+      getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema)
     );
   }
 
-  onSQLChange (sqlQuery) {
+  onSQLChange(sqlQuery) {
     this.props.dispatch(QueryActions.updateQueryIfNeeded(sqlQuery));
   }
 
-  onQuerySelectionChange (sqlQuery, selectedQuery) {
+  onQuerySelectionChange(sqlQuery, selectedQuery) {
     this.props.dispatch(QueryActions.updateQueryIfNeeded(sqlQuery, selectedQuery));
   }
 
-  onFilterChange (value) {
+  onFilterChange(value) {
     this.setState({ filter: value });
   }
 
@@ -291,8 +290,9 @@ class QueryBrowserContainer extends Component {
 
     dispatch(DbAction.generateDatabaseDiagram());
 
-    $(':checkbox:checked', 'div.ui.list')
-      .map((index, checkbox) => selectedTables.push(checkbox.id));
+    $(':checkbox:checked', 'div.ui.list').map((index, checkbox) =>
+      selectedTables.push(checkbox.id)
+    );
 
     dispatch(selectTablesForDiagram(selectedTables));
     this.fetchTableDiagramData(database, selectedTables);
@@ -335,7 +335,9 @@ class QueryBrowserContainer extends Component {
   setMenus() {
     this.menuHandler.setMenus({
       'sqlectron:query-execute': () => {
-        const { queries: { queriesById, currentQueryId } } = this.props;
+        const {
+          queries: { queriesById, currentQueryId },
+        } = this.props;
         const currentQuery = queriesById[currentQueryId];
         this.handleExecuteQuery(currentQuery.selectedQuery || currentQuery.query);
       },
@@ -375,11 +377,11 @@ class QueryBrowserContainer extends Component {
     this.props.dispatch(QueryActions.openQuery());
   }
 
-  copyToClipboard (rows, type, delimiter) {
+  copyToClipboard(rows, type, delimiter) {
     this.props.dispatch(QueryActions.copyToClipboard(rows, type, delimiter));
   }
 
-  saveToFile (rows, type, delimiter) {
+  saveToFile(rows, type, delimiter) {
     this.props.dispatch(QueryActions.saveToFile(rows, type, delimiter));
   }
 
@@ -419,13 +421,7 @@ class QueryBrowserContainer extends Component {
   }
 
   renderDatabaseDiagramModal() {
-    const {
-      databases,
-      tables,
-      columns,
-      views,
-      keys,
-    } = this.props;
+    const { databases, tables, columns, views, keys } = this.props;
 
     const selectedDB = databases.diagramDatabase;
 
@@ -444,7 +440,8 @@ class QueryBrowserContainer extends Component {
         onSaveDatabaseDiagram={this.onSaveDatabaseDiagram}
         onExportDatabaseDiagram={this.onExportDatabaseDiagram}
         onOpenDatabaseDiagram={this.onOpenDatabaseDiagram}
-        onClose={this.onCloseDiagramModal} />
+        onClose={this.onCloseDiagramModal}
+      />
     );
   }
 
@@ -475,7 +472,9 @@ class QueryBrowserContainer extends Component {
               <input
                 autoFocus
                 type="text"
-                ref={(comp) => { this.tabInput = comp; }}
+                ref={(comp) => {
+                  this.tabInput = comp;
+                }}
                 onBlur={() => {
                   dispatch(QueryActions.renameQuery(this.tabInput.value));
                   this.setState({ renamingTabQueryId: null });
@@ -491,7 +490,8 @@ class QueryBrowserContainer extends Component {
 
                   this.setState({ renamingTabQueryId: null });
                 }}
-                defaultValue={queries.queriesById[queryId].name} />
+                defaultValue={queries.queriesById[queryId].name}
+              />
             </div>
           );
         }
@@ -499,7 +499,8 @@ class QueryBrowserContainer extends Component {
         return (
           <div>
             {queries.queriesById[queryId].name}
-            <button className="right floated ui icon button mini"
+            <button
+              className="right floated ui icon button mini"
               onClick={debounce(() => {
                 this.removeQuery(queryId);
                 const position = this.state.tabNavPosition + 200;
@@ -512,7 +513,8 @@ class QueryBrowserContainer extends Component {
       };
 
       return (
-        <Tab key={queryId}
+        <Tab
+          key={queryId}
           onDoubleClick={() => this.onTabDoubleClick(queryId)}
           className={['react-tabs__tab', `item ${isCurrentQuery ? 'active' : ''}`]}>
           {buildContent()}
@@ -520,8 +522,9 @@ class QueryBrowserContainer extends Component {
       );
     });
 
-    const { disabledFeatures } = sqlectron.db.CLIENTS
-      .find((dbClient) => dbClient.key === connections.server.client);
+    const { disabledFeatures } = sqlectron.db.CLIENTS.find(
+      (dbClient) => dbClient.key === connections.server.client
+    );
 
     const allowCancel = !disabledFeatures || !disabledFeatures.includes('cancelQuery');
 
@@ -555,22 +558,27 @@ class QueryBrowserContainer extends Component {
             onCopyToClipboardClick={this.copyToClipboard}
             onSaveToFileClick={this.saveToFile}
             onSQLChange={this.onSQLChange}
-            onSelectionChange={this.onQuerySelectionChange} />
+            onSelectionChange={this.onQuerySelectionChange}
+          />
         </TabPanel>
       );
     });
 
-    const isOnMaxPosition = (
-      this.tabListTotalWidthChildren - Math.abs(this.state.tabNavPosition) <= this.tabListTotalWidth
-    );
+    const isOnMaxPosition =
+      this.tabListTotalWidthChildren - Math.abs(this.state.tabNavPosition) <=
+      this.tabListTotalWidth;
     const selectedIndex = queries.queryIds.indexOf(queries.currentQueryId);
     const isTabsFitOnScreen = this.tabListTotalWidthChildren >= this.tabListTotalWidth;
     return (
-      <Tabs className={['react-tabs']} onSelect={this.handleSelectTab} selectedIndex={selectedIndex} forceRenderTabPanel>
+      <Tabs
+        className={['react-tabs']}
+        onSelect={this.handleSelectTab}
+        selectedIndex={selectedIndex}
+        forceRenderTabPanel>
         <div id="tabs-nav-wrapper" className="ui pointing secondary menu">
-          {isTabsFitOnScreen
-            && (
-            <button className="ui icon button"
+          {isTabsFitOnScreen && (
+            <button
+              className="ui icon button"
               disabled={this.state.tabNavPosition === 0}
               onClick={() => {
                 const position = this.state.tabNavPosition + 100;
@@ -578,7 +586,7 @@ class QueryBrowserContainer extends Component {
               }}>
               <i className="left chevron icon" />
             </button>
-            )}
+          )}
           <div className="tabs-container">
             <TabList
               className={['react-tabs__tab-list']}
@@ -590,9 +598,9 @@ class QueryBrowserContainer extends Component {
           <button className="ui basic icon button" onClick={() => this.newTab()}>
             <i className="plus icon" />
           </button>
-          {isTabsFitOnScreen
-            && (
-            <button className="ui icon button"
+          {isTabsFitOnScreen && (
+            <button
+              className="ui icon button"
               disabled={this.tabListTotalWidthChildren < this.tabListTotalWidth || isOnMaxPosition}
               onClick={() => {
                 const position = this.state.tabNavPosition - 100;
@@ -600,7 +608,7 @@ class QueryBrowserContainer extends Component {
               }}>
               <i className="right chevron icon" />
             </button>
-            )}
+          )}
         </div>
         {panels}
       </Tabs>
@@ -630,28 +638,33 @@ class QueryBrowserContainer extends Component {
           title="SSH Private Key Passphrase"
           message="Enter the private key passphrase:"
           onCancelClick={this.onPromptCancelClick}
-          onOKClick={this.onPromptOKClick} />
+          onOKClick={this.onPromptOKClick}
+        />
       );
     }
 
-    const isLoading = (!connections.connected);
+    const isLoading = !connections.connected;
     if (isLoading && (!connections.server || !this.getCurrentQuery())) {
       return <Loader message={status} type="page" />;
     }
 
-    const breadcrumb = connections.server ? [
-      { icon: 'server', label: connections.server.name },
-      { icon: 'database', label: this.getCurrentQuery().database },
-    ] : [];
+    const breadcrumb = connections.server
+      ? [
+          { icon: 'server', label: connections.server.name },
+          { icon: 'database', label: this.getCurrentQuery().database },
+        ]
+      : [];
 
     const filteredDatabases = this.filterDatabases(filter, databases.items);
     return (
       <div style={STYLES.wrapper}>
         {isLoading && <Loader message={status} type="page" />}
         <div style={STYLES.header}>
-          <Header items={breadcrumb}
+          <Header
+            items={breadcrumb}
             onCloseConnectionClick={this.onCloseConnectionClick}
-            onReConnectionClick={this.onReConnectionClick} />
+            onReConnectionClick={this.onReConnectionClick}
+          />
         </div>
         <div id="main-collapse" onClick={this.onCollapseClick} style={STYLES.collapse}>
           <i
@@ -660,12 +673,14 @@ class QueryBrowserContainer extends Component {
           />
         </div>
         <div style={STYLES.container}>
-          <div id="sidebar"
+          <div
+            id="sidebar"
             style={{
               ...STYLES.sidebar,
-              marginLeft: this.state.sidebarCollapsed ? (-this.state.sideBarWidth) : 0,
+              marginLeft: this.state.sidebarCollapsed ? -this.state.sideBarWidth : 0,
             }}>
-            <ResizableBox className="react-resizable react-resizable-ew-resize"
+            <ResizableBox
+              className="react-resizable react-resizable-ew-resize"
               onResizeStop={(event, { size }) => this.setState({ sideBarWidth: size.width })}
               width={this.state.sideBarWidth || SIDEBAR_WIDTH}
               height={NaN}
@@ -679,14 +694,16 @@ class QueryBrowserContainer extends Component {
                     alt={CLIENTS[connections.server.client].name}
                     style={{ width: '2.5em' }}
                     className="ui mini left spaced image right"
-                    src={CLIENTS[connections.server.client].image} />
+                    src={CLIENTS[connections.server.client].image}
+                  />
                 </div>
                 <div className="item">
                   <DatabaseFilter
                     ref="databaseFilter"
                     value={filter}
                     isFetching={databases.isFetching}
-                    onFilterChange={this.onFilterChange} />
+                    onFilterChange={this.onFilterChange}
+                  />
                 </div>
                 <DatabaseList
                   ref="databaseList"
@@ -708,13 +725,12 @@ class QueryBrowserContainer extends Component {
                   onGetSQLScript={this.onGetSQLScript}
                   onRefreshDatabase={this.onRefreshDatabase}
                   onOpenTab={this.onOpenTab}
-                  onShowDiagramModal={this.onShowDiagramModal} />
+                  onShowDiagramModal={this.onShowDiagramModal}
+                />
               </div>
             </ResizableBox>
           </div>
-          <div style={STYLES.content}>
-            {this.renderTabQueries()}
-          </div>
+          <div style={STYLES.content}>{this.renderTabQueries()}</div>
           {this.props.databases.showingDiagram && this.renderDatabaseDiagramModal()}
         </div>
         <div style={STYLES.footer}>
@@ -725,7 +741,7 @@ class QueryBrowserContainer extends Component {
   }
 }
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   const {
     config,
     connections,

@@ -20,8 +20,10 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
 
   loggerConfig.logger = {};
 
-  for (const method in console) { // eslint-disable-line no-restricted-syntax
-    if (typeof console[method] === 'function') { // eslint-disable-line no-console
+  for (const method in console) {
+    // eslint-disable-line no-restricted-syntax
+    if (typeof console[method] === 'function') {
+      // eslint-disable-line no-console
       loggerConfig.logger[method] = function levelFn(...args) {
         if (isLogConsoleEnabled) {
           const m = method === 'debug' ? 'log' : method;
@@ -45,9 +47,7 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
   middlewares.push(createReduxLogger(loggerConfig));
 }
 
-const createStoreWithMiddleware = applyMiddleware(
-  ...middlewares,
-)(createStore);
+const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 
 export default function configureStore(initialState) {
   const store = createStoreWithMiddleware(rootReducer, initialState);

@@ -10,9 +10,7 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
-      return action.isServerConnection
-        ? { ...INITIAL_STATE, didInvalidate: true }
-        : state;
+      return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
     }
     case types.GET_SCRIPT_REQUEST: {
       return {
@@ -53,6 +51,7 @@ export default function (state = INITIAL_STATE, action) {
         error: action.error,
       };
     }
-    default: return state;
+    default:
+      return state;
   }
 }

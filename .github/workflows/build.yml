@@ -32,6 +32,10 @@ jobs:
 
     - run: npm ci
 
+    - run: npm run lint
+
+    - run: npm run format:check
+
     - run: npm test
 
     - run: npm run dist -- --publish never

@@ -15,13 +15,14 @@ const COMMANDS_TRIGER_REFRESH = ['CREATE_SCHEMA', 'DROP_SCHEMA'];
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
-      return action.isServerConnection
-        ? { ...INITIAL_STATE, didInvalidate: true }
-        : state;
+      return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
     }
     case types.FETCH_SCHEMAS_REQUEST: {
       return {
-        ...state, isFetching: true, didInvalidate: false, error: null,
+        ...state,
+        isFetching: true,
+        didInvalidate: false,
+        error: null,
       };
     }
     case types.FETCH_SCHEMAS_SUCCESS: {
@@ -47,8 +48,9 @@ export default function (state = INITIAL_STATE, action) {
     case queryTypes.EXECUTE_QUERY_SUCCESS: {
       return {
         ...state,
-        didInvalidate: action.results
-          .some(({ command }) => COMMANDS_TRIGER_REFRESH.includes(command)),
+        didInvalidate: action.results.some(({ command }) =>
+          COMMANDS_TRIGER_REFRESH.includes(command)
+        ),
       };
     }
     case dbTypes.REFRESH_DATABASES: {
@@ -63,6 +65,7 @@ export default function (state = INITIAL_STATE, action) {
         selectedSchemasForDiagram: null,
       };
     }
-    default: return state;
+    default:
+      return state;
   }
 }

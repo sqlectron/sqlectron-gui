@@ -17,16 +17,11 @@ export default class Checkbox extends Component {
     $(this.refs.checkbox).checkbox({ onChecked, onUnchecked });
   }
 
-  render () {
-    const {
-      name, label, disabled, defaultChecked,
-    } = this.props;
+  render() {
+    const { name, label, disabled, defaultChecked } = this.props;
     return (
       <div className="ui toggle checkbox" ref="checkbox">
-        <input type="checkbox"
-          name={name}
-          disabled={disabled}
-          defaultChecked={defaultChecked} />
+        <input type="checkbox" name={name} disabled={disabled} defaultChecked={defaultChecked} />
         <label>{label}</label>
       </div>
     );

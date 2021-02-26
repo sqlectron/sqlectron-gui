@@ -12,13 +12,14 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
-      return action.isServerConnection
-        ? { ...INITIAL_STATE, didInvalidate: true }
-        : state;
+      return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
     }
     case types.FETCH_ROUTINES_REQUEST: {
       return {
-        ...state, isFetching: true, didInvalidate: false, error: null,
+        ...state,
+        isFetching: true,
+        didInvalidate: false,
+        error: null,
       };
     }
     case types.FETCH_ROUTINES_SUCCESS: {
@@ -59,14 +60,15 @@ export default function (state = INITIAL_STATE, action) {
         didInvalidate: true,
       };
     }
-    default: return state;
+    default:
+      return state;
   }
 }
 
-function isFunction (routine) {
+function isFunction(routine) {
   return routine.routineType === 'FUNCTION';
 }
 
-function isProcedure (routine) {
+function isProcedure(routine) {
   return routine.routineType === 'PROCEDURE';
 }

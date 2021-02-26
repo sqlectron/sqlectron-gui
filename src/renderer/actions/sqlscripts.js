@@ -20,7 +20,7 @@ export function getSQLScriptIfNeeded(database, item, actionType, objectType, sch
   };
 }
 
-function shouldFetchScript (state, database, item, actionType) {
+function shouldFetchScript(state, database, item, actionType) {
   const scripts = state.sqlscripts;
   if (!scripts) return true;
   if (scripts.isFetching) return false;
@@ -30,7 +30,7 @@ function shouldFetchScript (state, database, item, actionType) {
   return scripts.didInvalidate;
 }
 
-function isScriptAlreadyFetched (state, database, item, actionType) {
+function isScriptAlreadyFetched(state, database, item, actionType) {
   const scripts = state.sqlscripts;
   if (!scripts.scriptsByObject[database]) return false;
   if (!scripts.scriptsByObject[database][item]) return false;
@@ -38,14 +38,18 @@ function isScriptAlreadyFetched (state, database, item, actionType) {
   return false;
 }
 
-function getAlreadyFetchedScript (state, database, item, actionType) {
+function getAlreadyFetchedScript(state, database, item, actionType) {
   return state.sqlscripts.scriptsByObject[database][item][actionType];
 }
 
-function getSQLScript (database, item, actionType, objectType, schema) {
+function getSQLScript(database, item, actionType, objectType, schema) {
   return async (dispatch) => {
     dispatch({
-      type: GET_SCRIPT_REQUEST, database, item, actionType, objectType,
+      type: GET_SCRIPT_REQUEST,
+      database,
+      item,
+      actionType,
+      objectType,
     });
     try {
       const dbConn = getDBConnByName(database);
@@ -66,7 +70,12 @@ function getSQLScript (database, item, actionType, objectType, schema) {
         script = await dbConn.getTableDeleteScript(item, schema);
       }
       dispatch({
-        type: GET_SCRIPT_SUCCESS, database, item, script, actionType, objectType,
+        type: GET_SCRIPT_SUCCESS,
+        database,
+        item,
+        script,
+        actionType,
+        objectType,
       });
       dispatch(appendQuery(script));
     } catch (error) {

@@ -15,7 +15,7 @@ export default class DatabaseDiagram extends Component {
     diagramJSON: PropTypes.string,
     isSaving: PropTypes.bool,
     addRelatedTables: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -51,7 +51,9 @@ export default class DatabaseDiagram extends Component {
   onTableRightClick(table) {
     const { tableKeys, addRelatedTables } = this.props;
     // eslint-disable-next-line max-len
-    const relatedTables = tableKeys[table].map((k) => k.referencedTable).filter((rt) => rt !== null);
+    const relatedTables = tableKeys[table]
+      .map((k) => k.referencedTable)
+      .filter((rt) => rt !== null);
     addRelatedTables(relatedTables);
   }
 
@@ -65,7 +67,8 @@ export default class DatabaseDiagram extends Component {
       restrictTranslate: true,
     });
 
-    if (!this.props.diagramJSON) { // Only supported for newely generated diagrams
+    if (!this.props.diagramJSON) {
+      // Only supported for newely generated diagrams
       this.paper.on('cell:contextmenu', (cellView) => {
         const table = cellView.model.attributes.name;
         this.onTableRightClick(table);
@@ -81,17 +84,19 @@ export default class DatabaseDiagram extends Component {
 
     try {
       tables.forEach((table, index) => {
-        tableShapes.push(new joint.shapes.sqlectron.Table({
-          position: {
-            x: 100 + (index % 6) * 100,
-            y: 20 + (index % 4) * 100,
-          },
-          size: {
-            width: 120,
-            height: (columnsByTable[table].length + 1.5) * 20,
-          },
-          name: table,
-        }));
+        tableShapes.push(
+          new joint.shapes.sqlectron.Table({
+            position: {
+              x: 100 + (index % 6) * 100,
+              y: 20 + (index % 4) * 100,
+            },
+            size: {
+              width: 120,
+              height: (columnsByTable[table].length + 1.5) * 20,
+            },
+            name: table,
+          })
+        );
         currentTable = tableShapes[index];
 
         columnsByTable[table].forEach((column, idx) => {
@@ -99,8 +104,8 @@ export default class DatabaseDiagram extends Component {
 
           newTabCell = new joint.shapes.sqlectron.TableCell({
             position: {
-              x: (currentTable.position().x),
-              y: ((currentTable.position().y + 7) + (idx + 1) * 20),
+              x: currentTable.position().x,
+              y: currentTable.position().y + 7 + (idx + 1) * 20,
             },
             size: {
               width: 100,
@@ -148,9 +153,7 @@ export default class DatabaseDiagram extends Component {
 
   shouldDisableDiagram() {
     const { isSaving } = this.props;
-    return isSaving
-      ? { pointerEvents: 'none' }
-      : { pointerEvents: 'auto' };
+    return isSaving ? { pointerEvents: 'none' } : { pointerEvents: 'auto' };
   }
 
   putEverythingOnGraph(tableShapes, tableCells, tableLinks) {
@@ -164,7 +167,7 @@ export default class DatabaseDiagram extends Component {
 
     tables.forEach((table) => {
       let biggestCellSize = $('span', `.sqlectron-table.${table} > p`).outerWidth();
-      $('span', `.sqlectron-table-cell.${table}`).each(function() {
+      $('span', `.sqlectron-table-cell.${table}`).each(function () {
         if ($(this).outerWidth() > biggestCellSize) {
           biggestCellSize = $(this).outerWidth();
         }
@@ -172,10 +175,12 @@ export default class DatabaseDiagram extends Component {
 
       if (biggestCellSize > 100) {
         // resize tables
-        tableShapes.find((shape) => shape.attributes.name === table)
+        tableShapes
+          .find((shape) => shape.attributes.name === table)
           .resize(biggestCellSize + 20, (columnsByTable[table].length + 1.5) * 20);
         // resize table cells
-        tableCells.filter((cell) => cell.attributes.tableName === table)
+        tableCells
+          .filter((cell) => cell.attributes.tableName === table)
           .map((cell) => cell.resize(biggestCellSize, 20));
       }
     });
@@ -184,8 +189,7 @@ export default class DatabaseDiagram extends Component {
   render() {
     if (this.state.error) {
       return (
-        <div className="ui negative message"
-          style={{ textAlign: 'center' }}>
+        <div className="ui negative message" style={{ textAlign: 'center' }}>
           {this.state.error}
         </div>
       );

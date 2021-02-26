@@ -23,7 +23,7 @@ export default class DbMetadataList extends Component {
     onExecuteDefaultQuery: PropTypes.func,
     onSelectItem: PropTypes.func,
     onGetSQLScript: PropTypes.func,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -52,9 +52,7 @@ export default class DbMetadataList extends Component {
   }
 
   renderHeader() {
-    const {
-      items,
-    } = this.props;
+    const { items } = this.props;
     const title = this.state.collapsed ? 'Expand' : 'Collapse';
     const cssClass = this.state.collapsed ? 'right' : 'down';
     const cssStyle = { ...STYLE.header };
@@ -62,10 +60,7 @@ export default class DbMetadataList extends Component {
       cssStyle.color = 'lightgray';
     }
     return (
-      <span
-        title={title}
-        className="header clickable"
-        style={cssStyle}>
+      <span title={title} className="header clickable" style={cssStyle}>
         <i className={`${cssClass} triangle icon`} onClick={this.toggleCollapse} />
         <span>{this.props.title}</span>
       </span>
@@ -89,7 +84,9 @@ export default class DbMetadataList extends Component {
 
     if (!items.length) {
       return (
-        <span className="ui grey item"><i> No results found</i></span>
+        <span className="ui grey item">
+          <i> No results found</i>
+        </span>
       );
     }
 
@@ -101,47 +98,46 @@ export default class DbMetadataList extends Component {
       const isCollapsed = !this.state.tableCollapsed[key];
       const renderChildren = !hasGroup || (hasChildren && !isCollapsed);
       const collapseArrowDirection = isCollapsed ? 'right' : 'down';
-      const header = hasGroup
-        ? (
-          <span
-            style={{ ...STYLE.item, cursor: hasChildren ? 'pointer' : 'default' }}
-            className="item"
-            onClick={() => this.handleTableCollapse(key)}>
-            {hasChildren ? <CollapseIcon arrowDirection={collapseArrowDirection} /> : null}
-            {key}
-          </span>
-        )
-        : null;
+      const header = hasGroup ? (
+        <span
+          style={{ ...STYLE.item, cursor: hasChildren ? 'pointer' : 'default' }}
+          className="item"
+          onClick={() => this.handleTableCollapse(key)}>
+          {hasChildren ? <CollapseIcon arrowDirection={collapseArrowDirection} /> : null}
+          {key}
+        </span>
+      ) : null;
 
       const body = renderChildren
         ? grouped[key].map((item) => {
-          const hasChildElements = !!onSelectItem;
+            const hasChildElements = !!onSelectItem;
 
-          const cssStyle = { ...STYLE.item, marginLeft: hasGroup ? '0.5em' : '0px' };
-          if (this.state.collapsed) {
-            cssStyle.display = 'none';
-          }
-          cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
+            const cssStyle = { ...STYLE.item, marginLeft: hasGroup ? '0.5em' : '0px' };
+            if (this.state.collapsed) {
+              cssStyle.display = 'none';
+            }
+            cssStyle.cursor = hasChildElements ? 'pointer' : 'default';
 
-          const { schema, name } = item;
-          const fullName = schema ? `${schema}.${name}` : name;
+            const { schema, name } = item;
+            const fullName = schema ? `${schema}.${name}` : name;
 
-          return (
-            <DatabaseItem
-              key={`${key}.${title}.${database.name}.${fullName}`}
-              client={client}
-              database={database}
-              item={item}
-              dbObjectType={this.props.title.slice(0, -1)}
-              style={cssStyle}
-              columnsByTable={this.props.columnsByTable}
-              triggersByTable={this.props.triggersByTable}
-              indexesByTable={this.props.indexesByTable}
-              onSelectItem={onSelectItem}
-              onExecuteDefaultQuery={onExecuteDefaultQuery}
-              onGetSQLScript={onGetSQLScript} />
-          );
-        })
+            return (
+              <DatabaseItem
+                key={`${key}.${title}.${database.name}.${fullName}`}
+                client={client}
+                database={database}
+                item={item}
+                dbObjectType={this.props.title.slice(0, -1)}
+                style={cssStyle}
+                columnsByTable={this.props.columnsByTable}
+                triggersByTable={this.props.triggersByTable}
+                indexesByTable={this.props.indexesByTable}
+                onSelectItem={onSelectItem}
+                onExecuteDefaultQuery={onExecuteDefaultQuery}
+                onGetSQLScript={onGetSQLScript}
+              />
+            );
+          })
         : null;
 
       return (

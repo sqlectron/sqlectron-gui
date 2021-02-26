@@ -10,7 +10,9 @@ export function mapObjectToConfig(obj) {
     connectionsAsList: obj.connectionsAsList || false,
     customFont: obj.customFont || 'Lato',
   };
-  if (!obj.log) { return config; }
+  if (!obj.log) {
+    return config;
+  }
 
   const { log } = obj;
   config.log = {

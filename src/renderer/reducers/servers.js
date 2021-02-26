@@ -74,7 +74,7 @@ export default function servers(state = INITIAL_STATE, action) {
 }
 
 function save(dataItems, server) {
-  const items = ([...dataItems] || []);
+  const items = [...dataItems] || [];
   const index = server.id && items.findIndex((srv) => srv.id === server.id);
   if (index >= 0) {
     items[index] = server;
@@ -86,8 +86,5 @@ function save(dataItems, server) {
 
 function remove(items, id) {
   const index = items.findIndex((srv) => srv.id === id);
-  return [
-    ...items.slice(0, index),
-    ...items.slice(index + 1),
-  ];
+  return [...items.slice(0, index), ...items.slice(index + 1)];
 }

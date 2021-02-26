@@ -1,12 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import {
-  Router,
-  Route,
-  IndexRoute,
-  hashHistory,
-} from 'react-router';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import App from './containers/app';
 import configureStore from './store/configure';
 import ServerManagementContainer from './containers/server-management';
@@ -23,5 +18,5 @@ ReactDOM.render(
       </Route>
     </Router>
   </Provider>,
-  document.getElementById('content'),
+  document.getElementById('content')
 );

@@ -4,7 +4,7 @@ export const FETCH_ROUTINES_REQUEST = 'FETCH_ROUTINES_REQUEST';
 export const FETCH_ROUTINES_SUCCESS = 'FETCH_ROUTINES_SUCCESS';
 export const FETCH_ROUTINES_FAILURE = 'FETCH_ROUTINES_FAILURE';
 
-export function fetchRoutinesIfNeeded (database, filter) {
+export function fetchRoutinesIfNeeded(database, filter) {
   return (dispatch, getState) => {
     if (shouldFetchRoutines(getState(), database)) {
       dispatch(fetchRoutines(database, filter));
@@ -12,7 +12,7 @@ export function fetchRoutinesIfNeeded (database, filter) {
   };
 }
 
-function shouldFetchRoutines (state, database) {
+function shouldFetchRoutines(state, database) {
   const routines = state.routines;
   if (!routines) return true;
   if (routines.isFetching) return false;
@@ -21,7 +21,7 @@ function shouldFetchRoutines (state, database) {
   return routines.didInvalidate;
 }
 
-function fetchRoutines (database, filter) {
+function fetchRoutines(database, filter) {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_ROUTINES_REQUEST, database });
     try {

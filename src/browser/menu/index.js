@@ -1,4 +1,4 @@
-import { Menu } from 'electron'; // eslint-disable-line import/no-unresolved
+import { Menu } from 'electron';
 import * as darwin from './darwin';
 import * as linux from './linux';
 import * as win32 from './win32';

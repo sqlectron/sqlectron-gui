@@ -29,7 +29,7 @@ export default class DatabaseDiagramModal extends Component {
     onExportDatabaseDiagram: PropTypes.func.isRequired,
     onOpenDatabaseDiagram: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -43,16 +43,18 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   componentDidMount() {
-    $(this.refs.diagramModal).modal({
-      closable: true,
-      detachable: false,
-      // Updates modal position on loading diagram in modal DOM
-      observeChanges: true,
-      onHidden: () => {
-        this.props.onClose();
-      },
-      onApprove: () => false,
-    }).modal('show');
+    $(this.refs.diagramModal)
+      .modal({
+        closable: true,
+        detachable: false,
+        // Updates modal position on loading diagram in modal DOM
+        observeChanges: true,
+        onHidden: () => {
+          this.props.onClose();
+        },
+        onApprove: () => false,
+      })
+      .modal('show');
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -113,11 +115,12 @@ export default class DatabaseDiagramModal extends Component {
   isDataLoaded(props) {
     const { selectedTables, columnsByTable, tableKeys } = props;
 
-    return (selectedTables
-      && columnsByTable
-      && tableKeys
-      && selectedTables.every((t) => Object.keys(columnsByTable).includes(t))
-      && selectedTables.every((t) => Object.keys(tableKeys).includes(t))
+    return (
+      selectedTables &&
+      columnsByTable &&
+      tableKeys &&
+      selectedTables.every((t) => Object.keys(columnsByTable).includes(t)) &&
+      selectedTables.every((t) => Object.keys(tableKeys).includes(t))
     );
   }
 
@@ -160,9 +163,7 @@ export default class DatabaseDiagramModal extends Component {
               Generate diagram
             </button>
           </div>
-          <div className="ui vertical divider">
-            Or
-          </div>
+          <div className="ui vertical divider">Or</div>
           <div className="six wide center aligned column">
             <button
               className="fluid ui blue labeled icon button"
@@ -185,13 +186,7 @@ export default class DatabaseDiagramModal extends Component {
   }
 
   renderDiagram() {
-    const {
-      selectedTables,
-      columnsByTable,
-      tableKeys,
-      diagramJSON,
-      isSaving,
-    } = this.props;
+    const { selectedTables, columnsByTable, tableKeys, diagramJSON, isSaving } = this.props;
 
     return (
       <DatabaseDiagram
@@ -201,7 +196,8 @@ export default class DatabaseDiagramModal extends Component {
         tableKeys={tableKeys}
         diagramJSON={diagramJSON}
         isSaving={isSaving}
-        addRelatedTables={this.onAddRelatedTables} />
+        addRelatedTables={this.onAddRelatedTables}
+      />
     );
   }
 
@@ -211,7 +207,8 @@ export default class DatabaseDiagramModal extends Component {
     return (
       <div className="actions">
         <div className="ui buttons">
-          <div className="ui small positive button"
+          <div
+            className="ui small positive button"
             tabIndex="0"
             onClick={() => onSaveDatabaseDiagram(this.refs.databaseDiagram.graph.toJSON())}>
             Save
@@ -221,12 +218,10 @@ export default class DatabaseDiagramModal extends Component {
             Export to
             <i className="caret up icon" />
             <div className="menu">
-              <div className="item"
-                onClick={() => this.onExportDatabaseDiagram('png')}>
+              <div className="item" onClick={() => this.onExportDatabaseDiagram('png')}>
                 PNG
               </div>
-              <div className="item"
-                onClick={() => this.onExportDatabaseDiagram('jpeg')}>
+              <div className="item" onClick={() => this.onExportDatabaseDiagram('jpeg')}>
                 JPEG
               </div>
             </div>
@@ -243,18 +238,11 @@ export default class DatabaseDiagramModal extends Component {
     // For more check this issue: https://github.com/clientIO/joint/issues/262
     return (
       <div className="ui modal" ref="diagramModal">
-        {!!this.state.showDatabaseDiagram
-          && (
-          <div className="header">
-            Database diagram
-          </div>
-          )}
+        {!!this.state.showDatabaseDiagram && <div className="header">Database diagram</div>}
         <div className="content">
-          {
-            !this.state.showDatabaseDiagram
-            && !this.state.showLoader
-            && this.renderSelectTablesMenu()
-          }
+          {!this.state.showDatabaseDiagram &&
+            !this.state.showLoader &&
+            this.renderSelectTablesMenu()}
           {!this.state.showDatabaseDiagram && !!this.state.showLoader && this.renderLoader()}
           {!!this.state.showDatabaseDiagram && this.renderDiagram()}
         </div>

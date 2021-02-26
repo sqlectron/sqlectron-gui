@@ -47,7 +47,7 @@ export function saveDatabaseDiagram(diagramJSON) {
     try {
       const filters = [{ name: 'JSON', extensions: ['json'] }];
 
-      let fileName = (getState().databases.fileName || await FileHandler.showSaveDialog(filters));
+      let fileName = getState().databases.fileName || (await FileHandler.showSaveDialog(filters));
       if (path.extname(fileName) !== '.json') {
         fileName += '.json';
       }
@@ -106,7 +106,7 @@ export function openDatabaseDiagram() {
   };
 }
 
-export function fetchDatabasesIfNeeded (filter) {
+export function fetchDatabasesIfNeeded(filter) {
   return (dispatch, getState) => {
     if (shouldFetchDatabases(getState())) {
       dispatch(fetchDatabases(filter));
@@ -114,14 +114,14 @@ export function fetchDatabasesIfNeeded (filter) {
   };
 }
 
-function shouldFetchDatabases (state) {
+function shouldFetchDatabases(state) {
   const databases = state.databases;
   if (!databases) return true;
   if (databases.isFetching) return false;
   return databases.didInvalidate;
 }
 
-function fetchDatabases (filter) {
+function fetchDatabases(filter) {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_DATABASES_REQUEST });
     try {

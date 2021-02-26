@@ -38,11 +38,8 @@ export default class QueryResultTable extends Component {
     rows: PropTypes.array,
     cellClass: PropTypes.string,
     nullCellClass: PropTypes.string,
-    rowCount: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.number,
-    ]),
-  }
+    rowCount: PropTypes.oneOfType([PropTypes.array, PropTypes.number]),
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -144,7 +141,7 @@ export default class QueryResultTable extends Component {
       const cellWidth = this.resolveCellWidth(name, fields, rows, averageTableCellWidth);
       totalColumnWidths += cellWidth;
 
-      const isLastColumn = (index + 1) === fields.length;
+      const isLastColumn = index + 1 === fields.length;
       if (isLastColumn && totalColumnWidths < tableWidth) {
         totalColumnWidths -= cellWidth;
         return tableWidth - totalColumnWidths;
@@ -162,13 +159,9 @@ export default class QueryResultTable extends Component {
 
     // We don't want the resizable handle on the last column for layout reasons
     let resizeDrag = null;
-    if ((this.props.fields.length - 1) !== params.columnIndex) {
+    if (this.props.fields.length - 1 !== params.columnIndex) {
       resizeDrag = (
-        <Draggable
-          axis="x"
-          onStop={handleStop}
-          position={{ x: 0, y: 0 }}
-          zIndex={999}>
+        <Draggable axis="x" onStop={handleStop} position={{ x: 0, y: 0 }} zIndex={999}>
           <div className="draggable-handle" />
         </Draggable>
       );
@@ -183,11 +176,7 @@ export default class QueryResultTable extends Component {
   }
 
   renderNoRows() {
-    return (
-      <div style={{ textAlign: 'center', fontSize: '16px' }}>
-        No results found
-      </div>
-    );
+    return <div style={{ textAlign: 'center', fontSize: '16px' }}>No results found</div>;
   }
 
   handleStop(data, e, move) {
@@ -198,7 +187,7 @@ export default class QueryResultTable extends Component {
     this.setState({
       columnWidths: {
         ...columnWidths,
-        [data.name]: Math.max((originalWidth + move.x), 10),
+        [data.name]: Math.max(originalWidth + move.x, 10),
       },
     });
 
@@ -227,9 +216,7 @@ export default class QueryResultTable extends Component {
   }
 
   renderHeaderTopBar() {
-    const {
-      rows, rowCount, onCopyToClipboardClick, onSaveToFileClick,
-    } = this.props;
+    const { rows, rowCount, onCopyToClipboardClick, onSaveToFileClick } = this.props;
     const csvDelimiter = this.props.config.data.csvDelimiter || ',';
     const styleCopied = { display: this.state.showCopied ? 'inline-block' : 'none' };
     const styleSaved = { display: this.state.showSaved ? 'inline-block' : 'none' };
@@ -242,13 +229,17 @@ export default class QueryResultTable extends Component {
       copyPanel = (
         <div className="ui small label" title="Copy as" style={{ float: 'right', margin: '3px' }}>
           <i className="copy icon" />
-          <a className="detail" style={styleCopied}>Copied</a>
-          <a className="detail"
+          <a className="detail" style={styleCopied}>
+            Copied
+          </a>
+          <a
+            className="detail"
             style={styleCopyButtons}
             onClick={() => onCopyToClipboardClick(rows, 'CSV', csvDelimiter)}>
             CSV
           </a>
-          <a className="detail"
+          <a
+            className="detail"
             style={styleCopyButtons}
             onClick={() => onCopyToClipboardClick(rows, 'JSON')}>
             JSON
@@ -259,13 +250,17 @@ export default class QueryResultTable extends Component {
       savePanel = (
         <div className="ui small label" title="Save as" style={{ float: 'right', margin: '3px' }}>
           <i className="save icon" />
-          <a className="detail" style={styleSaved}>Saved</a>
-          <a className="detail"
+          <a className="detail" style={styleSaved}>
+            Saved
+          </a>
+          <a
+            className="detail"
             style={styleSaveButtons}
             onClick={() => onSaveToFileClick(rows, 'CSV', csvDelimiter)}>
             CSV
           </a>
-          <a className="detail"
+          <a
+            className="detail"
             style={styleSaveButtons}
             onClick={() => onSaveToFileClick(rows, 'JSON')}>
             JSON
@@ -292,12 +287,7 @@ export default class QueryResultTable extends Component {
       return null;
     }
 
-    return (
-      <PreviewModal
-        value={this.state.valuePreview}
-        onCloseClick={this.onClosePreviewClick}
-      />
-    );
+    return <PreviewModal value={this.state.valuePreview} onCloseClick={this.onClosePreviewClick} />;
   }
 
   renderTableBody(onScroll) {
@@ -307,15 +297,17 @@ export default class QueryResultTable extends Component {
     const headerHeight = 62; // value of 2 headers together
     const scrollBarHeight = 15;
     const rowHeight = 28;
-    const fixedHeightRows = ((rowCount || 1) * rowHeight) + scrollBarHeight;
+    const fixedHeightRows = (rowCount || 1) * rowHeight + scrollBarHeight;
 
     return (
       <Grid
         className="grid-body"
-        ref={(ref) => { this.rowsGrid = ref; }}
+        ref={(ref) => {
+          this.rowsGrid = ref;
+        }}
         cellRenderer={createCellRenderer(this.renderCell)}
         width={tableWidth}
-        height={Math.min((tableHeight - headerHeight), fixedHeightRows)}
+        height={Math.min(tableHeight - headerHeight, fixedHeightRows)}
         rowHeight={rowHeight}
         onScroll={onScroll}
         rowCount={rowCount}
@@ -338,7 +330,9 @@ export default class QueryResultTable extends Component {
 
     return (
       <Grid
-        ref={(ref) => { this.headerGrid = ref; }}
+        ref={(ref) => {
+          this.headerGrid = ref;
+        }}
         columnWidth={this.getColumnWidth}
         columnCount={fields.length}
         height={30}
@@ -347,7 +341,8 @@ export default class QueryResultTable extends Component {
         rowHeight={30}
         rowCount={1}
         width={tableWidth - scrollbarSize()}
-        scrollLeft={scrollLeft} />
+        scrollLeft={scrollLeft}
+      />
     );
   }
 
@@ -357,7 +352,8 @@ export default class QueryResultTable extends Component {
 
     if (field && columnWidths && columnWidths[field.name] !== undefined) {
       return columnWidths[field.name];
-    } if (autoColumnWidths && autoColumnWidths[index] !== undefined) {
+    }
+    if (autoColumnWidths && autoColumnWidths[index] !== undefined) {
       return autoColumnWidths[index];
     }
     return 50;
@@ -375,13 +371,14 @@ export default class QueryResultTable extends Component {
     const headerWidth = this.getTextWidth(fieldName, `bold ${font}`);
     let averageRowsCellWidth = 0;
     if (rows.length) {
-      averageRowsCellWidth = rows
-        .slice(0, numRowsToFindAverage)
-        .map((row) => {
-          const value = valueToString(row[fieldName]);
-          return this.getTextWidth(value, font);
-        })
-        .reduce((prev, curr) => prev + curr, 0) / numRowsToFindAverage;
+      averageRowsCellWidth =
+        rows
+          .slice(0, numRowsToFindAverage)
+          .map((row) => {
+            const value = valueToString(row[fieldName]);
+            return this.getTextWidth(value, font);
+          })
+          .reduce((prev, curr) => prev + curr, 0) / numRowsToFindAverage;
     }
 
     if (headerWidth > averageRowsCellWidth) {
@@ -398,7 +395,8 @@ export default class QueryResultTable extends Component {
         rowIndex={params.rowIndex}
         data={this.props.rows}
         col={field.name}
-        onOpenPreviewClick={this.onOpenPreviewClick} />
+        onOpenPreviewClick={this.onOpenPreviewClick}
+      />
     );
   }
 

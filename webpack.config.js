@@ -17,10 +17,8 @@ const webpackConfig = {
     extensions: ['.js', '.jsx'],
     modules: ['node_modules', 'src/renderer'],
   },
-  entry: {
-  },
-  output: {
-  },
+  entry: {},
+  output: {},
   module: {
     rules: [
       {
@@ -98,9 +96,7 @@ const webpackConfig = {
     new webpack.LoaderOptionsPlugin({
       debug: !isProd,
       options: {
-        postcss: [
-          autoprefixer(),
-        ],
+        postcss: [autoprefixer()],
       },
     }),
   ],
@@ -135,9 +131,7 @@ if (isProd) {
     filename: '[name].bundle.js',
   };
 
-  webpackConfig.plugins.push(
-    new MiniCssExtractPlugin({ filename: '[name].bundle.css' }),
-  );
+  webpackConfig.plugins.push(new MiniCssExtractPlugin({ filename: '[name].bundle.css' }));
 
   webpackConfig.optimization = {
     minimize: true,
@@ -147,10 +141,7 @@ if (isProd) {
     'dtrace-provider': path.join(__dirname, 'empty-shim.js'),
   };
 
-  webpackConfig.entry.app = [
-    'webpack/hot/dev-server',
-    './src/renderer/entry.jsx',
-  ];
+  webpackConfig.entry.app = ['webpack/hot/dev-server', './src/renderer/entry.jsx'];
 
   webpackConfig.output = {
     path: path.join(__dirname, 'dist'),

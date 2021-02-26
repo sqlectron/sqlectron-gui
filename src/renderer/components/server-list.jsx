@@ -12,7 +12,7 @@ export default class ServerList extends Component {
     onEditClick: PropTypes.func.isRequired,
     onConnectClick: PropTypes.func.isRequired,
     config: PropTypes.object.isRequired,
-  }
+  };
 
   groupItemsInRows(items) {
     const itemsPerRow = 4;
@@ -28,9 +28,7 @@ export default class ServerList extends Component {
   }
 
   renderListOrCards() {
-    const {
-      servers, onEditClick, onConnectClick, config,
-    } = this.props;
+    const { servers, onEditClick, onConnectClick, config } = this.props;
 
     if (config.data.connectionsAsList) {
       return (
@@ -40,25 +38,25 @@ export default class ServerList extends Component {
               key={server.id}
               onConnectClick={() => onConnectClick(server)}
               onEditClick={() => onEditClick(server)}
-              server={server} />
+              server={server}
+            />
           ))}
         </div>
       );
     }
 
-    return (
-      this.groupItemsInRows(servers).map((row, rowIdx) => (
-        <div key={rowIdx} className="ui cards">
-          {row.map((server) => (
-            <ServerListCard
-              key={server.id}
-              onConnectClick={() => onConnectClick(server)}
-              onEditClick={() => onEditClick(server)}
-              server={server} />
-          ))}
-        </div>
-      ))
-    );
+    return this.groupItemsInRows(servers).map((row, rowIdx) => (
+      <div key={rowIdx} className="ui cards">
+        {row.map((server) => (
+          <ServerListCard
+            key={server.id}
+            onConnectClick={() => onConnectClick(server)}
+            onEditClick={() => onEditClick(server)}
+            server={server}
+          />
+        ))}
+      </div>
+    ));
   }
 
   render() {
@@ -68,10 +66,6 @@ export default class ServerList extends Component {
       return <Message message="No results" type="info" />;
     }
 
-    return (
-      <div id="server-list">
-        {this.renderListOrCards()}
-      </div>
-    );
+    return <div id="server-list">{this.renderListOrCards()}</div>;
   }
 }

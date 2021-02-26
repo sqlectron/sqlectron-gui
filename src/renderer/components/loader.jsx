@@ -6,7 +6,7 @@ export default class Loading extends Component {
     message: PropTypes.string,
     type: PropTypes.string,
     inverted: PropTypes.bool,
-  }
+  };
 
   componentDidMount() {
     $(this.refs.loader).dimmer('show');

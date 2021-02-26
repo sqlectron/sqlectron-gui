@@ -15,7 +15,7 @@ export default class TableSubmenu extends Component {
     collapsed: PropTypes.bool,
     database: PropTypes.object.isRequired,
     onDoubleClickItem: PropTypes.func,
-  }
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -64,7 +64,9 @@ export default class TableSubmenu extends Component {
 
     if (!itemsByTable[table].length) {
       return (
-        <span className="ui grey item"><i> No results found</i></span>
+        <span className="ui grey item">
+          <i> No results found</i>
+        </span>
       );
     }
 
@@ -82,23 +84,17 @@ export default class TableSubmenu extends Component {
     };
 
     return itemsByTable[table].map((item) => (
-      <span
-        key={item.name}
-        title={item.name}
-        style={cssStyle}
-        className="item">
+      <span key={item.name} title={item.name} style={cssStyle} className="item">
         {this.props.title === 'Columns' ? columnsIcon : null}
         {item.name}
-        {
-          this.props.title === 'Columns'
-            ? <span style={styleColumnType}>{item.dataType}</span>
-            : null
-        }
+        {this.props.title === 'Columns' ? (
+          <span style={styleColumnType}>{item.dataType}</span>
+        ) : null}
       </span>
     ));
   }
 
-  render () {
+  render() {
     const { table } = this.props;
     return (
       <div className="item">

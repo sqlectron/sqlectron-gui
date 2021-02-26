@@ -1,4 +1,4 @@
-import { shell } from 'electron'; // eslint-disable-line import/no-unresolved
+import { shell } from 'electron';
 
 function sendMessage(win, message) {
   if (win) {

@@ -13,7 +13,7 @@ const INITIAL_STATE = {
   databases: [], // connected databases
 };
 
-export default function(state = INITIAL_STATE, action) {
+export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case types.CONNECTION_SET_CONNECTING: {
       return {
@@ -23,7 +23,9 @@ export default function(state = INITIAL_STATE, action) {
     }
     case types.CONNECTION_REQUEST: {
       // eslint-disable-next-line max-len
-      const { disabledFeatures } = CLIENTS.find((dbClient) => dbClient.key === action.server.client);
+      const { disabledFeatures } = CLIENTS.find(
+        (dbClient) => dbClient.key === action.server.client
+      );
       return {
         ...state,
         server: action.server,
@@ -39,10 +41,7 @@ export default function(state = INITIAL_STATE, action) {
         connected: true,
         connecting: false,
         waitingPrivateKeyPassphrase: false,
-        databases: [
-          ...state.databases,
-          action.database,
-        ],
+        databases: [...state.databases, action.database],
       };
     }
     case types.CONNECTION_FAILURE: {
@@ -65,7 +64,10 @@ export default function(state = INITIAL_STATE, action) {
     case types.TEST_CONNECTION_FAILURE: {
       if (!isSameTestConnection(state, action)) return state;
       return {
-        ...state, testConnected: false, testConnecting: false, testError: action.error,
+        ...state,
+        testConnected: false,
+        testConnecting: false,
+        testError: action.error,
       };
     }
     case types.CLOSE_CONNECTION:
@@ -74,10 +76,11 @@ export default function(state = INITIAL_STATE, action) {
       return INITIAL_STATE;
     }
 
-    default: return state;
+    default:
+      return state;
   }
 }
 
-function isSameTestConnection (state, action) {
+function isSameTestConnection(state, action) {
   return state.testServer === action.server;
 }

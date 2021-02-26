@@ -9,7 +9,7 @@ export function selectTablesForDiagram(tables) {
   return { type: SELECT_TABLES_FOR_DIAGRAM, tables };
 }
 
-export function fetchTablesIfNeeded (database, filter) {
+export function fetchTablesIfNeeded(database, filter) {
   return (dispatch, getState) => {
     if (shouldFetchTables(getState(), database)) {
       dispatch(fetchTables(database, filter));
@@ -17,7 +17,7 @@ export function fetchTablesIfNeeded (database, filter) {
   };
 }
 
-function shouldFetchTables (state, database) {
+function shouldFetchTables(state, database) {
   const tables = state.tables;
   if (!tables) return true;
   if (tables.isFetching) return false;
@@ -25,7 +25,7 @@ function shouldFetchTables (state, database) {
   return tables.didInvalidate;
 }
 
-function fetchTables (database, filter) {
+function fetchTables(database, filter) {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_TABLES_REQUEST, database });
     try {

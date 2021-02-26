@@ -4,7 +4,7 @@ export const FETCH_SCHEMAS_REQUEST = 'FETCH_SCHEMAS_REQUEST';
 export const FETCH_SCHEMAS_SUCCESS = 'FETCH_SCHEMAS_SUCCESS';
 export const FETCH_SCHEMAS_FAILURE = 'FETCH_SCHEMAS_FAILURE';
 
-export function fetchSchemasIfNeeded (database) {
+export function fetchSchemasIfNeeded(database) {
   return (dispatch, getState) => {
     if (shouldFetchSchemas(getState(), database)) {
       dispatch(fetchSchemas(database));
@@ -12,7 +12,7 @@ export function fetchSchemasIfNeeded (database) {
   };
 }
 
-function shouldFetchSchemas (state, database) {
+function shouldFetchSchemas(state, database) {
   const schemas = state.schemas;
   if (!schemas) return true;
   if (schemas.isFetching) return false;
@@ -20,7 +20,7 @@ function shouldFetchSchemas (state, database) {
   return schemas.didInvalidate;
 }
 
-function fetchSchemas (database) {
+function fetchSchemas(database) {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_SCHEMAS_REQUEST, database });
     try {
