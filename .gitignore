@@ -10,3 +10,4 @@ npm-debug.log
 # test files
 *.sqlite3
 *.db
+test/fixtures/sqlite/sqlectron.json
