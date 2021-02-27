@@ -7,8 +7,12 @@ const LATEST_RELEASE_URL = `https://github.com/${repo}/releases/latest`;
 
 const UpdateChecker = () => {
   const [isVisible, setIsVisible] = useState(false);
+  //const [currentVersion, setCurrentVersion] = useState('');
+  const [latestVersion, setLatestVersion] = useState('');
 
-  const updateAvailable = () => {
+  const updateAvailable = (_, { /*currentVersion,*/ latestVersion }) => {
+    //setCurrentVersion(currentVersion);
+    setLatestVersion(latestVersion);
     setIsVisible(true);
   };
 
@@ -30,7 +34,8 @@ const UpdateChecker = () => {
     <>
       {isVisible && (
         <a className="ui green label" onClick={onClick}>
-          <i className="cloud download icon">Update available</i>
+          <i className="cloud download icon" />
+          Update available: {latestVersion}
         </a>
       )}
     </>

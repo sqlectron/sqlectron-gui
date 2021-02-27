@@ -18,5 +18,11 @@ export async function check(mainWindow, appConfig) {
     return;
   }
 
-  mainWindow.webContents.send('sqlectron:update-available');
+  console.log(currentVersion);
+  console.log(response.data.tag_name);
+
+  mainWindow.webContents.send('sqlectron:update-available', {
+    currentVersion,
+    latestVersion: response.data.tag_name,
+  });
 }
