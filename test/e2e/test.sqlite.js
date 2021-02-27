@@ -23,13 +23,13 @@ function setupDB() {
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
 
   // Create database
-  var db = new sqlite3.Database(DB_PATH);
+  const db = new sqlite3.Database(DB_PATH);
 
   db.serialize(function () {
     db.run('CREATE TABLE document (info TEXT)');
 
-    var stmt = db.prepare('INSERT INTO document VALUES (?)');
-    for (var i = 0; i < 10; i++) {
+    const stmt = db.prepare('INSERT INTO document VALUES (?)');
+    for (let i = 0; i < 10; i++) {
       stmt.run('Ipsum ' + i);
     }
     stmt.finalize();
@@ -71,13 +71,13 @@ describe('Sqlite', function () {
     // https://github.com/microsoft/playwright/issues/1042
     await btnConnect.dispatchEvent('click');
 
-    await this.mainWindow.waitForSelector('#sidebar .itemTable');
-    const tables = await this.mainWindow.$$('#sidebar .itemTable');
+    await this.mainWindow.waitForSelector('#sidebar .item-Table');
+    const tables = await this.mainWindow.$$('#sidebar .item-Table');
     expect(tables).to.have.lengthOf(1);
     await expect(await tables[0].innerText()).to.be.equal('document');
 
     // Clicks in the table to run default select query
-    const btnTable = await this.mainWindow.$('#sidebar .itemTable span');
+    const btnTable = await this.mainWindow.$('#sidebar .item-Table span');
     await btnTable.dispatchEvent('click');
 
     // Set default query and automatically executes it
@@ -98,8 +98,9 @@ describe('Sqlite', function () {
     // assertion on CI it doesn't return any rows.
     if (process.env.CI !== 'true') {
       expect(rows).to.have.lengthOf(11); // rows + info header
-      for (let i = 0; i < rows.length; i++) {
-        await expect(await rows[i].innerText()).to.be.equal(i === 0 ? 'info' : `Ipsum ${i - 1}`);
+      expect(await rows[0].innerText()).to.be.equal('info');
+      for (let i = 1; i < rows.length; i++) {
+        await expect(await rows[i].innerText()).to.be.equal(`Ipsum ${i - 1}`);
       }
     }
   });
