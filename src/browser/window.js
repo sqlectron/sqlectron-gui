@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { BrowserWindow, Menu } from 'electron';
+import { BrowserWindow, ipcMain, Menu } from 'electron';
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
 import { get as getConfig } from './config';
@@ -58,7 +58,9 @@ export function buildNewWindow(app) {
     });
   }
 
-  checkUpdate(mainWindow, appConfig).catch((err) =>
-    logger.error('Unable to check for updates', err)
-  );
+  ipcMain.on('sqlectron:check-upgrade', () => {
+    checkUpdate(mainWindow, appConfig).catch((err) =>
+      logger.error('Unable to check for updates', err)
+    );
+  });
 }
