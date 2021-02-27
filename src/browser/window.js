@@ -37,13 +37,17 @@ export function buildNewWindow(app) {
   attachMenuToWindow(app, buildNewWindow, appConfig);
 
   // and load the index.html of the app.
-  const entryBasePath = devMode ? 'http://localhost:8080' : 'file://' + resolve(__dirname, '..');
+  let entryBasePath = 'file://' + resolve(__dirname, '..');
+  if (devMode) {
+    entryBasePath = 'http://localhost:8080';
+  }
+
   mainWindow.loadURL(entryBasePath + '/static/index.html');
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => delete WINDOWS[windowsNumber]);
 
-  if (devMode) {
+  if (devMode || process.env.DEV_TOOLS === 'true') {
     mainWindow.openDevTools();
     mainWindow.webContents.on('context-menu', (_, props) => {
       const { x, y } = props;

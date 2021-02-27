@@ -1,0 +1,37 @@
+{
+  "log": {
+    "console": true,
+    "file": false,
+    "level": "debug",
+    "path": "sqlectron.log"
+  },
+  "zoomFactor": 1,
+  "limitQueryDefaultSelectTop": 101,
+  "servers": [
+    {
+      "id": "8d47c5fd-12af-43e3-bd0f-cdcc2eb1547c",
+      "name": "sqlectron-local-dev",
+      "client": "mysql",
+      "ssl": false,
+      "host": "localhost",
+      "port": 3306,
+      "socketPath": null,
+      "user": "root",
+      "password": {
+        "ivText": "caW1dt5Hh5gzUn23Pk2tfQ==",
+        "encryptedText": "DiOGAxi3k/iVGvTS377Dgw=="
+      },
+      "database": "authentication",
+      "schema": null,
+      "encrypted": true
+    }
+  ],
+  "enabledAutoComplete": true,
+  "enabledLiveAutoComplete": false,
+  "queries": {},
+  "enabledDarkTheme": false,
+  "disabledOpenAnimation": false,
+  "csvDelimiter": ",",
+  "connectionsAsList": false,
+  "customFont": "Lato"
+}

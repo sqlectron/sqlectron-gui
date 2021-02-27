@@ -169,7 +169,10 @@ export default class DatabaseItem extends Component {
 
     return (
       <div>
-        <span style={style} className="item" onContextMenu={this.onContextMenu}>
+        <span
+          style={style}
+          className={`item item-${dbObjectType}`}
+          onContextMenu={this.onContextMenu}>
           {dbObjectType === 'Table' ? (
             <CollapseIcon arrowDirection={collapseArrowDirection} expandAction={expandChildren} />
           ) : null}

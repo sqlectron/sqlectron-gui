@@ -36,4 +36,22 @@ The ESLint test will be run before unit tests in the CI environment, your build 
 npm run lint
 ```
 
+### Testing
+
+#### E2E Testing
+
+Running in production mode:
+
+```
+npm run compile
+DEV_TOOLS=true npm run test:e2e
+```
+
+Running in development mode:
+
+```
+npm run dev:webpack
+npm run test:e2e:dev
+```
+
 > Document based on [Sinon's CONTRIBUTING.md](https://github.com/sinonjs/sinon/blob/master/CONTRIBUTING.md).

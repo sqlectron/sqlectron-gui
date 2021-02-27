@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      node-version: 10.x
+      node-version: 14
 
     strategy:
       matrix:
@@ -36,7 +36,13 @@ jobs:
 
     - run: npm run format:check
 
-    - run: npm test
+    - name: Build app for e2e test
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: npm run compile
+
+    - name: Run e2e test
+      if: ${{ matrix.os == 'ubuntu-latest' }}
+      run: xvfb-run --auto-servernum npm run test:e2e
 
     - run: npm run dist -- --publish never
 
