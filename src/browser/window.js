@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, Menu } from 'electron';
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
 import { get as getConfig } from './config';
@@ -45,6 +45,17 @@ export function buildNewWindow(app) {
 
   if (devMode) {
     mainWindow.openDevTools();
+    mainWindow.webContents.on('context-menu', (_, props) => {
+      const { x, y } = props;
+      Menu.buildFromTemplate([
+        {
+          label: 'Inspect element',
+          click() {
+            mainWindow.inspectElement(x, y);
+          },
+        },
+      ]).popup(mainWindow);
+    });
   }
 
   checkUpdate(mainWindow, appConfig).catch((err) =>
