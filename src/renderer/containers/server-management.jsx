@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as ServersActions from '../actions/servers';
 import * as ConnActions from '../actions/connections';
 import * as ConfigActions from '../actions/config';
@@ -20,179 +20,150 @@ const STYLES = {
 
 const BREADCRUMB = [{ icon: 'server', label: 'servers' }];
 
-class ServerManagerment extends Component {
-  static propTypes = {
-    status: PropTypes.string.isRequired,
-    connections: PropTypes.object.isRequired,
-    servers: PropTypes.object.isRequired,
-    config: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
-    children: PropTypes.node,
-  };
-
-  constructor(props, context) {
-    super(props, context);
-    this.state = {};
-
-    this.onFilterChange = this.onFilterChange.bind(this);
-    this.onAddClick = this.onAddClick.bind(this);
-    this.onEditClick = this.onEditClick.bind(this);
-    this.onSettingsClick = this.onSettingsClick.bind(this);
-    this.onSettingsSaveClick = this.onSettingsSaveClick.bind(this);
-    this.onSettingsCancelClick = this.onSettingsCancelClick.bind(this);
-    this.onConnectClick = this.onConnectClick.bind(this);
-    this.onTestConnectionClick = this.onTestConnectionClick.bind(this);
-    this.onDuplicateClick = this.onDuplicateClick.bind(this);
-    this.onSaveClick = this.onSaveClick.bind(this);
-    this.onCancelClick = this.onCancelClick.bind(this);
-    this.onRemoveClick = this.onRemoveClick.bind(this);
-  }
-
-  onConnectClick({ id }) {
-    const { dispatch, router } = this.props;
-    dispatch(ConnActions.setConnecting());
-    router.push(`/server/${id}`);
-  }
-
-  onTestConnectionClick(server) {
-    const { dispatch } = this.props;
-    dispatch(ConnActions.test(server));
-  }
-
-  onAddClick() {
-    const { dispatch } = this.props;
-    dispatch(ServersActions.startEditing());
-  }
-
-  onSettingsClick() {
-    const { dispatch } = this.props;
-    dispatch(ConfigActions.startEditing());
-  }
-
-  onEditClick(server) {
-    const { dispatch } = this.props;
-    dispatch(ServersActions.startEditing(server.id));
-  }
-
-  onDuplicateClick(server) {
-    const { dispatch } = this.props;
-    dispatch(ServersActions.duplicateServer({ server }));
-  }
-
-  onSaveClick(server) {
-    const { dispatch, servers } = this.props;
-    const id = servers.editingServer && servers.editingServer.id;
-    dispatch(ServersActions.saveServer({ id, server }));
-  }
-
-  onCancelClick() {
-    const { dispatch } = this.props;
-    dispatch(ServersActions.finishEditing());
-  }
-
-  onRemoveClick() {
-    const { dispatch, servers } = this.props;
-    const id = servers.editingServer && servers.editingServer.id;
-    dispatch(ServersActions.removeServer({ id }));
-  }
-
-  onSettingsSaveClick(config) {
-    const { dispatch } = this.props;
-    dispatch(ConfigActions.saveConfig(config));
-  }
-
-  onSettingsCancelClick() {
-    const { dispatch } = this.props;
-    dispatch(ConfigActions.finishEditing());
-  }
-
-  onFilterChange(event) {
-    this.setState({ filter: event.target.value });
-  }
-
-  filterServers(name, servers) {
-    const regex = RegExp(name, 'i');
-    return servers.filter((srv) => regex.test(srv.name));
-  }
-
-  render() {
-    const { filter } = this.state;
-    const { connections, servers, config, status } = this.props;
-    const selected = servers.editingServer || {};
-    const filteredServers = this.filterServers(filter, servers.items);
-
-    const testConnection = {
-      connected: connections.testConnected,
-      connecting: connections.testConnecting,
-      error: connections.testError,
-    };
-
-    return (
-      <div style={STYLES.wrapper}>
-        <div style={STYLES.header}>
-          <Header items={BREADCRUMB} />
-        </div>
-        <div style={STYLES.container}>
-          <ServerFilter
-            onFilterChange={this.onFilterChange}
-            onAddClick={this.onAddClick}
-            onSettingsClick={this.onSettingsClick}
-          />
-
-          {connections.error && (
-            <Message
-              closeable
-              title="Connection Error"
-              message={connections.error.message}
-              type="error"
-            />
-          )}
-
-          <ServerList
-            servers={filteredServers}
-            onEditClick={this.onEditClick}
-            onConnectClick={this.onConnectClick}
-            config={config}
-          />
-
-          {servers.isEditing && (
-            <ServerModalForm
-              server={selected}
-              error={servers.error}
-              testConnection={testConnection}
-              onTestConnectionClick={this.onTestConnectionClick}
-              onDuplicateClick={this.onDuplicateClick}
-              onSaveClick={this.onSaveClick}
-              onCancelClick={this.onCancelClick}
-              onRemoveClick={this.onRemoveClick}
-            />
-          )}
-
-          {config.isEditing && (
-            <SettingsModalForm
-              config={config}
-              error={config.error}
-              onSaveClick={this.onSettingsSaveClick}
-              onCancelClick={this.onSettingsCancelClick}
-            />
-          )}
-        </div>
-        <div style={STYLES.footer}>
-          <Footer status={status} />
-        </div>
-      </div>
-    );
-  }
+function filterServers(name, servers) {
+  const regex = RegExp(name, 'i');
+  return servers.filter((srv) => regex.test(srv.name));
 }
 
-function mapStateToProps(state) {
-  return {
+const ServerManagement = ({ router }) => {
+  const [filter, setFilter] = useState('');
+  const dispatch = useDispatch();
+
+  const { connections, servers, config, status } = useSelector((state) => ({
     connections: state.connections,
     servers: state.servers,
     config: state.config,
     status: state.status,
-  };
-}
+  }));
 
-export default connect(mapStateToProps)(withRouter(ServerManagerment));
+  const onFilterChange = useCallback(
+    (event) => {
+      setFilter(event.target.value);
+    },
+    [setFilter]
+  );
+
+  const onConnectClick = useCallback(
+    ({ id }) => {
+      dispatch(ConnActions.setConnecting());
+      router.push(`/server/${id}`);
+    },
+    [dispatch, router]
+  );
+
+  const onTestConnectionClick = useCallback(
+    (server) => {
+      dispatch(ConnActions.test(server));
+    },
+    [dispatch]
+  );
+
+  const onAddClick = useCallback(() => dispatch(ServersActions.startEditing()), [dispatch]);
+
+  const onSettingsClick = useCallback(() => dispatch(ConfigActions.startEditing()), [dispatch]);
+
+  const onEditClick = useCallback((server) => dispatch(ServersActions.startEditing(server.id)), [
+    dispatch,
+  ]);
+
+  const onDuplicateClick = useCallback(
+    (server) => dispatch(ServersActions.duplicateServer({ server })),
+    [dispatch]
+  );
+
+  const onSaveClick = useCallback(
+    (server) => {
+      const id = servers.editingServer && servers.editingServer.id;
+      dispatch(ServersActions.saveServer({ id, server }));
+    },
+    [dispatch, servers]
+  );
+
+  const onCancelClick = useCallback(() => dispatch(ServersActions.finishEditing()), [dispatch]);
+
+  const onRemoveClick = useCallback(() => {
+    const id = servers.editingServer && servers.editingServer.id;
+    dispatch(ServersActions.removeServer({ id }));
+  }, [dispatch, servers]);
+
+  const onSettingsSaveClick = useCallback((config) => dispatch(ConfigActions.saveConfig(config)), [
+    dispatch,
+  ]);
+
+  const onSettingsCancelClick = useCallback(() => dispatch(ConfigActions.finishEditing()), [
+    dispatch,
+  ]);
+
+  const selected = servers.editingServer || {};
+  const filteredServers = filterServers(filter, servers.items);
+
+  const testConnection = {
+    connected: connections.testConnected,
+    connecting: connections.testConnecting,
+    error: connections.testError,
+  };
+
+  return (
+    <div style={STYLES.wrapper}>
+      <div style={STYLES.header}>
+        <Header items={BREADCRUMB} />
+      </div>
+      <div style={STYLES.container}>
+        <ServerFilter
+          onFilterChange={onFilterChange}
+          onAddClick={onAddClick}
+          onSettingsClick={onSettingsClick}
+        />
+
+        {connections.error && (
+          <Message
+            closeable
+            title="Connection Error"
+            message={connections.error.message}
+            type="error"
+          />
+        )}
+
+        <ServerList
+          servers={filteredServers}
+          onEditClick={onEditClick}
+          onConnectClick={onConnectClick}
+          config={config}
+        />
+
+        {servers.isEditing && (
+          <ServerModalForm
+            server={selected}
+            error={servers.error}
+            testConnection={testConnection}
+            onTestConnectionClick={onTestConnectionClick}
+            onDuplicateClick={onDuplicateClick}
+            onSaveClick={onSaveClick}
+            onCancelClick={onCancelClick}
+            onRemoveClick={onRemoveClick}
+          />
+        )}
+
+        {config.isEditing && (
+          <SettingsModalForm
+            config={config}
+            error={config.error}
+            onSaveClick={onSettingsSaveClick}
+            onCancelClick={onSettingsCancelClick}
+          />
+        )}
+      </div>
+      <div style={STYLES.footer}>
+        <Footer status={status} />
+      </div>
+    </div>
+  );
+};
+
+ServerManagement.displayName = 'ServerManagement';
+
+ServerManagement.propTypes = {
+  router: PropTypes.object.isRequired,
+};
+
+export default withRouter(ServerManagement);
