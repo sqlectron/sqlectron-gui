@@ -1,19 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const log = global.SQLECTRON_CONFIG.log;
 
-export default class LogStatus extends Component {
-  render() {
-    if (!log.console && !log.file) {
-      return null;
-    }
-
-    return (
-      <a className="ui red label">
-        <i className="terminal icon" />
-        Log
-        <div className="detail">{log.level}</div>
-      </a>
-    );
+const LogStatus = () => {
+  if (!log.console && !log.file) {
+    return null;
   }
-}
+
+  return (
+    <a className="ui red label" style={{ cursor: 'default' }}>
+      <i className="terminal icon" />
+      Log
+      <div className="detail">{log.level}</div>
+    </a>
+  );
+};
+
+LogStatus.displayName = 'LogStatus';
+
+export default LogStatus;
