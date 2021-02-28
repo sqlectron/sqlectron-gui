@@ -15,8 +15,8 @@ export default class TableCell extends Component {
     onOpenPreviewClick: PropTypes.func.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.contextMenu = null;
 
     this.onContextMenu = this.onContextMenu.bind(this);

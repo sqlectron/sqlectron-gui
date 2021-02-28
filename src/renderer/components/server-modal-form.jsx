@@ -33,8 +33,8 @@ export default class ServerModalForm extends Component {
     testConnection: PropTypes.object,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     const server = props.server || {};
     this.state = {
       ...server,

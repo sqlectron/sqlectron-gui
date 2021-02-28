@@ -41,8 +41,8 @@ export default class QueryResultTable extends Component {
     rowCount: PropTypes.oneOfType([PropTypes.array, PropTypes.number]),
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       columnWidths: {},
       autoColumnWidths: [],

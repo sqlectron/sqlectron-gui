@@ -93,8 +93,8 @@ class QueryBrowserContainer extends Component {
     children: PropTypes.node,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       tabNavPosition: 0,
       sideBarWidth: SIDEBAR_WIDTH,

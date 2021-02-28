@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import PropTypes from 'prop-types';
 
 export default class PromptModal extends Component {
@@ -10,15 +10,17 @@ export default class PromptModal extends Component {
     type: PropTypes.string.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+
+    this.ref = createRef();
   }
 
   componentDidMount() {
-    $(this.refs.promptModal)
+    $(this.ref.current)
       .modal({
         closable: false,
         detachable: false,
@@ -35,7 +37,7 @@ export default class PromptModal extends Component {
   }
 
   componentWillUnmount() {
-    $(this.refs.promptModal).modal('hide');
+    $(this.ref.current).modal('hide');
   }
 
   handleKeyPress(event) {
@@ -52,7 +54,7 @@ export default class PromptModal extends Component {
     const { title, message, type } = this.props;
 
     return (
-      <div className="ui modal" ref="promptModal">
+      <div className="ui modal" ref={this.ref}>
         <div className="header">{title}</div>
         <div className="content">
           {message}

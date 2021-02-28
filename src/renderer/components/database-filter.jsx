@@ -9,8 +9,8 @@ export default class DatabaseFilter extends Component {
     onFilterChange: PropTypes.func.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.onFilterChange = this.onFilterChange.bind(this);
   }

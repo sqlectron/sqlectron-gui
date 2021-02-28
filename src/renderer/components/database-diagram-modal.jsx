@@ -31,8 +31,8 @@ export default class DatabaseDiagramModal extends Component {
     onClose: PropTypes.func.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {};
 
     this.onSelectAllTables = this.onSelectAllTables.bind(this);
