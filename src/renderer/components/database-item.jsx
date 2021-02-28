@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { remote } from 'electron';
+// import { remote } from 'electron';
 import CollapseIcon from './collapse-icon';
 import TableSubmenu from './table-submenu';
-import { sqlectron } from '../../browser/remote';
+import { DB_CLIENTS } from '../api';
 
-const Menu = remote.Menu;
-const MenuItem = remote.MenuItem;
-const CLIENTS = sqlectron.db.CLIENTS;
+// const Menu = remote.Menu;
+// const MenuItem = remote.MenuItem;
 
 export default class DatabaseItem extends Component {
   static propTypes = {
@@ -42,68 +41,61 @@ export default class DatabaseItem extends Component {
   // menu onComponentDidMount or onComponentWillMount slows table listing when database
   // has a loads of tables, because menu will be created (unnecessarily) for every table shown
   onContextMenu(event) {
-    event.preventDefault();
-
-    if (!this.contextMenu) {
-      this.buildContextMenu();
-    }
-
-    this.contextMenu.popup({
-      x: event.clientX,
-      y: event.clientY,
-    });
+    // event.preventDefault();
+    // if (!this.contextMenu) {
+    //   this.buildContextMenu();
+    // }
+    // this.contextMenu.popup({
+    //   x: event.clientX,
+    //   y: event.clientY,
+    // });
   }
 
   buildContextMenu() {
-    const {
-      client,
-      database,
-      item,
-      dbObjectType,
-      onExecuteDefaultQuery,
-      onGetSQLScript,
-    } = this.props;
-
-    this.contextMenu = new Menu();
-    if (dbObjectType === 'Table' || dbObjectType === 'View') {
-      this.contextMenu.append(
-        new MenuItem({
-          label: 'Select Rows (with limit)',
-          click: onExecuteDefaultQuery.bind(this, database, item),
-        })
-      );
-    }
-
-    this.contextMenu.append(new MenuItem({ type: 'separator' }));
-
-    const { disabledFeatures } = CLIENTS.find((dbClient) => dbClient.key === client);
-    if (!disabledFeatures || !disabledFeatures.includes('scriptCreateTable')) {
-      this.contextMenu.append(
-        new MenuItem({
-          label: 'Create Statement',
-          click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
-        })
-      );
-    }
-
-    if (dbObjectType === 'Table') {
-      const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
-      const labelsByTypes = {
-        SELECT: 'Select Statement',
-        INSERT: 'Insert Statement',
-        UPDATE: 'Update Statement',
-        DELETE: 'Delete Statement',
-      };
-
-      actionTypes.forEach((actionType) => {
-        this.contextMenu.append(
-          new MenuItem({
-            label: labelsByTypes[actionType],
-            click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
-          })
-        );
-      });
-    }
+    // const {
+    //   client,
+    //   database,
+    //   item,
+    //   dbObjectType,
+    //   onExecuteDefaultQuery,
+    //   onGetSQLScript,
+    // } = this.props;
+    // this.contextMenu = new Menu();
+    // if (dbObjectType === 'Table' || dbObjectType === 'View') {
+    //   this.contextMenu.append(
+    //     new MenuItem({
+    //       label: 'Select Rows (with limit)',
+    //       click: onExecuteDefaultQuery.bind(this, database, item),
+    //     })
+    //   );
+    // }
+    // this.contextMenu.append(new MenuItem({ type: 'separator' }));
+    // const { disabledFeatures } = DB_CLIENTS.find((dbClient) => dbClient.key === client);
+    // if (!disabledFeatures || !disabledFeatures.includes('scriptCreateTable')) {
+    //   this.contextMenu.append(
+    //     new MenuItem({
+    //       label: 'Create Statement',
+    //       click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
+    //     })
+    //   );
+    // }
+    // if (dbObjectType === 'Table') {
+    //   const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
+    //   const labelsByTypes = {
+    //     SELECT: 'Select Statement',
+    //     INSERT: 'Insert Statement',
+    //     UPDATE: 'Update Statement',
+    //     DELETE: 'Delete Statement',
+    //   };
+    //   actionTypes.forEach((actionType) => {
+    //     this.contextMenu.append(
+    //       new MenuItem({
+    //         label: labelsByTypes[actionType],
+    //         click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
+    //       })
+    //     );
+    //   });
+    // }
   }
 
   toggleTableCollapse() {

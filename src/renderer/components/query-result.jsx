@@ -22,7 +22,7 @@ export default class QueryResult extends Component {
         rows: PropTypes.array,
         rowCount: PropTypes.number,
         affectedRows: PropTypes.number,
-      })
+      }),
     ),
     isExecuting: PropTypes.bool,
     error: PropTypes.object,
@@ -86,7 +86,7 @@ export default class QueryResult extends Component {
     let msgDuplicatedColumns = null;
     const groupFields = groupBy(fields, (field) => field.name);
     const duplicatedColumns = Object.keys(groupFields).filter(
-      (field) => groupFields[field].length > 1
+      (field) => groupFields[field].length > 1,
     );
     if (duplicatedColumns.length) {
       msgDuplicatedColumns = (
@@ -177,7 +177,7 @@ export default class QueryResult extends Component {
             totalQueries,
             queryIndex: idx,
             isMultipleResults: results.length > 1,
-          })
+          }),
         )}
       </div>
     );

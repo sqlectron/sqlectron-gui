@@ -1,6 +1,7 @@
 import path from 'path';
 import html2canvas from 'html2canvas';
-import { getCurrentDBConn } from './connections';
+// import { getCurrentDBConn } from './connections';
+import { sqlectron } from '../api';
 import * as FileHandler from '../utils/file-handler';
 
 export const REFRESH_DATABASES = 'REFRESH_DATABASES';
@@ -122,11 +123,11 @@ function shouldFetchDatabases(state) {
 }
 
 function fetchDatabases(filter) {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_DATABASES_REQUEST });
     try {
-      const dbConn = getCurrentDBConn(getState());
-      const databases = await dbConn.listDatabases(filter);
+      // const dbConn = getCurrentDBConn(getState());
+      const databases = await sqlectron.db.listDatabases(filter);
       dispatch({ type: FETCH_DATABASES_SUCCESS, databases });
     } catch (error) {
       dispatch({ type: FETCH_DATABASES_FAILURE, error });

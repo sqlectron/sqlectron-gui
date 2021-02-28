@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { remote } from 'electron';
+// import { remote } from 'electron';
 import DatabaseListItemMetatada from './database-list-item-metadata';
 import DatabaseFilter from './database-filter';
 
-const { Menu, MenuItem } = remote;
+// const { Menu, MenuItem } = remote;
 
 const STYLE = {
   database: {
@@ -59,29 +59,28 @@ export default class DatabaseListItem extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.contextMenu || !this.isMetadataLoaded(nextProps)) {
-      return;
-    }
-
-    this.contextMenu = new Menu();
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Refresh Database',
-        click: this.props.onRefreshDatabase.bind(this, nextProps.database),
-      })
-    );
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Open Tab',
-        click: this.props.onOpenTab.bind(this, nextProps.database),
-      })
-    );
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Show Database Diagram',
-        click: this.props.onShowDiagramModal.bind(this, nextProps.database),
-      })
-    );
+    // if (this.contextMenu || !this.isMetadataLoaded(nextProps)) {
+    //   return;
+    // }
+    // // this.contextMenu = new Menu();
+    // this.contextMenu.append(
+    //   new MenuItem({
+    //     label: 'Refresh Database',
+    //     click: this.props.onRefreshDatabase.bind(this, nextProps.database),
+    //   })
+    // );
+    // this.contextMenu.append(
+    //   new MenuItem({
+    //     label: 'Open Tab',
+    //     click: this.props.onOpenTab.bind(this, nextProps.database),
+    //   })
+    // );
+    // this.contextMenu.append(
+    //   new MenuItem({
+    //     label: 'Show Database Diagram',
+    //     click: this.props.onShowDiagramModal.bind(this, nextProps.database),
+    //   })
+    // );
   }
 
   onContextMenu(event) {

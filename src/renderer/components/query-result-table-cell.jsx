@@ -1,11 +1,11 @@
-import isPlainObject from 'lodash.isplainobject';
-import { remote } from 'electron';
+// import isPlainObject from 'lodash.isplainobject';
+// import { remote } from 'electron';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { valueToString } from '../utils/convert';
 
-const { Menu, MenuItem } = remote;
+// const { Menu, MenuItem } = remote;
 
 export default class TableCell extends Component {
   static propTypes = {
@@ -23,28 +23,24 @@ export default class TableCell extends Component {
   }
 
   onContextMenu(event) {
-    event.preventDefault();
-
-    const value = this.getValue();
-
-    const hasPreview = typeof value === 'string' || isPlainObject(value);
-
-    if (!this.contextMenu && hasPreview) {
-      this.contextMenu = new Menu();
-      this.contextMenu.append(
-        new MenuItem({
-          label: 'Open Preview',
-          click: () => this.props.onOpenPreviewClick(value),
-        })
-      );
-    }
-
-    if (this.contextMenu) {
-      this.contextMenu.popup({
-        x: event.clientX,
-        y: event.clientY,
-      });
-    }
+    // event.preventDefault();
+    // const value = this.getValue();
+    // const hasPreview = typeof value === 'string' || isPlainObject(value);
+    // if (!this.contextMenu && hasPreview) {
+    //   this.contextMenu = new Menu();
+    //   this.contextMenu.append(
+    //     new MenuItem({
+    //       label: 'Open Preview',
+    //       click: () => this.props.onOpenPreviewClick(value),
+    //     })
+    //   );
+    // }
+    // if (this.contextMenu) {
+    //   this.contextMenu.popup({
+    //     x: event.clientX,
+    //     y: event.clientY,
+    //   });
+    // }
   }
 
   getValue() {

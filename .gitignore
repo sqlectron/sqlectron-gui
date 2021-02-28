@@ -11,3 +11,4 @@ npm-debug.log
 *.sqlite3
 *.db
 test/fixtures/sqlite/sqlectron.json
+tsconfig.tsbuildinfo

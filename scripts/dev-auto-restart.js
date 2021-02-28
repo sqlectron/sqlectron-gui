@@ -1,13 +1,13 @@
 #!/usr/bin/env node
-/* eslint no-var: 0, object-shorthand:0 */
+/* eslint no-var: 0, object-shorthand:0,@typescript-eslint/no-var-requires:0 */
 var fs = require('fs');
 var join = require('path').join;
 var electron = require('electron');
 
-var main = join(__dirname, '../src/browser/main.js');
-var watch = [join(__dirname, '../src/browser')];
+var main = join(__dirname, '../out/browser/main.js');
+var watch = [join(__dirname, '../out/browser')];
 
-var pathCore = join(__dirname, '../../sqlectron-core/lib');
+var pathCore = join(__dirname, '../../sqlectron-db-core/lib');
 try {
   fs.accessSync(pathCore, fs.F_OK);
   watch.push(pathCore);
@@ -21,5 +21,5 @@ require('spawn-auto-restart')({
     command: electron,
     args: [main, '--dev'],
   },
-  watch: watch,
+  watch,
 });

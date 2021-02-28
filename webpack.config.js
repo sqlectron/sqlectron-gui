@@ -11,16 +11,21 @@ const isProd = process.env.NODE_ENV === 'production';
 
 const webpackConfig = {
   mode: isProd ? 'production' : 'development',
-  devtool: 'eval-source-map',
-  target: 'electron-renderer',
+  devtool: 'cheap-module-source-map',
+  target: 'web',
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
     modules: ['node_modules', 'src/renderer'],
   },
   entry: {},
   output: {},
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|vendor)/,
@@ -100,6 +105,9 @@ const webpackConfig = {
       },
     }),
   ],
+  devServer: {
+    https: true,
+  },
 };
 
 if (isProd) {

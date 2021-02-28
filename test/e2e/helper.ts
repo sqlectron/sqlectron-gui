@@ -1,10 +1,11 @@
-const path = require('path');
-const { expect } = require('chai');
-const electronPath = require('electron');
-const { electron } = require('playwright-electron');
+import * as path from 'path';
+import { expect } from 'chai';
+import electronPath = require('electron');
+import { electron } from 'playwright-electron';
 
 const startApp = async ({ sqlectronHome }) => {
   // Start Electron application
+  // @ts-ignore
   const app = await electron.launch(electronPath, {
     path: electronPath,
     args:
@@ -58,7 +59,7 @@ const expectToEqualText = async (page, selector, text) => {
   expect(await page.$eval(selector, (node) => node.innerText)).to.be.equal(text);
 };
 
-module.exports = {
+export default {
   startApp,
   endApp,
   wait,

@@ -1,4 +1,4 @@
-import { sqlectron } from '../../browser/remote';
+import { sqlectron } from '../api';
 import * as ConfigActions from './config';
 
 export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';

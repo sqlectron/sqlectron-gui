@@ -1,5 +1,6 @@
-import { getDBConnByName } from './connections';
+// import { getDBConnByName } from './connections';
 import { appendQuery } from './queries';
+import { sqlectron } from '../api';
 
 export const GET_SCRIPT_REQUEST = 'GET_SCRIPT_REQUEST';
 export const GET_SCRIPT_SUCCESS = 'GET_SCRIPT_SUCCESS';
@@ -52,22 +53,22 @@ function getSQLScript(database, item, actionType, objectType, schema) {
       objectType,
     });
     try {
-      const dbConn = getDBConnByName(database);
+      // const dbConn = getDBConnByName(database);
       let script;
       if (actionType === 'CREATE' && objectType === 'Table') {
-        [script] = await dbConn.getTableCreateScript(item, schema);
+        [script] = await sqlectron.db.getTableCreateScript(item, schema);
       } else if (actionType === 'CREATE' && objectType === 'View') {
-        [script] = await dbConn.getViewCreateScript(item, schema);
+        [script] = await sqlectron.db.getViewCreateScript(item, schema);
       } else if (actionType === 'CREATE') {
-        [script] = await dbConn.getRoutineCreateScript(item, objectType, schema);
+        [script] = await sqlectron.db.getRoutineCreateScript(item, objectType, schema);
       } else if (actionType === 'SELECT') {
-        script = await dbConn.getTableSelectScript(item, schema);
+        script = await sqlectron.db.getTableSelectScript(item, schema);
       } else if (actionType === 'INSERT') {
-        script = await dbConn.getTableInsertScript(item, schema);
+        script = await sqlectron.db.getTableInsertScript(item, schema);
       } else if (actionType === 'UPDATE') {
-        script = await dbConn.getTableUpdateScript(item, schema);
+        script = await sqlectron.db.getTableUpdateScript(item, schema);
       } else if (actionType === 'DELETE') {
-        script = await dbConn.getTableDeleteScript(item, schema);
+        script = await sqlectron.db.getTableDeleteScript(item, schema);
       }
       dispatch({
         type: GET_SCRIPT_SUCCESS,

@@ -99,7 +99,7 @@ export default function (state = INITIAL_STATE, action) {
           selectedQuery: action.selectedQuery,
           copied: false,
         },
-        { table: action.table }
+        { table: action.table },
       );
     }
     case types.COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST: {
@@ -212,7 +212,7 @@ function changeStateByCurrentQuery(oldFullState, newCurrentQueryState, options =
     oldQueryState.name = createQueryName(
       oldFullState.currentQueryId,
       oldQueryState.database,
-      options.table
+      options.table,
     );
   }
 

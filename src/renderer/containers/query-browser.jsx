@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { sqlectron } from '../../browser/remote';
+import { DB_CLIENTS } from '../api';
 import * as ConnActions from '../actions/connections';
 import * as QueryActions from '../actions/queries';
 import * as DbAction from '../actions/databases';
@@ -62,7 +62,7 @@ const STYLES = {
   resizeable: { width: 'auto', maxWidth: '100%' },
 };
 
-const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
+const CLIENTS = DB_CLIENTS.reduce((clients, dbClient) => {
   /* eslint no-param-reassign:0 */
   clients[dbClient.key] = {
     title: dbClient.name,
@@ -215,7 +215,7 @@ class QueryBrowserContainer extends Component {
   onExecuteDefaultQuery(database, table) {
     const schema = table.schema || this.props.connections.server.schema;
     this.props.dispatch(
-      QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema)
+      QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema),
     );
   }
 
@@ -243,7 +243,7 @@ class QueryBrowserContainer extends Component {
   onGetSQLScript(database, item, actionType, objectType) {
     const schema = item.schema || this.props.connections.server.schema;
     this.props.dispatch(
-      getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema)
+      getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema),
     );
   }
 
@@ -291,7 +291,7 @@ class QueryBrowserContainer extends Component {
     dispatch(DbAction.generateDatabaseDiagram());
 
     $(':checkbox:checked', 'div.ui.list').map((index, checkbox) =>
-      selectedTables.push(checkbox.id)
+      selectedTables.push(checkbox.id),
     );
 
     dispatch(selectTablesForDiagram(selectedTables));
@@ -522,8 +522,8 @@ class QueryBrowserContainer extends Component {
       );
     });
 
-    const { disabledFeatures } = sqlectron.db.CLIENTS.find(
-      (dbClient) => dbClient.key === connections.server.client
+    const { disabledFeatures } = DB_CLIENTS.find(
+      (dbClient) => dbClient.key === connections.server.client,
     );
 
     const allowCancel = !disabledFeatures || !disabledFeatures.includes('cancelQuery');

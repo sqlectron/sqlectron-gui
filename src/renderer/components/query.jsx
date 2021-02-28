@@ -80,7 +80,7 @@ export default class Query extends Component {
   componentDidMount() {
     this.refs.queryBoxTextarea.editor.on(
       EVENT_KEYS.onSelectionChange,
-      debounce(this.onSelectionChange, 100)
+      debounce(this.onSelectionChange, 100),
     );
 
     // init with the auto complete disabled
@@ -130,7 +130,7 @@ export default class Query extends Component {
 
     this.refs.queryBoxTextarea.editor.setOption(
       'enableLiveAutocompletion',
-      nextProps.enabledLiveAutoComplete
+      nextProps.enabledLiveAutoComplete,
     );
   }
 
@@ -144,14 +144,14 @@ export default class Query extends Component {
   componentWillUnmount() {
     this.refs.queryBoxTextarea.editor.removeListener(
       EVENT_KEYS.onSelectionChange,
-      this.onSelectionChange
+      this.onSelectionChange,
     );
   }
 
   onSelectionChange() {
     this.props.onSelectionChange(
       this.props.query.query,
-      this.refs.queryBoxTextarea.editor.getCopyText()
+      this.refs.queryBoxTextarea.editor.getCopyText(),
     );
   }
 

@@ -55,7 +55,7 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         didInvalidate: action.results.some(({ command }) =>
-          COMMANDS_TRIGER_REFRESH.includes(command)
+          COMMANDS_TRIGER_REFRESH.includes(command),
         ),
       };
     }

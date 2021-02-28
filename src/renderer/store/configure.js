@@ -2,21 +2,20 @@ import { createStore, applyMiddleware } from 'redux';
 import { createLogger as createReduxLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
-import { createLogger } from '../../browser/remote';
+import { CONFIG, sqlectron } from '../api';
 
 const middlewares = [thunkMiddleware];
 
 /* eslint global-require:0 */
-const isLogConsoleEnabled = global.SQLECTRON_CONFIG.log.console;
-const isLogFileEnabled = global.SQLECTRON_CONFIG.log.file;
+console.log('***CONFIGURE CONFIG', CONFIG);
+const isLogConsoleEnabled = CONFIG.log.console;
+const isLogFileEnabled = CONFIG.log.file;
 
 if (isLogConsoleEnabled || isLogFileEnabled) {
   const loggerConfig = {
-    level: global.SQLECTRON_CONFIG.log.level,
+    level: CONFIG.log.level,
     collapsed: true,
   };
-
-  const mainLogger = isLogFileEnabled ? createLogger('renderer:redux') : null;
 
   loggerConfig.logger = {};
 
@@ -35,9 +34,9 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
           // otherwise is too much private information
           // the user would need to remove to issue a bug
           const lastArg = args[args.length - 1];
-          if (lastArg && lastArg.error) {
-            mainLogger.error('Error', lastArg.error);
-            mainLogger.error('Error Stack', lastArg.error.stack);
+          if (lastArg && lastArg.error && isLogFileEnabled) {
+            sqlectron.logger.error('Error', lastArg.error);
+            sqlectron.logger.error('Error Stack', lastArg.error.stack);
           }
         }
       };

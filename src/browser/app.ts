@@ -2,6 +2,7 @@ import { app, dialog } from 'electron';
 
 import createLogger from './logger';
 import { buildNewWindow } from './window';
+import { registerIPCMainHandlers } from './ipcMain';
 
 const logger = createLogger('app');
 
@@ -16,6 +17,11 @@ const logger = createLogger('app');
 
 app.allowRendererProcessReuse = false;
 
+// Allow electron load the app using a self signed ssl certificate in development
+if (process.env.NODE_ENV === 'development' || process.env.DEV_TOOLS === 'true') {
+  app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
+}
+
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -26,6 +32,7 @@ app.on('window-all-closed', () => {
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
 app.whenReady().then(async () => {
+  registerIPCMainHandlers();
   if (process.env.NODE_ENV === 'development' || process.env.DEV_TOOLS === 'true') {
     // eslint-disable-next-line
     console.log('Loading electron extensions...');

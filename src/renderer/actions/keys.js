@@ -1,4 +1,5 @@
-import { getDBConnByName } from './connections';
+// import { getDBConnByName } from './connections';
+import { sqlectron } from '../api';
 
 export const FETCH_KEYS_REQUEST = 'FETCH_KEYS_REQUEST';
 export const FETCH_KEYS_SUCCESS = 'FETCH_KEYS_SUCCESS';
@@ -25,8 +26,8 @@ function fetchTableKeys(database, table, schema) {
   return async (dispatch) => {
     dispatch({ type: FETCH_KEYS_REQUEST, database, table });
     try {
-      const dbConn = getDBConnByName(database);
-      const tableKeys = await dbConn.getTableKeys(table, schema);
+      // const dbConn = getDBConnByName(database);
+      const tableKeys = await sqlectron.db.getTableKeys(table, schema);
       dispatch({
         type: FETCH_KEYS_SUCCESS,
         database,

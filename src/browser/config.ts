@@ -5,16 +5,17 @@
  * without passing through a transpiler, this file must use ES5.
  */
 
-const fs = require('fs');
-const path = require('path');
-const defaultsDeep = require('lodash.defaultsdeep');
-const sqlectron = require('sqlectron-core');
+import * as fs from 'fs';
+import * as path from 'path';
+import defaultsDeep from 'lodash.defaultsdeep';
+import * as sqlectron from './core';
+import { Config } from '../common/types/config';
 
 let config;
 
 const cryptoSecret = 'j[F6Y6NoWT}+YG|4c|-<89:ByJ83-9Aj?O8>$Zk/[WFk_~gFbg7<wm+*V|A{xQZ,';
 
-exports.get = function getConfiguration(cleanCache) {
+export const getConfig = function getConfiguration(cleanCache: boolean): Config {
   if (config && !cleanCache) {
     return config;
   }
@@ -22,6 +23,7 @@ exports.get = function getConfiguration(cleanCache) {
   const args = process.argv || [];
   const argsConfig = {
     devMode: args.indexOf('--dev') !== -1,
+    printVersion: false,
   };
 
   if (args.indexOf('--version') !== -1 || args.indexOf('-v') !== -1) {
@@ -29,7 +31,17 @@ exports.get = function getConfiguration(cleanCache) {
   }
 
   const basePath = path.resolve(__dirname, '..', '..');
-  const packageConfig = readJSON(path.resolve(basePath, 'package.json'));
+  let packageConfig = readJSON(path.resolve(basePath, 'package.json'));
+  packageConfig = {
+    name: packageConfig.name,
+    version: packageConfig.version,
+    description: packageConfig.description,
+    author: packageConfig.author,
+    license: packageConfig.license,
+    homepage: packageConfig.homepage,
+    bugs: packageConfig.bugs,
+    repository: packageConfig.repository,
+  };
 
   sqlectron.config.prepareSync(cryptoSecret);
   const appConfig = sqlectron.config.getSync();
@@ -44,7 +56,7 @@ exports.get = function getConfiguration(cleanCache) {
     log: {
       console: isDev,
       file: false,
-      level: appConfig.level || (process.env.DEBUG ? 'debug' : 'error'),
+      level: appConfig.log.level || (process.env.DEBUG ? 'debug' : 'error'),
       path: configPath.replace('.json', '.log'),
     },
   };

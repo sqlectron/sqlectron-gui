@@ -1,8 +1,6 @@
 import * as types from '../actions/connections';
 import * as serverTypes from '../actions/servers';
-import { sqlectron } from '../../browser/remote';
-
-const { CLIENTS } = sqlectron.db;
+import { DB_CLIENTS } from '../api';
 
 const INITIAL_STATE = {
   connected: false,
@@ -23,8 +21,8 @@ export default function (state = INITIAL_STATE, action) {
     }
     case types.CONNECTION_REQUEST: {
       // eslint-disable-next-line max-len
-      const { disabledFeatures } = CLIENTS.find(
-        (dbClient) => dbClient.key === action.server.client
+      const { disabledFeatures } = DB_CLIENTS.find(
+        (dbClient) => dbClient.key === action.server.client,
       );
       return {
         ...state,

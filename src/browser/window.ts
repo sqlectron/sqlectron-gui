@@ -1,8 +1,8 @@
-import { resolve } from 'path';
-import { BrowserWindow, ipcMain, Menu } from 'electron';
+import * as path from 'path';
+import { BrowserWindow, ipcMain, Menu, App } from 'electron';
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
-import { get as getConfig } from './config';
+import { getConfig } from './config';
 import createLogger from './logger';
 
 const logger = createLogger('window');
@@ -17,30 +17,36 @@ const WINDOWS = {};
 // Also used as identifier to for each window.
 let windowsNumber = 0;
 
-export function buildNewWindow(app) {
-  const appConfig = getConfig();
+export function buildNewWindow(app: App): void {
+  const appConfig = getConfig(false);
 
   windowsNumber += 1;
   const mainWindow = new BrowserWindow({
     title: appConfig.name,
-    icon: resolve(__dirname, '..', '..', 'build', 'app.png'),
+    icon: path.resolve(__dirname, '..', '..', 'build', 'app.png'),
     width: 1024,
     height: 700,
     minWidth: 512,
     minHeight: 350,
     webPreferences: {
-      preload: resolve(__dirname, 'preload.js'),
-      nodeIntegration: true,
+      webSecurity: true,
+      nativeWindowOpen: true,
+      worldSafeExecuteJavaScript: true,
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
+      preload: path.resolve(__dirname, 'preload.js'),
     },
   });
 
   attachMenuToWindow(app, buildNewWindow, appConfig);
 
   // and load the index.html of the app.
-  let entryBasePath = 'file://' + resolve(__dirname, '..');
+  let entryBasePath = 'file://' + path.resolve(__dirname, '..');
   if (devMode) {
-    entryBasePath = 'http://localhost:8080';
+    entryBasePath = 'https://localhost:8080';
   }
+  console.log('******ENTRY', entryBasePath);
 
   mainWindow.loadURL(entryBasePath + '/static/index.html');
 
@@ -48,23 +54,23 @@ export function buildNewWindow(app) {
   mainWindow.on('closed', () => delete WINDOWS[windowsNumber]);
 
   if (devMode || process.env.DEV_TOOLS === 'true') {
-    mainWindow.openDevTools();
+    mainWindow.webContents.openDevTools();
     mainWindow.webContents.on('context-menu', (_, props) => {
       const { x, y } = props;
       Menu.buildFromTemplate([
         {
           label: 'Inspect element',
           click() {
-            mainWindow.inspectElement(x, y);
+            mainWindow.webContents.inspectElement(x, y);
           },
         },
-      ]).popup(mainWindow);
+      ]).popup({ window: mainWindow });
     });
   }
 
   ipcMain.on('sqlectron:check-upgrade', () => {
     checkUpdate(mainWindow, appConfig).catch((err) =>
-      logger.error('Unable to check for updates', err)
+      logger.error('Unable to check for updates', err),
     );
   });
 }

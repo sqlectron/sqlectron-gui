@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import set from 'lodash.set';
 import Select from 'react-select';
-import { sqlectron } from '../../browser/remote';
+import { DB_CLIENTS } from '../api';
 import ConfirmModal from './confim-modal';
 import Message from './message';
 import Checkbox from './checkbox';
@@ -11,7 +11,7 @@ import { requireClientLogo } from './require-context';
 require('react-select/dist/react-select.css');
 require('./override-select.css');
 
-const CLIENTS = sqlectron.db.CLIENTS.map((dbClient) => ({
+const CLIENTS = DB_CLIENTS.map((dbClient) => ({
   value: dbClient.key,
   logo: requireClientLogo(dbClient.key),
   label: dbClient.name,

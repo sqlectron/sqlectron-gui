@@ -1,5 +1,5 @@
 import cloneDeep from 'lodash.clonedeep';
-import { config, sqlectron } from '../../browser/remote';
+import { sqlectron } from '../api';
 
 export const LOAD_CONFIG_REQUEST = 'LOAD_CONFIG_REQUEST';
 export const LOAD_CONFIG_SUCCESS = 'LOAD_CONFIG_SUCCESS';
@@ -16,7 +16,7 @@ export function loadConfig() {
     try {
       const forceCleanCache = true;
       const configPath = await sqlectron.config.path();
-      const remoteConfig = await config.get(forceCleanCache);
+      const remoteConfig = await sqlectron.config.get(forceCleanCache);
 
       // Remove any "reference" to the remote IPC object
       const configData = cloneDeep(remoteConfig);

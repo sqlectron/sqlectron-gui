@@ -1,8 +1,8 @@
 /* eslint global-require:0, no-var: 0, no-extend-native: 0, vars-on-top: 0 */
-const sqlectron = require('sqlectron-core');
-var config = require('./config');
+import * as sqlectron from './core';
+import { getConfig } from './config';
 
-var configData = config.get();
+const configData = getConfig(false);
 
 if (configData.printVersion) {
   console.log(configData.name, configData.version); // eslint-disable-line no-console
@@ -16,12 +16,5 @@ if (
   sqlectron.setSelectLimit();
 }
 
-// enables ES6+ support
-if (configData.devMode) {
-  require('@babel/register');
-}
-
-require('@babel/polyfill');
-
 // starts the electron app
-require('./app');
+import './app';

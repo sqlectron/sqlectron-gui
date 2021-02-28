@@ -18,5 +18,5 @@ ReactDOM.render(
       </Route>
     </Router>
   </Provider>,
-  document.getElementById('content')
+  document.getElementById('content'),
 );

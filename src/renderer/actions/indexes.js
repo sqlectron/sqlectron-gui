@@ -1,4 +1,5 @@
-import { getDBConnByName } from './connections';
+// import { getDBConnByName } from './connections';
+import { sqlectron } from '../api';
 
 export const FETCH_INDEXES_REQUEST = 'FETCH_INDEXES_REQUEST';
 export const FETCH_INDEXES_SUCCESS = 'FETCH_INDEXES_SUCCESS';
@@ -25,8 +26,8 @@ function fetchTableIndexes(database, table) {
   return async (dispatch) => {
     dispatch({ type: FETCH_INDEXES_REQUEST, database, table });
     try {
-      const dbConn = getDBConnByName(database);
-      const indexes = await dbConn.listTableIndexes(table);
+      // const dbConn = getDBConnByName(database);
+      const indexes = await sqlectron.db.listTableIndexes(table);
       dispatch({
         type: FETCH_INDEXES_SUCCESS,
         database,

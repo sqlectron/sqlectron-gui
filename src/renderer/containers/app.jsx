@@ -1,8 +1,9 @@
-import { webFrame } from 'electron';
+// import { webFrame } from 'electron';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { CONFIG } from '../api';
 import * as ConfigActions from '../actions/config';
 import imageSrc from './sqlectron.gif';
 
@@ -86,7 +87,7 @@ class AppContainer extends Component {
     if (typeof zoomFactor !== 'undefined' && zoomFactor > 0) {
       // Apply the zoom factor
       // Required for HiDPI support
-      webFrame.setZoomFactor(zoomFactor);
+      // webFrame.setZoomFactor(zoomFactor);
     }
     if (enabledDarkTheme === true) {
       $('body').addClass('dark-theme');
@@ -125,7 +126,7 @@ class AppContainer extends Component {
         const loadingInner = document.createElement('div');
 
         const version = document.createElement('H3');
-        version.appendChild(document.createTextNode(`v${global.SQLECTRON_CONFIG.version}`));
+        version.appendChild(document.createTextNode(`v${CONFIG.version}`));
 
         loadingInner.appendChild(version);
         loadingInner.appendChild(img);
@@ -140,7 +141,7 @@ class AppContainer extends Component {
           setTimeout(() => {
             loadingWrapper.remove();
           }, 500);
-        }, 4500);
+        }, 1000);
 
         document.getElementById('loading-signal').remove();
       }, 500);
