@@ -25,8 +25,8 @@ export default class DbMetadataList extends Component {
     onGetSQLScript: PropTypes.func,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = { tableCollapsed: {} };
 
     this.toggleCollapse = this.toggleCollapse.bind(this);

@@ -17,8 +17,8 @@ export default class TableSubmenu extends Component {
     onDoubleClickItem: PropTypes.func,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {};
 
     this.toggleCollapse = this.toggleCollapse.bind(this);

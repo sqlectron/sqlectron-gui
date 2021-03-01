@@ -17,8 +17,8 @@ export default class SettingsModalForm extends Component {
     error: PropTypes.object,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       ...props.config.data,
     };

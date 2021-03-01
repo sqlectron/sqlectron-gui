@@ -10,8 +10,8 @@ export default class Message extends Component {
     preformatted: PropTypes.bool,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.onClose = this.onClose.bind(this);
   }

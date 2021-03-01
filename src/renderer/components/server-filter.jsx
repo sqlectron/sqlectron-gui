@@ -9,8 +9,8 @@ export default class ServerFilter extends Component {
     onSettingsClick: PropTypes.func.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this.onFilterChange = this.onFilterChange.bind(this);
   }

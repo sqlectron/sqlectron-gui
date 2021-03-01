@@ -61,8 +61,8 @@ export default class Query extends Component {
     editorName: PropTypes.string.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {
       wrapEnabled: false,
     };

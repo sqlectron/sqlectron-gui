@@ -49,8 +49,8 @@ export default class DatabaseListItem extends Component {
     onShowDiagramModal: PropTypes.func.isRequired,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {};
     this.contextMenu = null;
 

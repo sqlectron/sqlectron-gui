@@ -24,8 +24,8 @@ export default class DatabaseItem extends Component {
     onGetSQLScript: PropTypes.func,
   };
 
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
     this.state = {};
     this.contextMenu = null;
 
