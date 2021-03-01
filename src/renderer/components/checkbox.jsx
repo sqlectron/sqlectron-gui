@@ -1,29 +1,28 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 
-export default class Checkbox extends Component {
-  static propTypes = {
-    name: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    disabled: PropTypes.bool,
-    defaultChecked: PropTypes.bool,
-    onChecked: PropTypes.func.isRequired,
-    onUnchecked: PropTypes.func.isRequired,
-  };
+const Checkbox = ({ name, label, disabled, defaultChecked, onChecked, onUnchecked }) => {
+  const ref = useRef(null);
 
-  componentDidMount() {
-    const { onChecked, onUnchecked } = this.props;
+  useEffect(() => {
+    $(ref.current).checkbox({ onChecked, onUnchecked });
+  }, [ref]);
 
-    $(this.refs.checkbox).checkbox({ onChecked, onUnchecked });
-  }
+  return (
+    <div className="ui toggle checkbox" ref={ref}>
+      <input type="checkbox" name={name} disabled={disabled} defaultChecked={defaultChecked} />
+      <label>{label}</label>
+    </div>
+  );
+};
 
-  render() {
-    const { name, label, disabled, defaultChecked } = this.props;
-    return (
-      <div className="ui toggle checkbox" ref="checkbox">
-        <input type="checkbox" name={name} disabled={disabled} defaultChecked={defaultChecked} />
-        <label>{label}</label>
-      </div>
-    );
-  }
-}
+Checkbox.propTypes = {
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+  defaultChecked: PropTypes.bool,
+  onChecked: PropTypes.func.isRequired,
+  onUnchecked: PropTypes.func.isRequired,
+};
+
+export default Checkbox;
