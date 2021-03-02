@@ -42,7 +42,17 @@ export function buildNewWindow(app) {
     entryBasePath = 'http://localhost:8080';
   }
 
-  mainWindow.loadURL(entryBasePath + '/static/index.html');
+  const appUrl = entryBasePath + '/static/index.html';
+
+  mainWindow.loadURL(appUrl);
+
+  // block navigation that would lead outside the application
+  mainWindow.webContents.on('will-navigate', (e, url) => {
+    if (url === appUrl) {
+      return;
+    }
+    e.preventDefault();
+  });
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => delete WINDOWS[windowsNumber]);
