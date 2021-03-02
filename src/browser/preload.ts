@@ -12,7 +12,8 @@ const sqlectronAPI: SqlectronAPI = {
   db: {
     getClientsSync: () => ipcRenderer.sendSync(event.DB_GET_CLIENTS_SYNC),
     handleSSHError: () => ipcRenderer.invoke(event.DB_HANDLE_SSH_ERROR),
-    connect: () => ipcRenderer.invoke(event.DB_CONNECT),
+    connect: (server: Server, database?: string) =>
+      ipcRenderer.invoke(event.DB_CONNECT, server, database),
     checkIsConnected: () => ipcRenderer.invoke(event.DB_CHECK_IS_CONNECTED),
     disconnect: () => ipcRenderer.invoke(event.DB_DISCONNECT),
     getVersion: () => ipcRenderer.invoke(event.DB_GET_VERSION),

@@ -1,18 +1,21 @@
 import { ipcMain, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 import { CLIENTS } from 'sqlectron-db-core';
+import { Database } from 'sqlectron-db-core/database';
+import { Server as DBServer, LegacyServerConfig } from 'sqlectron-db-core/server';
 import omit from 'lodash.omit';
 // import * as config from './config';
-import { config, servers } from './core';
+import { config, servers, db } from './core';
 import { getConfig } from './config';
 import createLogger from './logger';
 import * as event from '../common/event';
 import { Config } from '../common/types/config';
 import { Server } from '../common/types/server';
-import { Database, SchemaFilter, DatabaseFilter } from '../common/types/database';
+import { SchemaFilter, DatabaseFilter } from '../common/types/database';
 
 const rendererLogger = createLogger('renderer');
 
-const dbConn: Database | null = null;
+let serverSession: DBServer | null = null;
+let dbConn: Database | null = null;
 
 // Omit non-serializable objects because IPC calls cannot serialize them
 const dbClients = CLIENTS.map((c) => omit(c, 'adapter'));
@@ -73,10 +76,24 @@ function registerDBIPCMainHandlers() {
   });
   ipcMain.handle(event.DB_HANDLE_SSH_ERROR, () => dbConn?.handleSSHError());
   ipcMain.handle(event.DB_CHECK_IS_CONNECTED, () => dbConn?.checkIsConnected());
-  ipcMain.handle(event.DB_CONNECT, (e: IpcMainInvokeEvent, server?: Server, database?: string) => {
-    console.log('connect', server, database);
-    dbConn?.connect();
-  });
+  ipcMain.handle(
+    event.DB_CONNECT,
+    async (e: IpcMainInvokeEvent, server: Server, database?: string) => {
+      const legacyServer = server as LegacyServerConfig;
+      serverSession = db.createServer(legacyServer);
+
+      dbConn = serverSession.db(database as string);
+      if (!dbConn) {
+        dbConn = serverSession.createConnection(database);
+      }
+
+      if (!dbConn) {
+        throw new Error('Could not connect to database');
+      }
+
+      await dbConn?.connect();
+    },
+  );
   ipcMain.handle(event.DB_DISCONNECT, () => dbConn?.disconnect());
   ipcMain.handle(event.DB_GET_VERSION, () => dbConn?.getVersion());
   ipcMain.handle(event.DB_LIST_DATABASES, (e: IpcMainInvokeEvent, filter: DatabaseFilter) =>
@@ -85,9 +102,9 @@ function registerDBIPCMainHandlers() {
   ipcMain.handle(event.DB_LIST_SCHEMAS, (e: IpcMainInvokeEvent, filter: SchemaFilter) =>
     dbConn?.listSchemas(filter),
   );
-  ipcMain.handle(event.DB_LIST_TABLES, (e: IpcMainInvokeEvent, filter: SchemaFilter) =>
-    dbConn?.listTables(filter),
-  );
+  ipcMain.handle(event.DB_LIST_TABLES, (e: IpcMainInvokeEvent, filter: SchemaFilter) => {
+    return dbConn?.listTables(filter);
+  });
   ipcMain.handle(event.DB_LIST_VIEWS, (e: IpcMainInvokeEvent, filter: SchemaFilter) =>
     dbConn?.listViews(filter),
   );

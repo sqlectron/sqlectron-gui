@@ -14,7 +14,7 @@ export const START_EDITING_SERVER = 'START_EDITING_SERVER';
 export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
 
 export function startEditing(id) {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     if (!id) {
       dispatch({ type: START_EDITING_SERVER });
       return;
@@ -28,7 +28,7 @@ export function startEditing(id) {
       return;
     }
 
-    const decryptedServer = sqlectron.servers.decryptSecrects(server, cryptoSecret);
+    const decryptedServer = await sqlectron.servers.decryptSecrects(server, cryptoSecret);
 
     dispatch({ type: START_EDITING_SERVER, server: decryptedServer });
   };

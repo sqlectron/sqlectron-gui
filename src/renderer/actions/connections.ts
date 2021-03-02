@@ -96,7 +96,6 @@ export function connect(
       //   serverSession = sqlectron.db.createServer(server);
       // }
 
-      // dbConn = serverSession.db(database);
       if (await sqlectron.db.checkIsConnected()) {
         dispatch({
           type: CONNECTION_SUCCESS,
@@ -109,7 +108,7 @@ export function connect(
       }
 
       // dbConn = serverSession.createConnection(database);
-      await sqlectron.db.connect();
+      await sqlectron.db.connect(server, database);
 
       dispatch({
         type: CONNECTION_SUCCESS,
