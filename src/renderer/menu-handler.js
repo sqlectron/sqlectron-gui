@@ -13,7 +13,7 @@ export default class MenuHandler {
 
   removeAllMenus() {
     Object.keys(this.commands).forEach((command) =>
-      ipcRenderer.removeListener(command, this.commands[command])
+      ipcRenderer.removeListener(command, this.commands[command]),
     );
 
     this.commands = null;

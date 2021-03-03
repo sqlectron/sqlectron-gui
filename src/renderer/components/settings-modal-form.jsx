@@ -82,7 +82,7 @@ export default class SettingsModalForm extends Component {
   onDocClick(event) {
     event.preventDefault();
     shell.openExternal(
-      'https://github.com/sqlectron/sqlectron-gui/blob/master/docs/app/configuration-file.md'
+      'https://github.com/sqlectron/sqlectron-gui/blob/master/docs/app/configuration-file.md',
     );
   }
 

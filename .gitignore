@@ -6,8 +6,10 @@ installers
 npm-debug.log
 .DS_Store
 .tmp
+*.tsbuildinfo
 
 # test files
 *.sqlite3
 *.db
 test/fixtures/sqlite/sqlectron.json
+

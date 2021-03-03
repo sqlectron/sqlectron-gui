@@ -95,7 +95,7 @@ export default class DatabaseDiagram extends Component {
               height: (columnsByTable[table].length + 1.5) * 20,
             },
             name: table,
-          })
+          }),
         );
         currentTable = tableShapes[index];
 

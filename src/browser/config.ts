@@ -5,16 +5,17 @@
  * without passing through a transpiler, this file must use ES5.
  */
 
-const fs = require('fs');
-const path = require('path');
-const defaultsDeep = require('lodash.defaultsdeep');
-const sqlectron = require('sqlectron-core');
+import * as fs from 'fs';
+import * as path from 'path';
+import defaultsDeep from 'lodash.defaultsdeep';
+import * as sqlectron from 'sqlectron-core';
+import { Config } from '../common/types/config';
 
 let config;
 
 const cryptoSecret = 'j[F6Y6NoWT}+YG|4c|-<89:ByJ83-9Aj?O8>$Zk/[WFk_~gFbg7<wm+*V|A{xQZ,';
 
-exports.get = function getConfiguration(cleanCache) {
+export const getConfig = function getConfiguration(cleanCache = false): Config {
   if (config && !cleanCache) {
     return config;
   }
@@ -22,6 +23,7 @@ exports.get = function getConfiguration(cleanCache) {
   const args = process.argv || [];
   const argsConfig = {
     devMode: args.indexOf('--dev') !== -1,
+    printVersion: false,
   };
 
   if (args.indexOf('--version') !== -1 || args.indexOf('-v') !== -1) {

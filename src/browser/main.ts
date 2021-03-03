@@ -1,8 +1,8 @@
 /* eslint global-require:0, no-var: 0, no-extend-native: 0, vars-on-top: 0 */
-const sqlectron = require('sqlectron-core');
-var config = require('./config');
+import * as sqlectron from 'sqlectron-core';
+import { getConfig } from './config';
 
-var configData = config.get();
+var configData = getConfig();
 
 if (configData.printVersion) {
   console.log(configData.name, configData.version); // eslint-disable-line no-console

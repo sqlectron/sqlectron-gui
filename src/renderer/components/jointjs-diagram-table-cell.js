@@ -10,7 +10,7 @@ joint.shapes.sqlectron.TableCell = joint.shapes.basic.Rect.extend({
         rect: { stroke: 'none', 'fill-opacity': 0, style: { 'pointer-events': 'none' } },
       },
     },
-    joint.shapes.basic.Rect.prototype.defaults
+    joint.shapes.basic.Rect.prototype.defaults,
   ),
 });
 

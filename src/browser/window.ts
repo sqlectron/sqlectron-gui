@@ -1,8 +1,8 @@
 import { resolve } from 'path';
-import { BrowserWindow, ipcMain, Menu } from 'electron';
+import { BrowserWindow, ipcMain, Menu, App } from 'electron';
 import { attachMenuToWindow } from './menu';
 import { check as checkUpdate } from './update-checker';
-import { get as getConfig } from './config';
+import { getConfig } from './config';
 import createLogger from './logger';
 
 const logger = createLogger('window');
@@ -17,7 +17,7 @@ const WINDOWS = {};
 // Also used as identifier to for each window.
 let windowsNumber = 0;
 
-export function buildNewWindow(app) {
+export function buildNewWindow(app: App): void {
   const appConfig = getConfig();
 
   windowsNumber += 1;
@@ -58,23 +58,23 @@ export function buildNewWindow(app) {
   mainWindow.on('closed', () => delete WINDOWS[windowsNumber]);
 
   if (devMode || process.env.DEV_TOOLS === 'true') {
-    mainWindow.openDevTools();
+    mainWindow.webContents.openDevTools();
     mainWindow.webContents.on('context-menu', (_, props) => {
       const { x, y } = props;
       Menu.buildFromTemplate([
         {
           label: 'Inspect element',
           click() {
-            mainWindow.inspectElement(x, y);
+            mainWindow.webContents.inspectElement(x, y);
           },
         },
-      ]).popup(mainWindow);
+      ]).popup({ window: mainWindow });
     });
   }
 
   ipcMain.on('sqlectron:check-upgrade', () => {
     checkUpdate(mainWindow, appConfig).catch((err) =>
-      logger.error('Unable to check for updates', err)
+      logger.error('Unable to check for updates', err),
     );
   });
 }

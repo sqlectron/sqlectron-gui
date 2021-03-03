@@ -35,7 +35,7 @@ export default class TableCell extends Component {
         new MenuItem({
           label: 'Open Preview',
           click: () => this.props.onOpenPreviewClick(value),
-        })
+        }),
       );
     }
 

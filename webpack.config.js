@@ -14,13 +14,18 @@ const webpackConfig = {
   devtool: 'eval-source-map',
   target: 'electron-renderer',
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: ['node_modules', 'src/renderer'],
   },
   entry: {},
   output: {},
   module: {
     rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
       {
         test: /\.jsx?$/,
         exclude: /(node_modules|vendor)/,
@@ -123,7 +128,7 @@ if (isProd) {
       './vendor/renderer/semantic-ui/semantic.js',
       './vendor/renderer/semantic-ui/semantic.css',
     ],
-    app: './src/renderer/entry.jsx',
+    app: './src/renderer/entry.tsx',
   };
 
   webpackConfig.output = {
@@ -141,7 +146,7 @@ if (isProd) {
     'dtrace-provider': path.join(__dirname, 'empty-shim.js'),
   };
 
-  webpackConfig.entry.app = ['webpack/hot/dev-server', './src/renderer/entry.jsx'];
+  webpackConfig.entry.app = ['webpack/hot/dev-server', './src/renderer/entry.tsx'];
 
   webpackConfig.output = {
     path: path.join(__dirname, 'dist'),

@@ -7,18 +7,17 @@ import { createLogger } from '../../browser/remote';
 const middlewares = [thunkMiddleware];
 
 /* eslint global-require:0 */
-const isLogConsoleEnabled = global.SQLECTRON_CONFIG.log.console;
-const isLogFileEnabled = global.SQLECTRON_CONFIG.log.file;
+const isLogConsoleEnabled = window.SQLECTRON_CONFIG.log.console;
+const isLogFileEnabled = window.SQLECTRON_CONFIG.log.file;
 
 if (isLogConsoleEnabled || isLogFileEnabled) {
   const loggerConfig = {
-    level: global.SQLECTRON_CONFIG.log.level,
+    level: window.SQLECTRON_CONFIG.log.level,
     collapsed: true,
+    logger: {},
   };
 
   const mainLogger = isLogFileEnabled ? createLogger('renderer:redux') : null;
-
-  loggerConfig.logger = {};
 
   for (const method in console) {
     // eslint-disable-line no-restricted-syntax
@@ -49,10 +48,11 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
 
 const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
 
-export default function configureStore(initialState) {
+export default function configureStore(initialState?) {
   const store = createStoreWithMiddleware(rootReducer, initialState);
 
   if (module.hot) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     module.hot.accept('../reducers', () => store.replaceReducer(require('../reducers').default));
   }
 
