@@ -4,7 +4,7 @@ import { getConfig } from './config';
 // Hack solution to ignore console.error from dtrace imported by bunyan
 /* eslint no-console:0 */
 const realConsoleError = console.error;
-// eslint-disable-next-line
+// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
 console.error = (message?: any, ...optionalParams: any[]) => {};
 import { createLogger } from 'bunyan';
 

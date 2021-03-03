@@ -22,6 +22,6 @@ export interface Config {
   name: string;
   version: string;
   // Fields attached from cli args
-  devMode: boolean;
-  printVersion: boolean;
+  devMode?: boolean;
+  printVersion?: boolean;
 }
