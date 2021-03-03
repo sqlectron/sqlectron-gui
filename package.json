@@ -87,7 +87,6 @@
   },
   "dependencies": {
     "@babel/core": "^7.13.1",
-    "@babel/polyfill": "^7.8.7",
     "axios": "^0.21.1",
     "bunyan": "^1.8.5",
     "core-js": "^3.6.5",
@@ -102,7 +101,6 @@
     "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.13.0",
-    "@babel/register": "^7.13.8",
     "@types/chai": "^4.2.15",
     "@types/electron": "^1.6.10",
     "@types/mocha": "^8.2.1",
