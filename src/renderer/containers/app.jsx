@@ -125,7 +125,7 @@ class AppContainer extends Component {
         const loadingInner = document.createElement('div');
 
         const version = document.createElement('H3');
-        version.appendChild(document.createTextNode(`v${global.SQLECTRON_CONFIG.version}`));
+        version.appendChild(document.createTextNode(`v${window.SQLECTRON_CONFIG.version}`));
 
         loadingInner.appendChild(version);
         loadingInner.appendChild(img);

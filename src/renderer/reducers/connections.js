@@ -24,7 +24,7 @@ export default function (state = INITIAL_STATE, action) {
     case types.CONNECTION_REQUEST: {
       // eslint-disable-next-line max-len
       const { disabledFeatures } = CLIENTS.find(
-        (dbClient) => dbClient.key === action.server.client
+        (dbClient) => dbClient.key === action.server.client,
       );
       return {
         ...state,

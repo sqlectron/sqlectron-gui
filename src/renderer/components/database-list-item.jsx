@@ -68,19 +68,19 @@ export default class DatabaseListItem extends Component {
       new MenuItem({
         label: 'Refresh Database',
         click: this.props.onRefreshDatabase.bind(this, nextProps.database),
-      })
+      }),
     );
     this.contextMenu.append(
       new MenuItem({
         label: 'Open Tab',
         click: this.props.onOpenTab.bind(this, nextProps.database),
-      })
+      }),
     );
     this.contextMenu.append(
       new MenuItem({
         label: 'Show Database Diagram',
         click: this.props.onShowDiagramModal.bind(this, nextProps.database),
-      })
+      }),
     );
   }
 

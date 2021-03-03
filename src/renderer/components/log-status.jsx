@@ -1,6 +1,6 @@
 import React from 'react';
 
-const log = global.SQLECTRON_CONFIG.log;
+const log = window.SQLECTRON_CONFIG.log;
 
 const LogStatus = () => {
   if (!log.console && !log.file) {

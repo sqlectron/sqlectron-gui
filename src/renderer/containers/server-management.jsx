@@ -40,7 +40,7 @@ const ServerManagement = ({ router }) => {
     (event) => {
       setFilter(event.target.value);
     },
-    [setFilter]
+    [setFilter],
   );
 
   const onConnectClick = useCallback(
@@ -48,14 +48,14 @@ const ServerManagement = ({ router }) => {
       dispatch(ConnActions.setConnecting());
       router.push(`/server/${id}`);
     },
-    [dispatch, router]
+    [dispatch, router],
   );
 
   const onTestConnectionClick = useCallback(
     (server) => {
       dispatch(ConnActions.test(server));
     },
-    [dispatch]
+    [dispatch],
   );
 
   const onAddClick = useCallback(() => dispatch(ServersActions.startEditing()), [dispatch]);
@@ -68,7 +68,7 @@ const ServerManagement = ({ router }) => {
 
   const onDuplicateClick = useCallback(
     (server) => dispatch(ServersActions.duplicateServer({ server })),
-    [dispatch]
+    [dispatch],
   );
 
   const onSaveClick = useCallback(
@@ -76,7 +76,7 @@ const ServerManagement = ({ router }) => {
       const id = servers.editingServer && servers.editingServer.id;
       dispatch(ServersActions.saveServer({ id, server }));
     },
-    [dispatch, servers]
+    [dispatch, servers],
   );
 
   const onCancelClick = useCallback(() => dispatch(ServersActions.finishEditing()), [dispatch]);

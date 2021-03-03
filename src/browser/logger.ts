@@ -1,17 +1,30 @@
 import * as sqlectron from 'sqlectron-core';
-import config from './config';
+import { getConfig } from './config';
 
 // Hack solution to ignore console.error from dtrace imported by bunyan
 /* eslint no-console:0 */
 const realConsoleError = console.error;
-console.error = () => {};
-const { createLogger } = require('bunyan');
+// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars,@typescript-eslint/no-empty-function
+console.error = (message?: any, ...optionalParams: any[]) => {};
+import { createLogger } from 'bunyan';
 
 console.error = realConsoleError;
 
-const dataConfig = config.get();
+const dataConfig = getConfig();
 
-const loggerConfig = {
+export interface LogStream {
+  path?: string;
+  stream?: NodeJS.WriteStream;
+}
+
+export interface LoggerConfig {
+  app: string;
+  name: string;
+  level: string;
+  streams: Array<LogStream>;
+}
+
+const loggerConfig: LoggerConfig = {
   app: 'sqlectron-gui',
   name: 'sqlectron-gui',
   level: dataConfig.log.level,
@@ -31,4 +44,4 @@ const logger = createLogger(loggerConfig);
 // Set custom logger for sqlectron-core
 sqlectron.setLogger((namespace) => logger.child({ namespace: `sqlectron-core:${namespace}` }));
 
-export default (namespace) => logger.child({ namespace });
+export default (namespace: string): Console => logger.child({ namespace });

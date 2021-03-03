@@ -70,7 +70,7 @@ export default class DatabaseItem extends Component {
         new MenuItem({
           label: 'Select Rows (with limit)',
           click: onExecuteDefaultQuery.bind(this, database, item),
-        })
+        }),
       );
     }
 
@@ -82,7 +82,7 @@ export default class DatabaseItem extends Component {
         new MenuItem({
           label: 'Create Statement',
           click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
-        })
+        }),
       );
     }
 
@@ -100,7 +100,7 @@ export default class DatabaseItem extends Component {
           new MenuItem({
             label: labelsByTypes[actionType],
             click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
-          })
+          }),
         );
       });
     }

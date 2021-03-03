@@ -16,7 +16,7 @@ export function loadConfig() {
     try {
       const forceCleanCache = true;
       const configPath = await sqlectron.config.path();
-      const remoteConfig = await config.get(forceCleanCache);
+      const remoteConfig = await config.getConfig(forceCleanCache);
 
       // Remove any "reference" to the remote IPC object
       const configData = cloneDeep(remoteConfig);

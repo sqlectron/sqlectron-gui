@@ -1,9 +1,9 @@
-const fs = require('fs');
-const { expect } = require('chai');
-const path = require('path');
-const sqlite3 = require('sqlite3').verbose();
+import fs from 'fs';
+import { expect } from 'chai';
+import path from 'path';
+import sqlite3 from 'sqlite3';
 
-const helper = require('./helper');
+import helper from './helper';
 
 const BASE_PATH = path.join(__dirname, '../fixtures/sqlite');
 const DB_PATH = path.join(BASE_PATH, 'test.db');
@@ -40,60 +40,63 @@ function setupDB() {
 
 describe('Sqlite', function () {
   this.timeout(360000);
+  let db;
+  let app;
+  let mainWindow;
 
   before(async () => {
-    this.db = setupDB();
+    db = setupDB();
 
-    const { app, mainWindow } = await helper.startApp({
+    const res = await helper.startApp({
       sqlectronHome: path.join(__dirname, '../fixtures/sqlite'),
     });
 
-    this.app = app;
-    this.mainWindow = mainWindow;
+    app = res.app;
+    mainWindow = res.mainWindow;
   });
 
   after(async () => {
-    await helper.endApp(this.app);
-    this.db.close();
+    await helper.endApp(app);
+    db.close();
   });
 
   it('should connect and run basic actions', async () => {
-    await this.mainWindow.waitForSelector('#server-list');
+    await mainWindow.waitForSelector('#server-list');
 
-    const list = await this.mainWindow.$$('#server-list .header');
+    const list = await mainWindow.$$('#server-list .header');
     expect(list).to.have.lengthOf(1);
 
-    await helper.expectToEqualText(this.mainWindow, '#server-list .header', 'sqlite-test');
-    await helper.expectToEqualText(this.mainWindow, '#server-list .attached.button', 'Connect');
+    await helper.expectToEqualText(mainWindow, '#server-list .header', 'sqlite-test');
+    await helper.expectToEqualText(mainWindow, '#server-list .attached.button', 'Connect');
 
-    const btnConnect = await this.mainWindow.$('#server-list .attached.button');
+    const btnConnect = await mainWindow.$('#server-list .attached.button');
     // TODO: replace dispatchEvent('click') with the click method when we upgrade the electron app.
     // https://github.com/microsoft/playwright/issues/1042
     await btnConnect.dispatchEvent('click');
 
-    await this.mainWindow.waitForSelector('#sidebar .item-Table');
-    const tables = await this.mainWindow.$$('#sidebar .item-Table');
+    await mainWindow.waitForSelector('#sidebar .item-Table');
+    const tables = await mainWindow.$$('#sidebar .item-Table');
     expect(tables).to.have.lengthOf(1);
     await expect(await tables[0].innerText()).to.be.equal('document');
 
     // Clicks in the table to run default select query
-    const btnTable = await this.mainWindow.$('#sidebar .item-Table span');
+    const btnTable = await mainWindow.$('#sidebar .item-Table span');
     await btnTable.dispatchEvent('click');
 
     // Set default query and automatically executes it
     await helper.expectToEqualText(
-      this.mainWindow,
+      mainWindow,
       '.ace_content',
-      'SELECT * FROM "document" LIMIT 101'
+      'SELECT * FROM "document" LIMIT 101',
     );
 
     // Render results for a single query
-    await this.mainWindow.waitForSelector('.grid-query-wrapper');
-    const queryResults = await this.mainWindow.$$('.grid-query-wrapper');
+    await mainWindow.waitForSelector('.grid-query-wrapper');
+    const queryResults = await mainWindow.$$('.grid-query-wrapper');
     expect(queryResults).to.have.lengthOf(1);
 
     // Assert rows
-    const rows = await this.mainWindow.$$('.ReactVirtualized__Grid__cell');
+    const rows = await mainWindow.$$('.ReactVirtualized__Grid__cell');
     // NOTE: Keeping it disabled on CI for now. For some reason on running this
     // assertion on CI it doesn't return any rows.
     if (process.env.CI !== 'true') {

@@ -215,7 +215,7 @@ class QueryBrowserContainer extends Component {
   onExecuteDefaultQuery(database, table) {
     const schema = table.schema || this.props.connections.server.schema;
     this.props.dispatch(
-      QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema)
+      QueryActions.executeDefaultSelectQueryIfNeeded(database.name, table.name, schema),
     );
   }
 
@@ -243,7 +243,7 @@ class QueryBrowserContainer extends Component {
   onGetSQLScript(database, item, actionType, objectType) {
     const schema = item.schema || this.props.connections.server.schema;
     this.props.dispatch(
-      getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema)
+      getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema),
     );
   }
 
@@ -291,7 +291,7 @@ class QueryBrowserContainer extends Component {
     dispatch(DbAction.generateDatabaseDiagram());
 
     $(':checkbox:checked', 'div.ui.list').map((index, checkbox) =>
-      selectedTables.push(checkbox.id)
+      selectedTables.push(checkbox.id),
     );
 
     dispatch(selectTablesForDiagram(selectedTables));
@@ -523,7 +523,7 @@ class QueryBrowserContainer extends Component {
     });
 
     const { disabledFeatures } = sqlectron.db.CLIENTS.find(
-      (dbClient) => dbClient.key === connections.server.client
+      (dbClient) => dbClient.key === connections.server.client,
     );
 
     const allowCancel = !disabledFeatures || !disabledFeatures.includes('cancelQuery');

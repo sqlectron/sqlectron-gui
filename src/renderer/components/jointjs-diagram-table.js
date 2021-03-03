@@ -12,7 +12,7 @@ joint.shapes.sqlectron.Table = joint.shapes.basic.Rect.extend({
         rect: { stroke: 'none', 'fill-opacity': 0 },
       },
     },
-    joint.shapes.basic.Rect.prototype.defaults
+    joint.shapes.basic.Rect.prototype.defaults,
   ),
 });
 
