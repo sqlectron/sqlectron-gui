@@ -1,4 +1,4 @@
-import * as path from 'path';
+import path from 'path';
 import { expect } from 'chai';
 import electronPath = require('electron');
 import { electron } from 'playwright-electron';

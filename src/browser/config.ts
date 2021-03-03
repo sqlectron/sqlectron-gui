@@ -5,8 +5,8 @@
  * without passing through a transpiler, this file must use ES5.
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 import defaultsDeep from 'lodash.defaultsdeep';
 import * as sqlectron from 'sqlectron-core';
 import { Config } from '../common/types/config';
@@ -60,7 +60,7 @@ export function getConfig(cleanCache = false): Config {
   config = defaultsDeep(cryptoConfig, appConfig, packageConfig, argsConfig, defaultConfig);
 
   return config;
-};
+}
 
 function readJSON(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));

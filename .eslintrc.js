@@ -102,7 +102,7 @@ module.exports = {
         ecmaFeatures: { jsx: true },
         ecmaVersion: 2020,
         sourceType: 'module',
-        project: './tsconfig.eslint.json',
+        project: './tsconfig.json',
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
@@ -130,7 +130,7 @@ module.exports = {
         ecmaFeatures: { jsx: true },
         ecmaVersion: 2020,
         sourceType: 'module',
-        project: './tsconfig.eslint.json',
+        project: './tsconfig.json',
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {

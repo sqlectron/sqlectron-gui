@@ -1,6 +1,6 @@
-import * as fs from 'fs';
+import fs from 'fs';
 import { expect } from 'chai';
-import * as path from 'path';
+import path from 'path';
 import sqlite3 from 'sqlite3';
 
 import helper from './helper';

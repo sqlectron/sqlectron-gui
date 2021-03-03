@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "es5",
     "module": "commonjs",
-    "rootDir": ".",
+    "rootDir": "src",
     "outDir": "out",
     "jsx": "react",
     "strict": true,
@@ -10,5 +10,5 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false
   },
-  "include": ["src", "test"]
+  "include": ["src"]
 }
