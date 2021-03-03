@@ -12,15 +12,16 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     env:
-      node-version: 14
+      node-version: 10
 
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        # TODO: upgrade to latest Ubuntu
+        os: [ubuntu-18.04, macos-latest, windows-latest]
 
     steps:
     - name: Install Linux Dependencies
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: runner.os == 'Linux'
       run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
 
     - uses: actions/checkout@v2
@@ -37,11 +38,11 @@ jobs:
     - run: npm run format:check
 
     - name: Build app for e2e test
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: runner.os == 'Linux'
       run: npm run compile
 
     - name: Run e2e test
-      if: ${{ matrix.os == 'ubuntu-latest' }}
+      if: runner.os == 'Linux'
       run: xvfb-run --auto-servernum npm run test:e2e
 
     - run: npm run dist -- --publish never
