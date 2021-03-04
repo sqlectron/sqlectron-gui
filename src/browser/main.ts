@@ -1,4 +1,4 @@
-import * as sqlectron from 'sqlectron-core';
+import * as sqlectron from './core';
 import { getConfig } from './config';
 
 const configData = getConfig();
