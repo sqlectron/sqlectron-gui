@@ -3,6 +3,7 @@ import { expect } from 'chai';
 import { config } from '../../src/browser/core';
 import { readJSONFile } from '../../src/browser/core/utils';
 import { decrypt } from '../../src/browser/core/crypto';
+import { EncryptedPassword } from '../../src/common/types/server';
 import utilsStub from './utils-stub';
 
 const cryptoSecret = 'CHK`Ya91Hs{me!^8ndwPPaPPxwQ}`';
@@ -29,19 +30,19 @@ describe('config', () => {
         const expectedServer = expected.servers[i];
         const actualServer = fixtureAfter.servers[i];
         if (expectedServer.password) {
-          expect(decrypt(expected.servers[i].password, cryptoSecret)).to.equal(
-            decrypt(actualServer.password, cryptoSecret),
+          expect(decrypt(expected.servers[i].password as EncryptedPassword, cryptoSecret)).to.equal(
+            decrypt(actualServer.password as EncryptedPassword, cryptoSecret),
           );
-          delete expectedServer.password;
-          delete actualServer.password;
+          expectedServer.password = '';
+          actualServer.password = '';
         }
 
         if (expectedServer.ssh && expectedServer.ssh.password) {
-          expect(decrypt(expectedServer.ssh.password, cryptoSecret)).to.equal(
-            decrypt(actualServer.ssh.password, cryptoSecret),
+          expect(decrypt(expectedServer.ssh.password as EncryptedPassword, cryptoSecret)).to.equal(
+            decrypt(actualServer.ssh!.password as EncryptedPassword, cryptoSecret),
           );
-          delete expectedServer.ssh.password;
-          delete actualServer.ssh.password;
+          expectedServer.ssh.password = '';
+          actualServer.ssh!.password = '';
         }
 
         expect(expectedServer).to.eql(actualServer);

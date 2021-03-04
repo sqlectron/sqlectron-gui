@@ -1,5 +1,6 @@
 import Valida from 'valida2';
 import { CLIENTS } from 'sqlectron-db-core';
+import { Server } from '../../../common/types/server';
 
 function serverAddressValidator(ctx) {
   const { host, port, socketPath } = ctx.obj;
@@ -130,7 +131,7 @@ const SERVER_SCHEMA = {
 /**
  * validations applied on creating/updating a server
  */
-export async function validate(server) {
+export async function validate(server: Server): Promise<void> {
   const serverSchema = { ...SERVER_SCHEMA };
 
   const clientConfig = CLIENTS.find((dbClient) => dbClient.key === server.client);
@@ -149,7 +150,7 @@ export async function validate(server) {
   }
 }
 
-export function validateUniqueId(servers, serverId) {
+export function validateUniqueId(servers: Array<Server>, serverId?: string | null): boolean {
   if (!serverId) {
     throw new Error('serverId should be set');
   }

@@ -46,7 +46,7 @@ export function getConfig(cleanCache = false): Config {
     log: {
       console: isDev,
       file: false,
-      level: appConfig.level || (process.env.DEBUG ? 'debug' : 'error'),
+      level: appConfig.log.level || (process.env.DEBUG ? 'debug' : 'error'),
       path: configPath.replace('.json', '.log'),
     },
   };
