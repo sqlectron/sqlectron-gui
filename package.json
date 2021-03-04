@@ -67,7 +67,7 @@
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "test": "echo \"No unit tests yet\"",
+    "test": "npm run test:browser",
     "test:e2e": "mocha -r ts-node/register  'test/e2e/**/test.*.ts'",
     "test:e2e:dev": "cross-env DEV_MODE=true npm run test:e2e",
     "test:browser": "mocha -r ts-node/register 'test/browser/**/test.*.ts'",
@@ -90,8 +90,12 @@
     "axios": "^0.21.1",
     "bunyan": "^1.8.5",
     "core-js": "^3.6.5",
+    "env-paths": "^1.0.0",
     "lodash.defaultsdeep": "^4.6.0",
-    "sqlectron-core": "9.0.3"
+    "mkdirp": "^1.0.4",
+    "sqlectron-db-core": "^0.7.1",
+    "uuid": "^8.3.2",
+    "valida2": "^2.6.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.0",
@@ -174,6 +178,7 @@
     "redux-thunk": "^2.2.0",
     "rimraf": "^3.0.2",
     "sass-loader": "^6.0.7",
+    "sinon": "^9.2.4",
     "spawn-auto-restart": "^3.0.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.17",

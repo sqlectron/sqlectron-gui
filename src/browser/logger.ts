@@ -1,4 +1,4 @@
-import * as sqlectron from 'sqlectron-core';
+import * as sqlectron from './core';
 import { getConfig } from './config';
 
 // Hack solution to ignore console.error from dtrace imported by bunyan

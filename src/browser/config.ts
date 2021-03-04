@@ -8,7 +8,7 @@
 import fs from 'fs';
 import path from 'path';
 import defaultsDeep from 'lodash.defaultsdeep';
-import * as sqlectron from 'sqlectron-core';
+import * as sqlectron from './core';
 import { Config } from '../common/types/config';
 
 let config;
