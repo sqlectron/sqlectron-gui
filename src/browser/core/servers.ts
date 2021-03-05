@@ -112,8 +112,7 @@ export function decryptSecrects(server: Server, cryptoSecret: string): Server {
   if (server.password) {
     if (typeof server.password === 'string') {
       updatedServer.password = crypto.unsafeDecrypt(server.password, cryptoSecret);
-    }
-    {
+    } else {
       updatedServer.password = crypto.decrypt(server.password as EncryptedPassword, cryptoSecret);
     }
   }

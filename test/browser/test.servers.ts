@@ -343,6 +343,7 @@ describe('servers', () => {
       const decryptedServer = servers.decryptSecrects(encryptedServer, cryptoSecret);
 
       encryptedServer.encrypted = false;
+      encryptedServer.password = 'password';
       encryptedServer.ssh!.password = 'password';
       expect(decryptedServer).to.eql(encryptedServer);
     });

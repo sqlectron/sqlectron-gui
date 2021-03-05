@@ -1,14 +1,13 @@
 import { shell } from 'electron';
 import { BrowserWindow, App, MenuItem, MenuItemConstructorOptions } from 'electron';
 import { Config } from '../../common/types/config';
+import { BuildWindow } from '../../common/types/menu';
 
 function sendMessage(win: BrowserWindow, message: string) {
   if (win) {
     win.webContents.send(message);
   }
 }
-
-type BuildWindow = (app: App) => void; // eslint-disable-line no-unused-vars
 
 export function buildTemplate(
   app: App,

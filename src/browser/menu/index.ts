@@ -1,5 +1,6 @@
 import { Menu, App } from 'electron';
 import { Config } from '../../common/types/config';
+import { BuildWindow } from '../../common/types/menu';
 import * as darwin from './darwin';
 import * as linux from './linux';
 import * as win32 from './win32';
@@ -9,8 +10,6 @@ const menus = {
   linux,
   win32,
 };
-
-type BuildWindow = (app: App) => void; // eslint-disable-line no-unused-vars
 
 export function attachMenuToWindow(app: App, buildNewWindow: BuildWindow, appConfig: Config): void {
   const template = menus[process.platform].buildTemplate(app, buildNewWindow, appConfig);
