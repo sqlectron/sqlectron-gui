@@ -1,13 +1,15 @@
 import axios from 'axios';
+import { BrowserWindow } from 'electron';
+import { Config } from '../common/types/config';
 import createLogger from './logger';
 
 const logger = createLogger('gh-update-checker');
 
-export async function check(mainWindow, appConfig) {
+export async function check(mainWindow: BrowserWindow, appConfig: Config): Promise<void> {
   const currentVersion = `v${appConfig.version}`;
   logger.debug('current version %s', currentVersion);
 
-  const repo = appConfig.repository.url.replace('https://github.com/', '');
+  const repo = appConfig.repository?.url.replace('https://github.com/', '');
   const latestReleaseURL = `https://api.github.com/repos/${repo}/releases/latest`;
   const response = await axios.get(latestReleaseURL);
 

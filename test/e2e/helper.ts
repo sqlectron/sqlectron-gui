@@ -1,12 +1,16 @@
 import path from 'path';
 import { expect } from 'chai';
 import electronPath = require('electron');
-import { electron } from 'playwright-electron';
+import { electron, ElectronApplication, Page } from 'playwright-electron';
 
-const startApp = async ({ sqlectronHome }) => {
+const startApp = async ({
+  sqlectronHome,
+}: {
+  sqlectronHome: string;
+}): Promise<{ app: ElectronApplication; mainWindow: Page }> => {
   // Start Electron application
   // @ts-ignore
-  const app = await electron.launch(electronPath, {
+  const app: ElectronApplication = await electron.launch(electronPath, {
     path: electronPath,
     args:
       process.env.DEV_MODE === 'true'
@@ -24,14 +28,14 @@ const startApp = async ({ sqlectronHome }) => {
   return { app, mainWindow };
 };
 
-const endApp = async (app) => {
+const endApp = async (app: ElectronApplication): Promise<void> => {
   // After each test close Electron application.
   await app.close();
 };
 
-const wait = (time) => new Promise((resolve) => setTimeout(resolve, time));
+const wait = (time: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, time));
 
-const getAppPage = async (app, { waitAppLoad = true } = {}) => {
+const getAppPage = async (app: ElectronApplication, { waitAppLoad = true } = {}): Promise<Page> => {
   // Attempt though 25 times waiting 1s between each attempt
   // to get the application page
   for (let attempt = 0; attempt < 25; attempt++) {
@@ -55,8 +59,8 @@ const getAppPage = async (app, { waitAppLoad = true } = {}) => {
   throw new Error('Could not find application page');
 };
 
-const expectToEqualText = async (page, selector, text) => {
-  expect(await page.$eval(selector, (node) => node.innerText)).to.be.equal(text);
+const expectToEqualText = async (page: Page, selector: string, text: string): Promise<void> => {
+  expect(await page.$eval(selector, (node: HTMLElement) => node.innerText)).to.be.equal(text);
 };
 
 export default {

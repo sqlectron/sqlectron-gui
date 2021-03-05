@@ -2,13 +2,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { validate, validateUniqueId } from './validators/server';
 import * as config from './config';
 import * as crypto from './crypto';
+import { Server, EncryptedPassword } from '../../common/types/server';
 
-export async function getAll() {
+export async function getAll(): Promise<Array<Server>> {
   const { servers } = await config.get();
   return servers;
 }
 
-export async function add(server, cryptoSecret) {
+export async function add(server: Server, cryptoSecret: string): Promise<Server> {
   let srv = { ...server };
   await validate(srv);
 
@@ -27,7 +28,7 @@ export async function add(server, cryptoSecret) {
   return srv;
 }
 
-export async function update(server, cryptoSecret) {
+export async function update(server: Server, cryptoSecret: string): Promise<Server> {
   let srv = { ...server };
   await validate(srv);
 
@@ -43,13 +44,13 @@ export async function update(server, cryptoSecret) {
   return server;
 }
 
-export function addOrUpdate(server, cryptoSecret) {
+export function addOrUpdate(server: Server, cryptoSecret: string): Promise<Server> {
   const hasId = !!(server.id && String(server.id).length);
   // TODO: Add validation to check if the current id is a valid uuid
   return hasId ? update(server, cryptoSecret) : add(server, cryptoSecret);
 }
 
-export async function removeById(id) {
+export async function removeById(id: string): Promise<void> {
   const data = await config.get();
 
   const index = data.servers.findIndex((srv) => srv.id === id);
@@ -59,7 +60,7 @@ export async function removeById(id) {
 }
 
 // ensure all secret fields are encrypted
-function encryptSecrects(server, cryptoSecret, oldServer?) {
+function encryptSecrects(server: Server, cryptoSecret: string, oldServer?: Server): Server {
   const updatedServer = { ...server };
 
   if (server.password) {
@@ -88,11 +89,11 @@ function encryptSecrects(server, cryptoSecret, oldServer?) {
       oldServer.encrypted
     ) {
       if (server.password === oldServer.password) {
-        updatedServer.password = crypto.unsafeDecrypt(oldServer.password, cryptoSecret);
+        updatedServer.password = crypto.unsafeDecrypt(oldServer.password as string, cryptoSecret);
       }
     }
 
-    if (typeof updatedServer.ssh.password === 'string') {
+    if (updatedServer.ssh && typeof updatedServer.ssh.password === 'string') {
       updatedServer.ssh.password = crypto.encrypt(updatedServer.ssh.password, cryptoSecret);
     }
   }
@@ -102,22 +103,29 @@ function encryptSecrects(server, cryptoSecret, oldServer?) {
 }
 
 // decrypt secret fields
-export function decryptSecrects(server, cryptoSecret) {
+export function decryptSecrects(server: Server, cryptoSecret: string): Server {
   const updatedServer = { ...server };
   if (!server.encrypted) {
     return server;
   }
 
-  if (server.password && typeof server.password === 'string') {
-    updatedServer.password = crypto.unsafeDecrypt(server.password, cryptoSecret);
-  } else if (server.password) {
-    updatedServer.password = crypto.decrypt(server.password, cryptoSecret);
+  if (server.password) {
+    if (typeof server.password === 'string') {
+      updatedServer.password = crypto.unsafeDecrypt(server.password, cryptoSecret);
+    } else {
+      updatedServer.password = crypto.decrypt(server.password as EncryptedPassword, cryptoSecret);
+    }
   }
 
-  if (server.ssh && server.ssh.password && typeof server.ssh.password === 'string') {
-    updatedServer.ssh.password = crypto.unsafeDecrypt(server.ssh.password, cryptoSecret);
-  } else if (server.ssh && server.ssh.password) {
-    updatedServer.ssh.password = crypto.decrypt(server.ssh.password, cryptoSecret);
+  if (server.ssh && server.ssh.password && updatedServer.ssh) {
+    if (typeof server.ssh.password === 'string') {
+      updatedServer.ssh.password = crypto.unsafeDecrypt(server.ssh.password, cryptoSecret);
+    } else {
+      updatedServer.ssh.password = crypto.decrypt(
+        server.ssh.password as EncryptedPassword,
+        cryptoSecret,
+      );
+    }
   }
 
   updatedServer.encrypted = false;

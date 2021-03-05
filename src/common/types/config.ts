@@ -21,6 +21,11 @@ export interface Config {
   // Fields attached from package.json
   name: string;
   version: string;
+  homepage?: string;
+  bugs?: string;
+  repository?: {
+    url: string;
+  };
   // Fields attached from cli args
   devMode?: boolean;
   printVersion?: boolean;

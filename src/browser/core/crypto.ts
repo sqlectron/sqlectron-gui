@@ -1,9 +1,10 @@
 // Reference: http://lollyrock.com/articles/nodejs-encryption
 import crypto from 'crypto';
+import { EncryptedPassword } from '../../common/types/server';
 
 const algorithm = 'aes-256-cbc';
 
-export function encrypt(plainText, secret) {
+export function encrypt(plainText: string, secret: string): EncryptedPassword {
   if (!plainText) {
     throw new Error('Missing plain text');
   } else if (!secret) {
@@ -19,7 +20,7 @@ export function encrypt(plainText, secret) {
   };
 }
 
-export function decrypt(encrypted, secret) {
+export function decrypt(encrypted: EncryptedPassword, secret: string): string {
   if (!encrypted || !encrypted.ivText || !encrypted.encryptedText) {
     throw new Error('Invalid encrypted valued');
   } else if (!secret) {
@@ -52,7 +53,7 @@ export function decrypt(encrypted, secret) {
  * @param {string} text
  * @param {string} secret
  */
-export function unsafeDecrypt(text, secret) {
+export function unsafeDecrypt(text: string, secret: string): string {
   if (!secret) {
     throw new Error('Missing crypto secret');
   }

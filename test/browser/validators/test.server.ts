@@ -1,5 +1,6 @@
 import { expect } from 'chai';
 import { validate, validateUniqueId } from '../../../src/browser/core/validators/server';
+import { Server } from '../../../src/common/types/server';
 
 describe('validators/server', () => {
   describe('validate', () => {
@@ -90,7 +91,7 @@ describe('validators/server', () => {
       },
     ].forEach((server, idx) => {
       it(`should validate server ${idx}`, (done) => {
-        validate(server)
+        validate(server as Server)
           .then(() => done())
           .catch((err) => done(err));
       });
@@ -108,7 +109,7 @@ describe('validators/server', () => {
           password: 'password',
           database: 'company',
           ssl: false,
-        };
+        } as Server;
         validate(server)
           .then(() => done())
           .catch((err) => done(err));
@@ -126,7 +127,7 @@ describe('validators/server', () => {
         password: 'password',
         database: 'company',
         ssl: false,
-      };
+      } as Server;
       validate(server)
         .then(() => done(new Error('should have thrown error')))
         .catch((err) => {
@@ -150,7 +151,7 @@ describe('validators/server', () => {
     it('should fail when serverId is found', () => {
       expect(
         validateUniqueId(
-          [{ id: '1c7cdae9-6065-46fa-a7d0-b89ccff78703' }],
+          [{ id: '1c7cdae9-6065-46fa-a7d0-b89ccff78703' } as Server],
           '1c7cdae9-6065-46fa-a7d0-b89ccff78703',
         ),
       ).to.eql(false);

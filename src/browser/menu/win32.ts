@@ -1,12 +1,19 @@
 import { shell } from 'electron';
+import { BrowserWindow, App, MenuItem, MenuItemConstructorOptions } from 'electron';
+import { Config } from '../../common/types/config';
+import { BuildWindow } from '../../common/types/menu';
 
-function sendMessage(win, message) {
+function sendMessage(win: BrowserWindow, message: string) {
   if (win) {
     win.webContents.send(message);
   }
 }
 
-export function buildTemplate(app, buildNewWindow, appConfig) {
+export function buildTemplate(
+  app: App,
+  buildNewWindow: BuildWindow,
+  appConfig: Config,
+): Array<MenuItemConstructorOptions | MenuItem> {
   return [
     {
       label: 'File',
@@ -19,12 +26,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'New Tab',
           accelerator: 'Ctrl+T',
-          click: (item, win) => sendMessage(win, 'sqlectron:new-tab'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:new-tab'),
         },
         {
           label: 'Close Tab',
           accelerator: 'Ctrl+W',
-          click: (item, win) => sendMessage(win, 'sqlectron:close-tab'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:close-tab'),
         },
         {
           type: 'separator',
@@ -32,17 +39,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Save Query',
           accelerator: 'Ctrl+S',
-          click: (item, win) => sendMessage(win, 'sqlectron:save-query'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:save-query'),
         },
         {
           label: 'Save Query As',
           accelerator: 'Ctrl+Shift+S',
-          click: (item, win) => sendMessage(win, 'sqlectron:save-query-as'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:save-query-as'),
         },
         {
           label: 'Open Query',
           accelerator: 'Ctrl+O',
-          click: (item, win) => sendMessage(win, 'sqlectron:open-query'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:open-query'),
         },
         {
           type: 'separator',
@@ -60,17 +67,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Execute',
           accelerator: 'Ctrl+Enter',
-          click: (item, win) => sendMessage(win, 'sqlectron:query-execute'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-execute'),
         },
         {
           label: 'Execute',
           accelerator: 'Ctrl+R',
-          click: (item, win) => sendMessage(win, 'sqlectron:query-execute'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-execute'),
         },
         {
           label: 'Focus Query Editor',
           accelerator: 'Shift+Ctrl+0',
-          click: (item, win) => sendMessage(win, 'sqlectron:query-focus'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-focus'),
         },
       ],
     },
@@ -80,12 +87,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Undo',
           accelerator: 'Ctrl+Z',
-          selector: 'undo:',
+          role: 'undo',
         },
         {
           label: 'Redo',
           accelerator: 'Shift+Ctrl+Z',
-          selector: 'redo:',
+          role: 'redo',
         },
         {
           type: 'separator',
@@ -93,22 +100,22 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Cut',
           accelerator: 'Ctrl+X',
-          selector: 'cut:',
+          role: 'cut',
         },
         {
           label: 'Copy',
           accelerator: 'Ctrl+C',
-          selector: 'copy:',
+          role: 'copy',
         },
         {
           label: 'Paste',
           accelerator: 'Ctrl+V',
-          selector: 'paste:',
+          role: 'paste',
         },
         {
           label: 'Select All',
           accelerator: 'Ctrl+A',
-          selector: 'selectAll:',
+          role: 'selectAll',
         },
       ],
     },
@@ -118,12 +125,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Reload',
           accelerator: 'Ctrl+Shift+R',
-          click: (item, win) => win.webContents.reloadIgnoringCache(),
+          click: (item, win) => (win as BrowserWindow).webContents.reloadIgnoringCache(),
         },
         {
           label: 'Toggle DevTools',
           accelerator: 'Alt+Ctrl+I',
-          click: (item, win) => win.toggleDevTools(),
+          click: (item, win) => (win as BrowserWindow).webContents.toggleDevTools(),
         },
         {
           type: 'separator',
@@ -131,17 +138,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Zoom In',
           accelerator: 'Ctrl+=',
-          click: (item, win) => sendMessage(win, 'sqlectron:zoom-in'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-in'),
         },
         {
           label: 'Zoom Out',
           accelerator: 'Ctrl+-',
-          click: (item, win) => sendMessage(win, 'sqlectron:zoom-out'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-out'),
         },
         {
           label: 'Reset Zoom',
           accelerator: 'Ctrl+0',
-          click: (item, win) => sendMessage(win, 'sqlectron:zoom-reset'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-reset'),
         },
       ],
     },
@@ -151,12 +158,14 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Search databases',
           accelerator: 'Shift+Ctrl+9',
-          click: (item, win) => sendMessage(win, 'sqlectron:toggle-database-search'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, 'sqlectron:toggle-database-search'),
         },
         {
           label: 'Search database objects',
           accelerator: 'Ctrl+9',
-          click: (item, win) => sendMessage(win, 'sqlectron:toggle-database-objects-search'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, 'sqlectron:toggle-database-objects-search'),
         },
       ],
     },
@@ -165,11 +174,11 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
       submenu: [
         {
           label: 'Report Issue',
-          click: () => shell.openExternal(appConfig.bugs),
+          click: () => shell.openExternal(appConfig.bugs as string),
         },
         {
           label: `About ${appConfig.name}`,
-          click: () => shell.openExternal(appConfig.homepage),
+          click: () => shell.openExternal(appConfig.homepage as string),
         },
       ],
     },

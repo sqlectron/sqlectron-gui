@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as utils from './utils';
 import * as crypto from './crypto';
+import { Config } from '../../common/types/config';
 
-const EMPTY_CONFIG = { servers: [] };
+const EMPTY_CONFIG = <Config>{};
 
 function sanitizeServer(server, cryptoSecret) {
   const srv = { ...server };
@@ -48,7 +49,7 @@ function sanitizeServers(data, cryptoSecret) {
 /**
  * Prepare the configuration file sanitizing and validating all fields availbale
  */
-export async function prepare(cryptoSecret) {
+export async function prepare(cryptoSecret: string): Promise<void> {
   const filename = utils.getConfigPath();
   const fileExistsResult = await utils.fileExists(filename);
   if (!fileExistsResult) {
@@ -68,7 +69,7 @@ export async function prepare(cryptoSecret) {
   // }
 }
 
-export function prepareSync(cryptoSecret) {
+export function prepareSync(cryptoSecret: string): void {
   const filename = utils.getConfigPath();
   const fileExistsResult = utils.fileExistsSync(filename);
   if (!fileExistsResult) {
@@ -88,27 +89,27 @@ export function prepareSync(cryptoSecret) {
   // }
 }
 
-export function path() {
+export function path(): string {
   const filename = utils.getConfigPath();
   return utils.resolveHomePathToAbsolute(filename);
 }
 
-export function get() {
+export function get(): Promise<Config> {
   const filename = utils.getConfigPath();
   return utils.readJSONFile(filename);
 }
 
-export function getSync() {
+export function getSync(): Config {
   const filename = utils.getConfigPath();
   return utils.readJSONFileSync(filename);
 }
 
-export function save(data) {
+export function save(data: Config): Promise<void> {
   const filename = utils.getConfigPath();
   return utils.writeJSONFile(filename, data);
 }
 
-export async function saveSettings(data) {
+export async function saveSettings(data: Config): Promise<void> {
   const fullData = await get();
   const filename = utils.getConfigPath();
   const newData = { ...fullData, ...data };

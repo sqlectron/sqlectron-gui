@@ -10,7 +10,7 @@ export default {
   TMP_FIXTURE_PATH,
 
   getConfigPath: {
-    install({ copyFixtureToTemp }) {
+    install({ copyFixtureToTemp }: { copyFixtureToTemp?: boolean }): void {
       const sandbox = sinon.createSandbox();
 
       beforeEach(async () => {

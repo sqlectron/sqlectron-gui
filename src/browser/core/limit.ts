@@ -4,13 +4,13 @@ import {
 } from 'sqlectron-db-core/database';
 import * as config from './config';
 
-export async function setSelectLimit() {
+export async function setSelectLimit(): Promise<void> {
   const { limitQueryDefaultSelectTop } = await config.get();
   if (limitQueryDefaultSelectTop !== null && limitQueryDefaultSelectTop !== undefined) {
     internalSet(limitQueryDefaultSelectTop);
   }
 }
 
-export function clearSelectLimit() {
+export function clearSelectLimit(): void {
   internalClear();
 }

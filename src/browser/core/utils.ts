@@ -5,6 +5,7 @@ import mkdirp from 'mkdirp';
 import envPaths from 'env-paths';
 
 import { readFile, resolveHomePathToAbsolute } from 'sqlectron-db-core/utils';
+import { Config } from '../../common/types/config';
 
 export {
   createCancelablePromise,
@@ -16,7 +17,7 @@ export {
 
 let configPath = '';
 
-export function getConfigPath() {
+export function getConfigPath(): string {
   if (configPath) {
     return configPath;
   }
@@ -36,7 +37,7 @@ export function getConfigPath() {
   return configPath;
 }
 
-export function fileExists(filename) {
+export function fileExists(filename: string): Promise<boolean> {
   return new Promise((resolve) => {
     fs.stat(filename, (err, stats) => {
       if (err) return resolve(false);
@@ -45,7 +46,7 @@ export function fileExists(filename) {
   });
 }
 
-export function fileExistsSync(filename) {
+export function fileExistsSync(filename: string): boolean {
   try {
     return fs.statSync(filename).isFile();
   } catch (e) {
@@ -53,7 +54,7 @@ export function fileExistsSync(filename) {
   }
 }
 
-export function writeFile(filename, data): Promise<void> {
+export function writeFile(filename: string, data: string): Promise<void> {
   return new Promise((resolve, reject) => {
     fs.writeFile(filename, data, (err) => {
       if (err) return reject(err);
@@ -62,28 +63,28 @@ export function writeFile(filename, data): Promise<void> {
   });
 }
 
-export function writeJSONFile(filename, data) {
+export function writeJSONFile(filename: string, data: Config): Promise<void> {
   return writeFile(filename, JSON.stringify(data, null, 2));
 }
 
-export function writeJSONFileSync(filename, data) {
+export function writeJSONFileSync(filename: string, data: Config): void {
   return fs.writeFileSync(filename, JSON.stringify(data, null, 2));
 }
 
-export function readJSONFile(filename) {
+export function readJSONFile(filename: string): Promise<Config> {
   return readFile(filename).then((data) => JSON.parse(data));
 }
 
-export function readJSONFileSync(filename) {
+export function readJSONFileSync(filename: string): Config {
   const filePath = resolveHomePathToAbsolute(filename);
   const data = fs.readFileSync(path.resolve(filePath), { encoding: 'utf-8' });
   return JSON.parse(data);
 }
 
-export function createParentDirectory(filename) {
+export function createParentDirectory(filename: string): void {
   return mkdirp(path.dirname(filename));
 }
 
-export function createParentDirectorySync(filename) {
+export function createParentDirectorySync(filename: string): void {
   mkdirp.sync(path.dirname(filename));
 }

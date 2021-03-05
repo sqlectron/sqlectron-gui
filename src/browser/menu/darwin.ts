@@ -1,18 +1,30 @@
 import { shell } from 'electron';
+import { BrowserWindow, App, MenuItem, MenuItemConstructorOptions } from 'electron';
+import { Config } from '../../common/types/config';
+import { BuildWindow } from '../../common/types/menu';
 
-function sendMessage(win, message) {
+function sendMessage(win: BrowserWindow, message: string) {
   if (win) {
     win.webContents.send(message);
   }
 }
 
-export function buildTemplate(app, buildNewWindow, appConfig) {
+export function buildTemplate(
+  app: App,
+  buildNewWindow: BuildWindow,
+  appConfig: Config,
+): Array<MenuItemConstructorOptions | MenuItem> {
   return [
     {
       label: appConfig.name,
       submenu: [
         {
           label: `About ${appConfig.name}`,
+          // TODO: selector property isn't a field in the menu constructor.
+          // It is specific for macOS https://github.com/electron/electron/issues/2268
+          // Find out if it still works and check if there is another way to achieve this
+          // without having to ignore this typescript error.
+          // @ts-ignore
           selector: 'orderFrontStandardAboutPanel:',
         },
         {
@@ -28,15 +40,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: `Hide ${appConfig.name}`,
           accelerator: 'Cmd+H',
-          selector: 'hide:',
+          role: 'hide',
         },
         {
           label: 'Hide Others',
           accelerator: 'Cmd+Shift+H',
+          // @ts-ignore
           selector: 'hideOtherApplications:',
         },
         {
           label: 'Show All',
+          // @ts-ignore
           selector: 'unhideAllApplications:',
         },
         {
@@ -60,12 +74,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'New Tab',
           accelerator: 'Cmd+T',
-          click: (item, win) => sendMessage(win, 'sqlectron:new-tab'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:new-tab'),
         },
         {
           label: 'Close Tab',
           accelerator: 'Cmd+W',
-          click: (item, win) => sendMessage(win, 'sqlectron:close-tab'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:close-tab'),
         },
         {
           type: 'separator',
@@ -73,17 +87,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Save Query',
           accelerator: 'Cmd+S',
-          click: (item, win) => sendMessage(win, 'sqlectron:save-query'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:save-query'),
         },
         {
           label: 'Save Query As',
           accelerator: 'Shift+Cmd+S',
-          click: (item, win) => sendMessage(win, 'sqlectron:save-query-as'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:save-query-as'),
         },
         {
           label: 'Open Query',
           accelerator: 'Cmd+O',
-          click: (item, win) => sendMessage(win, 'sqlectron:open-query'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:open-query'),
         },
       ],
     },
@@ -93,17 +107,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Execute',
           accelerator: 'Cmd+Enter',
-          click: (item, win) => sendMessage(win, 'sqlectron:query-execute'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-execute'),
         },
         {
           label: 'Execute',
           accelerator: 'Cmd+R',
-          click: (item, win) => sendMessage(win, 'sqlectron:query-execute'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-execute'),
         },
         {
           label: 'Focus Query Editor',
           accelerator: 'Shift+Cmd+0',
-          click: (item, win) => sendMessage(win, 'sqlectron:query-focus'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-focus'),
         },
       ],
     },
@@ -113,12 +127,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Undo',
           accelerator: 'Cmd+Z',
-          selector: 'undo:',
+          role: 'undo',
         },
         {
           label: 'Redo',
           accelerator: 'Shift+Cmd+Z',
-          selector: 'redo:',
+          role: 'redo',
         },
         {
           type: 'separator',
@@ -126,22 +140,22 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Cut',
           accelerator: 'Cmd+X',
-          selector: 'cut:',
+          role: 'cut',
         },
         {
           label: 'Copy',
           accelerator: 'Cmd+C',
-          selector: 'copy:',
+          role: 'copy',
         },
         {
           label: 'Paste',
           accelerator: 'Cmd+V',
-          selector: 'paste:',
+          role: 'paste',
         },
         {
           label: 'Select All',
           accelerator: 'Cmd+A',
-          selector: 'selectAll:',
+          role: 'selectAll',
         },
       ],
     },
@@ -151,12 +165,12 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Reload',
           accelerator: 'Cmd+Shift+R',
-          click: (item, win) => win.webContents.reloadIgnoringCache(),
+          click: (item, win) => (win as BrowserWindow).webContents.reloadIgnoringCache(),
         },
         {
           label: 'Toggle DevTools',
           accelerator: 'Alt+Cmd+I',
-          click: (item, win) => win.toggleDevTools(),
+          click: (item, win) => (win as BrowserWindow).webContents.toggleDevTools(),
         },
         {
           type: 'separator',
@@ -164,17 +178,17 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Zoom In',
           accelerator: 'Cmd+=',
-          click: (item, win) => sendMessage(win, 'sqlectron:zoom-in'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-in'),
         },
         {
           label: 'Zoom Out',
           accelerator: 'Cmd+-',
-          click: (item, win) => sendMessage(win, 'sqlectron:zoom-out'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-out'),
         },
         {
           label: 'Reset Zoom',
           accelerator: 'Cmd+0',
-          click: (item, win) => sendMessage(win, 'sqlectron:zoom-reset'),
+          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-reset'),
         },
       ],
     },
@@ -184,12 +198,14 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Search databases',
           accelerator: 'Shift+Cmd+9',
-          click: (item, win) => sendMessage(win, 'sqlectron:toggle-database-search'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, 'sqlectron:toggle-database-search'),
         },
         {
           label: 'Search database objects',
           accelerator: 'Cmd+9',
-          click: (item, win) => sendMessage(win, 'sqlectron:toggle-database-objects-search'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, 'sqlectron:toggle-database-objects-search'),
         },
       ],
     },
@@ -199,11 +215,13 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         {
           label: 'Minimize',
           accelerator: 'Cmd+M',
+          // @ts-ignore
           selector: 'performMiniaturize:',
         },
         {
           label: 'Close',
           accelerator: 'Cmd+Shift+W',
+          // @ts-ignore
           selector: 'performClose:',
         },
         {
@@ -211,6 +229,7 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
         },
         {
           label: 'Bring All to Front',
+          // @ts-ignore
           selector: 'arrangeInFront:',
         },
       ],
@@ -220,13 +239,16 @@ export function buildTemplate(app, buildNewWindow, appConfig) {
       submenu: [
         {
           label: 'Report Issue',
-          click: () => shell.openExternal(appConfig.bugs),
+          click: () => shell.openExternal(appConfig.bugs as string),
         },
       ],
     },
   ];
 }
 
-export function buildTemplateDockMenu(app, buildNewWindow) {
+export function buildTemplateDockMenu(
+  app: App,
+  buildNewWindow: BuildWindow,
+): Array<MenuItemConstructorOptions> {
   return [{ label: 'New Window', click: () => buildNewWindow(app) }];
 }
