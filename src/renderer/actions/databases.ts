@@ -1,7 +1,10 @@
+import { AnyAction } from 'redux';
 import path from 'path';
 import html2canvas from 'html2canvas';
+import { ApplicationState, ThunkResult } from '../reducers';
 import { getCurrentDBConn } from './connections';
 import * as FileHandler from '../utils/file-handler';
+import { DatabaseFilter } from '../../common/types/database';
 
 export const REFRESH_DATABASES = 'REFRESH_DATABASES';
 export const FETCH_DATABASES_REQUEST = 'FETCH_DATABASES_REQUEST';
@@ -21,27 +24,27 @@ export const EXPORT_DIAGRAM_REQUEST = 'EXPORT_DIAGRAM_REQUEST';
 export const EXPORT_DIAGRAM_SUCCESS = 'EXPORT_DIAGRAM_SUCCESS';
 export const EXPORT_DIAGRAM_FAILURE = 'EXPORT_DIAGRAM_FAILURE';
 
-export function filterDatabases(name) {
+export function filterDatabases(name: string): AnyAction {
   return { type: FILTER_DATABASES, name };
 }
 
-export function refreshDatabase(name) {
+export function refreshDatabase(name: string): AnyAction {
   return { type: REFRESH_DATABASES, name };
 }
 
-export function showDatabaseDiagram(name) {
+export function showDatabaseDiagram(name: string): AnyAction {
   return { type: SHOW_DATABASE_DIAGRAM, name };
 }
 
-export function closeDatabaseDiagram() {
+export function closeDatabaseDiagram(): AnyAction {
   return { type: CLOSE_DATABASE_DIAGRAM };
 }
 
-export function generateDatabaseDiagram() {
+export function generateDatabaseDiagram(): AnyAction {
   return { type: GENERATE_DATABASE_DIAGRAM };
 }
 
-export function saveDatabaseDiagram(diagramJSON) {
+export function saveDatabaseDiagram(diagramJSON: unknown): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_DIAGRAM_REQUEST });
     try {
@@ -61,7 +64,10 @@ export function saveDatabaseDiagram(diagramJSON) {
   };
 }
 
-export function exportDatabaseDiagram(diagram, imageType) {
+export function exportDatabaseDiagram(
+  diagram: { scrollIntoView: () => void },
+  imageType: string,
+): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: EXPORT_DIAGRAM_REQUEST });
     try {
@@ -87,7 +93,7 @@ export function exportDatabaseDiagram(diagram, imageType) {
   };
 }
 
-export function openDatabaseDiagram() {
+export function openDatabaseDiagram(): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: OPEN_DIAGRAM_REQUEST });
     try {
@@ -106,7 +112,7 @@ export function openDatabaseDiagram() {
   };
 }
 
-export function fetchDatabasesIfNeeded(filter) {
+export function fetchDatabasesIfNeeded(filter: DatabaseFilter): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchDatabases(getState())) {
       dispatch(fetchDatabases(filter));
@@ -114,19 +120,19 @@ export function fetchDatabasesIfNeeded(filter) {
   };
 }
 
-function shouldFetchDatabases(state) {
+function shouldFetchDatabases(state: ApplicationState): boolean {
   const databases = state.databases;
   if (!databases) return true;
   if (databases.isFetching) return false;
   return databases.didInvalidate;
 }
 
-function fetchDatabases(filter) {
+function fetchDatabases(filter: DatabaseFilter): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_DATABASES_REQUEST });
     try {
       const dbConn = getCurrentDBConn(getState());
-      const databases = await dbConn.listDatabases(filter);
+      const databases = await dbConn?.listDatabases(filter);
       dispatch({ type: FETCH_DATABASES_SUCCESS, databases });
     } catch (error) {
       dispatch({ type: FETCH_DATABASES_FAILURE, error });

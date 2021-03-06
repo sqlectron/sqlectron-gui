@@ -115,6 +115,37 @@ module.exports = {
         react: { version: 'detect' },
       },
     },
+    // NOTE: Using a temporary specific override for actions and reducers while the rest of
+    // the renderer files are not converted to typescript, otherwise enabling
+    // @typescript-eslint/explicit-module-boundary-types for all files would make
+    // the linter go nuts
+    {
+      files: ['src/renderer/actions/*.ts', 'src/renderer/reducers/*.ts'],
+      env: { browser: true, es6: true, node: true },
+      extends: [
+        'eslint:recommended',
+        'plugin:react/recommended',
+        'plugin:@typescript-eslint/recommended',
+        'plugin:prettier/recommended',
+      ],
+      globals: { NodeJS: true, Atomics: 'readonly', SharedArrayBuffer: 'readonly' },
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        ecmaFeatures: { jsx: true },
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        project: './tsconfig.json',
+      },
+      plugins: ['prettier', '@typescript-eslint'],
+      rules: {
+        'no-unused-vars': 'off',
+        '@typescript-eslint/ban-ts-comment': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+      },
+      settings: {
+        react: { version: 'detect' },
+      },
+    },
     {
       files: ['src/browser/**/*.ts', 'src/common/**/*.ts'],
       env: { browser: true, es6: true, node: true },

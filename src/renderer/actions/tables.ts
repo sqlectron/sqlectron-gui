@@ -1,15 +1,18 @@
+import { AnyAction } from 'redux';
 import { getCurrentDBConn } from './connections';
+import { ApplicationState, ThunkResult } from '../reducers';
+import { SchemaFilter } from '../../common/types/database';
 
 export const FETCH_TABLES_REQUEST = 'FETCH_TABLES_REQUEST';
 export const FETCH_TABLES_SUCCESS = 'FETCH_TABLES_SUCCESS';
 export const FETCH_TABLES_FAILURE = 'FETCH_TABLES_FAILURE';
 export const SELECT_TABLES_FOR_DIAGRAM = 'SELECT_TABLES_FOR_DIAGRAM';
 
-export function selectTablesForDiagram(tables) {
+export function selectTablesForDiagram(tables: Array<string>): AnyAction {
   return { type: SELECT_TABLES_FOR_DIAGRAM, tables };
 }
 
-export function fetchTablesIfNeeded(database, filter) {
+export function fetchTablesIfNeeded(database: string, filter: SchemaFilter): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchTables(getState(), database)) {
       dispatch(fetchTables(database, filter));
@@ -17,7 +20,7 @@ export function fetchTablesIfNeeded(database, filter) {
   };
 }
 
-function shouldFetchTables(state, database) {
+function shouldFetchTables(state: ApplicationState, database: string): boolean {
   const tables = state.tables;
   if (!tables) return true;
   if (tables.isFetching) return false;
@@ -25,12 +28,12 @@ function shouldFetchTables(state, database) {
   return tables.didInvalidate;
 }
 
-function fetchTables(database, filter) {
+function fetchTables(database: string, filter: SchemaFilter): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_TABLES_REQUEST, database });
     try {
       const dbConn = getCurrentDBConn(getState());
-      const tables = await dbConn.listTables(filter);
+      const tables = await dbConn?.listTables(filter);
       dispatch({ type: FETCH_TABLES_SUCCESS, database, tables });
     } catch (error) {
       dispatch({ type: FETCH_TABLES_FAILURE, error });

@@ -1,18 +1,46 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as queryTypes from '../actions/queries';
 import * as types from '../actions/schemas';
 
-const INITIAL_STATE = {
+export interface Schema {
+  name: string;
+}
+
+export interface SchemaAction extends Action {
+  type: string;
+  error: Error;
+  schemas: Array<Schema>;
+  isServerConnection: boolean;
+  database: string;
+  results: Array<{ command: string }>;
+}
+
+export interface SchemaState {
+  error: null | Error;
+  isFetching: boolean;
+  didInvalidate: boolean;
+  itemsByDatabase: {
+    [db: string]: Array<string>;
+  };
+  selectedSchemasForDiagram: [];
+}
+
+const INITIAL_STATE: SchemaState = {
+  error: null,
   isFetching: false,
   didInvalidate: false,
   itemsByDatabase: {},
-  selectedTablesForDiagram: [],
+  selectedSchemasForDiagram: [],
 };
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_SCHEMA', 'DROP_SCHEMA'];
 
-export default function (state = INITIAL_STATE, action) {
+const schemaReducer: Reducer<SchemaState> = function (
+  state: SchemaState = INITIAL_STATE,
+  action,
+): SchemaState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
@@ -62,10 +90,11 @@ export default function (state = INITIAL_STATE, action) {
     case dbTypes.CLOSE_DATABASE_DIAGRAM: {
       return {
         ...state,
-        selectedSchemasForDiagram: null,
+        selectedSchemasForDiagram: [],
       };
     }
     default:
       return state;
   }
-}
+};
+export default schemaReducer;

@@ -29,4 +29,8 @@ export interface Config {
   // Fields attached from cli args
   devMode?: boolean;
   printVersion?: boolean;
+  // Fields attached in runtime by the config setup
+  crypto?: {
+    secret: string;
+  };
 }

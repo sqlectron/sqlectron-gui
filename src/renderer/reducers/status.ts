@@ -1,11 +1,16 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as tablesTypes from '../actions/tables';
 import * as queriesTypes from '../actions/queries';
 
+export interface StatusAction extends Action {
+  type: string;
+  error: null | Error;
+}
+
 const INITIAL_STATE = '';
 
-// eslint-disable-next-line
-export default function (state = INITIAL_STATE, action) {
+const statusReducer: Reducer<string> = function (_, action) {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST:
       return 'Connecting to database...';
@@ -20,8 +25,10 @@ export default function (state = INITIAL_STATE, action) {
     case queriesTypes.SAVE_QUERY_SUCCESS:
       return 'Query saved successfully';
     case queriesTypes.SAVE_QUERY_FAILURE:
-      return `Error saving query. ${action.error.message}`;
+      return `Error saving query. ${action.error?.message}`;
     default:
       return INITIAL_STATE;
   }
-}
+};
+
+export default statusReducer;

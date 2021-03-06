@@ -1,15 +1,42 @@
+import { Action, Reducer } from 'redux';
 import * as types from '../actions/servers';
 import * as configTypes from '../actions/config';
+import { Server } from '../../common/types/server';
 
-const INITIAL_STATE = {
+export interface ValidationError {
+  validationErrors: Array<Error>;
+}
+
+export interface ServerAction extends Action {
+  type: string;
+  error: ValidationError;
+  server: Server;
+  config: {
+    servers: Array<Server>;
+  };
+  id: string;
+}
+
+export interface ServerState {
+  error: null | ValidationError;
+  isSaving: boolean;
+  isEditing: boolean;
+  items: Array<Server>;
+  editingServer: null | Server;
+}
+
+const INITIAL_STATE: ServerState = {
+  error: null,
   isSaving: false,
   isEditing: false,
   items: [],
-  error: null,
   editingServer: null,
 };
 
-export default function servers(state = INITIAL_STATE, action) {
+const serverReducer: Reducer<ServerState> = function (
+  state: ServerState = INITIAL_STATE,
+  action,
+): ServerState {
   switch (action.type) {
     case configTypes.LOAD_CONFIG_SUCCESS:
       return {
@@ -71,7 +98,7 @@ export default function servers(state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
 
 function save(dataItems, server) {
   const items = [...dataItems] || [];
@@ -88,3 +115,5 @@ function remove(items, id) {
   const index = items.findIndex((srv) => srv.id === id);
   return [...items.slice(0, index), ...items.slice(index + 1)];
 }
+
+export default serverReducer;

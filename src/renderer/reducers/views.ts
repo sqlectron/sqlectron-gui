@@ -1,14 +1,36 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/views';
 import * as dbTypes from '../actions/databases';
 
-const INITIAL_STATE = {
+export interface ViewAction extends Action {
+  type: string;
+  error: Error;
+  isServerConnection: boolean;
+  views: Array<string>;
+  database: string;
+}
+
+export interface ViewState {
+  error: null | Error;
+  isFetching: boolean;
+  didInvalidate: boolean;
+  viewsByDatabase: {
+    [database: string]: string;
+  };
+}
+
+const INITIAL_STATE: ViewState = {
+  error: null,
   isFetching: false,
   didInvalidate: false,
   viewsByDatabase: {},
 };
 
-export default function (state = INITIAL_STATE, action) {
+const viewReducer: Reducer<ViewState> = function (
+  state: ViewState = INITIAL_STATE,
+  action,
+): ViewState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
@@ -50,4 +72,6 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
+
+export default viewReducer;

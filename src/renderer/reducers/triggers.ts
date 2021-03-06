@@ -1,14 +1,41 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as types from '../actions/triggers';
 
-const INITIAL_STATE = {
+export interface Trigger {
+  name: string;
+}
+
+export interface TriggerAction extends Action {
+  type: string;
+  error: Error;
+  isServerConnection: boolean;
+  database: string;
+  table: string;
+  triggers: Array<Trigger>;
+}
+
+export interface TriggerState {
+  error: null | Error;
+  isFetching: boolean;
+  didInvalidate: boolean;
+  triggersByTable: {
+    [table: string]: Trigger;
+  };
+}
+
+const INITIAL_STATE: TriggerState = {
+  error: null,
   isFetching: false,
   didInvalidate: false,
   triggersByTable: {},
 };
 
-export default function (state = INITIAL_STATE, action) {
+const triggerReducer: Reducer<TriggerState> = function (
+  state: TriggerState = INITIAL_STATE,
+  action,
+): TriggerState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
@@ -53,4 +80,6 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
+
+export default triggerReducer;

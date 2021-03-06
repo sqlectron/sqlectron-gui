@@ -46,10 +46,8 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
   middlewares.push(createReduxLogger(loggerConfig));
 }
 
-const createStoreWithMiddleware = applyMiddleware(...middlewares)(createStore);
-
 export default function configureStore(initialState?) {
-  const store = createStoreWithMiddleware(rootReducer, initialState);
+  const store = createStore(rootReducer, initialState, applyMiddleware(...middlewares));
 
   if (module.hot) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires

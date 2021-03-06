@@ -1,10 +1,11 @@
 import { getDBConnByName } from './connections';
+import { ApplicationState, ThunkResult } from '../reducers';
 
 export const FETCH_INDEXES_REQUEST = 'FETCH_INDEXES_REQUEST';
 export const FETCH_INDEXES_SUCCESS = 'FETCH_INDEXES_SUCCESS';
 export const FETCH_INDEXES_FAILURE = 'FETCH_INDEXES_FAILURE';
 
-export function fetchTableIndexesIfNeeded(database, table) {
+export function fetchTableIndexesIfNeeded(database: string, table: string): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchTableIndexes(getState(), database, table)) {
       dispatch(fetchTableIndexes(database, table));
@@ -12,7 +13,11 @@ export function fetchTableIndexesIfNeeded(database, table) {
   };
 }
 
-function shouldFetchTableIndexes(state, database, table) {
+function shouldFetchTableIndexes(
+  state: ApplicationState,
+  database: string,
+  table: string,
+): boolean {
   const indexes = state.indexes;
   if (!indexes) return true;
   if (indexes.isFetching) return false;
@@ -21,7 +26,7 @@ function shouldFetchTableIndexes(state, database, table) {
   return indexes.didInvalidate;
 }
 
-function fetchTableIndexes(database, table) {
+function fetchTableIndexes(database: string, table: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_INDEXES_REQUEST, database, table });
     try {

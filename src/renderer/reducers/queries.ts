@@ -1,7 +1,50 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/queries';
 
-const INITIAL_STATE = {
+export interface Query {
+  id: string;
+  database: string;
+  name: string;
+  filename: null | string;
+  isExecuting: boolean;
+  isDefaultSelect: boolean;
+  didInvalidate: boolean;
+  query: string;
+  selectedQuery: string;
+  queryHistory: Array<string>;
+  results: null | [];
+  error: null | Error;
+  copied: null | boolean;
+  resultItemsPerPage: [];
+}
+
+export interface QueryAction extends Action {
+  error: Error;
+  type: string;
+  id: string;
+  isDefaultSelect: boolean;
+  query: string;
+  name: string;
+  filename: string;
+  selectedQuery: string;
+  table: string;
+  results: string;
+}
+
+export interface QueryState {
+  lastCreatedId: number;
+  currentQueryId: null | string;
+  queryIds: Array<string>;
+  queriesById: {
+    [queryId: string]: Query;
+  };
+  resultItemsPerPage: number;
+  enabledAutoComplete: boolean;
+  enabledLiveAutoComplete: boolean;
+}
+
+const INITIAL_STATE: QueryState = {
   lastCreatedId: 0,
   currentQueryId: null,
   queryIds: [],
@@ -11,7 +54,10 @@ const INITIAL_STATE = {
   enabledLiveAutoComplete: true,
 };
 
-export default function (state = INITIAL_STATE, action) {
+const queryReducer: Reducer<QueryState> = function (
+  state: QueryState = INITIAL_STATE,
+  action,
+): QueryState {
   switch (action.type) {
     case connTypes.CLOSE_CONNECTION: {
       return INITIAL_STATE;
@@ -29,10 +75,10 @@ export default function (state = INITIAL_STATE, action) {
     case types.REMOVE_QUERY: {
       const newState = { ...state };
 
-      const { database } = state.queriesById[state.currentQueryId];
-      const index = state.queryIds.indexOf(state.currentQueryId);
+      const { database } = state.queriesById[state.currentQueryId as string];
+      const index = state.queryIds.indexOf(state.currentQueryId as string);
 
-      if (state.length === 1) {
+      if (state.queryIds.length === 1) {
         newState.currentQueryId = null;
       } else if (index > 0) {
         newState.currentQueryId = state.queryIds[index - 1];
@@ -41,7 +87,7 @@ export default function (state = INITIAL_STATE, action) {
       }
 
       newState.queryIds.splice(index, 1);
-      delete newState.queriesById[state.currentQueryId];
+      delete newState.queriesById[state.currentQueryId as string];
 
       if (newState.queryIds.length >= 1) {
         return newState;
@@ -55,7 +101,10 @@ export default function (state = INITIAL_STATE, action) {
         isExecuting: true,
         isDefaultSelect: action.isDefaultSelect,
         didInvalidate: false,
-        queryHistory: [...state.queriesById[state.currentQueryId].queryHistory, action.query],
+        queryHistory: [
+          ...state.queriesById[state.currentQueryId as string].queryHistory,
+          action.query,
+        ],
       });
     }
     case types.EXECUTE_QUERY_SUCCESS: {
@@ -150,7 +199,7 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
 
 function addNewQuery(state, action) {
   if (action.reconnecting) {
@@ -172,7 +221,7 @@ function addNewQuery(state, action) {
   }
 
   const newId = state.lastCreatedId + 1;
-  const newQuery = {
+  const newQuery: Query = {
     id: newId,
     database: action.database,
     name: createQueryName(newId, action.database, action.table),
@@ -204,7 +253,11 @@ function addNewQuery(state, action) {
   };
 }
 
-function changeStateByCurrentQuery(oldFullState, newCurrentQueryState, options = {}) {
+function changeStateByCurrentQuery(
+  oldFullState,
+  newCurrentQueryState,
+  options: { table?: string } = {},
+) {
   const oldQueryState = oldFullState.queriesById[oldFullState.currentQueryId];
 
   oldQueryState.name = newCurrentQueryState.name || oldQueryState.name;
@@ -231,3 +284,5 @@ function changeStateByCurrentQuery(oldFullState, newCurrentQueryState, options =
 function createQueryName(id, database, table) {
   return table ? `${database} / ${table} #${id}` : `${database} #${id}`;
 }
+
+export default queryReducer;

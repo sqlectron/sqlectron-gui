@@ -1,10 +1,12 @@
 import { getCurrentDBConn } from './connections';
+import { ApplicationState, ThunkResult } from '../reducers';
+import { SchemaFilter } from '../../common/types/database';
 
 export const FETCH_ROUTINES_REQUEST = 'FETCH_ROUTINES_REQUEST';
 export const FETCH_ROUTINES_SUCCESS = 'FETCH_ROUTINES_SUCCESS';
 export const FETCH_ROUTINES_FAILURE = 'FETCH_ROUTINES_FAILURE';
 
-export function fetchRoutinesIfNeeded(database, filter) {
+export function fetchRoutinesIfNeeded(database: string, filter: SchemaFilter): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchRoutines(getState(), database)) {
       dispatch(fetchRoutines(database, filter));
@@ -12,7 +14,7 @@ export function fetchRoutinesIfNeeded(database, filter) {
   };
 }
 
-function shouldFetchRoutines(state, database) {
+function shouldFetchRoutines(state: ApplicationState, database: string): boolean {
   const routines = state.routines;
   if (!routines) return true;
   if (routines.isFetching) return false;
@@ -21,12 +23,12 @@ function shouldFetchRoutines(state, database) {
   return routines.didInvalidate;
 }
 
-function fetchRoutines(database, filter) {
+function fetchRoutines(database: string, filter: SchemaFilter): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_ROUTINES_REQUEST, database });
     try {
       const dbConn = getCurrentDBConn(getState());
-      const routines = await dbConn.listRoutines(filter);
+      const routines = await dbConn?.listRoutines(filter);
       dispatch({ type: FETCH_ROUTINES_SUCCESS, database, routines });
     } catch (error) {
       dispatch({ type: FETCH_ROUTINES_FAILURE, error });

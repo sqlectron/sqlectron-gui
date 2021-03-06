@@ -1,10 +1,15 @@
 import { getDBConnByName } from './connections';
+import { ApplicationState, ThunkResult } from '../reducers';
 
 export const FETCH_KEYS_REQUEST = 'FETCH_KEYS_REQUEST';
 export const FETCH_KEYS_SUCCESS = 'FETCH_KEYS_SUCCESS';
 export const FETCH_KEYS_FAILURE = 'FETCH_KEYS_FAILURE';
 
-export function fetchTableKeysIfNeeded(database, table, schema) {
+export function fetchTableKeysIfNeeded(
+  database: string,
+  table: string,
+  schema: string,
+): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchTableKeys(getState(), database, table)) {
       dispatch(fetchTableKeys(database, table, schema));
@@ -12,7 +17,7 @@ export function fetchTableKeysIfNeeded(database, table, schema) {
   };
 }
 
-function shouldFetchTableKeys(state, database, table) {
+function shouldFetchTableKeys(state: ApplicationState, database: string, table: string): boolean {
   const keys = state.keys;
   if (!keys) return true;
   if (keys.isFetching[database] && keys.isFetching[database][table]) return false;
@@ -21,7 +26,7 @@ function shouldFetchTableKeys(state, database, table) {
   return keys.didInvalidate;
 }
 
-function fetchTableKeys(database, table, schema) {
+function fetchTableKeys(database: string, table: string, schema: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_KEYS_REQUEST, database, table });
     try {

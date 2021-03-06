@@ -1,14 +1,41 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as types from '../actions/indexes';
 
-const INITIAL_STATE = {
+export interface Index {
+  name: string;
+}
+
+export interface IndexAction extends Action {
+  type: string;
+  error: Error;
+  isServerConnection: boolean;
+  database: string;
+  table: string;
+  indexes: Array<Index>;
+}
+
+export interface IndexState {
+  isFetching: boolean;
+  didInvalidate: boolean;
+  indexesByTable: {
+    [table: string]: Index;
+  };
+  error: null | Error;
+}
+
+const INITIAL_STATE: IndexState = {
   isFetching: false,
   didInvalidate: false,
   indexesByTable: {},
+  error: null,
 };
 
-export default function (state = INITIAL_STATE, action) {
+const indexReducer: Reducer<IndexState> = function (
+  state: IndexState = INITIAL_STATE,
+  action,
+): IndexState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
@@ -53,4 +80,6 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
+
+export default indexReducer;
