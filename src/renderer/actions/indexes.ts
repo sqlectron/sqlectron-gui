@@ -1,4 +1,4 @@
-import { getDBConnByName } from './connections';
+import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 
 export const FETCH_INDEXES_REQUEST = 'FETCH_INDEXES_REQUEST';
@@ -30,8 +30,7 @@ function fetchTableIndexes(database: string, table: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_INDEXES_REQUEST, database, table });
     try {
-      const dbConn = getDBConnByName(database);
-      const indexes = await dbConn.listTableIndexes(table);
+      const indexes = await sqlectron.db.listTableIndexes(database, table);
       dispatch({
         type: FETCH_INDEXES_SUCCESS,
         database,

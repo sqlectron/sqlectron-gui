@@ -1,8 +1,7 @@
-import { ipcRenderer, shell } from 'electron';
 import React, { useEffect, useState } from 'react';
+import { CONFIG, sqlectron } from '../api';
 
-const EVENT_KEY = 'sqlectron:update-available';
-const repo = window.SQLECTRON_CONFIG.repository.url.replace('https://github.com/', '');
+const repo = CONFIG.repository.url.replace('https://github.com/', '');
 const LATEST_RELEASE_URL = `https://github.com/${repo}/releases/latest`;
 
 const UpdateChecker = () => {
@@ -18,15 +17,15 @@ const UpdateChecker = () => {
 
   const onClick = (event) => {
     event.preventDefault();
-    shell.openExternal(LATEST_RELEASE_URL);
+    sqlectron.shell.openExternal(LATEST_RELEASE_URL);
   };
 
   useEffect(() => {
-    ipcRenderer.on(EVENT_KEY, updateAvailable);
-    ipcRenderer.send('sqlectron:check-upgrade');
+    sqlectron.update.onUpdateAvailable(updateAvailable);
+    sqlectron.update.checkUpdateAvailable();
 
     return () => {
-      ipcRenderer.removeListener(EVENT_KEY, updateAvailable);
+      // TODO: remove listener updateAvailable
     };
   }, []);
 

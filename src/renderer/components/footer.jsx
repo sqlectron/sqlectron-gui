@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { shell } from 'electron';
+import { sqlectron } from '../api';
 import UpdateChecker from './update-checker';
 import LogStatus from './log-status';
 
@@ -11,12 +11,14 @@ const STYLE = {
 
 function onGithubClick(event) {
   event.preventDefault();
-  shell.openExternal('https://github.com/sqlectron/sqlectron-gui');
+  sqlectron.browser.shell.openExternal('https://github.com/sqlectron/sqlectron-gui');
 }
 
 function onShortcutsClick(event) {
   event.preventDefault();
-  shell.openExternal('https://github.com/sqlectron/sqlectron-gui/wiki/Keyboard-Shortcuts');
+  sqlectron.browser.shell.openExternal(
+    'https://github.com/sqlectron/sqlectron-gui/wiki/Keyboard-Shortcuts',
+  );
 }
 
 const Footer = ({ status }) => (

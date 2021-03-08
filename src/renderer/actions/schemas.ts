@@ -1,4 +1,4 @@
-import { getCurrentDBConn } from './connections';
+import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 
 export const FETCH_SCHEMAS_REQUEST = 'FETCH_SCHEMAS_REQUEST';
@@ -22,12 +22,11 @@ function shouldFetchSchemas(state: ApplicationState, database: string): boolean 
 }
 
 function fetchSchemas(database: string): ThunkResult<void> {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_SCHEMAS_REQUEST, database });
     try {
-      const dbConn = getCurrentDBConn(getState());
       // TODO: pass real filter setting
-      const schemas = await dbConn?.listSchemas({});
+      const schemas = await sqlectron.db.listSchemas(database, {});
       dispatch({ type: FETCH_SCHEMAS_SUCCESS, database, schemas });
     } catch (error) {
       dispatch({ type: FETCH_SCHEMAS_FAILURE, error });

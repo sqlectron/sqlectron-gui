@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { remote } from 'electron';
+import { sqlectron } from '../api';
 import DatabaseListItemMetatada from './database-list-item-metadata';
 import DatabaseFilter from './database-filter';
-
-const { Menu, MenuItem } = remote;
 
 const STYLE = {
   database: {
@@ -52,45 +50,27 @@ export default class DatabaseListItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.contextMenu = null;
+    this.isContextMenuConfigured = false;
 
     this.onFilterChange = this.onFilterChange.bind(this);
     this.onContextMenu = this.onContextMenu.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.contextMenu || !this.isMetadataLoaded(nextProps)) {
+    if (this.isContextMenuConfigured || !this.isMetadataLoaded(nextProps)) {
       return;
     }
 
-    this.contextMenu = new Menu();
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Refresh Database',
-        click: this.props.onRefreshDatabase.bind(this, nextProps.database),
-      }),
-    );
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Open Tab',
-        click: this.props.onOpenTab.bind(this, nextProps.database),
-      }),
-    );
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Show Database Diagram',
-        click: this.props.onShowDiagramModal.bind(this, nextProps.database),
-      }),
-    );
+    this.isContextMenuConfigured = true;
+    sqlectron.browser.menu.buildContextMenuDatabaseListItem({
+      database: nextProps.database,
+    });
   }
 
   onContextMenu(event) {
     event.preventDefault();
-    if (this.contextMenu) {
-      this.contextMenu.popup({
-        x: event.clientX,
-        y: event.clientY,
-      });
+    if (this.isContextMenuConfigured) {
+      sqlectron.browser.menu.popupContextMenuDatabaseListItem(event.clientX, event.clientY);
     }
   }
 

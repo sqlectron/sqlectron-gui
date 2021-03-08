@@ -1,13 +1,13 @@
-import { webFrame } from 'electron';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { CONFIG } from '../api';
 import * as ConfigActions from '../actions/config';
 import imageSrc from './sqlectron.gif';
 
 import '../../../vendor/renderer/semantic-ui/semantic';
-import MenuHandler from '../menu-handler';
+import { sqlectron } from '../api';
 import { mapObjectToConfig } from '../utils/config';
 
 require('../../../vendor/renderer/lato/latofonts.css');
@@ -27,8 +27,6 @@ class AppContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-
-    this.menuHandler = new MenuHandler();
   }
 
   UNSAFE_componentWillMount() {
@@ -46,34 +44,34 @@ class AppContainer extends Component {
       dispatch(ConfigActions.finishEditing());
     };
 
-    this.menuHandler.setMenus({
-      'sqlectron:zoom-in': async () => {
-        const { config } = this.props;
-        if (!config.data) {
-          return;
-        }
-        const { data } = config;
-        data.zoomFactor = (data.zoomFactor || 1) + 0.2;
-        updateConfig(data);
-      },
-      'sqlectron:zoom-out': async () => {
-        const { config } = this.props;
-        if (!config.data) {
-          return;
-        }
-        const { data } = config;
-        data.zoomFactor = (data.zoomFactor || 1) - 0.2;
-        updateConfig(data);
-      },
-      'sqlectron:zoom-reset': async () => {
-        const { config } = this.props;
-        if (!config.data) {
-          return;
-        }
-        const { data } = config;
-        data.zoomFactor = 1;
-        updateConfig(data);
-      },
+    sqlectron.browser.menu.onZoomIn(() => {
+      const { config } = this.props;
+      if (!config.data) {
+        return;
+      }
+      const { data } = config;
+      data.zoomFactor = (data.zoomFactor || 1) + 0.2;
+      updateConfig(data);
+    });
+
+    sqlectron.browser.menu.onZoomOut(() => {
+      const { config } = this.props;
+      if (!config.data) {
+        return;
+      }
+      const { data } = config;
+      data.zoomFactor = (data.zoomFactor || 1) - 0.2;
+      updateConfig(data);
+    });
+
+    sqlectron.browser.menu.onZoomReset(() => {
+      const { config } = this.props;
+      if (!config.data) {
+        return;
+      }
+      const { data } = config;
+      data.zoomFactor = 1;
+      updateConfig(data);
     });
   }
 
@@ -86,7 +84,7 @@ class AppContainer extends Component {
     if (typeof zoomFactor !== 'undefined' && zoomFactor > 0) {
       // Apply the zoom factor
       // Required for HiDPI support
-      webFrame.setZoomFactor(zoomFactor);
+      sqlectron.browser.webFrame.setZoomFactor(zoomFactor);
     }
     if (enabledDarkTheme === true) {
       $('body').addClass('dark-theme');
@@ -110,7 +108,7 @@ class AppContainer extends Component {
   componentWillUnmount() {
     document.removeEventListener('dragover', preventDefault, false);
     document.removeEventListener('drop', preventDefault, false);
-    this.menuHandler.removeAllMenus();
+    // TODO: Remove all menu linsteners
   }
 
   // this runs the animated loading
@@ -125,7 +123,7 @@ class AppContainer extends Component {
         const loadingInner = document.createElement('div');
 
         const version = document.createElement('H3');
-        version.appendChild(document.createTextNode(`v${window.SQLECTRON_CONFIG.version}`));
+        version.appendChild(document.createTextNode(`v${CONFIG.version}`));
 
         loadingInner.appendChild(version);
         loadingInner.appendChild(img);

@@ -1,4 +1,4 @@
-import { getCurrentDBConn } from './connections';
+import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { SchemaFilter } from '../../common/types/database';
 
@@ -23,11 +23,10 @@ function shouldFetchViews(state: ApplicationState, database: string): boolean {
 }
 
 function fetchViews(database: string, filter: SchemaFilter): ThunkResult<void> {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_VIEWS_REQUEST, database });
     try {
-      const dbConn = getCurrentDBConn(getState());
-      const views = await dbConn?.listViews(filter);
+      const views = await sqlectron.db.listViews(database, filter);
       dispatch({ type: FETCH_VIEWS_SUCCESS, database, views });
     } catch (error) {
       dispatch({ type: FETCH_VIEWS_FAILURE, error });

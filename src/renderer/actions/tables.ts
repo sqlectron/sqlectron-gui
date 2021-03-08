@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import { getCurrentDBConn } from './connections';
+import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { SchemaFilter } from '../../common/types/database';
 
@@ -29,11 +29,10 @@ function shouldFetchTables(state: ApplicationState, database: string): boolean {
 }
 
 function fetchTables(database: string, filter: SchemaFilter): ThunkResult<void> {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_TABLES_REQUEST, database });
     try {
-      const dbConn = getCurrentDBConn(getState());
-      const tables = await dbConn?.listTables(filter);
+      const tables = await sqlectron.db.listTables(database, filter);
       dispatch({ type: FETCH_TABLES_SUCCESS, database, tables });
     } catch (error) {
       dispatch({ type: FETCH_TABLES_FAILURE, error });

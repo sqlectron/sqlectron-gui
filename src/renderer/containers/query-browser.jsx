@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { sqlectron } from '../../browser/remote';
+import { DB_CLIENTS } from '../api';
 import * as ConnActions from '../actions/connections';
 import * as QueryActions from '../actions/queries';
 import * as DbAction from '../actions/databases';
@@ -28,7 +28,7 @@ import Footer from '../components/footer';
 import Query from '../components/query';
 import Loader from '../components/loader';
 import PromptModal from '../components/prompt-modal';
-import MenuHandler from '../menu-handler';
+import { sqlectron } from '../api';
 import { requireClientLogo } from '../components/require-context';
 
 require('./query-browser.css');
@@ -62,7 +62,7 @@ const STYLES = {
   resizeable: { width: 'auto', maxWidth: '100%' },
 };
 
-const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
+const CLIENTS = DB_CLIENTS.reduce((clients, dbClient) => {
   /* eslint no-param-reassign:0 */
   clients[dbClient.key] = {
     title: dbClient.name,
@@ -100,7 +100,6 @@ class QueryBrowserContainer extends Component {
       sideBarWidth: SIDEBAR_WIDTH,
       sidebarCollapsed: false,
     };
-    this.menuHandler = new MenuHandler();
 
     this.onGenerateDatabaseDiagram = this.onGenerateDatabaseDiagram.bind(this);
     this.onAddRelatedTables = this.onAddRelatedTables.bind(this);
@@ -162,8 +161,6 @@ class QueryBrowserContainer extends Component {
     dispatch(fetchTablesIfNeeded(lastConnectedDB, filter));
     dispatch(fetchViewsIfNeeded(lastConnectedDB, filter));
     dispatch(fetchRoutinesIfNeeded(lastConnectedDB, filter));
-
-    this.setMenus();
   }
 
   componentDidUpdate() {
@@ -180,7 +177,7 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillUnmount() {
-    this.menuHandler.removeAllMenus();
+    // TODO: Remove all menu listeners
   }
 
   handleSelectTab(index) {
@@ -333,23 +330,15 @@ class QueryBrowserContainer extends Component {
   }
 
   setMenus() {
-    this.menuHandler.setMenus({
-      'sqlectron:query-execute': () => {
-        const {
-          queries: { queriesById, currentQueryId },
-        } = this.props;
-        const currentQuery = queriesById[currentQueryId];
-        this.handleExecuteQuery(currentQuery.selectedQuery || currentQuery.query);
-      },
-      'sqlectron:new-tab': () => this.newTab(),
-      'sqlectron:close-tab': () => this.closeTab(),
-      'sqlectron:save-query': () => this.saveQuery(),
-      'sqlectron:save-query-as': () => this.saveQueryAs(),
-      'sqlectron:open-query': () => this.openQuery(),
-      'sqlectron:query-focus': () => this.focusQuery(),
-      'sqlectron:toggle-database-search': () => this.toggleDatabaseSearch(),
-      'sqlectron:toggle-database-objects-search': () => this.toggleDatabaseObjectsSearch(),
-    });
+    sqlectron.browser.menu.onQueryExecute(() => this.executeQuery());
+    sqlectron.browser.menu.onNewTab(() => this.newTab());
+    sqlectron.browser.menu.onCloseTab(() => this.closeTab());
+    sqlectron.browser.menu.onSaveQuery(() => this.saveQuery());
+    sqlectron.browser.menu.onSaveQueryAs(() => this.saveQueryAs());
+    sqlectron.browser.menu.onOpenQuery(() => this.openQuery());
+    sqlectron.browser.menu.onQueryFocus(() => this.focusQuery());
+    sqlectron.browser.menu.onToggleDatabaseSearch(() => this.toggleDatabaseSearch());
+    sqlectron.browser.menu.onToggleDatabaObjectsSearch(() => this.toggleDatabaseObjectsSearch());
   }
 
   fetchTableDiagramData(database, tables) {
@@ -410,6 +399,14 @@ class QueryBrowserContainer extends Component {
     }
 
     this.refs.databaseList.focus(currentDB);
+  }
+
+  executeQuery() {
+    const {
+      queries: { queriesById, currentQueryId },
+    } = this.props;
+    const currentQuery = queriesById[currentQueryId];
+    this.handleExecuteQuery(currentQuery.selectedQuery || currentQuery.query);
   }
 
   newTab() {
@@ -522,7 +519,7 @@ class QueryBrowserContainer extends Component {
       );
     });
 
-    const { disabledFeatures } = sqlectron.db.CLIENTS.find(
+    const { disabledFeatures } = DB_CLIENTS.find(
       (dbClient) => dbClient.key === connections.server.client,
     );
 

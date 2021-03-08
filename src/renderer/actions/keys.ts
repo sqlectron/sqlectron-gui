@@ -1,4 +1,4 @@
-import { getDBConnByName } from './connections';
+import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 
 export const FETCH_KEYS_REQUEST = 'FETCH_KEYS_REQUEST';
@@ -30,8 +30,7 @@ function fetchTableKeys(database: string, table: string, schema: string): ThunkR
   return async (dispatch) => {
     dispatch({ type: FETCH_KEYS_REQUEST, database, table });
     try {
-      const dbConn = getDBConnByName(database);
-      const tableKeys = await dbConn.getTableKeys(table, schema);
+      const tableKeys = await sqlectron.db.getTableKeys(database, table, schema);
       dispatch({
         type: FETCH_KEYS_SUCCESS,
         database,

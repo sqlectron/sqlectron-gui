@@ -1,13 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { remote } from 'electron';
 import CollapseIcon from './collapse-icon';
 import TableSubmenu from './table-submenu';
-import { sqlectron } from '../../browser/remote';
-
-const Menu = remote.Menu;
-const MenuItem = remote.MenuItem;
-const CLIENTS = sqlectron.db.CLIENTS;
+import { sqlectron } from '../api';
 
 export default class DatabaseItem extends Component {
   static propTypes = {
@@ -27,7 +22,7 @@ export default class DatabaseItem extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.contextMenu = null;
+    this.isContextMenuConfigured = false;
 
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onSingleClick = this.onSingleClick.bind(this);
@@ -40,15 +35,15 @@ export default class DatabaseItem extends Component {
 
   // Context menu is built dynamically on click (if it does not exist), because building
   // menu onComponentDidMount or onComponentWillMount slows table listing when database
-  // has a loads of tables, because menu will be created (unnecessarily) for every table shown
+  // has a loads of tables, because menu will be created (unnecessarily) for every shown table
   onContextMenu(event) {
     event.preventDefault();
 
-    if (!this.contextMenu) {
+    if (!this.isContextMenuConfigured) {
       this.buildContextMenu();
     }
 
-    this.contextMenu.popup({
+    sqlectron.browser.menu.popupContextMenuDatabaseItem({
       x: event.clientX,
       y: event.clientY,
     });
@@ -64,46 +59,15 @@ export default class DatabaseItem extends Component {
       onGetSQLScript,
     } = this.props;
 
-    this.contextMenu = new Menu();
-    if (dbObjectType === 'Table' || dbObjectType === 'View') {
-      this.contextMenu.append(
-        new MenuItem({
-          label: 'Select Rows (with limit)',
-          click: onExecuteDefaultQuery.bind(this, database, item),
-        }),
-      );
-    }
-
-    this.contextMenu.append(new MenuItem({ type: 'separator' }));
-
-    const { disabledFeatures } = CLIENTS.find((dbClient) => dbClient.key === client);
-    if (!disabledFeatures || !disabledFeatures.includes('scriptCreateTable')) {
-      this.contextMenu.append(
-        new MenuItem({
-          label: 'Create Statement',
-          click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
-        }),
-      );
-    }
-
-    if (dbObjectType === 'Table') {
-      const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
-      const labelsByTypes = {
-        SELECT: 'Select Statement',
-        INSERT: 'Insert Statement',
-        UPDATE: 'Update Statement',
-        DELETE: 'Delete Statement',
-      };
-
-      actionTypes.forEach((actionType) => {
-        this.contextMenu.append(
-          new MenuItem({
-            label: labelsByTypes[actionType],
-            click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
-          }),
-        );
-      });
-    }
+    this.isContextMenuConfigured = true;
+    sqlectron.browser.menu.buildContextMenuDatabaseItem({
+      client,
+      database,
+      item,
+      dbObjectType,
+      onExecuteDefaultQuery,
+      onGetSQLScript,
+    });
   }
 
   toggleTableCollapse() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { shell } from 'electron';
+import { sqlectron } from '../api';
 
 require('./header.css');
 
@@ -8,7 +8,7 @@ const LOGO_PATH = require('./logo-128px.png').default;
 
 function onSiteClick(event) {
   event.preventDefault();
-  shell.openExternal('https://sqlectron.github.io');
+  sqlectron.shell.openExternal('https://sqlectron.github.io');
 }
 
 function renderBreadcrumb(items) {

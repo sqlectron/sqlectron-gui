@@ -1,11 +1,9 @@
 import isPlainObject from 'lodash.isplainobject';
-import { remote } from 'electron';
+import { sqlectron } from '../api';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { valueToString } from '../utils/convert';
-
-const { Menu, MenuItem } = remote;
 
 export default class TableCell extends Component {
   static propTypes = {
@@ -17,7 +15,7 @@ export default class TableCell extends Component {
 
   constructor(props) {
     super(props);
-    this.contextMenu = null;
+    this.isContextMenuConfigured = false;
 
     this.onContextMenu = this.onContextMenu.bind(this);
   }
@@ -29,21 +27,14 @@ export default class TableCell extends Component {
 
     const hasPreview = typeof value === 'string' || isPlainObject(value);
 
-    if (!this.contextMenu && hasPreview) {
-      this.contextMenu = new Menu();
-      this.contextMenu.append(
-        new MenuItem({
-          label: 'Open Preview',
-          click: () => this.props.onOpenPreviewClick(value),
-        }),
-      );
+    if (!this.isContextMenuConfigured && hasPreview) {
+      this.isContextMenuConfigured = true;
+      sqlectron.browser.menu.buildContextMenuTableCell();
+      sqlectron.browser.menu.onPreviewTableCell(() => this.props.onOpenPreviewClick(value));
     }
 
-    if (this.contextMenu) {
-      this.contextMenu.popup({
-        x: event.clientX,
-        y: event.clientY,
-      });
+    if (this.isContextMenuConfigured) {
+      sqlectron.browser.menu.popupContextMenuTableCell(event.clientX, event.clientY);
     }
   }
 
