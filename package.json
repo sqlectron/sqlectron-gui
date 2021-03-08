@@ -92,6 +92,7 @@
     "core-js": "^3.6.5",
     "env-paths": "^1.0.0",
     "lodash.defaultsdeep": "^4.6.0",
+    "lodash.omit": "^4.5.0",
     "mkdirp": "^1.0.4",
     "sqlectron-db-core": "^0.7.1",
     "uuid": "^8.3.2",

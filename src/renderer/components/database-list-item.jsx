@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { remote } from 'electron';
+import { sqlectron } from '../api';
 import DatabaseListItemMetatada from './database-list-item-metadata';
 import DatabaseFilter from './database-filter';
+import * as eventKeys from '../../common/event';
+import ContextMenu from '../utils/context-menu';
 
-const { Menu, MenuItem } = remote;
+const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST_ITEM';
 
 const STYLE = {
   database: {
@@ -63,25 +65,34 @@ export default class DatabaseListItem extends Component {
       return;
     }
 
-    this.contextMenu = new Menu();
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Refresh Database',
-        click: this.props.onRefreshDatabase.bind(this, nextProps.database),
-      }),
-    );
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Open Tab',
-        click: this.props.onOpenTab.bind(this, nextProps.database),
-      }),
-    );
-    this.contextMenu.append(
-      new MenuItem({
-        label: 'Show Database Diagram',
-        click: this.props.onShowDiagramModal.bind(this, nextProps.database),
-      }),
-    );
+    this.contextMenu = new ContextMenu(MENU_CTX_ID);
+
+    this.contextMenu.append({
+      label: 'Refresh Database',
+      event: eventKeys.BROWSER_MENU_REFRESH_DATABASE,
+      click: () => this.props.onRefreshDatabase(nextProps.database),
+    });
+
+    this.contextMenu.append({
+      label: 'Open Tab',
+      event: eventKeys.BROWSER_MENU_OPEN_TAB,
+      click: () => this.props.onOpenTab(nextProps.database),
+    });
+
+    this.contextMenu.append({
+      label: 'Show Database Diagram',
+      event: eventKeys.BROWSER_MENU_SHOW_DATABASE_DIAGRAM,
+      click: () => this.props.onShowDiagramModal(nextProps.database),
+    });
+
+    this.contextMenu.build();
+  }
+
+  componentWillUnmount() {
+    if (this.contextMenu) {
+      this.contextMenu.dispose();
+      this.contextMenu = null;
+    }
   }
 
   onContextMenu(event) {

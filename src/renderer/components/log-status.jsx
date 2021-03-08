@@ -1,6 +1,7 @@
 import React from 'react';
+import { CONFIG } from '../api';
 
-const log = window.SQLECTRON_CONFIG.log;
+const log = CONFIG.log;
 
 const LogStatus = () => {
   if (!log.console && !log.file) {

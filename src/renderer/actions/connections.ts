@@ -1,6 +1,5 @@
 import { AnyAction } from 'redux';
-import { sqlectron } from '../../browser/remote';
-import { Database } from '../../common/types/database';
+import { sqlectron, DB_CLIENTS } from '../api';
 import { Server } from '../../common/types/server';
 import { ApplicationState, ThunkResult } from '../reducers';
 
@@ -14,31 +13,16 @@ export const TEST_CONNECTION_REQUEST = 'TEST_CONNECTION_REQUEST';
 export const TEST_CONNECTION_SUCCESS = 'TEST_CONNECTION_SUCCESS';
 export const TEST_CONNECTION_FAILURE = 'TEST_CONNECTION_FAILURE';
 
-let serverSession;
-export function getCurrentDBConn(state: ApplicationState): Database | null {
-  if (!serverSession) {
+let isConnected = false;
+
+export function getDatabaseByQueryID(state: ApplicationState): string {
+  if (!isConnected) {
     throw new Error('There is no server available');
   }
 
   const currentQuery = state.queries.queriesById[state.queries.currentQueryId as string];
-  if (!currentQuery) {
-    return null;
-  }
 
-  return getDBConnByName(currentQuery.database);
-}
-
-export function getDBConnByName(database: string): Database {
-  if (!serverSession) {
-    throw new Error('There is no server available');
-  }
-
-  const dbConn = serverSession.db(database);
-  if (!dbConn) {
-    throw new Error('This database is not available');
-  }
-
-  return dbConn;
+  return currentQuery ? currentQuery.database : '';
 }
 
 export function setConnecting(): ThunkResult<void> {
@@ -55,11 +39,16 @@ export function connect(
 ): ThunkResult<void> {
   return async (dispatch, getState) => {
     let server;
-    let dbConn;
     let database;
     let defaultDatabase;
 
     try {
+      if (reconnecting) {
+        dispatch({ type: CONNECTION_SET_CONNECTING });
+        await sqlectron.db.disconnectServer();
+        isConnected = false;
+      }
+
       const { config } = getState();
       const cryptoSecret = config.data?.crypto?.secret;
 
@@ -69,14 +58,9 @@ export function connect(
         throw new Error('Server configuration not found');
       }
 
-      server = sqlectron.servers.decryptSecrects(server, cryptoSecret);
+      server = await sqlectron.servers.decryptSecrects(server, cryptoSecret as string);
 
-      // Terrible workaround to avoid a state issue of data loading from the main process.
-      // For some reason changing a value here in client from a data coming from the main process
-      // doesn't have any effect. We need to clone this data and use the new state.
-      server = JSON.parse(JSON.stringify(server));
-
-      defaultDatabase = sqlectron.db.CLIENTS.find((c) => c.key === server.client).defaultDatabase;
+      defaultDatabase = DB_CLIENTS.find((c) => c.key === server.client)?.defaultDatabase as string;
       database = databaseName || server.database || defaultDatabase;
 
       dispatch({
@@ -87,7 +71,7 @@ export function connect(
         isServerConnection: !databaseName,
       });
 
-      if (!serverSession) {
+      if (!isConnected) {
         if (server.ssh) {
           if (server.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
             dispatch({ type: CONNECTION_REQUIRE_SSH_PASSPHRASE });
@@ -98,23 +82,10 @@ export function connect(
             server.ssh.passphrase = sshPassphrase;
           }
         }
-        serverSession = sqlectron.db.createServer(server);
       }
 
-      dbConn = serverSession.db(database);
-      if (dbConn) {
-        dispatch({
-          type: CONNECTION_SUCCESS,
-          server,
-          database,
-          config,
-          reconnecting,
-        });
-        return;
-      }
-
-      dbConn = serverSession.createConnection(database);
-      await dbConn.connect();
+      await sqlectron.db.connect(server, database);
+      isConnected = true;
 
       dispatch({
         type: CONNECTION_SUCCESS,
@@ -130,30 +101,26 @@ export function connect(
         database,
         error,
       });
-      if (dbConn) {
-        dbConn.disconnect();
-      }
+
       const currentConn = getState().connections;
       if (!currentConn.databases.length) {
-        dispatch(disconnect());
+        isConnected = false;
       }
     }
   };
 }
 
 export function disconnect(): AnyAction {
-  if (serverSession) {
-    serverSession.end();
+  if (isConnected) {
+    sqlectron.db.disconnectServer();
   }
 
-  serverSession = null;
+  isConnected = false;
 
   return { type: CLOSE_CONNECTION };
 }
 
 export function reconnect(id: string, database: string): ThunkResult<void> {
-  serverSession.end();
-  serverSession = null;
   return connect(id, database, true);
 }
 
@@ -161,17 +128,14 @@ export function test(server: Server): ThunkResult<void> {
   return async (dispatch) => {
     const serverCopy = JSON.parse(JSON.stringify(server));
     if (!serverCopy.database) {
-      const defaultDatabase = sqlectron.db.CLIENTS.find((c) => c.key === serverCopy.client)
-        .defaultDatabase;
+      const defaultDatabase = DB_CLIENTS.find((c) => c.key === serverCopy.client)?.defaultDatabase;
       serverCopy.database = serverCopy.database || defaultDatabase;
     }
+
     dispatch({ type: TEST_CONNECTION_REQUEST, serverCopy });
     let dbClient;
     try {
-      const testServerSession = sqlectron.db.createServer(serverCopy);
-      dbClient = testServerSession.createConnection(serverCopy.database);
-
-      await dbClient.connect(serverCopy, server.database);
+      await sqlectron.db.connect(serverCopy, serverCopy.database);
       dispatch({ type: TEST_CONNECTION_SUCCESS, serverCopy });
     } catch (error) {
       dispatch({ type: TEST_CONNECTION_FAILURE, serverCopy, error });

@@ -29,8 +29,10 @@ export function buildNewWindow(app: App): void {
     minWidth: 512,
     minHeight: 350,
     webPreferences: {
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
       preload: resolve(__dirname, 'preload.js'),
-      nodeIntegration: true,
     },
   });
 
@@ -39,7 +41,7 @@ export function buildNewWindow(app: App): void {
   // and load the index.html of the app.
   let entryBasePath = 'file://' + resolve(__dirname, '..');
   if (devMode) {
-    entryBasePath = 'http://localhost:8080';
+    entryBasePath = 'https://localhost:8080';
   }
 
   const appUrl = entryBasePath + '/static/index.html';

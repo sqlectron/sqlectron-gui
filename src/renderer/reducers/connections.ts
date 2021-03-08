@@ -1,7 +1,7 @@
 import { Action, Reducer } from 'redux';
 import * as types from '../actions/connections';
 import * as serverTypes from '../actions/servers';
-import { sqlectron } from '../../browser/remote';
+import { DB_CLIENTS } from '../api';
 import { Server } from '../../common/types/server';
 
 export interface ConnectionAction extends Action {
@@ -43,8 +43,6 @@ const INITIAL_STATE: ConnectionState = {
   testError: null,
 };
 
-const { CLIENTS } = sqlectron.db;
-
 const connectionReducer: Reducer<ConnectionState> = function (
   state: ConnectionState = INITIAL_STATE,
   action,
@@ -57,14 +55,11 @@ const connectionReducer: Reducer<ConnectionState> = function (
       };
     }
     case types.CONNECTION_REQUEST: {
-      // eslint-disable-next-line max-len
-      const { disabledFeatures } = CLIENTS.find(
-        (dbClient) => dbClient.key === action.server.client,
-      );
+      const dbClient = DB_CLIENTS.find((dbClient) => dbClient.key === action.server.client);
       return {
         ...state,
         server: action.server,
-        disabledFeatures: disabledFeatures || [],
+        disabledFeatures: dbClient?.disabledFeatures || [],
       };
     }
     case types.CONNECTION_REQUIRE_SSH_PASSPHRASE: {

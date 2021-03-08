@@ -11,7 +11,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const webpackConfig = {
   mode: isProd ? 'production' : 'development',
   devtool: 'eval-source-map',
-  target: 'electron-renderer',
+  target: 'web',
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: ['node_modules', 'src/renderer'],
@@ -157,6 +157,10 @@ if (isProd) {
   };
 
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+  webpackConfig.devServer = {
+    https: true,
+  };
 }
 
 module.exports = webpackConfig;

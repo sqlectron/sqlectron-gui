@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { Server } from '../../common/types/server';
-import { sqlectron } from '../../browser/remote';
+import { sqlectron } from '../api';
 import { ThunkResult } from '../reducers';
 import * as ConfigActions from './config';
 
@@ -17,7 +17,7 @@ export const START_EDITING_SERVER = 'START_EDITING_SERVER';
 export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
 
 export function startEditing(id: string): ThunkResult<void> {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     if (!id) {
       dispatch({ type: START_EDITING_SERVER });
       return;
@@ -31,7 +31,7 @@ export function startEditing(id: string): ThunkResult<void> {
       return;
     }
 
-    const decryptedServer = sqlectron.servers.decryptSecrects(server, cryptoSecret);
+    const decryptedServer = await sqlectron.servers.decryptSecrects(server, cryptoSecret as string);
 
     dispatch({ type: START_EDITING_SERVER, server: decryptedServer });
   };
@@ -49,11 +49,11 @@ export function saveServer({ server, id }: { server: Server; id: string }): Thun
       const cryptoSecret = config.data?.crypto?.secret;
 
       const newServer = Object.assign({}, server, { id });
-      const data = await sqlectron.servers.addOrUpdate(newServer, cryptoSecret);
+      const data = await sqlectron.servers.addOrUpdate(newServer, cryptoSecret as string);
 
       dispatch({
         type: SAVE_SERVER_SUCCESS,
-        server: convertToPlainObject(data),
+        server: data,
       });
 
       dispatch(ConfigActions.loadConfig());
@@ -90,11 +90,11 @@ export function duplicateServer({ server }: { server: Server }): ThunkResult<voi
       const { config } = getState();
       const cryptoSecret = config.data?.crypto?.secret;
 
-      const data = await sqlectron.servers.addOrUpdate(duplicated, cryptoSecret);
+      const data = await sqlectron.servers.addOrUpdate(duplicated, cryptoSecret as string);
 
       dispatch({
         type: DUPLICATE_SERVER_SUCCESS,
-        server: convertToPlainObject(data),
+        server: data,
       });
 
       dispatch(ConfigActions.loadConfig());
@@ -114,13 +114,4 @@ async function getUniqueName(server: Server): Promise<string> {
     currentName = `${server.name}-${num}`;
   }
   return currentName;
-}
-
-/**
- * Force the object has the values instead of getter and setter properties.
- * This is necessary because seems there is some bug around React accessing
- * getter properties from objects comming from Electron remote API.
- */
-function convertToPlainObject(item: Server): Server {
-  return JSON.parse(JSON.stringify(item));
 }

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { BrowserWindow } from 'electron';
 import { Config } from '../common/types/config';
 import createLogger from './logger';
+import * as event from '../common/event';
 
 const logger = createLogger('gh-update-checker');
 
@@ -20,8 +21,5 @@ export async function check(mainWindow: BrowserWindow, appConfig: Config): Promi
     return;
   }
 
-  mainWindow.webContents.send('sqlectron:update-available', {
-    currentVersion,
-    latestVersion: response.data.tag_name,
-  });
+  mainWindow.webContents.send(event.UPDATE_AVAILABLE, currentVersion, response.data.tag_name);
 }

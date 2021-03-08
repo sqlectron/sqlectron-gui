@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { shell } from 'electron';
+import { sqlectron } from '../api';
 import set from 'lodash.set';
 import Select from 'react-select';
 import Checkbox from './checkbox';
@@ -81,7 +81,7 @@ export default class SettingsModalForm extends Component {
 
   onDocClick(event) {
     event.preventDefault();
-    shell.openExternal(
+    sqlectron.shell.openExternal(
       'https://github.com/sqlectron/sqlectron-gui/blob/master/docs/app/configuration-file.md',
     );
   }

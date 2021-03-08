@@ -3,14 +3,13 @@ import path from 'path';
 import trim from 'lodash.trim';
 import cloneDeep from 'lodash.clonedeep';
 import csvStringify from 'csv-stringify';
-import { clipboard } from 'electron';
+import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { Query } from '../reducers/queries';
-import { getCurrentDBConn, getDBConnByName } from './connections';
+import { getDatabaseByQueryID } from './connections';
 import { rowsValuesToString } from '../utils/convert';
-import * as fileHandler from '../utils/file-handler';
+import * as fileHandler from '../utils/file';
 import wait from '../utils/wait';
-import { Database } from '../../common/types/database';
 
 export const NEW_QUERY = 'NEW_QUERY';
 export const RENAME_QUERY = 'RENAME_QUERY';
@@ -67,8 +66,7 @@ export function executeDefaultSelectQueryIfNeeded(
 ): ThunkResult<void> {
   return async (dispatch, getState) => {
     const currentState = getState();
-    const dbConn = getDBConnByName(database);
-    const queryDefaultSelect = await dbConn.getQuerySelectTop(table, schema);
+    const queryDefaultSelect = await sqlectron.db.getQuerySelectTop(database, table, schema);
 
     if (!shouldExecuteQuery(queryDefaultSelect, currentState)) {
       return;
@@ -79,7 +77,7 @@ export function executeDefaultSelectQueryIfNeeded(
     }
 
     dispatch({ type: UPDATE_QUERY, query: queryDefaultSelect, table });
-    dispatch(executeQuery(queryDefaultSelect, true, dbConn));
+    dispatch(executeQuery(queryDefaultSelect, true, database));
   };
 }
 
@@ -135,7 +133,7 @@ export function copyToClipboard(rows: [], type: string, delimiter: string): Thun
         await wait(0);
         value = JSON.stringify(rows, null, 2);
       }
-      clipboard.writeText(value);
+      sqlectron.browser.clipboard.writeText(value);
       dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS });
     } catch (error) {
       dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE, error });
@@ -237,8 +235,6 @@ function shouldExecuteQuery(query: string, state: ApplicationState): boolean {
   return true;
 }
 
-const executingQueries = {};
-
 function canCancelQuery(state: ApplicationState): boolean {
   return !state.connections.disabledFeatures?.includes('cancelQuery');
 }
@@ -246,33 +242,26 @@ function canCancelQuery(state: ApplicationState): boolean {
 function executeQuery(
   query: string,
   isDefaultSelect = false,
-  dbConnection: Database | null,
+  database: string | null,
   queryId?: string,
 ): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
       const state = getState();
-      const dbConn = dbConnection || getCurrentDBConn(state);
+      const db = database || getDatabaseByQueryID(state);
 
-      let remoteResult;
+      let results;
       if (canCancelQuery(state) && queryId) {
-        executingQueries[queryId] = dbConn?.query(query);
-        remoteResult = await executingQueries[queryId].execute();
+        await sqlectron.db.createCancellableQuery(db, queryId, query);
+        results = await sqlectron.db.executeCancellableQuery(queryId);
       } else {
-        remoteResult = await dbConn?.executeQuery(query);
+        results = await sqlectron.db.executeQuery(db, query);
       }
-
-      // Remove any "reference" to the remote IPC object
-      const results = cloneDeep(remoteResult);
 
       dispatch({ type: EXECUTE_QUERY_SUCCESS, query, results });
     } catch (error) {
       dispatch({ type: EXECUTE_QUERY_FAILURE, query, error });
-    } finally {
-      if (queryId) {
-        delete executingQueries[queryId];
-      }
     }
   };
 }
@@ -281,15 +270,11 @@ export function cancelQuery(queryId: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: CANCEL_QUERY_REQUEST, queryId });
     try {
-      if (executingQueries[queryId]) {
-        await executingQueries[queryId].cancel();
-      }
+      await sqlectron.db.cancelCancellableQuery(queryId);
 
       dispatch({ type: CANCEL_QUERY_SUCCESS, queryId });
     } catch (error) {
       dispatch({ type: CANCEL_QUERY_FAILURE, queryId, error });
-    } finally {
-      delete executingQueries[queryId];
     }
   };
 }

@@ -1,4 +1,4 @@
-import { getCurrentDBConn } from './connections';
+import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { SchemaFilter } from '../../common/types/database';
 
@@ -24,11 +24,10 @@ function shouldFetchRoutines(state: ApplicationState, database: string): boolean
 }
 
 function fetchRoutines(database: string, filter: SchemaFilter): ThunkResult<void> {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch({ type: FETCH_ROUTINES_REQUEST, database });
     try {
-      const dbConn = getCurrentDBConn(getState());
-      const routines = await dbConn?.listRoutines(filter);
+      const routines = await sqlectron.db.listRoutines(database, filter);
       dispatch({ type: FETCH_ROUTINES_SUCCESS, database, routines });
     } catch (error) {
       dispatch({ type: FETCH_ROUTINES_FAILURE, error });

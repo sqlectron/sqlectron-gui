@@ -2,9 +2,10 @@ import { AnyAction } from 'redux';
 import path from 'path';
 import html2canvas from 'html2canvas';
 import { ApplicationState, ThunkResult } from '../reducers';
-import { getCurrentDBConn } from './connections';
-import * as FileHandler from '../utils/file-handler';
-import { DatabaseFilter } from '../../common/types/database';
+import { getDatabaseByQueryID } from './connections';
+import { sqlectron } from '../api';
+import * as FileHandler from '../utils/file';
+import type { DatabaseFilter } from '../../common/types/database';
 
 export const REFRESH_DATABASES = 'REFRESH_DATABASES';
 export const FETCH_DATABASES_REQUEST = 'FETCH_DATABASES_REQUEST';
@@ -131,8 +132,8 @@ function fetchDatabases(filter: DatabaseFilter): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_DATABASES_REQUEST });
     try {
-      const dbConn = getCurrentDBConn(getState());
-      const databases = await dbConn?.listDatabases(filter);
+      const database = getDatabaseByQueryID(getState());
+      const databases = await sqlectron.db.listDatabases(database, filter);
       dispatch({ type: FETCH_DATABASES_SUCCESS, databases });
     } catch (error) {
       dispatch({ type: FETCH_DATABASES_FAILURE, error });
