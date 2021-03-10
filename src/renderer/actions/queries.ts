@@ -1,12 +1,16 @@
+import { AnyAction } from 'redux';
 import path from 'path';
 import trim from 'lodash.trim';
 import cloneDeep from 'lodash.clonedeep';
 import csvStringify from 'csv-stringify';
 import { clipboard } from 'electron';
+import { ApplicationState, ThunkResult } from '../reducers';
+import { Query } from '../reducers/queries';
 import { getCurrentDBConn, getDBConnByName } from './connections';
 import { rowsValuesToString } from '../utils/convert';
 import * as fileHandler from '../utils/file-handler';
 import wait from '../utils/wait';
+import { Database } from '../../common/types/database';
 
 export const NEW_QUERY = 'NEW_QUERY';
 export const RENAME_QUERY = 'RENAME_QUERY';
@@ -32,23 +36,23 @@ export const OPEN_QUERY_SUCCESS = 'OPEN_QUERY_SUCCESS';
 export const OPEN_QUERY_FAILURE = 'OPEN_QUERY_FAILURE';
 export const UPDATE_QUERY = 'UPDATE_QUERY';
 
-export function newQuery(database) {
+export function newQuery(database: string): AnyAction {
   return { type: NEW_QUERY, database };
 }
 
-export function renameQuery(name) {
+export function renameQuery(name: string): AnyAction {
   return { type: RENAME_QUERY, name };
 }
 
-export function selectQuery(id) {
+export function selectQuery(id: string): AnyAction {
   return { type: SELECT_QUERY, id };
 }
 
-export function removeQuery(id) {
+export function removeQuery(id: string): AnyAction {
   return { type: REMOVE_QUERY, id };
 }
 
-export function executeQueryIfNeeded(query, queryId) {
+export function executeQueryIfNeeded(query: string, queryId: string): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldExecuteQuery(query, getState())) {
       dispatch(executeQuery(query, false, null, queryId));
@@ -56,7 +60,11 @@ export function executeQueryIfNeeded(query, queryId) {
   };
 }
 
-export function executeDefaultSelectQueryIfNeeded(database, table, schema) {
+export function executeDefaultSelectQueryIfNeeded(
+  database: string,
+  table: string,
+  schema: string,
+): ThunkResult<void> {
   return async (dispatch, getState) => {
     const currentState = getState();
     const dbConn = getDBConnByName(database);
@@ -75,7 +83,7 @@ export function executeDefaultSelectQueryIfNeeded(database, table, schema) {
   };
 }
 
-export function updateQueryIfNeeded(query, selectedQuery) {
+export function updateQueryIfNeeded(query: string, selectedQuery: string): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldUpdateQuery(query, selectedQuery, getState())) {
       dispatch(updateQuery(query, selectedQuery));
@@ -83,11 +91,11 @@ export function updateQueryIfNeeded(query, selectedQuery) {
   };
 }
 
-function updateQuery(query, selectedQuery) {
+function updateQuery(query: string, selectedQuery?: string): AnyAction {
   return { type: UPDATE_QUERY, query, selectedQuery };
 }
 
-function shouldUpdateQuery(query, selectedQuery, state) {
+function shouldUpdateQuery(query: string, selectedQuery: string, state: ApplicationState): boolean {
   const currentQuery = getCurrentQuery(state);
   if (!currentQuery) return true;
   if (currentQuery.isExecuting) return false;
@@ -102,18 +110,19 @@ function shouldUpdateQuery(query, selectedQuery, state) {
   return true;
 }
 
-export function appendQuery(query) {
+export function appendQuery(query: string): ThunkResult<void> {
   return (dispatch, getState) => {
-    const currentQuery = getCurrentQuery(getState()).query;
+    const queryState = getCurrentQuery(getState());
+    const currentQuery = queryState.query;
     const newLine = !currentQuery ? '' : '\n';
     const appendedQuery = `${currentQuery}${newLine}${query}`;
-    if (!currentQuery.isExecuting) {
+    if (!queryState.isExecuting) {
       dispatch(updateQuery(appendedQuery));
     }
   };
 }
 
-export function copyToClipboard(rows, type, delimiter) {
+export function copyToClipboard(rows: [], type: string, delimiter: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST });
     try {
@@ -134,7 +143,7 @@ export function copyToClipboard(rows, type, delimiter) {
   };
 }
 
-export function saveToFile(rows, type, delimiter) {
+export function saveToFile(rows: [], type: string, delimiter: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_REQUEST });
     try {
@@ -162,14 +171,18 @@ export function saveToFile(rows, type, delimiter) {
   };
 }
 
-async function getFileName(currentQuery, isSaveAs, filters) {
+async function getFileName(
+  currentQuery: Query,
+  isSaveAs: boolean,
+  filters: Array<{ name: string; extensions: Array<string> }>,
+): Promise<string> {
   if (!isSaveAs && currentQuery.filename) {
     return currentQuery.filename;
   }
   return fileHandler.showSaveDialog(filters);
 }
 
-export function saveQuery(isSaveAs) {
+export function saveQuery(isSaveAs: boolean): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_QUERY_REQUEST });
     try {
@@ -194,7 +207,7 @@ export function saveQuery(isSaveAs) {
   };
 }
 
-export function openQuery() {
+export function openQuery(): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: OPEN_QUERY_REQUEST });
     try {
@@ -217,7 +230,7 @@ export function openQuery() {
   };
 }
 
-function shouldExecuteQuery(query, state) {
+function shouldExecuteQuery(query: string, state: ApplicationState): boolean {
   const currentQuery = getCurrentQuery(state);
   if (!currentQuery) return true;
   if (currentQuery.isExecuting) return false;
@@ -226,11 +239,16 @@ function shouldExecuteQuery(query, state) {
 
 const executingQueries = {};
 
-function canCancelQuery(state) {
-  return !state.connections.disabledFeatures.includes('cancelQuery');
+function canCancelQuery(state: ApplicationState): boolean {
+  return !state.connections.disabledFeatures?.includes('cancelQuery');
 }
 
-function executeQuery(query, isDefaultSelect = false, dbConnection, queryId) {
+function executeQuery(
+  query: string,
+  isDefaultSelect = false,
+  dbConnection: Database | null,
+  queryId?: string,
+): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
     try {
@@ -238,11 +256,11 @@ function executeQuery(query, isDefaultSelect = false, dbConnection, queryId) {
       const dbConn = dbConnection || getCurrentDBConn(state);
 
       let remoteResult;
-      if (canCancelQuery(state)) {
-        executingQueries[queryId] = dbConn.query(query);
+      if (canCancelQuery(state) && queryId) {
+        executingQueries[queryId] = dbConn?.query(query);
         remoteResult = await executingQueries[queryId].execute();
       } else {
-        remoteResult = await dbConn.executeQuery(query);
+        remoteResult = await dbConn?.executeQuery(query);
       }
 
       // Remove any "reference" to the remote IPC object
@@ -252,12 +270,14 @@ function executeQuery(query, isDefaultSelect = false, dbConnection, queryId) {
     } catch (error) {
       dispatch({ type: EXECUTE_QUERY_FAILURE, query, error });
     } finally {
-      delete executingQueries[queryId];
+      if (queryId) {
+        delete executingQueries[queryId];
+      }
     }
   };
 }
 
-export function cancelQuery(queryId) {
+export function cancelQuery(queryId: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: CANCEL_QUERY_REQUEST, queryId });
     try {
@@ -274,9 +294,9 @@ export function cancelQuery(queryId) {
   };
 }
 
-function stringifyResultToCSV(origRows, delimiter) {
+function stringifyResultToCSV(origRows: [], delimiter: string): Promise<string> {
   if (!origRows.length) {
-    return '';
+    return Promise.resolve('');
   }
 
   const rows = cloneDeep(origRows);
@@ -293,17 +313,21 @@ function stringifyResultToCSV(origRows, delimiter) {
       if (err) {
         reject(err);
       } else {
-        resolve(csv);
+        resolve(csv as string);
       }
     });
   });
 }
 
-function getCurrentQuery(state) {
-  return state.queries.queriesById[state.queries.currentQueryId];
+function getCurrentQuery(state: ApplicationState): Query {
+  return state.queries.queriesById[state.queries.currentQueryId as string];
 }
 
-function needNewQuery(currentState, database, queryDefaultSelect) {
+function needNewQuery(
+  currentState: ApplicationState,
+  database: string,
+  queryDefaultSelect: string,
+): boolean {
   const currentQuery = getCurrentQuery(currentState);
   if (!currentQuery) {
     return false;

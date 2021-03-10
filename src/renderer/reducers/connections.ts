@@ -1,19 +1,54 @@
+import { Action, Reducer } from 'redux';
 import * as types from '../actions/connections';
 import * as serverTypes from '../actions/servers';
 import { sqlectron } from '../../browser/remote';
+import { Server } from '../../common/types/server';
 
-const { CLIENTS } = sqlectron.db;
+export interface ConnectionAction extends Action {
+  type: string;
+  error: Error;
+  server: Server;
+  database: string;
+}
 
-const INITIAL_STATE = {
+export interface ConnectionState {
+  error: null | Error;
+  connected: boolean;
+  connecting: boolean;
+  server: null | Server;
+  disabledFeatures: null | Array<string>;
+  waitingPrivateKeyPassphrase: boolean;
+  databases: Array<string>;
+
+  // testing connection props
+  testConnected: boolean;
+  testConnecting: boolean;
+  testServer: null | Server;
+  testError: Error | null;
+}
+
+const INITIAL_STATE: ConnectionState = {
+  error: null,
   connected: false,
   connecting: false,
   server: null,
   disabledFeatures: null,
   waitingPrivateKeyPassphrase: false,
   databases: [], // connected databases
+
+  // testing connection props
+  testConnected: false,
+  testConnecting: false,
+  testServer: null,
+  testError: null,
 };
 
-export default function (state = INITIAL_STATE, action) {
+const { CLIENTS } = sqlectron.db;
+
+const connectionReducer: Reducer<ConnectionState> = function (
+  state: ConnectionState = INITIAL_STATE,
+  action,
+): ConnectionState {
   switch (action.type) {
     case types.CONNECTION_SET_CONNECTING: {
       return {
@@ -55,7 +90,12 @@ export default function (state = INITIAL_STATE, action) {
     }
     case types.TEST_CONNECTION_REQUEST: {
       const { server } = action;
-      return { testConnected: false, testConnecting: true, testServer: server };
+      return {
+        ...INITIAL_STATE,
+        testConnected: false,
+        testConnecting: true,
+        testServer: server,
+      };
     }
     case types.TEST_CONNECTION_SUCCESS: {
       if (!isSameTestConnection(state, action)) return state;
@@ -79,8 +119,10 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
 
 function isSameTestConnection(state, action) {
   return state.testServer === action.server;
 }
+
+export default connectionReducer;

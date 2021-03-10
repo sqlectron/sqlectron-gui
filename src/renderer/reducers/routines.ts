@@ -1,15 +1,51 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as types from '../actions/routines';
 
-const INITIAL_STATE = {
+export interface Routine {
+  schema: string;
+  name: string;
+  routineDefinition: string;
+}
+
+export interface RoutineAction extends Action {
+  type: string;
+  error: Error;
+  isServerConnection: boolean;
+  database: string;
+  routines: Array<{
+    schema: string;
+    routineName: string;
+    routineDefinition: string;
+    routineType: string;
+  }>;
+}
+
+export interface RoutineState {
+  error: null | Error;
+  isFetching: boolean;
+  didInvalidate: boolean;
+  functionsByDatabase: {
+    [db: string]: Array<Routine>;
+  };
+  proceduresByDatabase: {
+    [db: string]: Array<Routine>;
+  };
+}
+
+const INITIAL_STATE: RoutineState = {
+  error: null,
   isFetching: false,
   didInvalidate: false,
   functionsByDatabase: {},
   proceduresByDatabase: {},
 };
 
-export default function (state = INITIAL_STATE, action) {
+const routineReducer: Reducer<RoutineState> = function (
+  state: RoutineState = INITIAL_STATE,
+  action,
+): RoutineState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
@@ -63,7 +99,7 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
 
 function isFunction(routine) {
   return routine.routineType === 'FUNCTION';
@@ -72,3 +108,4 @@ function isFunction(routine) {
 function isProcedure(routine) {
   return routine.routineType === 'PROCEDURE';
 }
+export default routineReducer;

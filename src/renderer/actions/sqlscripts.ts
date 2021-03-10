@@ -1,11 +1,18 @@
 import { getDBConnByName } from './connections';
 import { appendQuery } from './queries';
+import { ApplicationState, ThunkResult } from '../reducers';
 
 export const GET_SCRIPT_REQUEST = 'GET_SCRIPT_REQUEST';
 export const GET_SCRIPT_SUCCESS = 'GET_SCRIPT_SUCCESS';
 export const GET_SCRIPT_FAILURE = 'GET_SCRIPT_FAILURE';
 
-export function getSQLScriptIfNeeded(database, item, actionType, objectType, schema) {
+export function getSQLScriptIfNeeded(
+  database: string,
+  item: string,
+  actionType: string,
+  objectType: string,
+  schema: string,
+): ThunkResult<void> {
   return (dispatch, getState) => {
     const state = getState();
     if (shouldFetchScript(state, database, item, actionType)) {
@@ -20,7 +27,12 @@ export function getSQLScriptIfNeeded(database, item, actionType, objectType, sch
   };
 }
 
-function shouldFetchScript(state, database, item, actionType) {
+function shouldFetchScript(
+  state: ApplicationState,
+  database: string,
+  item: string,
+  actionType: string,
+): boolean {
   const scripts = state.sqlscripts;
   if (!scripts) return true;
   if (scripts.isFetching) return false;
@@ -30,7 +42,12 @@ function shouldFetchScript(state, database, item, actionType) {
   return scripts.didInvalidate;
 }
 
-function isScriptAlreadyFetched(state, database, item, actionType) {
+function isScriptAlreadyFetched(
+  state: ApplicationState,
+  database: string,
+  item: string,
+  actionType: string,
+): boolean {
   const scripts = state.sqlscripts;
   if (!scripts.scriptsByObject[database]) return false;
   if (!scripts.scriptsByObject[database][item]) return false;
@@ -38,11 +55,22 @@ function isScriptAlreadyFetched(state, database, item, actionType) {
   return false;
 }
 
-function getAlreadyFetchedScript(state, database, item, actionType) {
+function getAlreadyFetchedScript(
+  state: ApplicationState,
+  database: string,
+  item: string,
+  actionType: string,
+) {
   return state.sqlscripts.scriptsByObject[database][item][actionType];
 }
 
-function getSQLScript(database, item, actionType, objectType, schema) {
+function getSQLScript(
+  database: string,
+  item: string,
+  actionType: string,
+  objectType: string,
+  schema: string,
+): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({
       type: GET_SCRIPT_REQUEST,

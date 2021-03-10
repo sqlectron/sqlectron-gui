@@ -1,8 +1,37 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as queryTypes from '../actions/queries';
 import * as types from '../actions/databases';
 
-const INITIAL_STATE = {
+export interface Database {
+  name: string;
+}
+
+export interface DatabaseAction extends Action {
+  error: Error;
+  type: string;
+  isServerConnection: boolean;
+  databases: Array<Database>;
+  name: string;
+  fileName: string;
+  diagramJSON: unknown;
+  results: Array<{ command: string }>;
+}
+
+export interface DatabaseState {
+  error: Error | null;
+  isFetching: boolean;
+  didInvalidate: boolean;
+  items: Array<Database>;
+  showingDiagram: boolean;
+  diagramDatabase: null;
+  fileName: null;
+  diagramJSON: null;
+  isSaving: boolean;
+}
+
+const INITIAL_STATE: DatabaseState = {
+  error: null,
   isFetching: false,
   didInvalidate: false,
   items: [],
@@ -15,7 +44,10 @@ const INITIAL_STATE = {
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_DATABASE', 'DROP_DATABASE'];
 
-export default function (state = INITIAL_STATE, action) {
+const databaseReducer: Reducer<DatabaseState> = function (
+  state: DatabaseState = INITIAL_STATE,
+  action,
+): DatabaseState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
@@ -108,4 +140,6 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
+
+export default databaseReducer;

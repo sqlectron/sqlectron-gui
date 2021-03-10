@@ -1,13 +1,43 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/sqlscripts';
 
-const INITIAL_STATE = {
+export interface ScriptAction extends Action {
+  type: string;
+  error: Error;
+  isServerConnection: boolean;
+  database: string;
+  item: string;
+  script: string;
+  scriptType: string;
+  objectType: string;
+  actionType: string;
+}
+
+export interface ScriptState {
+  error: null | Error;
+  isFetching: boolean;
+  didInvalidate: boolean;
+  scriptsByObject: {
+    [db: string]: {
+      [item: string]: string;
+    };
+  };
+  scriptType: string;
+}
+
+const INITIAL_STATE: ScriptState = {
+  error: null,
   isFetching: false,
   didInvalidate: false,
   scriptsByObject: {},
+  scriptType: '',
 };
 
-export default function (state = INITIAL_STATE, action) {
+const scriptReducer: Reducer<ScriptState> = function (
+  state: ScriptState = INITIAL_STATE,
+  action,
+): ScriptState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
@@ -23,7 +53,7 @@ export default function (state = INITIAL_STATE, action) {
     }
     case types.GET_SCRIPT_SUCCESS: {
       const scriptsByItem = !state.scriptsByObject[action.database]
-        ? null
+        ? {}
         : state.scriptsByObject[action.database][action.item];
       return {
         ...state,
@@ -54,4 +84,6 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
+
+export default scriptReducer;

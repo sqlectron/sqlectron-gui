@@ -1,19 +1,53 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
-import * as types from '../actions/keys';
+import * as types from '../actions/columns';
 
-const INITIAL_STATE = {
+export interface Column {
+  name: string;
+  dataType: string;
+}
+
+export interface ColumnAction extends Action {
+  type: string;
+  error: Error;
+  isServerConnection: boolean;
+  database: string;
+  table: string;
+  columns: Array<{ columnName: string; dataType: string }>;
+}
+
+export interface ColumnState {
+  error: null | Error;
+  didInvalidate: boolean;
+  isFetching: {
+    [database: string]: {
+      [table: string]: boolean;
+    };
+  };
+  columnsByTable: {
+    [database: string]: {
+      [table: string]: Column;
+    };
+  };
+}
+
+const INITIAL_STATE: ColumnState = {
+  error: null,
   isFetching: {},
   didInvalidate: false,
-  keysByTable: {},
+  columnsByTable: {},
 };
 
-export default function (state = INITIAL_STATE, action) {
+const columnReducer: Reducer<ColumnState> = function (
+  state: ColumnState = INITIAL_STATE,
+  action,
+): ColumnState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
     }
-    case types.FETCH_KEYS_REQUEST: {
+    case types.FETCH_COLUMNS_REQUEST: {
       return {
         ...state,
         isFetching: {
@@ -27,7 +61,7 @@ export default function (state = INITIAL_STATE, action) {
         error: null,
       };
     }
-    case types.FETCH_KEYS_SUCCESS: {
+    case types.FETCH_COLUMNS_SUCCESS: {
       return {
         ...state,
         isFetching: {
@@ -38,17 +72,20 @@ export default function (state = INITIAL_STATE, action) {
           },
         },
         didInvalidate: false,
-        keysByTable: {
-          ...state.keysByTable,
+        columnsByTable: {
+          ...state.columnsByTable,
           [action.database]: {
-            ...state.keysByTable[action.database],
-            [action.table]: action.tableKeys,
+            ...state.columnsByTable[action.database],
+            [action.table]: action.columns.map((column) => ({
+              name: column.columnName,
+              dataType: column.dataType,
+            })),
           },
         },
         error: null,
       };
     }
-    case types.FETCH_KEYS_FAILURE: {
+    case types.FETCH_COLUMNS_FAILURE: {
       return {
         ...state,
         isFetching: {
@@ -71,4 +108,6 @@ export default function (state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
+
+export default columnReducer;

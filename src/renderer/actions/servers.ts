@@ -1,4 +1,7 @@
+import { AnyAction } from 'redux';
+import { Server } from '../../common/types/server';
 import { sqlectron } from '../../browser/remote';
+import { ThunkResult } from '../reducers';
 import * as ConfigActions from './config';
 
 export const SAVE_SERVER_REQUEST = 'SAVE_SERVER_REQUEST';
@@ -13,7 +16,7 @@ export const DUPLICATE_SERVER_FAILURE = 'DUPLICATE_SERVER_FAILURE';
 export const START_EDITING_SERVER = 'START_EDITING_SERVER';
 export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
 
-export function startEditing(id) {
+export function startEditing(id: string): ThunkResult<void> {
   return (dispatch, getState) => {
     if (!id) {
       dispatch({ type: START_EDITING_SERVER });
@@ -21,9 +24,9 @@ export function startEditing(id) {
     }
 
     const { config } = getState();
-    const cryptoSecret = config.data.crypto.secret;
+    const cryptoSecret = config.data?.crypto?.secret;
 
-    const server = config.data.servers.find((srv) => srv.id === id);
+    const server = config.data?.servers.find((srv) => srv.id === id);
     if (!server) {
       return;
     }
@@ -34,18 +37,19 @@ export function startEditing(id) {
   };
 }
 
-export function finishEditing() {
+export function finishEditing(): AnyAction {
   return { type: FINISH_EDITING_SERVER };
 }
 
-export function saveServer({ server, id }) {
+export function saveServer({ server, id }: { server: Server; id: string }): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_SERVER_REQUEST, server });
     try {
       const { config } = getState();
-      const cryptoSecret = config.data.crypto.secret;
+      const cryptoSecret = config.data?.crypto?.secret;
 
-      const data = await sqlectron.servers.addOrUpdate({ id, ...server }, cryptoSecret);
+      const newServer = Object.assign({}, server, { id });
+      const data = await sqlectron.servers.addOrUpdate(newServer, cryptoSecret);
 
       dispatch({
         type: SAVE_SERVER_SUCCESS,
@@ -59,7 +63,7 @@ export function saveServer({ server, id }) {
   };
 }
 
-export function removeServer({ id }) {
+export function removeServer({ id }: { id: string }): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: REMOVE_SERVER_REQUEST, id });
     try {
@@ -75,16 +79,16 @@ export function removeServer({ id }) {
   };
 }
 
-export function duplicateServer({ server }) {
+export function duplicateServer({ server }: { server: Server }): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: DUPLICATE_SERVER_REQUEST, server });
     try {
       const newName = await getUniqueName(server);
       const duplicated = { ...server, name: newName };
-      delete duplicated.id;
+      duplicated.id = '';
 
       const { config } = getState();
-      const cryptoSecret = config.data.crypto.secret;
+      const cryptoSecret = config.data?.crypto?.secret;
 
       const data = await sqlectron.servers.addOrUpdate(duplicated, cryptoSecret);
 
@@ -100,7 +104,7 @@ export function duplicateServer({ server }) {
   };
 }
 
-async function getUniqueName(server) {
+async function getUniqueName(server: Server): Promise<string> {
   const dataServers = await sqlectron.servers.getAll();
   const duplicatedName = (name) => dataServers.some((srv) => srv.name === name);
   let currentName = server.name;
@@ -117,6 +121,6 @@ async function getUniqueName(server) {
  * This is necessary because seems there is some bug around React accessing
  * getter properties from objects comming from Electron remote API.
  */
-function convertToPlainObject(item) {
+function convertToPlainObject(item: Server): Server {
   return JSON.parse(JSON.stringify(item));
 }

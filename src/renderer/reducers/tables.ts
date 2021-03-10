@@ -1,9 +1,30 @@
+import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as dbTypes from '../actions/databases';
 import * as queryTypes from '../actions/queries';
 import * as types from '../actions/tables';
 
-const INITIAL_STATE = {
+export interface TableAction extends Action {
+  type: string;
+  error: Error;
+  isServerConnection: boolean;
+  tables: Array<string>;
+  database: string;
+  results: Array<{ command: string }>;
+}
+
+export interface TableState {
+  error: null | Error;
+  isFetching: boolean;
+  didInvalidate: boolean;
+  itemsByDatabase: {
+    [database: string]: string;
+  };
+  selectedTablesForDiagram: Array<string>;
+}
+
+const INITIAL_STATE: TableState = {
+  error: null,
   isFetching: false,
   didInvalidate: false,
   itemsByDatabase: {},
@@ -12,7 +33,10 @@ const INITIAL_STATE = {
 
 const COMMANDS_TRIGER_REFRESH = ['CREATE_TABLE', 'DROP_TABLE'];
 
-export default function (state = INITIAL_STATE, action) {
+const tableReducer: Reducer<TableState> = function (
+  state: TableState = INITIAL_STATE,
+  action,
+): TableState {
   switch (action.type) {
     case connTypes.CONNECTION_REQUEST: {
       return action.isServerConnection ? { ...INITIAL_STATE, didInvalidate: true } : state;
@@ -68,10 +92,12 @@ export default function (state = INITIAL_STATE, action) {
     case dbTypes.CLOSE_DATABASE_DIAGRAM: {
       return {
         ...state,
-        selectedTablesForDiagram: null,
+        selectedTablesForDiagram: [],
       };
     }
     default:
       return state;
   }
-}
+};
+
+export default tableReducer;

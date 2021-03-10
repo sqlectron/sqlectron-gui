@@ -1,4 +1,8 @@
+import { AnyAction } from 'redux';
 import { sqlectron } from '../../browser/remote';
+import { Database } from '../../common/types/database';
+import { Server } from '../../common/types/server';
+import { ApplicationState, ThunkResult } from '../reducers';
 
 export const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
 export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
@@ -11,12 +15,12 @@ export const TEST_CONNECTION_SUCCESS = 'TEST_CONNECTION_SUCCESS';
 export const TEST_CONNECTION_FAILURE = 'TEST_CONNECTION_FAILURE';
 
 let serverSession;
-export function getCurrentDBConn({ queries } = {}) {
+export function getCurrentDBConn(state: ApplicationState): Database | null {
   if (!serverSession) {
     throw new Error('There is no server available');
   }
 
-  const currentQuery = queries.queriesById[queries.currentQueryId];
+  const currentQuery = state.queries.queriesById[state.queries.currentQueryId as string];
   if (!currentQuery) {
     return null;
   }
@@ -24,7 +28,7 @@ export function getCurrentDBConn({ queries } = {}) {
   return getDBConnByName(currentQuery.database);
 }
 
-export function getDBConnByName(database) {
+export function getDBConnByName(database: string): Database {
   if (!serverSession) {
     throw new Error('There is no server available');
   }
@@ -37,13 +41,18 @@ export function getDBConnByName(database) {
   return dbConn;
 }
 
-export function setConnecting() {
+export function setConnecting(): ThunkResult<void> {
   return (dispatch) => {
     dispatch({ type: CONNECTION_SET_CONNECTING });
   };
 }
 
-export function connect(id, databaseName, reconnecting = false, sshPassphrase) {
+export function connect(
+  id: string,
+  databaseName: string,
+  reconnecting = false,
+  sshPassphrase?: string,
+): ThunkResult<void> {
   return async (dispatch, getState) => {
     let server;
     let dbConn;
@@ -52,7 +61,7 @@ export function connect(id, databaseName, reconnecting = false, sshPassphrase) {
 
     try {
       const { config } = getState();
-      const cryptoSecret = config.data.crypto.secret;
+      const cryptoSecret = config.data?.crypto?.secret;
 
       const servers = await sqlectron.servers.getAll();
       server = servers.find((srv) => srv.id === id);
@@ -126,13 +135,13 @@ export function connect(id, databaseName, reconnecting = false, sshPassphrase) {
       }
       const currentConn = getState().connections;
       if (!currentConn.databases.length) {
-        this.disconnect();
+        dispatch(disconnect());
       }
     }
   };
 }
 
-export function disconnect() {
+export function disconnect(): AnyAction {
   if (serverSession) {
     serverSession.end();
   }
@@ -142,13 +151,13 @@ export function disconnect() {
   return { type: CLOSE_CONNECTION };
 }
 
-export function reconnect(id, database) {
+export function reconnect(id: string, database: string): ThunkResult<void> {
   serverSession.end();
   serverSession = null;
   return connect(id, database, true);
 }
 
-export function test(server) {
+export function test(server: Server): ThunkResult<void> {
   return async (dispatch) => {
     const serverCopy = JSON.parse(JSON.stringify(server));
     if (!serverCopy.database) {

@@ -1,6 +1,29 @@
+import { Action, Reducer } from 'redux';
 import * as types from '../actions/config';
+import { Config as ConfigType } from '../../common/types/config';
 
-const INITIAL_STATE = {
+export interface Config {
+  database: string;
+  queryHistory: Array<string>;
+}
+
+export interface ConfigAction extends Action {
+  error: Error;
+  type: string;
+  config: ConfigType;
+  path: string;
+}
+
+export interface ConfigState {
+  isSaving: boolean;
+  isEditing: boolean;
+  path: null | string;
+  data: null | ConfigType;
+  error: null | Error;
+  isLoaded: boolean;
+}
+
+const INITIAL_STATE: ConfigState = {
   isSaving: false,
   isEditing: false,
   path: null,
@@ -9,7 +32,10 @@ const INITIAL_STATE = {
   isLoaded: false,
 };
 
-export default function config(state = INITIAL_STATE, action) {
+const configReducer: Reducer<ConfigState> = function (
+  state: ConfigState = INITIAL_STATE,
+  action,
+): ConfigState {
   switch (action.type) {
     case types.LOAD_CONFIG_SUCCESS:
       return {
@@ -49,6 +75,7 @@ export default function config(state = INITIAL_STATE, action) {
     }
     case types.SAVE_CONFIG_SUCCESS: {
       return {
+        ...state,
         data: {
           ...state.data,
           ...action.config,
@@ -59,4 +86,6 @@ export default function config(state = INITIAL_STATE, action) {
     default:
       return state;
   }
-}
+};
+
+export default configReducer;
