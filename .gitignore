@@ -13,3 +13,4 @@ npm-debug.log
 *.db
 test/fixtures/sqlite/sqlectron.json
 
+test/fixtures/browser/tmp.sqlectron.json
