@@ -20,7 +20,7 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
   const mainLogger = isLogFileEnabled ? createLogger('renderer:redux') : null;
 
   for (const method in console) {
-    // eslint-disable-line no-restricted-syntax
+    // eslint-disable-next-line no-console
     if (typeof console[method] === 'function') {
       // eslint-disable-line no-console
       loggerConfig.logger[method] = function levelFn(...args) {
