@@ -20,9 +20,6 @@ export async function check(mainWindow: BrowserWindow, appConfig: Config): Promi
     return;
   }
 
-  console.log(currentVersion);
-  console.log(response.data.tag_name);
-
   mainWindow.webContents.send('sqlectron:update-available', {
     currentVersion,
     latestVersion: response.data.tag_name,

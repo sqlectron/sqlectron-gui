@@ -7,6 +7,7 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     'prettier/prettier': ['error'],
+    'no-console': 'error',
   },
   env: {
     es2017: true,
