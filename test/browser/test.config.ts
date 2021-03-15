@@ -5,6 +5,7 @@ import { readJSONFile } from '../../src/browser/core/utils';
 import { decrypt } from '../../src/browser/core/crypto';
 import { EncryptedPassword } from '../../src/common/types/server';
 import utilsStub from './utils-stub';
+import { ConfigFile } from '../../src/common/types/config';
 
 const cryptoSecret = 'CHK`Ya91Hs{me!^8ndwPPaPPxwQ}`';
 
@@ -21,7 +22,7 @@ describe('config', () => {
 
       expect(findItem(fixtureBefore)).to.not.have.property('id');
       expect(findItem(fixtureAfter)).to.have.property('id');
-      const expected = await readJSONFile(
+      const expected = await readJSONFile<ConfigFile>(
         path.join(__dirname, '../fixtures/browser/sqlectron.prepared.json'),
       );
       expect(fixtureAfter.servers).to.be.same.length(expected.servers.length);
@@ -51,6 +52,6 @@ describe('config', () => {
   });
 
   function loadConfig() {
-    return readJSONFile(utilsStub.TMP_FIXTURE_PATH);
+    return readJSONFile<ConfigFile>(utilsStub.TMP_FIXTURE_PATH);
   }
 });

@@ -11,7 +11,7 @@ import defaultsDeep from 'lodash.defaultsdeep';
 import * as sqlectron from './core';
 import { Config } from '../common/types/config';
 
-let config;
+let config: Config;
 
 const cryptoSecret = 'j[F6Y6NoWT}+YG|4c|-<89:ByJ83-9Aj?O8>$Zk/[WFk_~gFbg7<wm+*V|A{xQZ,';
 
@@ -46,7 +46,7 @@ export function getConfig(cleanCache = false): Config {
     log: {
       console: isDev,
       file: false,
-      level: appConfig.log.level || (process.env.DEBUG ? 'debug' : 'error'),
+      level: (appConfig.log || {}).level || (process.env.DEBUG ? 'debug' : 'error'),
       path: configPath.replace('.json', '.log'),
     },
   };
