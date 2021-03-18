@@ -1,5 +1,10 @@
 import { Server } from './server';
 
+/**
+ * This interface documents the sqlectron.json file. The only thing guaranteed to
+ * exist is the `servers` key/value pair (instantiated to empty array). The rest
+ * will only exist if the user goes into the Settings modal and hits save.
+ */
 export interface ConfigFile {
   log?: {
     console: boolean;
@@ -20,6 +25,11 @@ export interface ConfigFile {
   customFont?: string;
 }
 
+/**
+ * This interface documents the instantiated Config object that is fed through
+ * sqlectron application. This takes the config loaded by the file, adds in application
+ * defaults and fields from package.json, and then utilizes that throughout.
+ */
 export interface Config {
   log: {
     console: boolean;
