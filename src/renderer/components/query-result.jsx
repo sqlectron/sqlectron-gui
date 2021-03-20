@@ -75,10 +75,22 @@ export default class QueryResult extends Component {
       const title = fields[0].name;
       return (
         <Message
-          key={queryIndex}
+          key={`explain-${queryIndex}`}
           preformatted
           title={title}
           message={rows.map((row) => row[title]).join('\n')}
+        />
+      );
+    }
+
+    // Not sure what type of query they ran, but cannot render table, print
+    // generic message.
+    if (fields.length === 0) {
+      return (
+        <Message
+          key={`genericResult-${queryIndex}`}
+          message={`Query executed successfully.`}
+          type="success"
         />
       );
     }
