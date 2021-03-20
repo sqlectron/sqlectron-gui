@@ -95,7 +95,8 @@ const sqlectronAPI: SqlectronAPI = {
     prepare: (cryptoSecret: string) => ipcRenderer.invoke(eventKeys.CONFIG_PREPARE, cryptoSecret),
     path: () => ipcRenderer.invoke(eventKeys.CONFIG_PATH),
     get: () => ipcRenderer.invoke(eventKeys.CONFIG_GET),
-    getFull: () => ipcRenderer.invoke(eventKeys.CONFIG_GET_FULL),
+    getFull: (forceCleanCache?: boolean) =>
+      ipcRenderer.invoke(eventKeys.CONFIG_GET_FULL, forceCleanCache),
     getFullSync: () => ipcRenderer.sendSync(eventKeys.CONFIG_GET_FULL_SYNC),
     save: (data: Config) => ipcRenderer.invoke(eventKeys.CONFIG_SAVE, data),
     saveSettings: (data: Config) => ipcRenderer.invoke(eventKeys.CONFIG_SAVE_SETTINS, data),
