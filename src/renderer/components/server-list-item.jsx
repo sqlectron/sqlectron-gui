@@ -12,7 +12,7 @@ const ICONS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
   return clients;
 }, {});
 
-const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
+const ServerListItem = ({ server, onConnectClick, onEditClick, enabledDarkTheme }) => (
   <div className="item">
     <div className="middle aligned content">
       <div className="left floated" style={{ padding: '1em' }}>
@@ -40,8 +40,16 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
         </div>
       </div>
       <div>
-        <div className="header">{server.name}</div>
-        <div className="meta" style={{ lineHeight: '1.5em', marginTop: '5px' }}>
+        <div className="header" style={{ color: enabledDarkTheme ? 'white' : null }}>
+          {server.name}
+        </div>
+        <div
+          className="meta"
+          style={{
+            lineHeight: '1.5em',
+            marginTop: '5px',
+            color: enabledDarkTheme ? 'white' : null,
+          }}>
           {server.host ? `${server.host}:${server.port}` : server.socketPath}
           {server.ssh && (
             <div>

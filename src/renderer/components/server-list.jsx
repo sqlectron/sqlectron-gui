@@ -39,6 +39,7 @@ export default class ServerList extends Component {
               onConnectClick={() => onConnectClick(server)}
               onEditClick={() => onEditClick(server)}
               server={server}
+              enabledDarkTheme={config.data.enabledDarkTheme}
             />
           ))}
         </div>
