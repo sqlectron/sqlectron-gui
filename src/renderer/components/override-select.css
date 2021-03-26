@@ -1,6 +1,8 @@
 .Select-input input {
   padding: 0 !important;
   border: 0 !important;
+  vertical-align: middle;
+  height: 100%;
 }
 
 .error .Select .Select-control {
