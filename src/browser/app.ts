@@ -17,11 +17,6 @@ const logger = createLogger('app');
 
 app.allowRendererProcessReuse = false;
 
-// Allow electron load the app using a self signed ssl certificate in development
-if (process.env.NODE_ENV === 'development' || process.env.DEV_TOOLS === 'true') {
-  app.commandLine.appendSwitch('ignore-certificate-errors', 'true');
-}
-
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

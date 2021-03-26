@@ -157,10 +157,6 @@ if (isProd) {
   };
 
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-
-  webpackConfig.devServer = {
-    https: true,
-  };
 }
 
 module.exports = webpackConfig;
