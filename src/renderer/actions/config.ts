@@ -32,8 +32,7 @@ export function saveConfig(configData: Config): ThunkResult<void> {
     dispatch({ type: SAVE_CONFIG_REQUEST });
     try {
       await sqlectron.config.saveSettings(configData);
-      // TODO: Check, should it really be setting the limit wihtout a value?
-      sqlectron.db.setSelectLimit(1000);
+      sqlectron.db.setSelectLimit(configData.limitQueryDefaultSelectTop);
       dispatch({ type: SAVE_CONFIG_SUCCESS, config: configData });
     } catch (error) {
       dispatch({ type: SAVE_CONFIG_FAILURE, error });
