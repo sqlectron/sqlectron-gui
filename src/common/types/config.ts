@@ -1,15 +1,41 @@
 import { Server } from './server';
 
-export interface Config {
-  log: {
-    console: boolean;
-    file: boolean;
-    level: string;
-    path: string;
-  };
+interface LogOptions {
+  console: boolean;
+  file: boolean;
+  level: string;
+  path: string;
+}
+
+/**
+ * This interface documents the sqlectron.json file. The only thing guaranteed to
+ * exist is the `servers` key/value pair (instantiated to empty array). The rest
+ * will only exist if the user goes into the Settings modal and hits save.
+ */
+export interface ConfigFile {
+  servers: Array<Server>;
+  log?: LogOptions;
+  zoomFactor?: number;
+  limitQueryDefaultSelectTop?: number;
+  enabledAutoComplete?: boolean;
+  enabledLiveAutoComplete?: boolean;
+  // queries: Object;
+  enabledDarkTheme?: boolean;
+  disabledOpenAnimation?: boolean;
+  csvDelimiter?: string;
+  connectionsAsList?: boolean;
+  customFont?: string;
+}
+
+/**
+ * This interface documents the instantiated Config object that is fed through
+ * sqlectron application. This takes the config loaded by the file, adds in application
+ * defaults and fields from package.json, and then utilizes that throughout.
+ */
+export interface Config extends ConfigFile {
+  log: LogOptions;
   zoomFactor: number;
   limitQueryDefaultSelectTop: number;
-  servers: Array<Server>;
   enabledAutoComplete: boolean;
   enabledLiveAutoComplete: boolean;
   // queries: Object;

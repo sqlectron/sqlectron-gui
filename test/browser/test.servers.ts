@@ -4,6 +4,7 @@ import { readJSONFile } from '../../src/browser/core/utils';
 import * as crypto from '../../src/browser/core/crypto';
 import { Server } from '../../src/common/types/server';
 import utilsStub from './utils-stub';
+import { Config } from '../../src/common/types/config';
 
 const cryptoSecret = 'CHK`Ya91Hs{me!^8ndwPPaPPxwQ}`';
 
@@ -365,6 +366,6 @@ describe('servers', () => {
   });
 
   function loadConfig() {
-    return readJSONFile(utilsStub.TMP_FIXTURE_PATH);
+    return readJSONFile<Config>(utilsStub.TMP_FIXTURE_PATH);
   }
 });

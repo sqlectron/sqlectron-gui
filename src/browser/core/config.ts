@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as utils from './utils';
 import * as crypto from './crypto';
-import { Config } from '../../common/types/config';
+import { Config, ConfigFile } from '../../common/types/config';
 
-const EMPTY_CONFIG = <Config>{};
+const EMPTY_CONFIG = <ConfigFile>{
+  servers: [],
+};
 
 function sanitizeServer(server, cryptoSecret) {
   const srv = { ...server };
@@ -57,7 +59,7 @@ export async function prepare(cryptoSecret: string): Promise<void> {
     await utils.writeJSONFile(filename, EMPTY_CONFIG);
   }
 
-  const result = await utils.readJSONFile(filename);
+  const result = await utils.readJSONFile<ConfigFile>(filename);
 
   result.servers = sanitizeServers(result, cryptoSecret);
 
@@ -77,7 +79,7 @@ export function prepareSync(cryptoSecret: string): void {
     utils.writeJSONFileSync(filename, EMPTY_CONFIG);
   }
 
-  const result = utils.readJSONFileSync(filename);
+  const result = utils.readJSONFileSync<ConfigFile>(filename);
 
   result.servers = sanitizeServers(result, cryptoSecret);
 
@@ -99,7 +101,7 @@ export function get(): Promise<Config> {
   return utils.readJSONFile(filename);
 }
 
-export function getSync(): Config {
+export function getSync(): ConfigFile {
   const filename = utils.getConfigPath();
   return utils.readJSONFileSync(filename);
 }

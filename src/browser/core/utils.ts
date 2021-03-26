@@ -5,7 +5,6 @@ import mkdirp from 'mkdirp';
 import envPaths from 'env-paths';
 
 import { readFile, resolveHomePathToAbsolute } from 'sqlectron-db-core/utils';
-import { Config } from '../../common/types/config';
 
 export {
   createCancelablePromise,
@@ -63,19 +62,19 @@ export function writeFile(filename: string, data: string): Promise<void> {
   });
 }
 
-export function writeJSONFile(filename: string, data: Config): Promise<void> {
+export function writeJSONFile<T>(filename: string, data: T): Promise<void> {
   return writeFile(filename, JSON.stringify(data, null, 2));
 }
 
-export function writeJSONFileSync(filename: string, data: Config): void {
+export function writeJSONFileSync<T>(filename: string, data: T): void {
   return fs.writeFileSync(filename, JSON.stringify(data, null, 2));
 }
 
-export function readJSONFile(filename: string): Promise<Config> {
+export function readJSONFile<T>(filename: string): Promise<T> {
   return readFile(filename).then((data) => JSON.parse(data));
 }
 
-export function readJSONFileSync(filename: string): Config {
+export function readJSONFileSync<T>(filename: string): T {
   const filePath = resolveHomePathToAbsolute(filename);
   const data = fs.readFileSync(path.resolve(filePath), { encoding: 'utf-8' });
   return JSON.parse(data);
