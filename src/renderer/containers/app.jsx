@@ -1,14 +1,16 @@
-import { webFrame } from 'electron';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
+import { CONFIG } from '../api';
 import * as ConfigActions from '../actions/config';
 import imageSrc from './sqlectron.gif';
 
 import '../../../vendor/renderer/semantic-ui/semantic';
-import MenuHandler from '../menu-handler';
+import { sqlectron } from '../api';
+import * as eventKeys from '../../common/event';
 import { mapObjectToConfig } from '../utils/config';
+import MenuHandler from '../utils/menu';
 
 require('../../../vendor/renderer/lato/latofonts.css');
 require('../../../vendor/renderer/semantic-ui/semantic.css');
@@ -27,7 +29,6 @@ class AppContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-
     this.menuHandler = new MenuHandler();
   }
 
@@ -47,7 +48,7 @@ class AppContainer extends Component {
     };
 
     this.menuHandler.setMenus({
-      'sqlectron:zoom-in': async () => {
+      [eventKeys.BROWSER_MENU_ZOOM_IN]: () => {
         const { config } = this.props;
         if (!config.data) {
           return;
@@ -56,7 +57,7 @@ class AppContainer extends Component {
         data.zoomFactor = (data.zoomFactor || 1) + 0.2;
         updateConfig(data);
       },
-      'sqlectron:zoom-out': async () => {
+      [eventKeys.BROWSER_MENU_ZOOM_OUT]: () => {
         const { config } = this.props;
         if (!config.data) {
           return;
@@ -65,7 +66,7 @@ class AppContainer extends Component {
         data.zoomFactor = (data.zoomFactor || 1) - 0.2;
         updateConfig(data);
       },
-      'sqlectron:zoom-reset': async () => {
+      [eventKeys.BROWSER_MENU_ZOOM_RESET]: () => {
         const { config } = this.props;
         if (!config.data) {
           return;
@@ -86,7 +87,7 @@ class AppContainer extends Component {
     if (typeof zoomFactor !== 'undefined' && zoomFactor > 0) {
       // Apply the zoom factor
       // Required for HiDPI support
-      webFrame.setZoomFactor(zoomFactor);
+      sqlectron.browser.webFrame.setZoomFactor(zoomFactor);
     }
     if (enabledDarkTheme === true) {
       $('body').addClass('dark-theme');
@@ -110,7 +111,10 @@ class AppContainer extends Component {
   componentWillUnmount() {
     document.removeEventListener('dragover', preventDefault, false);
     document.removeEventListener('drop', preventDefault, false);
-    this.menuHandler.removeAllMenus();
+
+    if (this.menuHandler) {
+      this.menuHandler.dispose();
+    }
   }
 
   // this runs the animated loading
@@ -125,7 +129,7 @@ class AppContainer extends Component {
         const loadingInner = document.createElement('div');
 
         const version = document.createElement('H3');
-        version.appendChild(document.createTextNode(`v${window.SQLECTRON_CONFIG.version}`));
+        version.appendChild(document.createTextNode(`v${CONFIG.version}`));
 
         loadingInner.appendChild(version);
         loadingInner.appendChild(img);

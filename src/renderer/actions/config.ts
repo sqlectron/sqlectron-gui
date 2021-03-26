@@ -1,7 +1,6 @@
 import { AnyAction } from 'redux';
-import cloneDeep from 'lodash.clonedeep';
 import { ThunkResult } from '../reducers';
-import { config, sqlectron } from '../../browser/remote';
+import { sqlectron } from '../api';
 import { Config } from '../../common/types/config';
 
 export const LOAD_CONFIG_REQUEST = 'LOAD_CONFIG_REQUEST';
@@ -19,12 +18,9 @@ export function loadConfig(): ThunkResult<void> {
     try {
       const forceCleanCache = true;
       const configPath = await sqlectron.config.path();
-      const remoteConfig = await config.getConfig(forceCleanCache);
+      const config = await sqlectron.config.getFull(forceCleanCache);
 
-      // Remove any "reference" to the remote IPC object
-      const configData = cloneDeep(remoteConfig);
-
-      dispatch({ type: LOAD_CONFIG_SUCCESS, config: configData, path: configPath });
+      dispatch({ type: LOAD_CONFIG_SUCCESS, config, path: configPath });
     } catch (error) {
       dispatch({ type: LOAD_CONFIG_FAILURE, error });
     }
@@ -36,7 +32,7 @@ export function saveConfig(configData: Config): ThunkResult<void> {
     dispatch({ type: SAVE_CONFIG_REQUEST });
     try {
       await sqlectron.config.saveSettings(configData);
-      await sqlectron.setSelectLimit();
+      sqlectron.db.setSelectLimit(configData.limitQueryDefaultSelectTop);
       dispatch({ type: SAVE_CONFIG_SUCCESS, config: configData });
     } catch (error) {
       dispatch({ type: SAVE_CONFIG_FAILURE, error });

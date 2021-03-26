@@ -2,6 +2,7 @@ import { shell } from 'electron';
 import { BrowserWindow, App, MenuItem, MenuItemConstructorOptions } from 'electron';
 import { Config } from '../../common/types/config';
 import { BuildWindow } from '../../common/types/menu';
+import * as eventKeys from '../../common/event';
 
 function sendMessage(win: BrowserWindow, message: string) {
   if (win) {
@@ -74,12 +75,14 @@ export function buildTemplate(
         {
           label: 'New Tab',
           accelerator: 'Cmd+T',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:new-tab'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_QUERY_TAB_NEW),
         },
         {
           label: 'Close Tab',
           accelerator: 'Cmd+W',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:close-tab'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_QUERY_TAB_CLOSE),
         },
         {
           type: 'separator',
@@ -87,17 +90,20 @@ export function buildTemplate(
         {
           label: 'Save Query',
           accelerator: 'Cmd+S',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:save-query'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_QUERY_SAVE),
         },
         {
           label: 'Save Query As',
           accelerator: 'Shift+Cmd+S',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:save-query-as'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_QUERY_SAVE_AS),
         },
         {
           label: 'Open Query',
           accelerator: 'Cmd+O',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:open-query'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_QUERY_OPEN),
         },
       ],
     },
@@ -107,17 +113,20 @@ export function buildTemplate(
         {
           label: 'Execute',
           accelerator: 'Cmd+Enter',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-execute'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_QUERY_EXECUTE),
         },
         {
           label: 'Execute',
           accelerator: 'Cmd+R',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-execute'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_QUERY_EXECUTE),
         },
         {
           label: 'Focus Query Editor',
           accelerator: 'Shift+Cmd+0',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:query-focus'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_QUERY_FOCUS),
         },
       ],
     },
@@ -178,17 +187,18 @@ export function buildTemplate(
         {
           label: 'Zoom In',
           accelerator: 'Cmd+=',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-in'),
+          click: (item, win) => sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_ZOOM_IN),
         },
         {
           label: 'Zoom Out',
           accelerator: 'Cmd+-',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-out'),
+          click: (item, win) => sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_ZOOM_OUT),
         },
         {
           label: 'Reset Zoom',
           accelerator: 'Cmd+0',
-          click: (item, win) => sendMessage(win as BrowserWindow, 'sqlectron:zoom-reset'),
+          click: (item, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_ZOOM_RESET),
         },
       ],
     },
@@ -199,13 +209,13 @@ export function buildTemplate(
           label: 'Search databases',
           accelerator: 'Shift+Cmd+9',
           click: (item, win) =>
-            sendMessage(win as BrowserWindow, 'sqlectron:toggle-database-search'),
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_TOGGLE_DB_SEARCH),
         },
         {
           label: 'Search database objects',
           accelerator: 'Cmd+9',
           click: (item, win) =>
-            sendMessage(win as BrowserWindow, 'sqlectron:toggle-database-objects-search'),
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_TOGGLE_DB_OBJS_SEARCH),
         },
       ],
     },

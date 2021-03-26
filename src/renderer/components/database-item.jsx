@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { remote } from 'electron';
+import { sqlectron, DB_CLIENTS } from '../api';
 import CollapseIcon from './collapse-icon';
 import TableSubmenu from './table-submenu';
-import { sqlectron } from '../../browser/remote';
+import * as eventKeys from '../../common/event';
+import ContextMenu from '../utils/context-menu';
 
-const Menu = remote.Menu;
-const MenuItem = remote.MenuItem;
-const CLIENTS = sqlectron.db.CLIENTS;
+const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST';
 
 export default class DatabaseItem extends Component {
   static propTypes = {
@@ -31,6 +30,13 @@ export default class DatabaseItem extends Component {
 
     this.onContextMenu = this.onContextMenu.bind(this);
     this.onSingleClick = this.onSingleClick.bind(this);
+  }
+
+  componentWillUnmount() {
+    if (this.contextMenu) {
+      this.contextMenu.dispose();
+      this.contextMenu = null;
+    }
   }
 
   onSingleClick() {
@@ -64,46 +70,57 @@ export default class DatabaseItem extends Component {
       onGetSQLScript,
     } = this.props;
 
-    this.contextMenu = new Menu();
+    // Create unique context menu for this table
+    this.contextMenu = new ContextMenu(`${MENU_CTX_ID}@${database.name}@${item.name}`);
+
     if (dbObjectType === 'Table' || dbObjectType === 'View') {
-      this.contextMenu.append(
-        new MenuItem({
-          label: 'Select Rows (with limit)',
-          click: onExecuteDefaultQuery.bind(this, database, item),
-        }),
-      );
+      this.contextMenu.append({
+        label: 'Select Rows (with limit)',
+        event: eventKeys.BROWSER_MENU_EXECUTE_DEFAULT_QUERY,
+        click: () => onExecuteDefaultQuery(database, item),
+      });
     }
 
-    this.contextMenu.append(new MenuItem({ type: 'separator' }));
+    this.contextMenu.append({
+      type: 'separator',
+    });
 
-    const { disabledFeatures } = CLIENTS.find((dbClient) => dbClient.key === client);
+    const { disabledFeatures } = DB_CLIENTS.find((dbClient) => dbClient.key === client);
     if (!disabledFeatures || !disabledFeatures.includes('scriptCreateTable')) {
-      this.contextMenu.append(
-        new MenuItem({
-          label: 'Create Statement',
-          click: onGetSQLScript.bind(this, database, item, 'CREATE', dbObjectType),
-        }),
-      );
+      this.contextMenu.append({
+        label: 'Create Statement',
+        event: eventKeys.BROWSER_MENU_GET_SQL_SCRIPT_CREATE_TABLE,
+        click: () => onGetSQLScript(database, item, 'CREATE', dbObjectType),
+      });
     }
 
     if (dbObjectType === 'Table') {
-      const actionTypes = ['SELECT', 'INSERT', 'UPDATE', 'DELETE'];
-      const labelsByTypes = {
-        SELECT: 'Select Statement',
-        INSERT: 'Insert Statement',
-        UPDATE: 'Update Statement',
-        DELETE: 'Delete Statement',
-      };
+      this.contextMenu.append({
+        label: 'Select Statement',
+        event: eventKeys.BROWSER_MENU_GET_SQL_SCRIPT_SELECT,
+        click: () => onGetSQLScript(database, item, 'SELECT', dbObjectType),
+      });
 
-      actionTypes.forEach((actionType) => {
-        this.contextMenu.append(
-          new MenuItem({
-            label: labelsByTypes[actionType],
-            click: onGetSQLScript.bind(this, database, item, actionType, dbObjectType),
-          }),
-        );
+      this.contextMenu.append({
+        label: 'Insert Statement',
+        event: eventKeys.BROWSER_MENU_GET_SQL_SCRIPT_INSERT,
+        click: () => onGetSQLScript(database, item, 'INSERT', dbObjectType),
+      });
+
+      this.contextMenu.append({
+        label: 'Update Statement',
+        event: eventKeys.BROWSER_MENU_GET_SQL_SCRIPT_UPDATE,
+        click: () => onGetSQLScript(database, item, 'UPDATE', dbObjectType),
+      });
+
+      this.contextMenu.append({
+        label: 'Delete Statement',
+        event: eventKeys.BROWSER_MENU_GET_SQL_SCRIPT_DELETE,
+        click: () => onGetSQLScript(database, item, 'DELETE', dbObjectType),
       });
     }
+
+    this.contextMenu.build();
   }
 
   toggleTableCollapse() {

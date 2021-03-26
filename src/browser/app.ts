@@ -2,6 +2,7 @@ import { app, dialog } from 'electron';
 
 import createLogger from './logger';
 import { buildNewWindow } from './window';
+import { registerIPCMainHandlers } from './ipcMain';
 
 const logger = createLogger('app');
 
@@ -26,6 +27,8 @@ app.on('window-all-closed', () => {
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
 app.whenReady().then(async () => {
+  registerIPCMainHandlers();
+
   if (process.env.NODE_ENV === 'development' || process.env.DEV_TOOLS === 'true') {
     // eslint-disable-next-line no-console
     console.log('Loading electron extensions...');

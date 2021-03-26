@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { sqlectron } from '../../browser/remote';
+import { DB_CLIENTS } from '../api';
 
-const CLIENTS = sqlectron.db.CLIENTS.map((dbClient) => ({
+const CLIENTS = DB_CLIENTS.map((dbClient) => ({
   key: dbClient.key,
   name: dbClient.name,
 }));

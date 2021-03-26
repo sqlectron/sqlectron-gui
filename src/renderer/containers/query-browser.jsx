@@ -7,7 +7,7 @@ import { withRouter } from 'react-router';
 import { connect } from 'react-redux';
 import { ResizableBox } from 'react-resizable';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
-import { sqlectron } from '../../browser/remote';
+import { DB_CLIENTS } from '../api';
 import * as ConnActions from '../actions/connections';
 import * as QueryActions from '../actions/queries';
 import * as DbAction from '../actions/databases';
@@ -28,8 +28,10 @@ import Footer from '../components/footer';
 import Query from '../components/query';
 import Loader from '../components/loader';
 import PromptModal from '../components/prompt-modal';
-import MenuHandler from '../menu-handler';
+import { sqlectron } from '../api';
+import * as eventKeys from '../../common/event';
 import { requireClientLogo } from '../components/require-context';
+import MenuHandler from '../utils/menu';
 
 require('./query-browser.css');
 require('../components/react-resizable.css');
@@ -62,7 +64,7 @@ const STYLES = {
   resizeable: { width: 'auto', maxWidth: '100%' },
 };
 
-const CLIENTS = sqlectron.db.CLIENTS.reduce((clients, dbClient) => {
+const CLIENTS = DB_CLIENTS.reduce((clients, dbClient) => {
   /* eslint no-param-reassign:0 */
   clients[dbClient.key] = {
     title: dbClient.name,
@@ -162,8 +164,6 @@ class QueryBrowserContainer extends Component {
     dispatch(fetchTablesIfNeeded(lastConnectedDB, filter));
     dispatch(fetchViewsIfNeeded(lastConnectedDB, filter));
     dispatch(fetchRoutinesIfNeeded(lastConnectedDB, filter));
-
-    this.setMenus();
   }
 
   componentDidUpdate() {
@@ -180,7 +180,9 @@ class QueryBrowserContainer extends Component {
   }
 
   componentWillUnmount() {
-    this.menuHandler.removeAllMenus();
+    if (this.menuHandler) {
+      this.menuHandler.dispose();
+    }
   }
 
   handleSelectTab(index) {
@@ -334,21 +336,15 @@ class QueryBrowserContainer extends Component {
 
   setMenus() {
     this.menuHandler.setMenus({
-      'sqlectron:query-execute': () => {
-        const {
-          queries: { queriesById, currentQueryId },
-        } = this.props;
-        const currentQuery = queriesById[currentQueryId];
-        this.handleExecuteQuery(currentQuery.selectedQuery || currentQuery.query);
-      },
-      'sqlectron:new-tab': () => this.newTab(),
-      'sqlectron:close-tab': () => this.closeTab(),
-      'sqlectron:save-query': () => this.saveQuery(),
-      'sqlectron:save-query-as': () => this.saveQueryAs(),
-      'sqlectron:open-query': () => this.openQuery(),
-      'sqlectron:query-focus': () => this.focusQuery(),
-      'sqlectron:toggle-database-search': () => this.toggleDatabaseSearch(),
-      'sqlectron:toggle-database-objects-search': () => this.toggleDatabaseObjectsSearch(),
+      [eventKeys.BROWSER_MENU_QUERY_EXECUTE]: () => this.executeQuery(),
+      [eventKeys.BROWSER_MENU_QUERY_TAB_NEW]: () => this.newTab(),
+      [eventKeys.BROWSER_MENU_QUERY_TAB_CLOSE]: () => this.closeTab(),
+      [eventKeys.BROWSER_MENU_QUERY_SAVE]: () => this.saveQuery(),
+      [eventKeys.BROWSER_MENU_QUERY_SAVE_AS]: () => this.saveQueryAs(),
+      [eventKeys.BROWSER_MENU_QUERY_OPEN]: () => this.openQuery(),
+      [eventKeys.BROWSER_MENU_QUERY_FOCUS]: () => this.focusQuery(),
+      [eventKeys.BROWSER_MENU_TOGGLE_DB_SEARCH]: () => this.toggleDatabaseSearch(),
+      [eventKeys.BROWSER_MENU_TOGGLE_DB_OBJS_SEARCH]: () => this.toggleDatabaseObjectsSearch(),
     });
   }
 
@@ -410,6 +406,14 @@ class QueryBrowserContainer extends Component {
     }
 
     this.refs.databaseList.focus(currentDB);
+  }
+
+  executeQuery() {
+    const {
+      queries: { queriesById, currentQueryId },
+    } = this.props;
+    const currentQuery = queriesById[currentQueryId];
+    this.handleExecuteQuery(currentQuery.selectedQuery || currentQuery.query);
   }
 
   newTab() {
@@ -522,7 +526,7 @@ class QueryBrowserContainer extends Component {
       );
     });
 
-    const { disabledFeatures } = sqlectron.db.CLIENTS.find(
+    const { disabledFeatures } = DB_CLIENTS.find(
       (dbClient) => dbClient.key === connections.server.client,
     );
 

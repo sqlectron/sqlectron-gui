@@ -29,8 +29,10 @@ export function buildNewWindow(app: App): void {
     minWidth: 512,
     minHeight: 350,
     webPreferences: {
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      enableRemoteModule: false, // turn off remote
       preload: resolve(__dirname, 'preload.js'),
-      nodeIntegration: true,
     },
   });
 
