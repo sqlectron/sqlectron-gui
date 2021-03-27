@@ -57,7 +57,7 @@
     }
   },
   "scripts": {
-    "postinstall": "husky install && electron-builder install-app-deps",
+    "prepare": "husky install",
     "dev": "cross-env NODE_ENV=development concurrently --names \"webpack,electron\" --prefix name \"npm run dev:webpack\" \"npm run dev:electron\"",
     "dev:webpack": "webpack-dev-server --color",
     "dev:electron": "npm run compile:browser && concurrently --kill-others --names \"build,run\" \"npm run compile:browser -- -w\" \"cross-env DEBUG=spawn-auto-restart node scripts/dev-auto-restart.js | bunyan -o short\"",
@@ -127,7 +127,7 @@
     "css-loader": "^4.2.1",
     "csv-stringify": "^5.5.1",
     "dom-helpers": "^5.1.4",
-    "electron": "^8.5.5",
+    "electron": "^12.0.1",
     "electron-builder": "^22.8.0",
     "electron-devtools-installer": "^3.1.1",
     "eslint": "^7.21.0",
