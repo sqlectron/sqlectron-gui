@@ -281,7 +281,7 @@ export default class ServerModalForm extends Component {
               name="ssl"
               label="SSL"
               disabled={this.isFeatureDisabled('server:ssl')}
-              defaultChecked={this.state.ssl}
+              checked={this.state.ssl}
               onChecked={() => this.setState({ ssl: true })}
               onUnchecked={() => this.setState({ ssl: false })}
             />
@@ -439,7 +439,7 @@ export default class ServerModalForm extends Component {
           <Checkbox
             name="sshTunnel"
             label="SSH Tunnel"
-            defaultChecked={isSSHChecked}
+            checked={isSSHChecked}
             onChecked={() => this.setState({ ssh: {} })}
             onUnchecked={() => this.setState({ ssh: null })}
           />
@@ -524,7 +524,7 @@ export default class ServerModalForm extends Component {
                   name="ssh.privateKeyWithPassphrase"
                   label="Passphrase"
                   disabled={!!(!isSSHChecked || ssh.password)}
-                  defaultChecked={ssh && ssh.privateKeyWithPassphrase}
+                  checked={ssh && ssh.privateKeyWithPassphrase}
                   onChecked={() => {
                     const stateSSH = this.state.ssh ? { ...this.state.ssh } : {};
                     stateSSH.privateKeyWithPassphrase = true;
@@ -593,7 +593,7 @@ export default class ServerModalForm extends Component {
           <Checkbox
             name="filter"
             label="Filter"
-            defaultChecked={isFilterChecked}
+            checked={isFilterChecked}
             onChecked={() => this.setState({ filter: {} })}
             onUnchecked={() => this.setState({ filter: null })}
           />
