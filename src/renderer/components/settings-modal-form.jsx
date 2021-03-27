@@ -195,7 +195,7 @@ export default class SettingsModalForm extends Component {
                 <Checkbox
                   name="enabledDarkTheme"
                   label="Dark Theme"
-                  defaultChecked={this.state.enabledDarkTheme}
+                  checked={this.state.enabledDarkTheme}
                   onChecked={() => this.setState({ enabledDarkTheme: true })}
                   onUnchecked={() => this.setState({ enabledDarkTheme: false })}
                 />
@@ -205,7 +205,7 @@ export default class SettingsModalForm extends Component {
                 <Checkbox
                   name="disabledOpenAnimation"
                   label="Disable Intro"
-                  defaultChecked={this.state.disabledOpenAnimation}
+                  checked={this.state.disabledOpenAnimation}
                   onChecked={() => this.setState({ disabledOpenAnimation: true })}
                   onUnchecked={() => this.setState({ disabledOpenAnimation: false })}
                 />
@@ -215,7 +215,7 @@ export default class SettingsModalForm extends Component {
                 <Checkbox
                   name="connectionsAsList"
                   label="List Connections"
-                  defaultChecked={this.state.connectionsAsList}
+                  checked={this.state.connectionsAsList}
                   onChecked={() => this.setState({ connectionsAsList: true })}
                   onUnchecked={() => this.setState({ connectionsAsList: false })}
                 />
@@ -248,7 +248,7 @@ export default class SettingsModalForm extends Component {
               <Checkbox
                 name="enabledAutoComplete"
                 label="Auto Complete"
-                defaultChecked={this.state.enabledAutoComplete}
+                checked={this.state.enabledAutoComplete}
                 onChecked={() => this.setState({ enabledAutoComplete: true })}
                 onUnchecked={() => this.setState({ enabledAutoComplete: false })}
               />
@@ -258,7 +258,7 @@ export default class SettingsModalForm extends Component {
               <Checkbox
                 name="enabledLiveAutoComplete"
                 label="Live Auto Complete"
-                defaultChecked={this.state.enabledLiveAutoComplete}
+                checked={this.state.enabledLiveAutoComplete}
                 onChecked={() => this.setState({ enabledLiveAutoComplete: true })}
                 onUnchecked={() => this.setState({ enabledLiveAutoComplete: false })}
               />
@@ -284,7 +284,7 @@ export default class SettingsModalForm extends Component {
               <Checkbox
                 name="use"
                 label="Tab Delimited Values"
-                defaultChecked={this.state.csvDelimiter === '  '}
+                checked={this.state.csvDelimiter === '  '}
                 onChecked={() => this.setState({ csvDelimiter: '  ' })}
                 onUnchecked={() => this.setState({ csvDelimiter: ',' })}
               />
@@ -307,7 +307,7 @@ export default class SettingsModalForm extends Component {
               <Checkbox
                 name="log.console"
                 label="Console"
-                defaultChecked={log.console}
+                checked={log.console}
                 onChecked={() =>
                   this.handleChange({
                     target: { name: 'log.console', value: true },
@@ -326,7 +326,7 @@ export default class SettingsModalForm extends Component {
               <Checkbox
                 name="log.file"
                 label="File"
-                defaultChecked={log.file}
+                checked={log.file}
                 onChecked={() =>
                   this.handleChange({
                     target: { name: 'log.file', value: true },

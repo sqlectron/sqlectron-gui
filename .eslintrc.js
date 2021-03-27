@@ -108,6 +108,7 @@ module.exports = {
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
         'no-unused-vars': 'off',
+        'react/prop-types': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off', // temporary disable for tests

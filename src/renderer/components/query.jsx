@@ -312,6 +312,7 @@ export default class Query extends Component {
                   <CheckBox
                     name="wrapQueryContents"
                     label="Wrap Contents"
+                    checked={this.state.wrapEnabled}
                     onChecked={this.onWrapContentsChecked}
                     onUnchecked={this.onWrapContentsUnchecked}
                   />
