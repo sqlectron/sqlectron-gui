@@ -6,13 +6,7 @@ import envPaths from 'env-paths';
 
 import { readFile, resolveHomePathToAbsolute } from 'sqlectron-db-core/utils';
 
-export {
-  createCancelablePromise,
-  getPort,
-  readFile,
-  resolveHomePathToAbsolute,
-  versionCompare,
-} from 'sqlectron-db-core/utils';
+export { resolveHomePathToAbsolute } from 'sqlectron-db-core/utils';
 
 let configPath = '';
 
