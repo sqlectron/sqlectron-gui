@@ -26,7 +26,7 @@ describe('utils', () => {
 
   describe('.getConfigPath', () => {
     describe('use of SQLECTRON_HOME', () => {
-      let env;
+      let env: NodeJS.ProcessEnv;
 
       before(() => {
         env = process.env;
