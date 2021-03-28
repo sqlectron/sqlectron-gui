@@ -45,6 +45,18 @@ app.whenReady().then(async () => {
   buildNewWindow(app);
 });
 
+app.on('web-contents-created', (event, contents) => {
+  contents.on('will-navigate', (event) => {
+    // Disables in-app navigation
+    event.preventDefault();
+  });
+
+  contents.setWindowOpenHandler(() => {
+    // Disables opening new windows with window.open()
+    return { action: 'deny' };
+  });
+});
+
 // Show only the error description to the user
 process.on('uncaughtException', (error) => {
   logger.error('uncaughtException', error);
