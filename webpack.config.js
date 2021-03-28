@@ -3,14 +3,20 @@ const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const isProd = process.env.NODE_ENV === 'production';
 
 const webpackConfig = {
   mode: isProd ? 'production' : 'development',
-  devtool: 'eval-source-map',
+  // NOTE: It does not use eval-source-map or any other kind of eval option
+  // because of the Content Security Policy which we cannot have eval enabled.
+  // If at some point we find out the build is too slow in development, we could disable
+  // the csp plugin in development and use the eval-source-map option. But, it should
+  // be avoided as much as possible because we wouldn't be testing the CSP rules in development
+  // and we could miss something is blocked in production because of that.
+  devtool: 'source-map',
   target: 'web',
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
@@ -92,6 +98,29 @@ const webpackConfig = {
       template: 'src/renderer/index.html',
       chunksSortMode: isProd ? 'none' : 'auto',
     }),
+    new CspHtmlWebpackPlugin(
+      // NOTE: It has unsafe-inline and disabled nonce and hash for style-src because of Ace
+      // which adds style scripts in runtime. In case we ever move away from Ace,
+      // we should review this configuration.
+      {
+        'base-uri': "'self'",
+        'object-src': "'none'",
+        'script-src': ["'self'"],
+        'style-src': ["'unsafe-inline'", "'self'"],
+      },
+      {
+        enabled: true,
+        hashingMethod: 'sha256',
+        hashEnabled: {
+          'script-src': true,
+          'style-src': false,
+        },
+        nonceEnabled: {
+          'script-src': true,
+          'style-src': false,
+        },
+      },
+    ),
     new webpack.ProvidePlugin({
       jQuery: 'jquery',
       $: 'jquery',
@@ -99,7 +128,6 @@ const webpackConfig = {
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify(isProd ? 'production' : 'development'),
     }),
-    // new BundleAnalyzerPlugin()
     new webpack.LoaderOptionsPlugin({
       debug: !isProd,
       options: {
