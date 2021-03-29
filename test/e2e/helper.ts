@@ -2,6 +2,7 @@ import path from 'path';
 import { expect } from 'chai';
 import electronPath = require('electron');
 import { electron, ElectronApplication, Page } from 'playwright-electron';
+import { ElementHandle } from 'playwright-core';
 
 const startApp = async ({
   sqlectronHome,
@@ -63,10 +64,29 @@ const expectToEqualText = async (page: Page, selector: string, text: string): Pr
   expect(await page.$eval(selector, (node: HTMLElement) => node.innerText)).to.be.equal(text);
 };
 
+const getElementByText = async (
+  page: Page,
+  selector: string,
+  text: string,
+): Promise<ElementHandle<HTMLElement>> => {
+  const elements = await page.$$(selector);
+  expect(elements).to.have.lengthOf.at.least(1);
+
+  for (const element of elements) {
+    const eltext = await element.innerText();
+    if (eltext === text) {
+      return element as ElementHandle<HTMLElement>;
+    }
+  }
+
+  throw new Error(`Not found element with text "${text}" for selector "${selector}"`);
+};
+
 export default {
   startApp,
   endApp,
   wait,
   getAppPage,
   expectToEqualText,
+  getElementByText,
 };

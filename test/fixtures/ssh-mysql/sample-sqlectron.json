@@ -1,0 +1,45 @@
+{
+  "log": {
+    "console": true,
+    "file": false,
+    "level": "debug",
+    "path": "sqlectron.log"
+  },
+  "zoomFactor": 1,
+  "limitQueryDefaultSelectTop": 101,
+  "servers": [
+    {
+      "name": "test mysql with SSH private key rsa",
+      "client": "mysql",
+      "ssl": false,
+      "host": "mysql",
+      "port": 3306,
+      "socketPath": null,
+      "user": "root",
+      "password": {
+        "ivText": "xcNXUOBZUVANxc2l4PPKUQ==",
+        "encryptedText": "jdcJLn8pQjJBk4KBuxIqeA=="
+      },
+      "schema": null,
+      "ssh": {
+        "host": "127.0.0.1",
+        "port": 2222,
+        "user": "sqlectron",
+        "password": null,
+        "privateKey": "{{SQLECTRON_DB_CORE_PATH}}/spec/ssh_files/id_rsa",
+        "useAgent": false,
+        "privateKeyWithPassphrase": false
+      },
+      "id": "6fd8427e-162d-4c98-bb3a-e2782a326617",
+      "encrypted": true
+    }
+  ],
+  "enabledAutoComplete": true,
+  "enabledLiveAutoComplete": false,
+  "queries": {},
+  "enabledDarkTheme": false,
+  "disabledOpenAnimation": false,
+  "csvDelimiter": ",",
+  "connectionsAsList": false,
+  "customFont": "Lato"
+}

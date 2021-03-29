@@ -1,51 +1,30 @@
 import fs from 'fs';
 import { expect } from 'chai';
 import path from 'path';
-import sqlite3 from 'sqlite3';
 
 import helper from './helper';
 
-const BASE_PATH = path.join(__dirname, '../fixtures/sqlite');
-const DB_PATH = path.join(BASE_PATH, 'test.db');
+const BASE_PATH = path.join(__dirname, '../fixtures/ssh-mysql');
+const SQLECTRON_DB_CORE_PATH = path.join(__dirname, '../../../sqlectron-db-core');
 const CONFIG_SAMPLE_PATH = path.join(BASE_PATH, 'sample-sqlectron.json');
 const CONFIG_PATH = path.join(BASE_PATH, 'sqlectron.json');
 
 function setupDB() {
-  // Drop database
-  if (fs.existsSync(DB_PATH)) {
-    fs.unlinkSync(DB_PATH);
-  }
+  // Set path attributes, it is required because sqlectron only suports absolute path
+  let configSample = fs.readFileSync(CONFIG_SAMPLE_PATH, { encoding: 'utf8' });
+  configSample = configSample.replace('{{SQLECTRON_DB_CORE_PATH}}', SQLECTRON_DB_CORE_PATH);
 
-  // Set DB path, it is required because sqlectron only suports absolute path
-  const configSample = fs.readFileSync(CONFIG_SAMPLE_PATH, { encoding: 'utf8' });
   const config = JSON.parse(configSample);
-  config.servers[0].database = DB_PATH;
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
-
-  // Create database
-  const db = new sqlite3.Database(DB_PATH);
-
-  db.serialize(function () {
-    db.run('CREATE TABLE document (info TEXT)');
-
-    const stmt = db.prepare('INSERT INTO document VALUES (?)');
-    for (let i = 0; i < 10; i++) {
-      stmt.run('Ipsum ' + i);
-    }
-    stmt.finalize();
-  });
-
-  return db;
 }
 
-describe('Sqlite', function () {
+describe('SSH MySQL', function () {
   this.timeout(360000);
-  let db;
   let app;
   let mainWindow;
 
   before(async () => {
-    db = setupDB();
+    setupDB();
 
     const res = await helper.startApp({
       sqlectronHome: BASE_PATH,
@@ -57,7 +36,6 @@ describe('Sqlite', function () {
 
   after(async () => {
     await helper.endApp(app);
-    db.close();
   });
 
   it('should connect and run basic actions', async () => {
@@ -66,7 +44,11 @@ describe('Sqlite', function () {
     const list = await mainWindow.$$('#server-list .header');
     expect(list).to.have.lengthOf(1);
 
-    await helper.expectToEqualText(mainWindow, '#server-list .header', 'sqlite-test');
+    await helper.expectToEqualText(
+      mainWindow,
+      '#server-list .header',
+      'test mysql with SSH private key rsa',
+    );
     await helper.expectToEqualText(mainWindow, '#server-list .attached.button', 'Connect');
 
     const btnConnect = await mainWindow.$('#server-list .attached.button');
@@ -74,10 +56,16 @@ describe('Sqlite', function () {
     // https://github.com/microsoft/playwright/issues/1042
     await btnConnect.dispatchEvent('click');
 
+    await mainWindow.waitForSelector('#sidebar .header');
+    const dbItem = await helper.getElementByText(mainWindow, '#sidebar .header', 'sqlectron');
+    await dbItem.dispatchEvent('click');
+
     await mainWindow.waitForSelector('#sidebar .item-Table');
     const tables = await mainWindow.$$('#sidebar .item-Table');
-    expect(tables).to.have.lengthOf(1);
-    await expect(await tables[0].innerText()).to.be.equal('document');
+
+    expect(tables).to.have.lengthOf(2);
+    await expect(await tables[0].innerText()).to.be.equal('roles');
+    await expect(await tables[1].innerText()).to.be.equal('users');
 
     // Clicks in the table to run default select query
     const btnTable = await mainWindow.$('#sidebar .item-Table span');
@@ -87,7 +75,7 @@ describe('Sqlite', function () {
     await helper.expectToEqualText(
       mainWindow,
       '.react-tabs__tab-panel--selected .ace_content',
-      'SELECT * FROM "document" LIMIT 101',
+      'SELECT * FROM `roles` LIMIT 101',
     );
 
     // Render results for a single query
@@ -97,14 +85,12 @@ describe('Sqlite', function () {
 
     // Assert rows
     const rows = await mainWindow.$$('.ReactVirtualized__Grid__cell');
+
     // NOTE: Keeping it disabled on CI for now. For some reason on running this
     // assertion on CI it doesn't return any rows.
     if (process.env.CI !== 'true') {
-      expect(rows).to.have.lengthOf(11); // rows + info header
-      expect(await rows[0].innerText()).to.be.equal('info');
-      for (let i = 1; i < rows.length; i++) {
-        await expect(await rows[i].innerText()).to.be.equal(`Ipsum ${i - 1}`);
-      }
+      expect(rows).to.have.lengthOf.at.least(2); // rows + info header
+      expect(await rows[0].innerText()).to.be.equal('id');
     }
   });
 });

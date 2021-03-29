@@ -37,6 +37,12 @@ jobs:
 
     - run: npm run format:check
 
+    - run: npm run test
+
+    - name: Prepare integration test dependencies
+      if: runner.os == 'Linux'
+      run: ./scripts/start-test-integration-deps.sh
+
     - name: Build app for e2e test
       if: runner.os == 'Linux'
       run: npm run compile

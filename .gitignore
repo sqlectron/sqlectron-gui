@@ -11,6 +11,8 @@ npm-debug.log
 # test files
 *.sqlite3
 *.db
-test/fixtures/sqlite/sqlectron.json
 
+# auto generated files during tests
+test/fixtures/sqlite/sqlectron.json
 test/fixtures/browser/tmp.sqlectron.json
+test/fixtures/ssh-mysql/sqlectron.json
