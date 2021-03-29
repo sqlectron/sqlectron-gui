@@ -93,6 +93,7 @@ const SSH_SCHEMA = {
   password: [{ sanitizer: passwordSanitizer }, { validator: passwordValidator, min: 1 }],
   privateKey: [{ sanitizer: Valida.Sanitizer.trim }, { validator: Valida.Validator.len, min: 1 }],
   privateKeyWithPassphrase: [{ validator: boolValidator }],
+  useAgent: [{ validator: boolValidator }],
 };
 
 const SERVER_SCHEMA = {
