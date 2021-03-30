@@ -19,7 +19,6 @@ function setupDB() {
 }
 
 describe('SSH MySQL', function () {
-  this.timeout(360000);
   let app;
   let mainWindow;
 

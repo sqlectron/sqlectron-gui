@@ -4,8 +4,6 @@ import { expect } from 'chai';
 import helper from './helper';
 
 describe('MainWindow', function () {
-  this.timeout(60000);
-
   let app;
   let mainWindow;
 

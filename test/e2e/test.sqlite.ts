@@ -39,7 +39,6 @@ function setupDB() {
 }
 
 describe('Sqlite', function () {
-  this.timeout(360000);
   let db;
   let app;
   let mainWindow;
