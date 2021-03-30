@@ -7,6 +7,7 @@ import ConfirmModal from './confim-modal';
 import Message from './message';
 import Checkbox from './checkbox';
 import { requireClientLogo } from './require-context';
+import { ConnectionString } from 'connection-string';
 
 require('react-select/dist/react-select.css');
 require('./override-select.css');
@@ -40,9 +41,18 @@ export default class ServerModalForm extends Component {
       ...server,
       isNew: !server.id,
       showPlainPassword: false,
+      uri: '',
     };
 
+    if (server) {
+      const connURI = this.buildConnectionURI(this.state);
+      if (connURI) {
+        this.state.uri = connURI;
+      }
+    }
+
     this.handleChange = this.handleChange.bind(this);
+    this.handleURIChange = this.handleURIChange.bind(this);
     this.handleOnClientChange = this.handleOnClientChange.bind(this);
     this.onToggleShowPlainPasswordClick = this.onToggleShowPlainPasswordClick.bind(this);
     this.onTestConnectionClick = this.onTestConnectionClick.bind(this);
@@ -81,6 +91,35 @@ export default class ServerModalForm extends Component {
     $(this.refs.serverModal).modal('hide');
   }
 
+  buildConnectionURI(currentState, newState = {}) {
+    try {
+      const data = { ...currentState, ...newState };
+      const clientConfig = DB_CLIENTS.find((entry) => entry.key === data.client);
+
+      if (data.password && !data.showPlainPassword) {
+        data.password = data.password.replace(/./g, '*');
+      }
+
+      const conn = new ConnectionString(null, {
+        protocol: clientConfig ? clientConfig.protocol : '',
+        user: data.user,
+        password: data.password,
+        path: [data.database],
+        hosts: [
+          {
+            name: data.host,
+            port: parseInt(data.port, 10),
+          },
+        ],
+      });
+
+      return conn.toString();
+    } catch (err) {
+      // Ignore error, it just means the data is not ready to be parsed into the URI format yet
+      return '';
+    }
+  }
+
   handleOnClientChange(selected) {
     const client = selected.value || selected;
     this.setState({ client });
@@ -88,6 +127,11 @@ export default class ServerModalForm extends Component {
     const clientConfig = CLIENTS.find((entry) => entry.value === client);
     if (clientConfig && clientConfig.defaultPort) {
       this.setState({ defaultPort: clientConfig.defaultPort });
+    }
+
+    const connURI = this.buildConnectionURI(this.state, { client: clientConfig ? client : '' });
+    if (connURI) {
+      this.setState({ uri: connURI });
     }
   }
 
@@ -108,7 +152,36 @@ export default class ServerModalForm extends Component {
 
     set(newState, name, value);
 
-    return this.setState(newState);
+    const connURI = this.buildConnectionURI(this.state, newState);
+    if (connURI) {
+      set(newState, 'uri', connURI);
+    }
+
+    this.setState(newState);
+  }
+
+  handleURIChange(event) {
+    const newState = {};
+    const { value } = event.target;
+    set(newState, 'uri', value);
+
+    try {
+      const data = new ConnectionString(value);
+
+      const clientConfig = DB_CLIENTS.find((entry) => entry.protocol === data.protocol);
+
+      set(newState, 'client', clientConfig ? clientConfig.key : '');
+      set(newState, 'user', data.user);
+      set(newState, 'password', data.password);
+      set(newState, 'database', data.path && data.path[0]);
+      set(newState, 'host', data.hosts && data.hosts[0].name);
+      set(newState, 'port', data.hosts && data.hosts[0].port);
+    } catch (err) {
+      // Ignore error, it just means the data is not ready to be parsed from the URI format yet
+      return;
+    }
+
+    this.setState(newState);
   }
 
   onSaveClick() {
@@ -136,7 +209,14 @@ export default class ServerModalForm extends Component {
   }
 
   onToggleShowPlainPasswordClick() {
-    this.setState({ showPlainPassword: !this.state.showPlainPassword });
+    const newState = { showPlainPassword: !this.state.showPlainPassword };
+
+    const connURI = this.buildConnectionURI(this.state, newState);
+    if (connURI) {
+      newState.uri = connURI;
+    }
+
+    this.setState(newState);
   }
 
   isFeatureDisabled(feature) {
@@ -419,6 +499,18 @@ export default class ServerModalForm extends Component {
               disabled={this.isFeatureDisabled('server:schema')}
               value={this.state.schema || ''}
               onChange={this.handleChange}
+            />
+          </div>
+        </div>
+        <div className="fields">
+          <div className={`sixteen wide field ${this.highlightError('name')}`}>
+            <label>URI</label>
+            <input
+              type="text"
+              name="uri"
+              placeholder="URI"
+              value={this.state.uri || ''}
+              onChange={this.handleURIChange}
             />
           </div>
         </div>
