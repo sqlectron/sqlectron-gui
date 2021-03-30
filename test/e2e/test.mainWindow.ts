@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import { expect } from 'chai';
 
@@ -8,6 +9,14 @@ describe('MainWindow', function () {
   let mainWindow;
 
   before(async () => {
+    // Makes a copy of the file, because the app writes to it during the startup
+    // which has a slight different format than we use with prettier and it causes
+    // an unecessary change to be commited everytime the test runs.
+    fs.copyFileSync(
+      path.join(__dirname, '../fixtures/simple/sqlectron-sample.json'),
+      path.join(__dirname, '../fixtures/simple/sqlectron.json'),
+    );
+
     const res = await helper.startApp({
       sqlectronHome: path.join(__dirname, '../fixtures/simple'),
     });
