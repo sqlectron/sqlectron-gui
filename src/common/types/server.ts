@@ -25,6 +25,7 @@ export interface Server {
     host: string;
     port: number;
     privateKeyWithPassphrase?: boolean;
+    useAgent?: boolean;
   };
   ssl?:
     | {

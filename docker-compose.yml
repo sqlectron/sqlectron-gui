@@ -1,12 +1,18 @@
-dist:
-  image: maxcnunes/electron-distribution:eb3node4-onbuild
-  # Build all and pack only for Windows
-  # because is not possible packing for OSX from Linux.
-  # Use unsafe-perm to force npm respect the tmp path (http://git.io/vB2oR)
-  command: npm run --unsafe-perm dist:winlinux
-  environment:
-    # Keep the tmp folder inside the project.
-    # This way we dont lose some cache files between distribution tasks
-    TMPDIR: /usr/src/app/.tmp
-  volumes:
-    - .:/usr/src/app
+version: '3'
+
+services:
+  # ---------------------
+  # Distribution services
+  # ---------------------
+  dist:
+    image: maxcnunes/electron-distribution:eb3node4-onbuild
+    # Build all and pack only for Windows
+    # because is not possible packing for OSX from Linux.
+    # Use unsafe-perm to force npm respect the tmp path (http://git.io/vB2oR)
+    command: npm run --unsafe-perm dist:winlinux
+    environment:
+      # Keep the tmp folder inside the project.
+      # This way we dont lose some cache files between distribution tasks
+      TMPDIR: /usr/src/app/.tmp
+    volumes:
+      - .:/usr/src/app

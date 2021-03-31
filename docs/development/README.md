@@ -40,6 +40,12 @@ npm run lint
 
 #### E2E Testing
 
+Start integration test dependencies:
+
+```
+./scripts/start-test-integration-deps.sh
+```
+
 Running in production mode:
 
 ```

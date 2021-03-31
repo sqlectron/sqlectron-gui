@@ -39,7 +39,6 @@ function setupDB() {
 }
 
 describe('Sqlite', function () {
-  this.timeout(360000);
   let db;
   let app;
   let mainWindow;
@@ -48,7 +47,7 @@ describe('Sqlite', function () {
     db = setupDB();
 
     const res = await helper.startApp({
-      sqlectronHome: path.join(__dirname, '../fixtures/sqlite'),
+      sqlectronHome: BASE_PATH,
     });
 
     app = res.app;
@@ -86,7 +85,7 @@ describe('Sqlite', function () {
     // Set default query and automatically executes it
     await helper.expectToEqualText(
       mainWindow,
-      '.ace_content',
+      '.react-tabs__tab-panel--selected .ace_content',
       'SELECT * FROM "document" LIMIT 101',
     );
 

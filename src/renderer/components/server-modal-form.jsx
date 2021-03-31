@@ -171,6 +171,7 @@ export default class ServerModalForm extends Component {
         user: ssh.user,
         password: ssh.password && ssh.password.length ? ssh.password : null,
         privateKey: ssh.privateKey && ssh.privateKey.length ? ssh.privateKey : null,
+        useAgent: !!ssh.useAgent,
         privateKeyWithPassphrase: !!ssh.privateKeyWithPassphrase,
       };
     }
@@ -449,7 +450,7 @@ export default class ServerModalForm extends Component {
             <div className="field">
               <label>SSH Address</label>
               <div className="fields">
-                <div className={`seven wide field ${this.highlightError('ssh.host')}`}>
+                <div className={`six wide field ${this.highlightError('ssh.host')}`}>
                   <input
                     type="text"
                     name="ssh.host"
@@ -468,6 +469,24 @@ export default class ServerModalForm extends Component {
                     disabled={!isSSHChecked}
                     value={ssh.port || DEFAULT_SSH_PORT}
                     onChange={this.handleChange}
+                  />
+                </div>
+                <div className="four wide field" style={{ paddingTop: '0.5em' }}>
+                  <Checkbox
+                    name="ssh.useAgent"
+                    label="Use ssh agent"
+                    disabled={!isSSHChecked}
+                    checked={ssh && ssh.useAgent}
+                    onChecked={() => {
+                      const stateSSH = this.state.ssh ? { ...this.state.ssh } : {};
+                      stateSSH.useAgent = true;
+                      this.setState({ ssh: stateSSH });
+                    }}
+                    onUnchecked={() => {
+                      const stateSSH = this.state.ssh ? { ...this.state.ssh } : {};
+                      stateSSH.useAgent = false;
+                      this.setState({ ssh: stateSSH });
+                    }}
                   />
                 </div>
               </div>
@@ -490,7 +509,7 @@ export default class ServerModalForm extends Component {
                   type="password"
                   name="ssh.password"
                   placeholder="Password"
-                  disabled={!isSSHChecked || ssh.privateKey}
+                  disabled={!isSSHChecked || ssh.privateKey || ssh.useAgent}
                   value={ssh.password || ''}
                   onChange={this.handleChange}
                 />
@@ -502,7 +521,7 @@ export default class ServerModalForm extends Component {
                     type="text"
                     name="ssh.privateKey"
                     placeholder="~/.ssh/id_rsa"
-                    disabled={!isSSHChecked || ssh.password}
+                    disabled={!isSSHChecked || ssh.password || ssh.useAgent}
                     value={ssh.privateKey || ''}
                     onChange={this.handleChange}
                   />
@@ -513,7 +532,7 @@ export default class ServerModalForm extends Component {
                       id="file.ssh.privateKey"
                       name="file.ssh.privateKey"
                       onChange={this.handleChange}
-                      disabled={!isSSHChecked || ssh.password}
+                      disabled={!isSSHChecked || ssh.password || ssh.useAgent}
                       style={{ display: 'none' }}
                     />
                   </label>
