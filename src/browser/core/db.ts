@@ -1,12 +1,16 @@
 import { WebContents, BrowserWindow, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 
 import * as db from 'sqlectron-db-core';
-import { ADAPTERS } from 'sqlectron-db-core';
-import { Database, setSelectLimit } from 'sqlectron-db-core/database';
-import type { Adapter } from 'sqlectron-db-core/adapters';
-import type { QueryRowResult } from 'sqlectron-db-core/adapters/abstract_adapter';
-import type { DatabaseFilter, SchemaFilter } from 'sqlectron-db-core/filters';
-import { Server as DBServer, LegacyServerConfig } from 'sqlectron-db-core/server';
+import { ADAPTERS, setSelectLimit } from 'sqlectron-db-core';
+import type {
+  Database,
+  Adapter,
+  QueryRowResult,
+  DatabaseFilter,
+  SchemaFilter,
+  Server as DBServer,
+  LegacyServerConfig,
+} from 'sqlectron-db-core';
 import omit from 'lodash.omit';
 import { Server } from '../../common/types/server';
 import { SqlectronDB } from '../../common/types/api';
