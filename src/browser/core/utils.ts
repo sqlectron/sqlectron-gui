@@ -4,10 +4,6 @@ import path from 'path';
 import mkdirp from 'mkdirp';
 import envPaths from 'env-paths';
 
-import { readFile, resolveHomePathToAbsolute } from 'sqlectron-db-core/utils';
-
-export { resolveHomePathToAbsolute } from 'sqlectron-db-core/utils';
-
 let configPath = '';
 
 export function getConfigPath(): string {
@@ -65,7 +61,18 @@ export function writeJSONFileSync<T>(filename: string, data: T): void {
 }
 
 export function readJSONFile<T>(filename: string): Promise<T> {
-  return readFile(filename).then((data) => JSON.parse(data));
+  const filePath = resolveHomePathToAbsolute(filename);
+  return new Promise((resolve, reject) => {
+    fs.readFile(path.resolve(filePath), { encoding: 'utf-8' }, (err, data) => {
+      if (err) return reject(err);
+      try {
+        const parsed = JSON.parse(data);
+        resolve(parsed);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  });
 }
 
 export function readJSONFileSync<T>(filename: string): T {
@@ -80,4 +87,12 @@ export function createParentDirectory(filename: string): void {
 
 export function createParentDirectorySync(filename: string): void {
   mkdirp.sync(path.dirname(filename));
+}
+
+export function resolveHomePathToAbsolute(filename: string): string {
+  if (!/^~\//.test(filename)) {
+    return filename;
+  }
+
+  return path.join(homedir(), filename.substring(2));
 }

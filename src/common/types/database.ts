@@ -1,2 +1,1 @@
-export type { Database } from 'sqlectron-db-core/database';
-export type { SchemaFilter, DatabaseFilter } from 'sqlectron-db-core/filters';
+export type { Database, SchemaFilter, DatabaseFilter } from 'sqlectron-db-core';
