@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { CONFIG } from '../api';
 
 const log = CONFIG.log;
 
-const LogStatus = () => {
+const LogStatus: FC = () => {
   if (!log.console && !log.file) {
     return null;
   }
@@ -16,7 +16,5 @@ const LogStatus = () => {
     </a>
   );
 };
-
-LogStatus.displayName = 'LogStatus';
 
 export default LogStatus;
