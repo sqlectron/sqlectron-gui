@@ -18,7 +18,10 @@ const ConfirmModal = ({
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    $(ref.current as HTMLDivElement)
+    if (!ref.current) {
+      return;
+    }
+    $(ref.current)
       .modal({
         closable: false,
         detachable: false,
@@ -33,7 +36,10 @@ const ConfirmModal = ({
       })
       .modal('show');
     return () => {
-      $(ref.current as HTMLDivElement).modal('hide');
+      if (!ref.current) {
+        return;
+      }
+      $(ref.current).modal('hide');
     };
   }, [ref.current]);
 
