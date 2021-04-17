@@ -105,7 +105,7 @@ const webpackConfig = {
       {
         'base-uri': "'self'",
         'object-src': "'none'",
-        'script-src': ["'self'"],
+        'script-src': ["'unsafe-eval'", "'self'"],
         'style-src': ["'unsafe-inline'", "'self'"],
       },
       {
