@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import { createLogger as createReduxLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
@@ -8,6 +8,12 @@ const middlewares = [thunkMiddleware];
 
 const isLogConsoleEnabled = CONFIG.log.console;
 const isLogFileEnabled = CONFIG.log.file;
+
+declare global {
+  interface Window {
+    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: typeof compose;
+  }
+}
 
 if (isLogConsoleEnabled || isLogFileEnabled) {
   const loggerConfig = {
@@ -44,7 +50,13 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
 }
 
 export default function configureStore(initialState?) {
-  const store = createStore(rootReducer, initialState, applyMiddleware(...middlewares));
+  const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+  const store = createStore(
+    rootReducer,
+    initialState,
+    composeEnhancer(applyMiddleware(...middlewares)),
+  );
 
   if (module.hot) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
