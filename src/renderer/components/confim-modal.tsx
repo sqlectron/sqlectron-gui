@@ -1,10 +1,26 @@
 import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
 
-const ConfirmModal = ({ onCancelClick, onRemoveClick, title, message, context }) => {
-  const ref = useRef(null);
+interface ConfirmModalProps {
+  title: string;
+  message: string;
+  context: string;
+  onCancelClick: () => void;
+  onRemoveClick: () => void;
+}
+
+const ConfirmModal = ({
+  onCancelClick,
+  onRemoveClick,
+  title,
+  message,
+  context,
+}: ConfirmModalProps) => {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!ref.current) {
+      return;
+    }
     $(ref.current)
       .modal({
         closable: false,
@@ -13,15 +29,16 @@ const ConfirmModal = ({ onCancelClick, onRemoveClick, title, message, context })
         context: context,
         onDeny: () => {
           onCancelClick();
-          return true;
         },
         onApprove: () => {
           onRemoveClick();
-          return false;
         },
       })
       .modal('show');
     return () => {
+      if (!ref.current) {
+        return;
+      }
       $(ref.current).modal('hide');
     };
   }, [ref.current]);
@@ -31,25 +48,17 @@ const ConfirmModal = ({ onCancelClick, onRemoveClick, title, message, context })
       <div className="header">{title}</div>
       <div className="content">{message}</div>
       <div className="actions">
-        <div className="small ui black deny right labeled icon button" tabIndex="0">
+        <div className="small ui black deny right labeled icon button" tabIndex={0}>
           No
           <i className="ban icon" />
         </div>
-        <div className="small ui positive right labeled icon button" tabIndex="0">
+        <div className="small ui positive right labeled icon button" tabIndex={0}>
           Yes
           <i className="checkmark icon" />
         </div>
       </div>
     </div>
   );
-};
-
-ConfirmModal.propTypes = {
-  onCancelClick: PropTypes.func.isRequired,
-  onRemoveClick: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  message: PropTypes.string.isRequired,
-  context: PropTypes.string.isRequired,
 };
 
 export default ConfirmModal;
