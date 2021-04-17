@@ -105,6 +105,7 @@ const webpackConfig = {
       {
         'base-uri': "'self'",
         'object-src': "'none'",
+        // unsafe-eval should be removed once JointJS is upgraded to 3.x
         'script-src': ["'unsafe-eval'", "'self'"],
         'style-src': ["'unsafe-inline'", "'self'"],
       },
