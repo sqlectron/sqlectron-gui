@@ -172,7 +172,7 @@ module.exports = {
       },
     },
     {
-      files: ['test/**/*.ts', 'test/**/*.tsx'],
+      files: ['stories/**/*.tsx', 'test/**/*.ts', 'test/**/*.tsx'],
       env: { browser: true, es6: true, node: true },
       extends: [
         'eslint:recommended',

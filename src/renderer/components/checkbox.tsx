@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useCallback } from 'react';
 
-interface Props {
+export interface CheckboxProps {
   name: string;
   label: string;
   disabled?: boolean;
@@ -9,7 +9,14 @@ interface Props {
   onUnchecked: () => void;
 }
 
-const Checkbox: FC<Props> = ({ name, label, disabled, checked, onChecked, onUnchecked }) => {
+const Checkbox: FC<CheckboxProps> = ({
+  name,
+  label,
+  disabled,
+  checked,
+  onChecked,
+  onUnchecked,
+}) => {
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.checked) {

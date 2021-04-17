@@ -84,7 +84,9 @@
     "build:win": "npm run clean:win && electron-builder --windows",
     "dist": "npm run compile && electron-builder",
     "dist:all-arch": "npm run compile && electron-builder --ia32 --x64",
-    "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win"
+    "dist:winlinux": "npm run compile && npm run build:linux && npm run build:win",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@babel/core": "^7.13.1",
@@ -107,6 +109,10 @@
     "@babel/preset-env": "^7.13.9",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.13.0",
+    "@storybook/addon-actions": "^6.2.5",
+    "@storybook/addon-essentials": "^6.2.5",
+    "@storybook/addon-links": "^6.2.5",
+    "@storybook/react": "^6.2.5",
     "@types/chai": "^4.2.15",
     "@types/electron": "^1.6.10",
     "@types/enzyme": "^3.10.8",
