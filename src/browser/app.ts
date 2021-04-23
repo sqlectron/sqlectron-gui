@@ -1,8 +1,23 @@
 import { app, dialog } from 'electron';
+import installExtension, {
+  REACT_DEVELOPER_TOOLS,
+  REDUX_DEVTOOLS,
+} from 'electron-devtools-installer';
 
 import createLogger from './logger';
 import { buildNewWindow } from './window';
 import { registerIPCMainHandlers } from './ipcMain';
+
+async function loadExtension(extension) {
+  try {
+    const name = await installExtension(extension);
+    // eslint-disable-next-line no-console
+    console.log(`Loaded ${name}`);
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error(`Error loading extension: ${err}`);
+  }
+}
 
 const logger = createLogger('app');
 
@@ -30,16 +45,7 @@ app.whenReady().then(async () => {
   registerIPCMainHandlers();
 
   if (process.env.NODE_ENV === 'development' || process.env.DEV_TOOLS === 'true') {
-    // eslint-disable-next-line no-console
-    console.log('Loading electron extensions...');
-    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = await import(
-      'electron-devtools-installer'
-    );
-    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-      // eslint-disable-next-line no-console
-      .then((name) => console.log(`Added extension: ${name}`))
-      // eslint-disable-next-line no-console
-      .catch((err) => console.error(`Error adding extensions: ${err}`));
+    await Promise.all([loadExtension(REACT_DEVELOPER_TOOLS), loadExtension(REDUX_DEVTOOLS)]);
   }
 
   buildNewWindow(app);
