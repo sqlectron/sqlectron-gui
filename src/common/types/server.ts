@@ -3,6 +3,11 @@ export interface EncryptedPassword {
   encryptedText: string;
 }
 
+export interface ServerResult {
+  data?: Server;
+  validationErrors?: unknown;
+}
+
 export interface Server {
   id: string;
   name: string;

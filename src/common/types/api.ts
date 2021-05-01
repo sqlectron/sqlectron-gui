@@ -1,6 +1,6 @@
 import type { IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 import type { Config } from './config';
-import type { Server } from './server';
+import type { Server, ServerResult } from './server';
 import type { Adapter, QueryRowResult, SchemaFilter, DatabaseFilter } from 'sqlectron-db-core';
 
 export interface MenuOptions {
@@ -101,9 +101,9 @@ export interface SqlectronDB {
 
 export interface SqlectronServers {
   getAll(): Promise<Array<Server>>;
-  add(server: Server, cryptoSecret: string): Promise<Server>;
-  update(server: Server, cryptoSecret: string): Promise<Server>;
-  addOrUpdate(server: Server, cryptoSecret: string): Promise<Server>;
+  add(server: Server, cryptoSecret: string): Promise<ServerResult>;
+  update(server: Server, cryptoSecret: string): Promise<ServerResult>;
+  addOrUpdate(server: Server, cryptoSecret: string): Promise<ServerResult>;
   removeById(id: string): Promise<void>;
   decryptSecrects(server: Server, cryptoSecret: string): Promise<Server>;
 }

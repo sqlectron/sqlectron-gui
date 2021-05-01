@@ -49,7 +49,15 @@ export function saveServer({ server, id }: { server: Server; id: string }): Thun
       const cryptoSecret = config.data?.crypto?.secret;
 
       const newServer = Object.assign({}, server, { id });
-      const data = await sqlectron.servers.addOrUpdate(newServer, cryptoSecret as string);
+      const { data, validationErrors } = await sqlectron.servers.addOrUpdate(
+        newServer,
+        cryptoSecret as string,
+      );
+
+      if (validationErrors) {
+        dispatch({ type: SAVE_SERVER_FAILURE, error: { validationErrors } });
+        return;
+      }
 
       dispatch({
         type: SAVE_SERVER_SUCCESS,
@@ -90,7 +98,15 @@ export function duplicateServer({ server }: { server: Server }): ThunkResult<voi
       const { config } = getState();
       const cryptoSecret = config.data?.crypto?.secret;
 
-      const data = await sqlectron.servers.addOrUpdate(duplicated, cryptoSecret as string);
+      const { data, validationErrors } = await sqlectron.servers.addOrUpdate(
+        duplicated,
+        cryptoSecret as string,
+      );
+
+      if (validationErrors) {
+        dispatch({ type: SAVE_SERVER_FAILURE, error: { validationErrors } });
+        return;
+      }
 
       dispatch({
         type: DUPLICATE_SERVER_SUCCESS,

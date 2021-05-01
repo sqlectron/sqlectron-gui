@@ -8,13 +8,28 @@ import { Config } from '../../src/common/types/config';
 
 const cryptoSecret = 'CHK`Ya91Hs{me!^8ndwPPaPPxwQ}`';
 
-function assertPassword(newServer, createdServer) {
+function assertServers(serverA, serverB) {
   /* eslint no-param-reassign: 0 */
-  expect(createdServer).to.have.property('password').to.have.keys(['ivText', 'encryptedText']);
-  expect(crypto.decrypt(createdServer.password, cryptoSecret)).to.eql(newServer.password);
-  newServer.encrypted = true;
-  delete createdServer.password;
-  delete newServer.password;
+
+  const srvA = { ...serverA };
+  const srvB = { ...serverB };
+
+  let srvAPasswordDecrypted = srvA.password;
+  if (srvA.password && srvA.password.ivText && srvA.password.encryptedText) {
+    srvAPasswordDecrypted = crypto.decrypt(srvA.password, cryptoSecret);
+  }
+
+  expect(srvB).to.have.property('password').to.have.keys(['ivText', 'encryptedText']);
+  const srvBPasswordDecrypted = crypto.decrypt(srvB.password, cryptoSecret);
+
+  expect(srvBPasswordDecrypted).to.eql(srvAPasswordDecrypted);
+
+  srvA.encrypted = true;
+
+  delete srvA.password;
+  delete srvB.password;
+
+  expect(srvA).to.eql(srvB);
 }
 
 describe('servers', () => {
@@ -57,11 +72,10 @@ describe('servers', () => {
         user: 'root',
         password: 'password',
       };
-      const createdServer = await servers.add(newServer, cryptoSecret);
+      const { data: createdServer } = await servers.add(newServer, cryptoSecret);
       expect(createdServer).to.have.property('id');
-      createdServer.id = '';
-      assertPassword(newServer, createdServer);
-      expect(createdServer).to.eql(newServer);
+      createdServer!.id = '';
+      assertServers(newServer, createdServer);
 
       const configAfter = await loadConfig();
       expect(configAfter.servers.length).to.eql(configBefore.servers.length + 1);
@@ -91,11 +105,10 @@ describe('servers', () => {
           privateKeyWithPassphrase: true,
         },
       };
-      const createdServer = await servers.add(newServer, cryptoSecret);
+      const { data: createdServer } = await servers.add(newServer, cryptoSecret);
       expect(createdServer).to.have.property('id');
-      createdServer.id = '';
-      assertPassword(newServer, createdServer);
-      expect(createdServer).to.eql(newServer);
+      createdServer!.id = '';
+      assertServers(newServer, createdServer);
 
       const configAfter = await loadConfig();
       expect(configAfter.servers.length).to.eql(configBefore.servers.length + 1);
@@ -117,14 +130,13 @@ describe('servers', () => {
         user: 'usr',
         password: 'pwd',
       };
-      const updatedServer = await servers.update(serverToUpdate, cryptoSecret);
-      expect(updatedServer).to.eql(serverToUpdate);
+      const { data: updatedServer } = await servers.update(serverToUpdate, cryptoSecret);
+      assertServers(serverToUpdate, updatedServer);
 
       const configAfter = await loadConfig();
       expect(configAfter.servers.length).to.eql(configBefore.servers.length);
       const configServer = configAfter.servers.find((srv) => srv.id === id);
-      assertPassword(serverToUpdate, configServer);
-      expect(updatedServer).to.eql(configServer);
+      assertServers(serverToUpdate, configServer);
     });
 
     it('should upgrade oldstyle encrypted password', async () => {
@@ -141,15 +153,15 @@ describe('servers', () => {
         user: 'usr',
         password: 'fa1d88ee82bd4439',
       };
-      const updatedServer = await servers.update(serverToUpdate, cryptoSecret);
-      expect(updatedServer).to.eql(serverToUpdate);
+      const { data: updatedServer } = await servers.update(serverToUpdate, cryptoSecret);
+      serverToUpdate.password = 'password';
+      assertServers(serverToUpdate, updatedServer);
 
       const configAfter = await loadConfig();
       expect(configAfter.servers.length).to.eql(configBefore.servers.length);
-      serverToUpdate.password = 'password';
+
       const configServer = configAfter.servers.find((srv) => srv.id === id);
-      assertPassword(serverToUpdate, configServer);
-      expect(serverToUpdate).to.eql(configServer);
+      assertServers(serverToUpdate, configServer);
     });
   });
 
@@ -170,8 +182,8 @@ describe('servers', () => {
         encryptedText: '0LySDs9WPAvwSS9Qv+W3/A==',
       },
     };
-    const updatedServer = await servers.update(serverToUpdate, cryptoSecret);
-    expect(updatedServer).to.eql(serverToUpdate);
+    const { data: updatedServer } = await servers.update(serverToUpdate, cryptoSecret);
+    assertServers(serverToUpdate, updatedServer);
 
     const configAfter = await loadConfig();
 
@@ -197,11 +209,10 @@ describe('servers', () => {
           user: 'root',
           password: 'password',
         };
-        const createdServer = await servers.addOrUpdate(newServer, cryptoSecret);
+        const { data: createdServer } = await servers.addOrUpdate(newServer, cryptoSecret);
         expect(createdServer).to.have.property('id');
-        createdServer.id = '';
-        assertPassword(newServer, createdServer);
-        expect(createdServer).to.eql(newServer);
+        createdServer!.id = '';
+        assertServers(newServer, createdServer);
 
         const configAfter = await loadConfig();
         expect(configAfter.servers.length).to.eql(configBefore.servers.length + 1);
@@ -223,14 +234,13 @@ describe('servers', () => {
           user: 'usr',
           password: 'pwd',
         };
-        const updatedServer = await servers.addOrUpdate(serverToUpdate, cryptoSecret);
-        expect(updatedServer).to.eql(serverToUpdate);
+        const { data: updatedServer } = await servers.addOrUpdate(serverToUpdate, cryptoSecret);
+        assertServers(serverToUpdate, updatedServer);
 
         const configAfter = await loadConfig();
         expect(configAfter.servers.length).to.eql(configBefore.servers.length);
         const configServer = configAfter.servers.find((srv) => srv.id === id);
-        assertPassword(serverToUpdate, configServer);
-        expect(updatedServer).to.eql(configServer);
+        assertServers(serverToUpdate, configServer);
       });
     });
   });
