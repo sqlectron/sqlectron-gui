@@ -41,13 +41,13 @@ export default class ServerModalForm extends Component {
       ...server,
       isNew: !server.id,
       showPlainPassword: false,
-      uri: '',
+      connURI: '',
     };
 
     if (server) {
       const connURI = this.buildConnectionURI(this.state);
       if (connURI) {
-        this.state.uri = connURI;
+        this.state.connURI = connURI;
       }
     }
 
@@ -131,7 +131,7 @@ export default class ServerModalForm extends Component {
 
     const connURI = this.buildConnectionURI(this.state, { client: clientConfig ? client : '' });
     if (connURI) {
-      this.setState({ uri: connURI });
+      this.setState({ connURI });
     }
   }
 
@@ -154,7 +154,7 @@ export default class ServerModalForm extends Component {
 
     const connURI = this.buildConnectionURI(this.state, newState);
     if (connURI) {
-      set(newState, 'uri', connURI);
+      set(newState, 'connURI', connURI);
     }
 
     this.setState(newState);
@@ -163,7 +163,7 @@ export default class ServerModalForm extends Component {
   handleURIChange(event) {
     const newState = {};
     const { value } = event.target;
-    set(newState, 'uri', value);
+    set(newState, 'connURI', value);
 
     try {
       const data = new ConnectionString(value);
@@ -213,7 +213,7 @@ export default class ServerModalForm extends Component {
 
     const connURI = this.buildConnectionURI(this.state, newState);
     if (connURI) {
-      newState.uri = connURI;
+      newState.connURI = connURI;
     }
 
     this.setState(newState);
@@ -461,7 +461,7 @@ export default class ServerModalForm extends Component {
                 onChange={this.handleChange}
               />
               <span className="ui icon button" onClick={this.onToggleShowPlainPasswordClick}>
-                <i className="unhide icon" />
+                <i className={`icon ${this.state.showPlainPassword ? 'hide' : 'unhide'}`} />
               </span>
             </div>
           </div>
@@ -502,16 +502,21 @@ export default class ServerModalForm extends Component {
             />
           </div>
         </div>
-        <div className="fields">
-          <div className={`sixteen wide field ${this.highlightError('name')}`}>
+        <div className="field">
+          <div className={`field ${this.highlightError('name')}`}>
             <label>URI</label>
             <input
               type="text"
-              name="uri"
+              name="connURI"
               placeholder="URI"
-              value={this.state.uri || ''}
+              disabled={!this.state.showPlainPassword}
+              value={this.state.connURI || ''}
               onChange={this.handleURIChange}
             />
+            <em style={{ visibility: this.state.showPlainPassword ? 'hidden' : 'visible' }}>
+              Make the password visible in order to change the database credentials through the URI
+              format.
+            </em>
           </div>
         </div>
       </div>
