@@ -174,8 +174,8 @@ export default class ServerModalForm extends Component {
       set(newState, 'user', data.user);
       set(newState, 'password', data.password);
       set(newState, 'database', data.path && data.path[0]);
-      set(newState, 'host', data.hosts && data.hosts[0].name);
-      set(newState, 'port', data.hosts && data.hosts[0].port);
+      set(newState, 'host', data.hostname);
+      set(newState, 'port', data.port);
     } catch (err) {
       // Ignore error, it just means the data is not ready to be parsed from the URI format yet
       return;
