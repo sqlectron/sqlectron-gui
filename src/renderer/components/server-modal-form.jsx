@@ -110,7 +110,7 @@ export default class ServerModalForm extends Component {
         ],
       });
 
-      return conn.toString({passwordHash});
+      return conn.toString({ passwordHash });
     } catch (err) {
       // Ignore error, it just means the data is not ready to be parsed into the URI format yet
       return '';
