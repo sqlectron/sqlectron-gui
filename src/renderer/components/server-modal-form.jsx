@@ -95,10 +95,7 @@ export default class ServerModalForm extends Component {
     try {
       const data = { ...currentState, ...newState };
       const clientConfig = DB_CLIENTS.find((entry) => entry.key === data.client);
-
-      if (data.password && !data.showPlainPassword) {
-        data.password = data.password.replace(/./g, '*');
-      }
+      const passwordHash = data.showPlainPassword ? false : '*';
 
       const conn = new ConnectionString(null, {
         protocol: clientConfig ? clientConfig.protocol : '',
@@ -113,7 +110,7 @@ export default class ServerModalForm extends Component {
         ],
       });
 
-      return conn.toString();
+      return conn.toString({passwordHash});
     } catch (err) {
       // Ignore error, it just means the data is not ready to be parsed into the URI format yet
       return '';
