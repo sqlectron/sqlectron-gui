@@ -2,16 +2,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { validate, validateUniqueId } from './validators/server';
 import * as config from './config';
 import * as crypto from './crypto';
-import { Server, EncryptedPassword } from '../../common/types/server';
+import { Server, ServerResult, EncryptedPassword } from '../../common/types/server';
 
 export async function getAll(): Promise<Array<Server>> {
   const { servers } = await config.get();
   return servers;
 }
 
-export async function add(server: Server, cryptoSecret: string): Promise<Server> {
+export async function add(server: Server, cryptoSecret: string): Promise<ServerResult> {
   let srv = { ...server };
-  await validate(srv);
+
+  const validationErrors = await getValidationErrors(srv);
+  if (validationErrors) {
+    return { validationErrors };
+  }
 
   const data = await config.get();
   let newId;
@@ -25,12 +29,16 @@ export async function add(server: Server, cryptoSecret: string): Promise<Server>
   data.servers.push(srv);
   await config.save(data);
 
-  return srv;
+  return { data: srv };
 }
 
-export async function update(server: Server, cryptoSecret: string): Promise<Server> {
+export async function update(server: Server, cryptoSecret: string): Promise<ServerResult> {
   let srv = { ...server };
-  await validate(srv);
+
+  const validationErrors = await getValidationErrors(srv);
+  if (validationErrors) {
+    return { validationErrors };
+  }
 
   const data = await config.get();
 
@@ -41,10 +49,10 @@ export async function update(server: Server, cryptoSecret: string): Promise<Serv
 
   await config.save(data);
 
-  return server;
+  return { data: srv };
 }
 
-export function addOrUpdate(server: Server, cryptoSecret: string): Promise<Server> {
+export function addOrUpdate(server: Server, cryptoSecret: string): Promise<ServerResult> {
   const hasId = !!(server.id && String(server.id).length);
   // TODO: Add validation to check if the current id is a valid uuid
   return hasId ? update(server, cryptoSecret) : add(server, cryptoSecret);
@@ -130,4 +138,16 @@ export function decryptSecrects(server: Server, cryptoSecret: string): Server {
 
   updatedServer.encrypted = false;
   return updatedServer;
+}
+
+async function getValidationErrors(server: Server): Promise<unknown> {
+  try {
+    await validate(server);
+  } catch (err) {
+    if (err.validationErrors) {
+      return err.validationErrors;
+    }
+
+    throw err;
+  }
 }
