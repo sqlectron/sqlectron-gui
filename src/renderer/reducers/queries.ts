@@ -16,7 +16,7 @@ export interface Query {
   results: null | [];
   error: null | Error;
   copied: null | boolean;
-  resultItemsPerPage: [];
+  resultItemsPerPage: number;
 }
 
 export interface QueryAction extends Action {
@@ -206,18 +206,22 @@ function addNewQuery(state, action) {
     return state;
   }
 
-  const configItemsPerPage = action.config && action.config.resultItemsPerPage;
-  const itemsPerPage =
-    configItemsPerPage || state.resultItemsPerPage || INITIAL_STATE.resultItemsPerPage;
+  let { enabledAutoComplete, enabledLiveAutoComplete, resultItemsPerPage } = INITIAL_STATE;
 
-  let { enabledAutoComplete } = INITIAL_STATE;
-  if (action.config && action.config.enabledAutoComplete !== undefined) {
-    ({ enabledAutoComplete } = action.config);
+  const config = action.config && action.config.data;
+
+  if (config?.resultItemsPerPage !== undefined) {
+    resultItemsPerPage = config?.resultItemsPerPage;
+  } else if (state.resultItemsPerPage !== undefined) {
+    resultItemsPerPage = state.resultItemsPerPage;
   }
 
-  let { enabledLiveAutoComplete } = INITIAL_STATE;
-  if (action.config && action.config.enabledLiveAutoComplete !== undefined) {
-    ({ enabledLiveAutoComplete } = action.config);
+  if (config?.enabledAutoComplete !== undefined) {
+    enabledAutoComplete = config?.enabledAutoComplete;
+  }
+
+  if (config?.enabledLiveAutoComplete !== undefined) {
+    enabledLiveAutoComplete = config?.enabledLiveAutoComplete;
   }
 
   const newId = state.lastCreatedId + 1;
@@ -235,14 +239,14 @@ function addNewQuery(state, action) {
     results: null,
     error: null,
     copied: null,
-    resultItemsPerPage: itemsPerPage,
+    resultItemsPerPage,
   };
 
   return {
     ...state,
     lastCreatedId: newQuery.id,
     currentQueryId: newQuery.id,
-    resultItemsPerPage: itemsPerPage,
+    resultItemsPerPage,
     enabledAutoComplete,
     enabledLiveAutoComplete,
     queryIds: [...state.queryIds, newQuery.id],
