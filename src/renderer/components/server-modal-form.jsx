@@ -95,10 +95,7 @@ export default class ServerModalForm extends Component {
     try {
       const data = { ...currentState, ...newState };
       const clientConfig = DB_CLIENTS.find((entry) => entry.key === data.client);
-
-      if (data.password && !data.showPlainPassword) {
-        data.password = data.password.replace(/./g, '*');
-      }
+      const passwordHash = data.showPlainPassword ? false : '*';
 
       const conn = new ConnectionString(null, {
         protocol: clientConfig ? clientConfig.protocol : '',
@@ -113,7 +110,7 @@ export default class ServerModalForm extends Component {
         ],
       });
 
-      return conn.toString();
+      return conn.toString({ passwordHash });
     } catch (err) {
       // Ignore error, it just means the data is not ready to be parsed into the URI format yet
       return '';
@@ -174,8 +171,8 @@ export default class ServerModalForm extends Component {
       set(newState, 'user', data.user);
       set(newState, 'password', data.password);
       set(newState, 'database', data.path && data.path[0]);
-      set(newState, 'host', data.hosts && data.hosts[0].name);
-      set(newState, 'port', data.hosts && data.hosts[0].port);
+      set(newState, 'host', data.hostname);
+      set(newState, 'port', data.port);
     } catch (err) {
       // Ignore error, it just means the data is not ready to be parsed from the URI format yet
       return;
