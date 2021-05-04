@@ -1,9 +1,25 @@
-import { Action, Reducer } from 'redux';
+import { Action, Reducer, AnyAction } from 'redux';
+import { ConnectionAction } from './connections';
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/queries';
 
+interface QueryPartialUpdate {
+  name?: string;
+  filename?: null | string;
+  isExecuting?: boolean;
+  isDefaultSelect?: boolean;
+  didInvalidate?: boolean;
+  query?: string;
+  selectedQuery?: string;
+  queryHistory?: Array<string>;
+  results?: null | [];
+  error?: null | Error;
+  copied?: null | boolean;
+  isCanceling?: boolean;
+}
+
 export interface Query {
-  id: string;
+  id: number;
   database: string;
   name: string;
   filename: null | string;
@@ -16,28 +32,30 @@ export interface Query {
   results: null | [];
   error: null | Error;
   copied: null | boolean;
+  isCanceling: boolean;
   resultItemsPerPage: number;
 }
 
 export interface QueryAction extends Action {
   error: Error;
   type: string;
-  id: string;
+  id: number;
   isDefaultSelect: boolean;
   query: string;
   name: string;
   filename: string;
   selectedQuery: string;
+  database: string;
   table: string;
   results: string;
 }
 
 export interface QueryState {
   lastCreatedId: number;
-  currentQueryId: null | string;
-  queryIds: Array<string>;
+  currentQueryId: null | number;
+  queryIds: Array<number>;
   queriesById: {
-    [queryId: string]: Query;
+    [queryId: number]: Query;
   };
   resultItemsPerPage: number;
   enabledAutoComplete: boolean;
@@ -56,15 +74,17 @@ const INITIAL_STATE: QueryState = {
 
 const queryReducer: Reducer<QueryState> = function (
   state: QueryState = INITIAL_STATE,
-  action,
+  action: AnyAction,
 ): QueryState {
   switch (action.type) {
     case connTypes.CLOSE_CONNECTION: {
       return INITIAL_STATE;
     }
-    case connTypes.CONNECTION_SUCCESS:
+    case connTypes.CONNECTION_SUCCESS: {
+      return addNewQuery(state, null, action as ConnectionAction);
+    }
     case types.NEW_QUERY: {
-      return addNewQuery(state, action);
+      return addNewQuery(state, action as QueryAction);
     }
     case types.SELECT_QUERY: {
       return {
@@ -75,8 +95,10 @@ const queryReducer: Reducer<QueryState> = function (
     case types.REMOVE_QUERY: {
       const newState = { ...state };
 
-      const { database } = state.queriesById[state.currentQueryId as string];
-      const index = state.queryIds.indexOf(state.currentQueryId as string);
+      const currentQueryId = state.currentQueryId as number;
+
+      const { database } = state.queriesById[currentQueryId];
+      const index = state.queryIds.indexOf(currentQueryId);
 
       if (state.queryIds.length === 1) {
         newState.currentQueryId = null;
@@ -87,13 +109,13 @@ const queryReducer: Reducer<QueryState> = function (
       }
 
       newState.queryIds.splice(index, 1);
-      delete newState.queriesById[state.currentQueryId as string];
+      delete newState.queriesById[currentQueryId];
 
       if (newState.queryIds.length >= 1) {
         return newState;
       }
 
-      return addNewQuery(newState, { ...action, database });
+      return addNewQuery(newState, { ...action, database } as QueryAction);
     }
     case types.EXECUTE_QUERY_REQUEST: {
       return changeStateByCurrentQuery(state, {
@@ -102,7 +124,7 @@ const queryReducer: Reducer<QueryState> = function (
         isDefaultSelect: action.isDefaultSelect,
         didInvalidate: false,
         queryHistory: [
-          ...state.queriesById[state.currentQueryId as string].queryHistory,
+          ...state.queriesById[state.currentQueryId as number].queryHistory,
           action.query,
         ],
       });
@@ -201,34 +223,40 @@ const queryReducer: Reducer<QueryState> = function (
   }
 };
 
-function addNewQuery(state, action) {
-  if (action.reconnecting) {
-    return state;
-  }
-
+function addNewQuery(
+  state: QueryState,
+  queryAction: QueryAction | null,
+  connAction?: ConnectionAction,
+): QueryState {
   let { enabledAutoComplete, enabledLiveAutoComplete, resultItemsPerPage } = INITIAL_STATE;
 
-  const config = action.config && action.config.data;
+  if (connAction) {
+    if (connAction.reconnecting) {
+      return state;
+    }
 
-  if (config?.resultItemsPerPage !== undefined) {
-    resultItemsPerPage = config?.resultItemsPerPage;
-  } else if (state.resultItemsPerPage !== undefined) {
+    if (connAction.config) {
+      if (connAction.config.enabledAutoComplete !== undefined) {
+        enabledAutoComplete = connAction.config.enabledAutoComplete;
+      }
+
+      if (connAction.config.enabledLiveAutoComplete !== undefined) {
+        enabledLiveAutoComplete = connAction.config.enabledLiveAutoComplete;
+      }
+    }
+  }
+
+  if (state.resultItemsPerPage !== undefined) {
     resultItemsPerPage = state.resultItemsPerPage;
   }
 
-  if (config?.enabledAutoComplete !== undefined) {
-    enabledAutoComplete = config?.enabledAutoComplete;
-  }
-
-  if (config?.enabledLiveAutoComplete !== undefined) {
-    enabledLiveAutoComplete = config?.enabledLiveAutoComplete;
-  }
+  const database = (queryAction?.database || connAction?.database) as string;
 
   const newId = state.lastCreatedId + 1;
   const newQuery: Query = {
     id: newId,
-    database: action.database,
-    name: createQueryName(newId, action.database, action.table),
+    database,
+    name: createQueryName(newId, database, queryAction?.table),
     filename: null,
     isExecuting: false,
     isDefaultSelect: false,
@@ -239,6 +267,7 @@ function addNewQuery(state, action) {
     results: null,
     error: null,
     copied: null,
+    isCanceling: false,
     resultItemsPerPage,
   };
 
@@ -258,26 +287,23 @@ function addNewQuery(state, action) {
 }
 
 function changeStateByCurrentQuery(
-  oldFullState,
-  newCurrentQueryState,
+  oldFullState: QueryState,
+  newCurrentQueryState: QueryPartialUpdate,
   options: { table?: string } = {},
 ) {
-  const oldQueryState = oldFullState.queriesById[oldFullState.currentQueryId];
+  const currentQueryId = oldFullState.currentQueryId as number;
+  const oldQueryState = oldFullState.queriesById[currentQueryId];
 
   oldQueryState.name = newCurrentQueryState.name || oldQueryState.name;
   if (options.table) {
-    oldQueryState.name = createQueryName(
-      oldFullState.currentQueryId,
-      oldQueryState.database,
-      options.table,
-    );
+    oldQueryState.name = createQueryName(currentQueryId, oldQueryState.database, options.table);
   }
 
   return {
     ...oldFullState,
     queriesById: {
       ...oldFullState.queriesById,
-      [oldFullState.currentQueryId]: {
+      [currentQueryId]: {
         ...oldQueryState,
         ...newCurrentQueryState,
       },
@@ -285,7 +311,7 @@ function changeStateByCurrentQuery(
   };
 }
 
-function createQueryName(id, database, table) {
+function createQueryName(id: number, database: string, table?: string): string {
   return table ? `${database} / ${table} #${id}` : `${database} #${id}`;
 }
 

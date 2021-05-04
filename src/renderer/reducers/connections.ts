@@ -3,12 +3,15 @@ import * as types from '../actions/connections';
 import * as serverTypes from '../actions/servers';
 import { DB_CLIENTS } from '../api';
 import { Server } from '../../common/types/server';
+import { Config as ConfigType } from '../../common/types/config';
 
 export interface ConnectionAction extends Action {
   type: string;
   error: Error;
   server: Server;
   database: string;
+  reconnecting: boolean;
+  config?: ConfigType;
 }
 
 export interface ConnectionState {

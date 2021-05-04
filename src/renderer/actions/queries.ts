@@ -305,7 +305,7 @@ function stringifyResultToCSV(origRows: [], delimiter: string): Promise<string> 
 }
 
 function getCurrentQuery(state: ApplicationState): Query {
-  return state.queries.queriesById[state.queries.currentQueryId as string];
+  return state.queries.queriesById[state.queries.currentQueryId as number];
 }
 
 function needNewQuery(
