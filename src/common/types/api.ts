@@ -2,6 +2,7 @@ import type { IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 import type { Config } from './config';
 import type { Server, ServerResult } from './server';
 import type { Adapter, QueryRowResult, SchemaFilter, DatabaseFilter } from 'sqlectron-db-core';
+import type { Tab } from './tab';
 
 export interface MenuOptions {
   menuItems: Array<MenuItem>;
@@ -168,6 +169,14 @@ export interface SqlectronBrowser {
   menu: SqlectronBrowserMenu;
 }
 
+export interface SqlectronTabStore {
+  loadTabs: (serverId: string, databaseName: string) => Promise<Array<Tab>>;
+  createTab: (serverId: string, databaseName: string, type: string) => Promise<Tab>;
+  loadTabContent: (tab: Tab) => Promise<string | undefined>;
+  saveTabContent: (tab: Tab, content: string) => void;
+  removeTab: (tab: Tab) => Promise<undefined>;
+}
+
 export interface SqlectronAPI {
   db: SqlectronDB;
   servers: SqlectronServers;
@@ -175,4 +184,5 @@ export interface SqlectronAPI {
   logger: SqlectronLogger;
   browser: SqlectronBrowser;
   update: SqlectronUpdate;
+  tabStore: SqlectronTabStore;
 }

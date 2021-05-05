@@ -7,6 +7,9 @@ import installExtension, {
 import createLogger from './logger';
 import { buildNewWindow } from './window';
 import { registerIPCMainHandlers } from './ipcMain';
+import TabStore from './tabStore';
+
+const tabStore = new TabStore();
 
 async function loadExtension(extension) {
   try {
@@ -42,7 +45,7 @@ app.on('window-all-closed', () => {
 // This method will be called when Electron has done everything
 // initialization and ready for creating browser windows.
 app.whenReady().then(async () => {
-  registerIPCMainHandlers();
+  registerIPCMainHandlers(tabStore);
 
   if (process.env.NODE_ENV === 'development' || process.env.DEV_TOOLS === 'true') {
     await Promise.all([loadExtension(REACT_DEVELOPER_TOOLS), loadExtension(REDUX_DEVTOOLS)]);

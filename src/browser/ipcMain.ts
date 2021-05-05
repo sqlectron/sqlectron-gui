@@ -6,8 +6,10 @@ import createLogger from './logger';
 import * as event from '../common/event';
 import { Config } from '../common/types/config';
 import { Server } from '../common/types/server';
+import { Tab } from '../common/types/tab';
 import { DialogFilter, MenuOptions } from '../common/types/api';
 import { SchemaFilter, DatabaseFilter } from '../common/types/database';
+import TabStore from './tabStore';
 
 const rendererLogger = createLogger('renderer');
 
@@ -246,10 +248,31 @@ function registerBrowserIPCMainHandlers() {
   );
 }
 
-export const registerIPCMainHandlers = (): void => {
+function registerTabStoreIPCMainHandlers(tabStore: TabStore): void {
+  ipcMain.handle(
+    event.TABSTORE_LOAD_TABS,
+    (e: IpcMainInvokeEvent, serverId: string, databaseName: string) =>
+      tabStore.loadTabs(serverId, databaseName),
+  );
+  ipcMain.handle(
+    event.TABSTORE_CREATE_TAB,
+    (e: IpcMainInvokeEvent, serverId: string, databaseName: string, type: string) =>
+      tabStore.createTab(serverId, databaseName, type),
+  );
+  ipcMain.handle(event.TABSTORE_LOAD_TAB_CONTENT, (e: IpcMainInvokeEvent, tab: Tab) =>
+    tabStore.loadTabContent(tab),
+  );
+  ipcMain.on(event.TABSTORE_SAVE_TAB_CONTENT, (event, tab: Tab, content: string) =>
+    tabStore.saveTabContent(tab, content),
+  );
+  ipcMain.handle(event.TABSTORE_REMOVE_TAB, (event, tab: Tab) => tabStore.removeTab(tab));
+}
+
+export const registerIPCMainHandlers = (tabStore: TabStore): void => {
   registerConfigIPCMainHandlers();
   registerServersIPCMainHandlers();
   registerLoggerIPCMainHandlers();
   registerDBIPCMainHandlers();
   registerBrowserIPCMainHandlers();
+  registerTabStoreIPCMainHandlers(tabStore);
 };

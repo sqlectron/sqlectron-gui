@@ -7,6 +7,7 @@ import type { SqlectronAPI, DialogFilter, MenuOptions, ListenerUnsub } from '../
 import type { DatabaseFilter, SchemaFilter } from '../common/types/database';
 import type { Server } from '../common/types/server';
 import type { Config } from '../common/types/config';
+import type { Tab } from '../common/types/tab';
 import * as eventKeys from '../common/event';
 
 const ipcRendererHelper = {
@@ -156,6 +157,17 @@ const sqlectronAPI: SqlectronAPI = {
       // eslint-disable-next-line no-unused-vars
       cb: (currentVersion: string, latestVersion: string) => void,
     ): ListenerUnsub => ipcRendererHelper.receive(eventKeys.UPDATE_AVAILABLE, cb),
+  },
+
+  tabStore: {
+    loadTabs: (serverId: string, databaseName: string) =>
+      ipcRenderer.invoke(eventKeys.TABSTORE_LOAD_TABS, serverId, databaseName),
+    createTab: (serverId: string, databaseName: string, type: string) =>
+      ipcRenderer.invoke(eventKeys.TABSTORE_CREATE_TAB, serverId, databaseName, type),
+    loadTabContent: (tab: Tab) => ipcRenderer.invoke(eventKeys.TABSTORE_LOAD_TAB_CONTENT, tab),
+    saveTabContent: (tab: Tab, content: string) =>
+      ipcRenderer.send(eventKeys.TABSTORE_SAVE_TAB_CONTENT, tab, content),
+    removeTab: (tab: Tab) => ipcRenderer.invoke(eventKeys.TABSTORE_REMOVE_TAB, tab),
   },
 };
 
