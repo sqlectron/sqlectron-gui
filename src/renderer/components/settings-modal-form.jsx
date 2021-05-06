@@ -6,8 +6,14 @@ import Select from 'react-select';
 import Checkbox from './checkbox';
 import { mapObjectToConfig } from '../utils/config';
 
-require('react-select/dist/react-select.css');
-require('./override-select.css');
+const logLevelOptions = [
+  { value: 'debug', label: 'Debug', icon: 'bug' },
+  { value: 'info', label: 'Info', icon: 'info' },
+  { value: 'warn', label: 'Warn', icon: 'warning sign' },
+  { value: 'error', label: 'Error', icon: 'remove circle' },
+];
+
+const errorLogLevelOption = logLevelOptions.find((l) => l.value === 'error');
 
 export default class SettingsModalForm extends Component {
   static propTypes = {
@@ -370,17 +376,12 @@ export default class SettingsModalForm extends Component {
               <label>Level</label>
               <Select
                 name="log.level"
-                options={[
-                  { value: 'debug', label: 'Debug', icon: 'bug' },
-                  { value: 'info', label: 'Info', icon: 'info' },
-                  { value: 'warn', label: 'Warn', icon: 'warning sign' },
-                  { value: 'error', label: 'Error', icon: 'remove circle' },
-                ]}
-                clearable={false}
+                options={logLevelOptions}
+                defaultValue={errorLogLevelOption}
+                isClearable={false}
                 onChange={this.handleOnLogLevelChange}
-                optionRenderer={this.renderLogLevelItem}
-                valueRenderer={this.renderLogLevelItem}
-                value={log.level || 'error'}
+                formatOptionLabel={this.renderLogLevelItem}
+                value={logLevelOptions.find((l) => l.value === log.level)}
               />
               <p className="help">Level logging: debug, info, warn, error.</p>
             </div>
