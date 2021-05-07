@@ -90,8 +90,8 @@ class QueryBrowserContainer extends Component {
     sqlscripts: PropTypes.object.isRequired,
     keys: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
-    params: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
     children: PropTypes.node,
   };
 
@@ -133,8 +133,8 @@ class QueryBrowserContainer extends Component {
   }
 
   UNSAFE_componentWillMount() {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.connect(params.id));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.connect(match.params.id));
   }
 
   componentDidMount() {
@@ -142,13 +142,13 @@ class QueryBrowserContainer extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    const { dispatch, router, connections } = nextProps;
+    const { dispatch, history, connections } = nextProps;
 
     if (
       connections.error ||
       (!connections.connecting && !connections.server && !connections.waitingSSHPassword)
     ) {
-      router.push('/');
+      history.push('/');
       return;
     }
 
@@ -209,9 +209,8 @@ class QueryBrowserContainer extends Component {
   }
 
   onSelectDatabase(database) {
-    const { dispatch, params } = this.props;
-
-    dispatch(ConnActions.connect(params.id, database.name));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.connect(match.params.id, database.name));
   }
 
   onExecuteDefaultQuery(database, table) {
@@ -231,8 +230,8 @@ class QueryBrowserContainer extends Component {
   }
 
   onPromptOKClick(password) {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.connect(params.id, null, false, password));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.connect(match.params.id, null, false, password));
   }
 
   onSelectTable(database, table) {
@@ -267,8 +266,8 @@ class QueryBrowserContainer extends Component {
   }
 
   onReConnectionClick() {
-    const { dispatch, params } = this.props;
-    dispatch(ConnActions.reconnect(params.id, this.getCurrentQuery().database));
+    const { dispatch, match } = this.props;
+    dispatch(ConnActions.reconnect(match.params.id, this.getCurrentQuery().database));
   }
 
   onRefreshDatabase(database) {
