@@ -1,4 +1,4 @@
-import { combineReducers, Reducer } from 'redux';
+import { combineReducers, Reducer, AnyAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import config, { ConfigState } from './config';
 import databases, { DatabaseState } from './databases';
@@ -16,7 +16,7 @@ import indexes, { IndexState } from './indexes';
 import sqlscripts, { ScriptState } from './sqlscripts';
 import keys, { KeyState } from './keys';
 
-export type ThunkResult<R> = ThunkAction<R, ApplicationState, undefined>;
+export type ThunkResult<R> = ThunkAction<R, ApplicationState, undefined, AnyAction>;
 
 // The top-level state object
 export interface ApplicationState {
