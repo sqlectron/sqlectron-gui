@@ -20,7 +20,7 @@ export function getDatabaseByQueryID(state: ApplicationState): string {
     throw new Error('There is no server available');
   }
 
-  const currentQuery = state.queries.queriesById[state.queries.currentQueryId as string];
+  const currentQuery = state.queries.queriesById[state.queries.currentQueryId as number];
 
   return currentQuery ? currentQuery.database : '';
 }
@@ -49,8 +49,8 @@ export function connect(
         isConnected = false;
       }
 
-      const { config } = getState();
-      const cryptoSecret = config.data?.crypto?.secret;
+      const config = getState().config.data;
+      const cryptoSecret = config?.crypto?.secret;
 
       const servers = await sqlectron.servers.getAll();
       server = servers.find((srv) => srv.id === id);
