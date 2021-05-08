@@ -3,9 +3,7 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        targets: {
-          chrome: 53,
-        },
+        targets: 'Chrome > 89', // Electron 12
         useBuiltIns: 'usage',
         corejs: { version: 3, proposals: true },
       },
