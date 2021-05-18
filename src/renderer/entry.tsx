@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, IndexRoute, hashHistory } from 'react-router';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
 import App from './containers/app';
 import configureStore from './store/configure';
 import ServerManagementContainer from './containers/server-management';
@@ -11,11 +11,13 @@ const store = configureStore();
 
 ReactDOM.render(
   <Provider store={store}>
-    <Router history={hashHistory}>
-      <Route path="/" component={App}>
-        <IndexRoute component={ServerManagementContainer} />
-        <Route path="server/:id" component={QueryBrowserContainer} />
-      </Route>
+    <Router>
+      <App>
+        <Switch>
+          <Route exact path="/" component={ServerManagementContainer} />
+          <Route path="/server/:id" component={QueryBrowserContainer} />
+        </Switch>
+      </App>
     </Router>
   </Provider>,
   document.getElementById('content'),

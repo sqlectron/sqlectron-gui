@@ -25,7 +25,7 @@ function filterServers(name, servers) {
   return servers.filter((srv) => regex.test(srv.name));
 }
 
-const ServerManagement = ({ router }) => {
+const ServerManagement = ({ history }) => {
   const [filter, setFilter] = useState('');
   const dispatch = useDispatch();
 
@@ -46,9 +46,9 @@ const ServerManagement = ({ router }) => {
   const onConnectClick = useCallback(
     ({ id }) => {
       dispatch(ConnActions.setConnecting());
-      router.push(`/server/${id}`);
+      history.push(`/server/${id}`);
     },
-    [dispatch, router],
+    [dispatch, history],
   );
 
   const onTestConnectionClick = useCallback(
@@ -163,7 +163,7 @@ const ServerManagement = ({ router }) => {
 ServerManagement.displayName = 'ServerManagement';
 
 ServerManagement.propTypes = {
-  router: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
 
 export default withRouter(ServerManagement);

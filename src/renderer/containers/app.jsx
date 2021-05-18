@@ -22,7 +22,7 @@ class AppContainer extends Component {
   static propTypes = {
     config: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    router: PropTypes.object.isRequired,
+    history: PropTypes.object.isRequired,
     children: PropTypes.node,
   };
 
