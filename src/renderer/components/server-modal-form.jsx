@@ -9,9 +9,6 @@ import Checkbox from './checkbox';
 import { requireClientLogo } from './require-context';
 import { ConnectionString } from 'connection-string';
 
-require('react-select/dist/react-select.css');
-require('./override-select.css');
-
 const CLIENTS = DB_CLIENTS.map((dbClient) => ({
   value: dbClient.key,
   logo: requireClientLogo(dbClient.key),
@@ -118,7 +115,7 @@ export default class ServerModalForm extends Component {
   }
 
   handleOnClientChange(selected) {
-    const client = selected.value || selected;
+    const client = selected.value;
     this.setState({ client });
 
     const clientConfig = CLIENTS.find((entry) => entry.value === client);
@@ -346,12 +343,23 @@ export default class ServerModalForm extends Component {
             <Select
               name="client"
               placeholder="Select"
+              styles={
+                this.highlightError('client')
+                  ? {
+                      control: (styles) => ({
+                        ...styles,
+                        backgroundColor: '#fff6f6',
+                        borderColor: '#e0b4b4',
+                        color: '#9f3a38',
+                      }),
+                    }
+                  : {}
+              }
+              formatOptionLabel={this.renderClientItem}
               options={CLIENTS}
-              clearable={false}
+              isClearable={false}
               onChange={this.handleOnClientChange}
-              optionRenderer={this.renderClientItem}
-              valueRenderer={this.renderClientItem}
-              value={this.state.client}
+              value={CLIENTS.find((c) => c.value === this.state.client)}
             />
           </div>
           <div className="one field" style={{ paddingTop: '2em' }}>
