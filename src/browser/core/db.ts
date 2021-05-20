@@ -1,4 +1,9 @@
 import { WebContents, BrowserWindow, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
+import path from 'path';
+import cloneDeep from 'lodash.clonedeep';
+import csvStringify from 'csv-stringify';
+import { rowsValuesToString } from './utils/convert';
+import browserFacade from '../browser';
 
 import * as db from 'sqlectron-db-core';
 import { ADAPTERS, setSelectLimit } from 'sqlectron-db-core';
@@ -14,6 +19,7 @@ import type {
 import omit from 'lodash.omit';
 import { Server } from '../../common/types/server';
 import { SqlectronDB } from '../../common/types/api';
+import { writeFile } from './utils';
 
 interface CancellableQuery {
   execute: () => Promise<QueryRowResult[]>;
@@ -241,6 +247,42 @@ export default class DatabaseFacade implements SqlectronDB {
   setSelectLimit(limit: number): void {
     return setSelectLimit(limit);
   }
+
+  async exportQueryResultToFile(rows: [], exportType: string, delimiter: string): Promise<void> {
+    let value;
+    const filters = [{ name: 'All Files', extensions: ['*'] }];
+
+    if (exportType === 'CSV') {
+      value = await stringifyResultToCSV(rows, delimiter);
+      filters.push({ name: 'CSV', extensions: ['csv'] });
+    } else {
+      value = JSON.stringify(rows, null, 2);
+      filters.push({ name: 'JSON', extensions: ['json'] });
+    }
+
+    let filename = await browserFacade.dialog.showSaveDialog(filters);
+    if (path.extname(filename) !== `.${exportType.toLowerCase()}`) {
+      filename += `.${exportType.toLowerCase()}`;
+    }
+
+    await writeFile(filename, value);
+  }
+
+  async exportQueryResultToClipboard(
+    rows: [],
+    exportType: string,
+    delimiter: string,
+  ): Promise<void> {
+    let value;
+
+    if (exportType === 'CSV') {
+      value = await stringifyResultToCSV(rows, delimiter);
+    } else {
+      value = JSON.stringify(rows, null, 2);
+    }
+
+    browserFacade.clipboard.writeText(value);
+  }
 }
 
 // Keep connections by BrowserWindow instances
@@ -265,3 +307,28 @@ export const getConn = (e: IpcMainEvent | IpcMainInvokeEvent): SqlectronDB => {
 
   return conn;
 };
+
+function stringifyResultToCSV(origRows: [], delimiter: string): Promise<string> {
+  if (!origRows.length) {
+    return Promise.resolve('');
+  }
+
+  const rows = cloneDeep(origRows);
+
+  const header = Object.keys(rows[0]).reduce((_header, col) => {
+    _header[col] = col; // eslint-disable-line no-param-reassign
+    return _header;
+  }, {});
+
+  const data = [header, ...rowsValuesToString(rows)];
+
+  return new Promise((resolve, reject) => {
+    csvStringify(data, { delimiter }, (err, csv) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(csv as string);
+      }
+    });
+  });
+}

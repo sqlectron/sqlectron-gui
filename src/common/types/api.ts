@@ -97,6 +97,9 @@ export interface SqlectronDB {
   truncateAllTables(database: string, schema?: string): Promise<void>;
   getTableColumnNames(database: string, table: string, schema?: string): Promise<string[]>;
   setSelectLimit(limit: number): void;
+
+  exportQueryResultToFile(rows: [], exportType: string, delimiter: string): Promise<void>;
+  exportQueryResultToClipboard(rows: [], exportType: string, delimiter: string): Promise<void>;
 }
 
 export interface SqlectronServers {

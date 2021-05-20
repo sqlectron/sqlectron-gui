@@ -1,15 +1,11 @@
 import { AnyAction } from 'redux';
 import path from 'path';
 import trim from 'lodash.trim';
-import cloneDeep from 'lodash.clonedeep';
-import csvStringify from 'csv-stringify';
 import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { Query } from '../reducers/queries';
 import { getDatabaseByQueryID } from './connections';
-import { rowsValuesToString } from '../utils/convert';
 import * as fileHandler from '../utils/file';
-import wait from '../utils/wait';
 
 export const NEW_QUERY = 'NEW_QUERY';
 export const RENAME_QUERY = 'RENAME_QUERY';
@@ -120,20 +116,15 @@ export function appendQuery(query: string): ThunkResult<void> {
   };
 }
 
-export function copyToClipboard(rows: [], type: string, delimiter: string): ThunkResult<void> {
+export function copyToClipboard(
+  rows: [],
+  exportType: string,
+  delimiter: string,
+): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST });
     try {
-      let value;
-      if (type === 'CSV') {
-        value = await stringifyResultToCSV(rows, delimiter);
-      } else {
-        // force the next dispatch be separately
-        // handled of the previous one
-        await wait(0);
-        value = JSON.stringify(rows, null, 2);
-      }
-      sqlectron.browser.clipboard.writeText(value);
+      await sqlectron.db.exportQueryResultToClipboard(rows, exportType, delimiter);
       dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_SUCCESS });
     } catch (error) {
       dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_FAILURE, error });
@@ -141,27 +132,11 @@ export function copyToClipboard(rows: [], type: string, delimiter: string): Thun
   };
 }
 
-export function saveToFile(rows: [], type: string, delimiter: string): ThunkResult<void> {
+export function saveToFile(rows: [], exportType: string, delimiter: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_REQUEST });
     try {
-      let value;
-      const filters = [{ name: 'All Files', extensions: ['*'] }];
-      if (type === 'CSV') {
-        value = await stringifyResultToCSV(rows, delimiter);
-        filters.push({ name: 'CSV', extensions: ['csv'] });
-      } else {
-        // force the next dispatch be separately
-        // handled of the previous one
-        await wait(0);
-        value = JSON.stringify(rows, null, 2);
-        filters.push({ name: 'JSON', extensions: ['json'] });
-      }
-      let filename = await fileHandler.showSaveDialog(filters);
-      if (path.extname(filename) !== `.${type.toLowerCase()}`) {
-        filename += `.${type.toLowerCase()}`;
-      }
-      await fileHandler.saveFile(filename, value);
+      await sqlectron.db.exportQueryResultToFile(rows, exportType, delimiter);
       dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_SUCCESS });
     } catch (error) {
       dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_FAILURE, error });
@@ -277,31 +252,6 @@ export function cancelQuery(queryId: string): ThunkResult<void> {
       dispatch({ type: CANCEL_QUERY_FAILURE, queryId, error });
     }
   };
-}
-
-function stringifyResultToCSV(origRows: [], delimiter: string): Promise<string> {
-  if (!origRows.length) {
-    return Promise.resolve('');
-  }
-
-  const rows = cloneDeep(origRows);
-
-  const header = Object.keys(rows[0]).reduce((_header, col) => {
-    _header[col] = col; // eslint-disable-line no-param-reassign
-    return _header;
-  }, {});
-
-  const data = [header, ...rowsValuesToString(rows)];
-
-  return new Promise((resolve, reject) => {
-    csvStringify(data, { delimiter }, (err, csv) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(csv as string);
-      }
-    });
-  });
 }
 
 function getCurrentQuery(state: ApplicationState): Query {
