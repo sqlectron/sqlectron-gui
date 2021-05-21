@@ -92,7 +92,7 @@
     "@babel/core": "^7.13.1",
     "axios": "^0.21.1",
     "bunyan": "^1.8.5",
-    "connection-string": "^4.3.2",
+    "connection-string": "^4.3.4",
     "core-js": "^3.6.5",
     "electron-devtools-installer": "^3.1.1",
     "env-paths": "^1.0.0",

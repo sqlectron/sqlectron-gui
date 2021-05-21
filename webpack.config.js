@@ -22,9 +22,6 @@ const webpackConfig = {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: ['node_modules', 'src/renderer'],
     fallback: {
-      // Configuration required for the connection-string module
-      // TODO: https://github.com/sqlectron/sqlectron-gui/issues/656
-      os: false,
       // Configuration required for the csv-stringify module
       // TODO: https://github.com/sqlectron/sqlectron-gui/issues/655
       stream: require.resolve('stream-browserify'),
