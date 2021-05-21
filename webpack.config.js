@@ -38,14 +38,6 @@ const webpackConfig = {
   module: {
     rules: [
       {
-        // Configuration required for the connection-string module
-        // TODO: https://github.com/sqlectron/sqlectron-gui/issues/656
-        test: /\.m?js/,
-        resolve: {
-          fullySpecified: false,
-        },
-      },
-      {
         test: /\.tsx?$/,
         use: {
           loader: 'ts-loader',
