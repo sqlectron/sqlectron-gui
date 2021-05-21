@@ -78,6 +78,15 @@ const sqlectronAPI: SqlectronAPI = {
     getTableColumnNames: (database: string, table: string, schema?: string) =>
       ipcRenderer.invoke(eventKeys.DB_GET_TABLE_COLUMN_NAMES, database, table, schema),
     setSelectLimit: (limit: number) => ipcRenderer.invoke(eventKeys.DB_SET_SELECT_LIMIT, limit),
+    exportQueryResultToFile: (rows: [], exportType: string, delimiter: string) =>
+      ipcRenderer.invoke(eventKeys.DB_EXPORT_QUERY_RESULT_TO_FILE, rows, exportType, delimiter),
+    exportQueryResultToClipboard: (rows: [], exportType: string, delimiter: string) =>
+      ipcRenderer.invoke(
+        eventKeys.DB_EXPORT_QUERY_RESULT_TO_CLIPBOARD,
+        rows,
+        exportType,
+        delimiter,
+      ),
   },
   servers: {
     getAll: () => ipcRenderer.invoke(eventKeys.SERVERS_GET_ALL),

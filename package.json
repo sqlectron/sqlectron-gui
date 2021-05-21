@@ -202,7 +202,6 @@
     "sass-loader": "^11.0.1",
     "sinon": "^9.2.4",
     "spawn-auto-restart": "^3.0.0",
-    "stream-browserify": "^3.0.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^8.0.17",
     "ts-node": "^9.1.1",

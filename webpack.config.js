@@ -22,9 +22,6 @@ const webpackConfig = {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     modules: ['node_modules', 'src/renderer'],
     fallback: {
-      // Configuration required for the csv-stringify module
-      // TODO: https://github.com/sqlectron/sqlectron-gui/issues/655
-      stream: require.resolve('stream-browserify'),
       // Configuration required for the for a few places in the renderer process using "path" module
       // TODO: https://github.com/sqlectron/sqlectron-gui/issues/657
       path: require.resolve('path-browserify'),
