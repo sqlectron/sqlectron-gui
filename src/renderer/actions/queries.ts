@@ -144,34 +144,16 @@ export function saveToFile(rows: [], exportType: string, delimiter: string): Thu
   };
 }
 
-async function getFileName(
-  currentQuery: Query,
-  isSaveAs: boolean,
-  filters: Array<{ name: string; extensions: Array<string> }>,
-): Promise<string> {
-  if (!isSaveAs && currentQuery.filename) {
-    return currentQuery.filename;
-  }
-  return fileHandler.showSaveDialog(filters);
-}
-
 export function saveQuery(isSaveAs: boolean): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_QUERY_REQUEST });
     try {
       const currentQuery = getCurrentQuery(getState());
-      const filters = [
-        { name: 'SQL', extensions: ['sql'] },
-        { name: 'All Files', extensions: ['*'] },
-      ];
-
-      let filename = await getFileName(currentQuery, isSaveAs, filters);
-      if (path.extname(filename) !== '.sql') {
-        filename += '.sql';
-      }
-
-      await fileHandler.saveFile(filename, currentQuery.query);
-      const name = path.basename(filename, '.sql');
+      const { name, filename } = await sqlectron.db.saveQuery(
+        isSaveAs,
+        currentQuery.filename,
+        currentQuery.query,
+      );
 
       dispatch({ type: SAVE_QUERY_SUCCESS, name, filename });
     } catch (error) {
@@ -184,12 +166,7 @@ export function openQuery(): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: OPEN_QUERY_REQUEST });
     try {
-      const filters = [{ name: 'SQL', extensions: ['sql'] }];
-
-      const [filename] = await fileHandler.showOpenDialog(filters);
-      const name = path.basename(filename, '.sql');
-
-      const query = await fileHandler.openFile(filename);
+      const { name, filename, query } = await sqlectron.db.openQuery();
 
       dispatch({
         type: OPEN_QUERY_SUCCESS,

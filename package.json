@@ -178,7 +178,6 @@
     "mini-css-extract-plugin": "^1.6.0",
     "mocha": "^8.3.0",
     "node-sass": "^5.0.0",
-    "path-browserify": "^1.0.1",
     "playwright-core": "^1.9.1",
     "playwright-electron": "^0.5.0",
     "postcss-loader": "^3.0.0",

@@ -60,19 +60,19 @@ export function writeJSONFileSync<T>(filename: string, data: T): void {
   return fs.writeFileSync(filename, JSON.stringify(data, null, 2));
 }
 
-export function readJSONFile<T>(filename: string): Promise<T> {
-  const filePath = resolveHomePathToAbsolute(filename);
+export function readFile(filename: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    fs.readFile(path.resolve(filePath), { encoding: 'utf-8' }, (err, data) => {
+    fs.readFile(filename, { encoding: 'utf-8' }, (err, data) => {
       if (err) return reject(err);
-      try {
-        const parsed = JSON.parse(data);
-        resolve(parsed);
-      } catch (err) {
-        reject(err);
-      }
+      resolve(data);
     });
   });
+}
+
+export async function readJSONFile<T>(filename: string): Promise<T> {
+  const filePath = resolveHomePathToAbsolute(filename);
+  const data = await readFile(path.resolve(filePath));
+  return JSON.parse(data);
 }
 
 export function readJSONFileSync<T>(filename: string): T {

@@ -208,6 +208,22 @@ function registerDBIPCMainHandlers() {
     (e: IpcMainInvokeEvent, rows: [], exportType: string, delimiter: string) =>
       getConn(e).exportQueryResultToClipboard(rows, exportType, delimiter),
   );
+
+  ipcMain.handle(
+    event.DB_QUERY_SAVE,
+    (e: IpcMainInvokeEvent, isSaveAs: boolean, filename: string, query: string) =>
+      getConn(e).saveQuery(isSaveAs, filename, query),
+  );
+  ipcMain.handle(event.DB_QUERY_OPEN, (e: IpcMainInvokeEvent) => getConn(e).openQuery());
+
+  ipcMain.handle(
+    event.DB_DIAGRAM_SAVE,
+    (e: IpcMainInvokeEvent, filename: string, diagramJSON: unknown) =>
+      getConn(e).saveDatabaseDiagram(filename, diagramJSON),
+  );
+  ipcMain.handle(event.DB_DIAGRAM_OPEN, (e: IpcMainInvokeEvent, filename: string) =>
+    getConn(e).openDatabaseDiagram(filename),
+  );
 }
 
 function registerBrowserIPCMainHandlers() {
