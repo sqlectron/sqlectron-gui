@@ -1,11 +1,9 @@
 import { AnyAction } from 'redux';
-import path from 'path';
 import trim from 'lodash.trim';
 import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { Query } from '../reducers/queries';
 import { getDatabaseByQueryID } from './connections';
-import * as fileHandler from '../utils/file';
 
 export const NEW_QUERY = 'NEW_QUERY';
 export const RENAME_QUERY = 'RENAME_QUERY';
