@@ -110,8 +110,11 @@ const webpackConfig = {
       {
         'base-uri': "'self'",
         'object-src': "'none'",
-        'script-src': ["'self'"],
+        // NOTE: unsafe-eval is required because of JointJS
+        // https://github.com/sqlectron/sqlectron-gui/issues/663
+        'script-src': ["'self'", "'unsafe-eval'"],
         'style-src': ["'unsafe-inline'", "'self'"],
+        'img-src': ["'self'", 'data:;'],
       },
       {
         enabled: true,
