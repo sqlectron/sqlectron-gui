@@ -1,5 +1,4 @@
 import { AnyAction } from 'redux';
-import path from 'path';
 import html2canvas from 'html2canvas';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { getDatabaseByQueryID } from './connections';
@@ -49,14 +48,10 @@ export function saveDatabaseDiagram(diagramJSON: unknown): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_DIAGRAM_REQUEST });
     try {
-      const filters = [{ name: 'JSON', extensions: ['json'] }];
-
-      let fileName = getState().databases.fileName || (await FileHandler.showSaveDialog(filters));
-      if (path.extname(fileName) !== '.json') {
-        fileName += '.json';
-      }
-
-      await FileHandler.saveFile(fileName, JSON.stringify(diagramJSON));
+      const fileName = sqlectron.db.saveDatabaseDiagram(
+        getState().databases.fileName || '',
+        diagramJSON,
+      );
 
       dispatch({ type: SAVE_DIAGRAM_SUCCESS, fileName });
     } catch (error) {
@@ -99,14 +94,11 @@ export function openDatabaseDiagram(): ThunkResult<void> {
     dispatch({ type: OPEN_DIAGRAM_REQUEST });
     try {
       // Path user used last for save or open diagram in the same session. If such exists.
-      const defaultPath = path.dirname(getState().databases.fileName || '');
-      const filters = [{ name: 'JSON', extensions: ['json'] }];
+      const { filename, diagram } = await sqlectron.db.openDatabaseDiagram(
+        getState().databases.fileName || '',
+      );
 
-      const [fileName] = await FileHandler.showOpenDialog(filters, defaultPath);
-
-      const diagramJSON = await FileHandler.openFile(fileName);
-
-      dispatch({ type: OPEN_DIAGRAM_SUCCESS, fileName, diagramJSON });
+      dispatch({ type: OPEN_DIAGRAM_SUCCESS, fileName: filename, diagramJSON: diagram });
     } catch (error) {
       dispatch({ type: OPEN_DIAGRAM_FAILURE, error });
     }

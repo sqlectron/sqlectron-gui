@@ -100,6 +100,16 @@ export interface SqlectronDB {
 
   exportQueryResultToFile(rows: [], exportType: string, delimiter: string): Promise<void>;
   exportQueryResultToClipboard(rows: [], exportType: string, delimiter: string): Promise<void>;
+
+  saveQuery(
+    isSaveAs: boolean,
+    filename: string | null,
+    query: string,
+  ): Promise<{ name: string; filename: string }>;
+  openQuery(): Promise<{ name: string; query: string; filename: string }>;
+
+  saveDatabaseDiagram(filename: string, diagramJSON: unknown): Promise<string>;
+  openDatabaseDiagram(filename: string): Promise<{ filename: string; diagram: unknown }>;
 }
 
 export interface SqlectronServers {

@@ -19,7 +19,7 @@ import type {
 import omit from 'lodash.omit';
 import { Server } from '../../common/types/server';
 import { SqlectronDB } from '../../common/types/api';
-import { writeFile } from './utils';
+import { writeFile, readFile } from './utils';
 
 interface CancellableQuery {
   execute: () => Promise<QueryRowResult[]>;
@@ -282,6 +282,69 @@ export default class DatabaseFacade implements SqlectronDB {
     }
 
     browserFacade.clipboard.writeText(value);
+  }
+
+  async saveQuery(
+    isSaveAs: boolean,
+    filename: string,
+    query: string,
+  ): Promise<{ name: string; filename: string }> {
+    const filters = [
+      { name: 'SQL', extensions: ['sql'] },
+      { name: 'All Files', extensions: ['*'] },
+    ];
+
+    if (isSaveAs || !filename) {
+      filename = await browserFacade.dialog.showSaveDialog(filters);
+    }
+
+    if (path.extname(filename) !== '.sql') {
+      filename += '.sql';
+    }
+
+    await writeFile(filename, query);
+    const name = path.basename(filename, '.sql');
+
+    return { name, filename };
+  }
+
+  async openQuery(): Promise<{ name: string; query: string; filename: string }> {
+    const filters = [{ name: 'SQL', extensions: ['sql'] }];
+
+    const [filename] = await browserFacade.dialog.showOpenDialog(filters);
+    const name = path.basename(filename, '.sql');
+
+    const query = await readFile(filename);
+
+    return { name, query, filename };
+  }
+
+  async saveDatabaseDiagram(filename: string, diagramJSON: unknown): Promise<string> {
+    const filters = [{ name: 'JSON', extensions: ['json'] }];
+
+    if (!filename) {
+      filename = await browserFacade.dialog.showSaveDialog(filters);
+    }
+
+    if (path.extname(filename) !== '.json') {
+      filename += '.json';
+    }
+
+    await writeFile(filename, JSON.stringify(diagramJSON));
+
+    return filename;
+  }
+
+  async openDatabaseDiagram(filename: string): Promise<{ filename: string; diagram: unknown }> {
+    // Path user used last for save or open diagram in the same session. If such exists.
+    const defaultPath = path.dirname(filename || '');
+    const filters = [{ name: 'JSON', extensions: ['json'] }];
+
+    const [diagramFilename] = await browserFacade.dialog.showOpenDialog(filters, defaultPath);
+
+    const diagramJSON = await readFile(diagramFilename);
+
+    return { filename: diagramFilename, diagram: diagramJSON };
   }
 }
 
