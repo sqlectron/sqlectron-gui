@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { sqlectron } from '../api';
 import DatabaseListItemMetatada from './database-list-item-metadata';
 import DatabaseFilter from './database-filter';
 import * as eventKeys from '../../common/event';

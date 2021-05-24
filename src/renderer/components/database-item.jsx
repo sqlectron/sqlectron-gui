@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { sqlectron, DB_CLIENTS } from '../api';
+import { DB_CLIENTS } from '../api';
 import CollapseIcon from './collapse-icon';
 import TableSubmenu from './table-submenu';
 import * as eventKeys from '../../common/event';
