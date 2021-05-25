@@ -44,7 +44,6 @@ module.exports = {
         $: true,
       },
       rules: {
-        'no-unused-vars': 'off',
         camelcase: [
           'error',
           {
@@ -107,7 +106,6 @@ module.exports = {
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
-        'no-unused-vars': 'off',
         'react/prop-types': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
@@ -140,7 +138,6 @@ module.exports = {
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
-        'no-unused-vars': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
       },
@@ -166,7 +163,6 @@ module.exports = {
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
-        'no-unused-vars': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
       },
@@ -190,7 +186,6 @@ module.exports = {
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
-        'no-unused-vars': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',

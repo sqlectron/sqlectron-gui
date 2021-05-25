@@ -28,7 +28,6 @@ import Footer from '../components/footer';
 import Query from '../components/query';
 import Loader from '../components/loader';
 import PromptModal from '../components/prompt-modal';
-import { sqlectron } from '../api';
 import * as eventKeys from '../../common/event';
 import { requireClientLogo } from '../components/require-context';
 import MenuHandler from '../utils/menu';

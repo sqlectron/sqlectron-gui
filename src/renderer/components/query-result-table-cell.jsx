@@ -1,5 +1,4 @@
 import isPlainObject from 'lodash.isplainobject';
-import { sqlectron } from '../api';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
