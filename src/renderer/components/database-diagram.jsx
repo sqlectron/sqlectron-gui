@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { joint, SqlectronShapes, cellNamespace } from './database-diagram-shapes';
+import { joint, SqlectronShapes, HTMLShapes, cellNamespace } from './database-diagram-shapes';
 
 require('jointjs/dist/joint.min.css');
 require('./database-diagram.css');
@@ -65,6 +65,14 @@ export default class DatabaseDiagram extends Component {
       restrictTranslate: true,
       cellViewNamespace: cellNamespace,
     });
+
+    // Container for all HTML views inside paper
+    var htmlContainer = document.createElement('div');
+    htmlContainer.style.pointerEvents = 'none';
+    htmlContainer.style.position = 'absolute';
+    htmlContainer.style.inset = '0';
+    this.paper.el.appendChild(htmlContainer);
+    this.paper.htmlContainer = htmlContainer;
 
     if (!this.props.diagramJSON) {
       // Only supported for newely generated diagrams
@@ -157,8 +165,55 @@ export default class DatabaseDiagram extends Component {
   }
 
   putEverythingOnGraph(tableShapes, tableCells, tableLinks) {
-    this.graph.addCells(tableShapes.concat(tableCells, tableLinks));
-    this.resizeTableElements(tableShapes, tableCells);
+    // this.graph.addCells(tableShapes.concat(tableCells, tableLinks));
+    // this.resizeTableElements(tableShapes, tableCells);
+    var el1 = new HTMLShapes.Element({
+      position: { x: 16, y: 150 },
+      fields: {
+        name: 'Create Story',
+        resource: 'bob',
+        state: 'done',
+      },
+    });
+
+    var el2 = new HTMLShapes.Element({
+      position: { x: 298, y: 150 },
+      fields: {
+        name: 'Promote',
+        resource: 'mary',
+      },
+    });
+
+    var el3 = new HTMLShapes.Element({
+      position: { x: 580, y: 150 },
+      fields: {
+        name: 'Measure',
+        resource: 'john',
+        state: 'at-risk',
+      },
+    });
+
+    var l1 = new joint.shapes.standard.Link({
+      source: { id: el1.id },
+      target: { id: el2.id },
+      attrs: {
+        line: {
+          stroke: '#464554',
+        },
+      },
+    });
+
+    var l2 = new joint.shapes.standard.Link({
+      source: { id: el2.id },
+      target: { id: el3.id },
+      attrs: {
+        line: {
+          stroke: '#464554',
+        },
+      },
+    });
+
+    this.graph.resetCells([el1, el2, el3, l1, l2]);
   }
 
   // Resize table elements based on attributes text length

@@ -110,9 +110,7 @@ const webpackConfig = {
       {
         'base-uri': "'self'",
         'object-src': "'none'",
-        // NOTE: unsafe-eval is required because of JointJS
-        // https://github.com/sqlectron/sqlectron-gui/issues/663
-        'script-src': ["'self'", "'unsafe-eval'"],
+        'script-src': "'self'",
         'style-src': ["'unsafe-inline'", "'self'"],
         'img-src': ["'self'", 'data:;'],
       },
@@ -193,6 +191,10 @@ if (isProd) {
   };
 
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+  webpackConfig.devServer = {
+    port: 9000,
+  };
 }
 
 module.exports = webpackConfig;
