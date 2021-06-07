@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import * as joint from 'jointjs';
-import './jointjs-diagram-table';
-import './jointjs-diagram-table-cell';
+import { joint, SqlectronShapes, cellNamespace } from './database-diagram-shapes';
 
 require('jointjs/dist/joint.min.css');
 require('./database-diagram.css');
@@ -20,7 +18,7 @@ export default class DatabaseDiagram extends Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.graph = new joint.dia.Graph();
+    this.graph = new joint.dia.Graph({}, { cellNamespace });
   }
 
   componentDidMount() {
@@ -65,6 +63,7 @@ export default class DatabaseDiagram extends Component {
       model: this.graph,
       gridSize: 1,
       restrictTranslate: true,
+      cellViewNamespace: cellNamespace,
     });
 
     if (!this.props.diagramJSON) {
@@ -84,25 +83,26 @@ export default class DatabaseDiagram extends Component {
 
     try {
       tables.forEach((table, index) => {
-        tableShapes.push(
-          new joint.shapes.sqlectron.Table({
-            position: {
-              x: 100 + (index % 6) * 100,
-              y: 20 + (index % 4) * 100,
-            },
-            size: {
-              width: 120,
-              height: (columnsByTable[table].length + 1.5) * 20,
-            },
-            name: table,
-          }),
-        );
+        const tableShape = new SqlectronShapes.Table({
+          position: {
+            x: 100 + (index % 6) * 100,
+            y: 20 + (index % 4) * 100,
+          },
+          size: {
+            width: 120,
+            height: (columnsByTable[table].length + 1.5) * 20,
+          },
+          name: table,
+        });
+
+        tableShapes.push(tableShape);
+
         currentTable = tableShapes[index];
 
         columnsByTable[table].forEach((column, idx) => {
           columnKey = tableKeys[table].find((k) => k.columnName === column.name);
 
-          newTabCell = new joint.shapes.sqlectron.TableCell({
+          newTabCell = new SqlectronShapes.TableCell({
             position: {
               x: currentTable.position().x,
               y: currentTable.position().y + 7 + (idx + 1) * 20,
