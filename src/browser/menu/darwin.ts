@@ -10,6 +10,10 @@ function sendMessage(win: BrowserWindow, message: string) {
   }
 }
 
+function capitalizeName(name: string) {
+  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+}
+
 export function buildTemplate(
   app: App,
   buildNewWindow: BuildWindow,
@@ -20,7 +24,7 @@ export function buildTemplate(
       label: appConfig.name,
       submenu: [
         {
-          label: `About ${appConfig.name}`,
+          label: `About ${capitalizeName(appConfig.name)}`,
           // TODO: selector property isn't a field in the menu constructor.
           // It is specific for macOS https://github.com/electron/electron/issues/2268
           // Find out if it still works and check if there is another way to achieve this
@@ -39,7 +43,7 @@ export function buildTemplate(
           type: 'separator',
         },
         {
-          label: `Hide ${appConfig.name}`,
+          label: `Hide ${capitalizeName(appConfig.name)}`,
           accelerator: 'Cmd+H',
           role: 'hide',
         },

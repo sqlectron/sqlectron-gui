@@ -10,6 +10,10 @@ function sendMessage(win: BrowserWindow, message: string) {
   }
 }
 
+function capitalizeName(name: string) {
+  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`;
+}
+
 export function buildTemplate(
   app: App,
   buildNewWindow: BuildWindow,
@@ -187,7 +191,7 @@ export function buildTemplate(
           click: () => shell.openExternal(appConfig.bugs as string),
         },
         {
-          label: `About ${appConfig.name}`,
+          label: `About ${capitalizeName(appConfig.name)}`,
           click: () => shell.openExternal(appConfig.homepage as string),
         },
       ],
