@@ -90,9 +90,9 @@ class AppContainer extends Component {
       sqlectron.browser.webFrame.setZoomFactor(zoomFactor);
     }
     if (enabledDarkTheme === true) {
-      $('body').addClass('dark-theme');
+      document.body.classList.add('dark-theme');
     } else {
-      $('body').removeClass('dark-theme');
+      document.body.classList.remove('dark-theme');
     }
 
     // remove the loading screen quickly if disabled
