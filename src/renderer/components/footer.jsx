@@ -30,7 +30,7 @@ const Footer = ({ status }) => (
         <UpdateChecker />
       </div>
       <a href="#" className="item" onClick={onGithubClick}>
-        Github
+        GitHub
       </a>
       <a href="#" className="item" title="Keyboard Shortcuts" onClick={onShortcutsClick}>
         <i className="keyboard icon" />
