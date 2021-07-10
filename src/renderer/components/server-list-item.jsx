@@ -43,12 +43,7 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
         <div className="header">{server.name}</div>
         <div className="meta" style={{ lineHeight: '1.5em', marginTop: '5px' }}>
           {server.host ? `${server.host}:${server.port}` : server.socketPath}
-          {server.ssh && (
-            <div>
-              via
-              {server.ssh.host}
-            </div>
-          )}
+          {server.ssh && <div>via {server.ssh.host}</div>}
         </div>
       </div>
     </div>
