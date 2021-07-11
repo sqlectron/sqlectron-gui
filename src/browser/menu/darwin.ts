@@ -166,6 +166,14 @@ export function buildTemplate(
           accelerator: 'Cmd+A',
           role: 'selectAll',
         },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Beautify Query',
+          accelerator: 'Cmd+I',
+          // Do nothing, these are handled internally by ace editor
+        },
       ],
     },
     {
