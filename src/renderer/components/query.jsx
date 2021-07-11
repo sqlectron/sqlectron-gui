@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import { format } from 'sql-formatter';
 import AceEditor from 'react-ace';
 import ace from 'brace';
 import 'brace/mode/sql';
@@ -259,6 +260,23 @@ export default class Query extends Component {
             start: { column: 0, row },
             end: { column: endColumn, row },
           });
+        },
+      },
+      {
+        name: 'format',
+        bindKey: { win: 'Ctrl-I', mac: 'Command-I' },
+        exec: (editor) => {
+          if (this.props.query.query) {
+            editor.setValue(
+              format(this.props.query.query, {
+                language: ['cassandra', 'sqlite'].includes(this.props.client)
+                  ? 'sql'
+                  : this.props.client === 'sqlserver'
+                  ? 'tsql'
+                  : this.props.client,
+              }),
+            );
+          }
         },
       },
     ];
