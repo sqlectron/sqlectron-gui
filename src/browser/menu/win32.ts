@@ -132,7 +132,8 @@ export function buildTemplate(
         {
           label: 'Beautify Query',
           accelerator: 'Ctrl+I',
-          // Do nothing, these are handled internally by ace editor
+          click: (_, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_EDITOR_FORMAT),
         },
       ],
     },
