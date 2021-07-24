@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import debounce from 'lodash.debounce';
+import { format } from 'sql-formatter';
 import AceEditor from 'react-ace';
 import ace from 'brace';
 import 'brace/mode/sql';
@@ -11,6 +12,8 @@ import { ResizableBox } from 'react-resizable';
 import CheckBox from './checkbox';
 import QueryResult from './query-result';
 import ServerDBClientInfoModal from './server-db-client-info-modal';
+import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
+import MenuHandler from '../utils/menu';
 
 require('./react-resizable.css');
 require('./override-ace.css');
@@ -75,6 +78,8 @@ export default class Query extends Component {
     this.onExecQueryClick = this.onExecQueryClick.bind(this);
     this.onCancelQueryClick = this.onCancelQueryClick.bind(this);
     this.onDiscQueryClick = this.onDiscQueryClick.bind(this);
+
+    this.menuHandler = new MenuHandler();
   }
 
   componentDidMount() {
@@ -86,6 +91,10 @@ export default class Query extends Component {
     // init with the auto complete disabled
     this.refs.queryBoxTextarea.editor.completers = [];
     this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', false);
+
+    this.menuHandler.setMenus({
+      [BROWSER_MENU_EDITOR_FORMAT]: () => this.refs.queryBoxTextarea.editor.execCommand('format'),
+    });
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -146,6 +155,10 @@ export default class Query extends Component {
       EVENT_KEYS.onSelectionChange,
       this.onSelectionChange,
     );
+
+    if (this.menuHandler) {
+      this.menuHandler.dispose();
+    }
   }
 
   onSelectionChange() {
@@ -259,6 +272,23 @@ export default class Query extends Component {
             start: { column: 0, row },
             end: { column: endColumn, row },
           });
+        },
+      },
+      {
+        name: 'format',
+        bindKey: { win: 'Ctrl-I', mac: 'Command-I' },
+        exec: (editor) => {
+          if (this.props.query.query) {
+            editor.setValue(
+              format(this.props.query.query, {
+                language: ['cassandra', 'sqlite'].includes(this.props.client)
+                  ? 'sql'
+                  : this.props.client === 'sqlserver'
+                  ? 'tsql'
+                  : this.props.client,
+              }),
+            );
+          }
         },
       },
     ];

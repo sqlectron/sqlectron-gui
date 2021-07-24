@@ -126,6 +126,15 @@ export function buildTemplate(
           accelerator: 'Ctrl+A',
           role: 'selectAll',
         },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Beautify Query',
+          accelerator: 'Ctrl+I',
+          click: (_, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_EDITOR_FORMAT),
+        },
       ],
     },
     {
