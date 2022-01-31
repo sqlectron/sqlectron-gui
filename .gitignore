@@ -18,3 +18,7 @@ test/fixtures/browser/tmp.sqlectron.json
 test/fixtures/ssh-mysql/sqlectron.json
 test/fixtures/simple/sqlectron.json
 storybook-static
+
+# Editor ignores
+.vscode/
+.idea/
