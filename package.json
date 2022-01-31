@@ -16,8 +16,11 @@
   },
   "build": {
     "appId": "org.sqlectron.gui",
+    "afterSign": "build/notarize.js",
     "mac": {
-      "category": "public.app-category.developer-tools"
+      "category": "public.app-category.developer-tools",
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist"
     },
     "dmg": {
       "contents": [
@@ -144,9 +147,11 @@
     "csp-html-webpack-plugin": "^5.1.0",
     "css-loader": "^5.2.5",
     "dom-helpers": "^5.1.4",
+    "dotenv": "^10.0.0",
     "dotenv-webpack": "^7.0.2",
     "electron": "^12.0.1",
     "electron-builder": "^22.11.5",
+    "electron-notarize": "^1.1.1",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "eslint": "^7.21.0",
