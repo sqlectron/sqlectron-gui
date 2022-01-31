@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    environment: deploy
 
     runs-on: ${{ matrix.os }}
 
@@ -39,6 +40,11 @@ jobs:
       if: runner.os == 'macOS'
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        CSC_LINK: ${{ secrets.APPLE_CERT_BASE64 }}
+        CSC_KEY_PASSWORD: ${{ secrets.APPLE_CERT_PASSWORD }}
+        APPLE_ID: ${{ secrets.APPLE_ID }}
+        APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
+
 
     - run: npm run dist:all-arch
       if: runner.os != 'macOS'
