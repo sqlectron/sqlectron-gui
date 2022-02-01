@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler, Component, FC, useCallback, useMemo } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, FC, useCallback, useMemo } from 'react';
 import { debounce } from 'lodash';
 
 interface Props {
