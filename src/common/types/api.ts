@@ -1,7 +1,9 @@
 import type { IpcMainInvokeEvent, IpcMainEvent } from 'electron';
+import type { QueryRowResult, SchemaFilter, DatabaseFilter } from 'sqlectron-db-core';
+
 import type { Config } from './config';
+import type { Adapter } from './database';
 import type { Server, ServerResult } from './server';
-import type { Adapter, QueryRowResult, SchemaFilter, DatabaseFilter } from 'sqlectron-db-core';
 
 export interface MenuOptions {
   menuItems: Array<MenuItem>;

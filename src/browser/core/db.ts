@@ -9,7 +9,6 @@ import * as db from 'sqlectron-db-core';
 import { ADAPTERS, setSelectLimit } from 'sqlectron-db-core';
 import type {
   Database,
-  Adapter,
   QueryRowResult,
   DatabaseFilter,
   SchemaFilter,
@@ -18,7 +17,8 @@ import type {
 } from 'sqlectron-db-core';
 import omit from 'lodash.omit';
 import { Server } from '../../common/types/server';
-import { SqlectronDB } from '../../common/types/api';
+import type { SqlectronDB } from '../../common/types/api';
+import type { Adapter } from '../../common/types/database';
 import { writeFile, readFile } from './utils';
 
 interface CancellableQuery {
@@ -371,7 +371,7 @@ export const getConn = (e: IpcMainEvent | IpcMainInvokeEvent): SqlectronDB => {
   return conn;
 };
 
-function stringifyResultToCSV(origRows: [], delimiter: string): Promise<string> {
+function stringifyResultToCSV(origRows: any[], delimiter: string): Promise<string> {
   if (!origRows.length) {
     return Promise.resolve('');
   }
