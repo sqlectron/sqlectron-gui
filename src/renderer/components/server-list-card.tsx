@@ -1,18 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { FC } from 'react';
 import { requireClientLogo } from './require-context';
 import { DB_CLIENTS } from '../api';
+import { Server } from '../../common/types/server';
 
 /**
  * Load icons for supported database clients
  */
 const ICONS = DB_CLIENTS.reduce((clients, dbClient) => {
-  /* eslint no-param-reassign:0 */
   clients[dbClient.key] = requireClientLogo(dbClient.key);
   return clients;
 }, {});
 
-const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
+interface Props {
+  server: Server;
+  onConnectClick: () => void;
+  onEditClick: () => void;
+}
+
+const ServerListCard: FC<Props> = ({ server, onConnectClick, onEditClick }) => (
   <div className="card">
     <div className="content">
       <div
@@ -25,9 +30,7 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
           src={ICONS[server.client]}
         />
       </div>
-      <button
-        className="right floated circular ui icon button mini"
-        onClick={() => onEditClick(server)}>
+      <button className="right floated circular ui icon button mini" onClick={onEditClick}>
         <i className="icon pencil" />
       </button>
       <div className="header">{server.name}</div>
@@ -41,17 +44,13 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
         )}
       </div>
     </div>
-    <div className="ui bottom attached button" tabIndex="0" onClick={() => onConnectClick(server)}>
+    <div className="ui bottom attached button" tabIndex={0} onClick={onConnectClick}>
       <i className="plug icon" />
       Connect
     </div>
   </div>
 );
 
-ServerListItem.propTypes = {
-  server: PropTypes.object.isRequired,
-  onConnectClick: PropTypes.func.isRequired,
-  onEditClick: PropTypes.func.isRequired,
-};
+ServerListCard.displayName = 'ServerListCard';
 
-export default ServerListItem;
+export default ServerListCard;

@@ -11,7 +11,7 @@ export interface ServerResult {
 export interface Server {
   id: string;
   name: string;
-  client?: string;
+  client: string;
   adapter?: string;
   host?: string;
   socketPath?: string;

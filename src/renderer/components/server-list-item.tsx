@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { FC } from 'react';
 import { requireClientLogo } from './require-context';
 import { DB_CLIENTS } from '../api';
+import { Server } from '../../common/types/server';
 
 /**
  * Load icons for supported database clients
@@ -12,7 +12,13 @@ const ICONS = DB_CLIENTS.reduce((clients, dbClient) => {
   return clients;
 }, {});
 
-const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
+interface Props {
+  server: Server;
+  onConnectClick: () => void;
+  onEditClick: () => void;
+}
+
+const ServerListItem: FC<Props> = ({ server, onConnectClick, onEditClick }) => (
   <div className="item">
     <div className="middle aligned content">
       <div className="left floated" style={{ padding: '1em' }}>
@@ -20,17 +26,15 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
       </div>
       <div className="right floated">
         <div style={{ padding: '0 0 3em' }}>
-          <button
-            className="right floated circular ui icon button mini"
-            onClick={() => onEditClick(server)}>
+          <button className="right floated circular ui icon button mini" onClick={onEditClick}>
             <i className="icon pencil" />
           </button>
         </div>
         <div>
           <button
             className="ui button"
-            tabIndex="0"
-            onClick={() => onConnectClick(server)}
+            tabIndex={0}
+            onClick={onConnectClick}
             style={{ verticalAlign: 'middle' }}>
             <div>
               <i className="plug icon" />
@@ -50,10 +54,6 @@ const ServerListItem = ({ server, onConnectClick, onEditClick }) => (
   </div>
 );
 
-ServerListItem.propTypes = {
-  server: PropTypes.object.isRequired,
-  onConnectClick: PropTypes.func.isRequired,
-  onEditClick: PropTypes.func.isRequired,
-};
+ServerListItem.displayName = 'ServerListItem';
 
 export default ServerListItem;
