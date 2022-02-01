@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { FC, MouseEvent, useEffect, useState } from 'react';
 import { CONFIG, sqlectron } from '../api';
 
-const repo = CONFIG.repository.url.replace('https://github.com/', '');
+const repo = CONFIG.repository?.url.replace('https://github.com/', '');
 const LATEST_RELEASE_URL = `https://github.com/${repo}/releases/latest`;
 
-const UpdateChecker = () => {
+const UpdateChecker: FC = () => {
   const [isVisible, setIsVisible] = useState(false);
   //const [currentVersion, setCurrentVersion] = useState('');
   const [latestVersion, setLatestVersion] = useState('');
@@ -15,9 +15,9 @@ const UpdateChecker = () => {
     setIsVisible(true);
   };
 
-  const onClick = (event) => {
+  const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    sqlectron.shell.openExternal(LATEST_RELEASE_URL);
+    sqlectron.browser.shell.openExternal(LATEST_RELEASE_URL);
   };
 
   useEffect(() => {
