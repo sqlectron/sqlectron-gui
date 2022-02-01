@@ -45,6 +45,7 @@ export default class Query extends Component {
     allowCancel: PropTypes.bool.isRequired,
     config: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
+    isCurrentQuery: PropTypes.bool.isRequired,
     enabledAutoComplete: PropTypes.bool.isRequired,
     enabledLiveAutoComplete: PropTypes.bool.isRequired,
     databases: PropTypes.array,
@@ -95,6 +96,8 @@ export default class Query extends Component {
     this.menuHandler.setMenus({
       [BROWSER_MENU_EDITOR_FORMAT]: () => this.refs.queryBoxTextarea.editor.execCommand('format'),
     });
+
+    this.refs.queryBoxTextarea.editor.focus();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -143,8 +146,10 @@ export default class Query extends Component {
     );
   }
 
-  componentDidUpdate() {
-    this.refs.queryBoxTextarea.editor.focus();
+  componentDidUpdate(prevProps) {
+    if (prevProps.isCurrentQuery !== this.props.isCurrentQuery && this.props.isCurrentQuery) {
+      this.refs.queryBoxTextarea.editor.focus();
+    }
 
     if (this.props.query.isExecuting && this.props.query.isDefaultSelect) {
       window.scrollTo(0, 0);

@@ -541,6 +541,7 @@ class QueryBrowserContainer extends Component {
             client={connections.server.client}
             allowCancel={allowCancel}
             query={query}
+            isCurrentQuery={query.id === queries.currentQueryId}
             enabledAutoComplete={queries.enabledAutoComplete}
             enabledLiveAutoComplete={queries.enabledLiveAutoComplete}
             database={currentDB}
