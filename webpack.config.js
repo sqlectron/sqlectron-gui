@@ -146,28 +146,7 @@ const webpackConfig = {
 };
 
 if (isProd) {
-  webpackConfig.entry = {
-    vendor: [
-      // common
-      'jquery',
-      // react related
-      'classnames',
-      'react',
-      'react-ace',
-      'react-dom',
-      'react-redux',
-      'react-resizable',
-      'react-router',
-      'react-select',
-      'redux',
-      'redux-thunk',
-      // semantic ui
-      './vendor/renderer/lato/latofonts.css',
-      './vendor/renderer/semantic-ui/semantic.js',
-      './vendor/renderer/semantic-ui/semantic.css',
-    ],
-    app: './src/renderer/entry.tsx',
-  };
+  webpackConfig.entry = './src/renderer/entry.tsx';
 
   webpackConfig.output = {
     path: path.join(__dirname, 'out', 'static'),
@@ -184,7 +163,7 @@ if (isProd) {
     'dtrace-provider': path.join(__dirname, 'empty-shim.js'),
   };
 
-  webpackConfig.entry.app = ['webpack/hot/dev-server', './src/renderer/entry.tsx'];
+  webpackConfig.entry = ['webpack/hot/dev-server', './src/renderer/entry.tsx'];
 
   webpackConfig.output = {
     path: path.join(__dirname, 'dist'),
