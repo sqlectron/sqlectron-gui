@@ -105,7 +105,7 @@
     "lodash.defaultsdeep": "^4.6.0",
     "lodash.omit": "^4.5.0",
     "mkdirp": "^1.0.4",
-    "sqlectron-db-core": "^0.10.0",
+    "sqlectron-db-core": "^0.10.1",
     "uuid": "^8.3.2",
     "valida2": "^2.6.1"
   },
