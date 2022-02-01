@@ -64,7 +64,7 @@ export default class DatabaseListItem extends Component {
       return;
     }
 
-    this.contextMenu = new ContextMenu(MENU_CTX_ID);
+    this.contextMenu = new ContextMenu(`${MENU_CTX_ID}@${this.props.database.name}`);
 
     this.contextMenu.append({
       label: 'Refresh Database',
