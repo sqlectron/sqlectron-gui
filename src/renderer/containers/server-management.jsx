@@ -1,10 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
 import * as ServersActions from '../actions/servers';
 import * as ConnActions from '../actions/connections';
 import * as ConfigActions from '../actions/config';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import Header from '../components/header';
 import Footer from '../components/footer';
 import ServerList from '../components/server-list';
@@ -27,9 +27,9 @@ function filterServers(name, servers) {
 
 const ServerManagement = ({ history }) => {
   const [filter, setFilter] = useState('');
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const { connections, servers, config, status } = useSelector((state) => ({
+  const { connections, servers, config, status } = useAppSelector((state) => ({
     connections: state.connections,
     servers: state.servers,
     config: state.config,

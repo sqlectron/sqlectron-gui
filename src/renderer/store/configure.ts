@@ -1,19 +1,12 @@
-import { createStore, applyMiddleware, compose } from 'redux';
+import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { createLogger as createReduxLogger } from 'redux-logger';
-import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import { sqlectron, CONFIG } from '../api';
 
-const middlewares = [thunkMiddleware];
+const middlewares: Middleware[] = [];
 
 const isLogConsoleEnabled = CONFIG.log.console;
 const isLogFileEnabled = CONFIG.log.file;
-
-declare global {
-  interface Window {
-    __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: typeof compose;
-  }
-}
 
 if (isLogConsoleEnabled || isLogFileEnabled) {
   const loggerConfig = {
@@ -49,19 +42,11 @@ if (isLogConsoleEnabled || isLogFileEnabled) {
   middlewares.push(createReduxLogger(loggerConfig));
 }
 
-export default function configureStore(initialState?) {
-  const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+export const store = configureStore({
+  devTools: process.env.NODE_ENV !== 'production',
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(middlewares),
+  reducer: rootReducer,
+});
 
-  const store = createStore(
-    rootReducer,
-    initialState,
-    composeEnhancer(applyMiddleware(...middlewares)),
-  );
-
-  if (module.hot) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    module.hot.accept('../reducers', () => store.replaceReducer(require('../reducers').default));
-  }
-
-  return store;
-}
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
