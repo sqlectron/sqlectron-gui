@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import groupBy from 'lodash.groupby';
+import groupBy from 'lodash/groupBy';
 import CollapseIcon from './collapse-icon';
 import DatabaseItem from './database-item';
 

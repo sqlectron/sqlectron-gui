@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import set from 'lodash.set';
+import set from 'lodash/set';
 import Select from 'react-select';
 import { DB_CLIENTS } from '../api';
 import ConfirmModal from './confim-modal';

@@ -1,6 +1,6 @@
 import { WebContents, BrowserWindow, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 import path from 'path';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep, omit } from 'lodash';
 import csvStringify from 'csv-stringify';
 import { rowsValuesToString } from './utils/convert';
 import browserFacade from '../browser';
@@ -15,7 +15,6 @@ import type {
   Server as DBServer,
   LegacyServerConfig,
 } from 'sqlectron-db-core';
-import omit from 'lodash.omit';
 import { Server } from '../../common/types/server';
 import type { SqlectronDB } from '../../common/types/api';
 import type { Adapter } from '../../common/types/database';

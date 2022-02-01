@@ -1,5 +1,5 @@
 import { AnyAction } from 'redux';
-import trim from 'lodash.trim';
+import trim from 'lodash/trim';
 import { sqlectron } from '../api';
 import { ApplicationState, ThunkResult } from '../reducers';
 import { Query } from '../reducers/queries';

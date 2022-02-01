@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import debounce from 'lodash.debounce';
+import debounce from 'lodash/debounce';
 import { format } from 'sql-formatter';
 import AceEditor from 'react-ace';
 import ace from 'ace-builds';
