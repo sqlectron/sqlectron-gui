@@ -13,14 +13,12 @@ const Loader: FC<Props> = ({ message, type, inverted = false }) => {
     if (!ref.current) {
       return;
     }
-    $(ref.current).dimmer('show');
+    const elem = ref.current;
+    $(elem).dimmer('show');
     return () => {
-      if (!ref.current) {
-        return;
-      }
-      $(ref.current).dimmer('hide');
+      $(elem).dimmer('hide');
     };
-  }, []);
+  }, [ref]);
 
   return (
     <div className={`ui ${type} ${inverted ? 'inverted' : ''} dimmer`} ref={ref}>
