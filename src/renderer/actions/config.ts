@@ -40,8 +40,8 @@ export function saveConfig(configData: Config): ThunkResult<void> {
   };
 }
 
-export function startEditing(id: string): AnyAction {
-  return { type: START_EDITING_CONFIG, id };
+export function startEditing(): AnyAction {
+  return { type: START_EDITING_CONFIG };
 }
 
 export function finishEditing(): AnyAction {

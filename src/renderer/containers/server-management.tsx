@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router';
 import * as ServersActions from '../actions/servers';
 import * as ConnActions from '../actions/connections';
 import * as ConfigActions from '../actions/config';
@@ -12,20 +11,17 @@ import ServerModalForm from '../components/server-modal-form';
 import SettingsModalForm from '../components/settings-modal-form';
 import ServerFilter from '../components/server-filter';
 import Message from '../components/message';
-
-const STYLES = {
-  wrapper: { paddingTop: '50px' },
-  container: { padding: '10px 10px 50px 10px' },
-};
+import { Server } from '../../common/types/server';
 
 const BREADCRUMB = [{ icon: 'server', label: 'servers' }];
 
-function filterServers(name, servers) {
+function filterServers(name: string, servers: Server[]): Server[] {
   const regex = RegExp(name, 'i');
   return servers.filter((srv) => regex.test(srv.name));
 }
 
-const ServerManagement = ({ history }) => {
+const ServerManagement = () => {
+  const history = useHistory();
   const [filter, setFilter] = useState('');
   const dispatch = useAppDispatch();
 
@@ -73,8 +69,10 @@ const ServerManagement = ({ history }) => {
 
   const onSaveClick = useCallback(
     (server) => {
-      const id = servers.editingServer && servers.editingServer.id;
-      dispatch(ServersActions.saveServer({ id, server }));
+      const id = servers.editingServer?.id;
+      if (!id) {
+        dispatch(ServersActions.saveServer({ id, server }));
+      }
     },
     [dispatch, servers],
   );
@@ -82,7 +80,10 @@ const ServerManagement = ({ history }) => {
   const onCancelClick = useCallback(() => dispatch(ServersActions.finishEditing()), [dispatch]);
 
   const onRemoveClick = useCallback(() => {
-    const id = servers.editingServer && servers.editingServer.id;
+    const id = servers.editingServer?.id;
+    if (!id) {
+      return;
+    }
     dispatch(ServersActions.removeServer({ id }));
   }, [dispatch, servers]);
 
@@ -104,11 +105,11 @@ const ServerManagement = ({ history }) => {
   };
 
   return (
-    <div style={STYLES.wrapper}>
-      <div style={STYLES.header}>
+    <div style={{ paddingTop: '50px' }}>
+      <div>
         <Header items={BREADCRUMB} />
       </div>
-      <div style={STYLES.container}>
+      <div style={{ padding: '10px 10px 50px 10px' }}>
         <ServerFilter
           onFilterChange={onFilterChange}
           onAddClick={onAddClick}
@@ -153,7 +154,7 @@ const ServerManagement = ({ history }) => {
           />
         )}
       </div>
-      <div style={STYLES.footer}>
+      <div>
         <Footer status={status} />
       </div>
     </div>
@@ -162,8 +163,4 @@ const ServerManagement = ({ history }) => {
 
 ServerManagement.displayName = 'ServerManagement';
 
-ServerManagement.propTypes = {
-  history: PropTypes.object.isRequired,
-};
-
-export default withRouter(ServerManagement);
+export default ServerManagement;
