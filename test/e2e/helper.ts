@@ -1,8 +1,7 @@
 import path from 'path';
 import { expect } from 'chai';
-import electronPath = require('electron');
-import { electron, ElectronApplication, Page } from 'playwright-electron';
-import { ElementHandle } from 'playwright-core';
+import { _electron as electron, ElementHandle } from 'playwright';
+import type { ElectronApplication, Page } from 'playwright';
 
 const startApp = async ({
   sqlectronHome,
@@ -10,18 +9,17 @@ const startApp = async ({
   sqlectronHome: string;
 }): Promise<{ app: ElectronApplication; mainWindow: Page }> => {
   // Start Electron application
-  // @ts-ignore
-  const app: ElectronApplication = await electron.launch(electronPath, {
-    path: electronPath,
+  const app: ElectronApplication = await electron.launch({
     args:
       process.env.DEV_MODE === 'true'
         ? [path.join(__dirname, '../../src/browser/main'), '--dev']
         : [path.join(__dirname, '../../out/browser/main')],
     // MUST pass along the host env variables, otherwise it will
     // crash if we use a custom env variable with tests running with xvfb
-    env: Object.assign({}, process.env, {
+    env: {
+      ...process.env,
       SQLECTRON_HOME: sqlectronHome,
-    }),
+    },
   });
 
   const mainWindow = await getAppPage(app);
@@ -40,7 +38,7 @@ const getAppPage = async (app: ElectronApplication, { waitAppLoad = true } = {})
   // Attempt though 25 times waiting 1s between each attempt
   // to get the application page
   for (let attempt = 0; attempt < 25; attempt++) {
-    const windows = await app.windows();
+    const windows = app.windows();
 
     for (let i = 0; i < windows.length; i++) {
       const page = windows[i];
