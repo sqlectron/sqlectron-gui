@@ -1,14 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { FC } from 'react';
 import { sqlectron } from '../api';
+
+import LOGO_PATH from './logo-128px.png';
 
 require('./header.css');
 
-const LOGO_PATH = require('./logo-128px.png').default;
-
 function onSiteClick(event) {
   event.preventDefault();
-  sqlectron.shell.openExternal('https://sqlectron.github.io');
+  sqlectron.browser.shell.openExternal('https://sqlectron.github.io');
 }
 
 function renderBreadcrumb(items) {
@@ -28,7 +27,13 @@ function renderBreadcrumb(items) {
   );
 }
 
-const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
+interface Props {
+  items: { icon: string; label: string }[];
+  onCloseConnectionClick?: () => void;
+  onReConnectionClick?: () => void;
+}
+
+const Header: FC<Props> = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
   const visibilityButtons = onCloseConnectionClick ? 'visible' : 'hidden';
   const styleItem = { paddingLeft: 0, paddingTop: 0, paddingBottom: 0 };
   return (
@@ -60,10 +65,6 @@ const Header = ({ items, onCloseConnectionClick, onReConnectionClick }) => {
   );
 };
 
-Header.propTypes = {
-  items: PropTypes.array.isRequired,
-  onCloseConnectionClick: PropTypes.func,
-  onReConnectionClick: PropTypes.func,
-};
+Header.displayName = 'Header';
 
 export default Header;

@@ -150,7 +150,7 @@ module.exports = {
       },
     },
     {
-      files: ['src/browser/**/*.ts', 'src/common/**/*.ts'],
+      files: ['src/*.ts', 'src/browser/**/*.ts', 'src/common/**/*.ts'],
       env: { browser: true, es6: true, node: true },
       extends: [
         'eslint:recommended',
