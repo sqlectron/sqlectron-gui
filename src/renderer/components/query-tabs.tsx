@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useCallback, useMemo, useRef, useState } from 'react';
+import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { TabPanel, Tabs } from 'react-tabs';
 
 import Query from './query';
@@ -98,23 +98,26 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
     }
   }, [dispatch, currentQuery]);
 
-  const tabListTotalWidth = useMemo(() => {
+  const [tabListTotalWidth, setTabListTotalWidth] = useState(0);
+  const [tabListTotalWidthChildren, setTabListTotalWidthChildren] = useState(0);
+
+  useEffect(() => {
     if (!tabListRef.current) {
-      return 0;
+      return;
     }
-    return tabListRef.current.offsetWidth;
+    setTabListTotalWidth(tabListRef.current.offsetWidth);
   }, [tabListRef]);
 
-  const tabListTotalWidthChildren = useMemo(() => {
+  useEffect(() => {
     if (!tabListRef.current || !queries.queryIds.length) {
-      return 0;
+      return;
     }
-    let tabListTotalWidthChildren = 0;
+    let acc = 0;
     for (const child of Array.from(tabListRef.current.children) as HTMLElement[]) {
-      tabListTotalWidthChildren += child.offsetWidth;
+      acc += child.offsetWidth;
     }
-    return tabListTotalWidthChildren;
-  }, [tabListRef, queries]);
+    setTabListTotalWidthChildren(acc);
+  }, [tabListRef, queries.queryIds]);
 
   const isOnMaxPosition = tabListTotalWidthChildren - Math.abs(tabNavPosition) <= tabListTotalWidth;
   const selectedIndex = queries.currentQueryId

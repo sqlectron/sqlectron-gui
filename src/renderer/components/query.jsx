@@ -325,7 +325,7 @@ export default class Query extends Component {
     const infos = INFOS[client];
 
     return (
-      <div ref={queryRef} tabIndex={-1} onFocus={this.onFocus}>
+      <div>
         <div>
           <ResizableBox
             className="react-resizable react-resizable-se-resize ui segment"
@@ -333,6 +333,7 @@ export default class Query extends Component {
             width={500}
             onResizeStop={this.onQueryBoxResize}>
             <>
+              <div ref={queryRef} tabIndex={-1} onFocus={this.onFocus}></div>
               <AceEditor
                 mode="sql"
                 theme="github"
