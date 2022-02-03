@@ -37,15 +37,15 @@ export function renameQuery(name: string): AnyAction {
   return { type: RENAME_QUERY, name };
 }
 
-export function selectQuery(id: string): AnyAction {
+export function selectQuery(id: number): AnyAction {
   return { type: SELECT_QUERY, id };
 }
 
-export function removeQuery(id: string): AnyAction {
+export function removeQuery(id: number): AnyAction {
   return { type: REMOVE_QUERY, id };
 }
 
-export function executeQueryIfNeeded(query: string, queryId: string): ThunkResult<void> {
+export function executeQueryIfNeeded(query: string, queryId: number): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldExecuteQuery(query, getState())) {
       dispatch(executeQuery(query, false, null, queryId));
@@ -56,7 +56,7 @@ export function executeQueryIfNeeded(query: string, queryId: string): ThunkResul
 export function executeDefaultSelectQueryIfNeeded(
   database: string,
   table: string,
-  schema: string,
+  schema?: string,
 ): ThunkResult<void> {
   return async (dispatch, getState) => {
     const currentState = getState();
@@ -75,7 +75,7 @@ export function executeDefaultSelectQueryIfNeeded(
   };
 }
 
-export function updateQueryIfNeeded(query: string, selectedQuery: string): ThunkResult<void> {
+export function updateQueryIfNeeded(query: string, selectedQuery?: string): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldUpdateQuery(query, selectedQuery, getState())) {
       dispatch(updateQuery(query, selectedQuery));
@@ -87,7 +87,11 @@ function updateQuery(query: string, selectedQuery?: string): AnyAction {
   return { type: UPDATE_QUERY, query, selectedQuery };
 }
 
-function shouldUpdateQuery(query: string, selectedQuery: string, state: ApplicationState): boolean {
+function shouldUpdateQuery(
+  query: string,
+  selectedQuery: undefined | string,
+  state: ApplicationState,
+): boolean {
   const currentQuery = getCurrentQuery(state);
   if (!currentQuery) return true;
   if (currentQuery.isExecuting) return false;
@@ -115,7 +119,7 @@ export function appendQuery(query: string): ThunkResult<void> {
 }
 
 export function copyToClipboard(
-  rows: [],
+  rows: any[],
   exportType: string,
   delimiter: string,
 ): ThunkResult<void> {
@@ -130,7 +134,7 @@ export function copyToClipboard(
   };
 }
 
-export function saveToFile(rows: [], exportType: string, delimiter: string): ThunkResult<void> {
+export function saveToFile(rows: any[], exportType: string, delimiter: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_REQUEST });
     try {
@@ -193,7 +197,7 @@ function executeQuery(
   query: string,
   isDefaultSelect = false,
   database: string | null,
-  queryId?: string,
+  queryId?: number,
 ): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: EXECUTE_QUERY_REQUEST, query, isDefaultSelect });
@@ -216,7 +220,7 @@ function executeQuery(
   };
 }
 
-export function cancelQuery(queryId: string): ThunkResult<void> {
+export function cancelQuery(queryId: number): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: CANCEL_QUERY_REQUEST, queryId });
     try {

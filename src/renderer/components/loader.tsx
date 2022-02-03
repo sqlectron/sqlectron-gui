@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef } from 'react';
 
 interface Props {
   message?: string;
-  type: string;
+  type: 'active' | 'page';
   inverted?: boolean;
 }
 

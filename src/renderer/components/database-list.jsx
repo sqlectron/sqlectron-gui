@@ -6,6 +6,7 @@ export default class DatabaseList extends Component {
   static propTypes = {
     client: PropTypes.string.isRequired,
     databases: PropTypes.array.isRequired,
+    databaseRefs: PropTypes.object.isRequired,
     currentDB: PropTypes.string,
     isFetching: PropTypes.bool.isRequired,
     tablesByDatabase: PropTypes.object.isRequired,
@@ -29,14 +30,11 @@ export default class DatabaseList extends Component {
     this.state = {};
   }
 
-  focus(database) {
-    this.refs[database].focus();
-  }
-
   render() {
     const {
       client,
       databases,
+      databaseRefs,
       isFetching,
       tablesByDatabase,
       columnsByTable,
@@ -67,7 +65,7 @@ export default class DatabaseList extends Component {
       <div className="item" style={{ padding: 0 }}>
         {databases.map((database) => (
           <DatabaseListItem
-            ref={database.name}
+            databaseRef={databaseRefs[database.name]}
             key={database.name}
             currentDB={currentDB}
             client={client}

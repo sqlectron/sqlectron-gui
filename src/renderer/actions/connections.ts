@@ -33,7 +33,7 @@ export function setConnecting(): ThunkResult<void> {
 
 export function connect(
   id: string,
-  databaseName: string,
+  databaseName?: string,
   reconnecting = false,
   sshPassphrase?: string,
 ): ThunkResult<void> {

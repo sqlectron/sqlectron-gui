@@ -12,7 +12,7 @@ export function selectTablesForDiagram(tables: Array<string>): AnyAction {
   return { type: SELECT_TABLES_FOR_DIAGRAM, tables };
 }
 
-export function fetchTablesIfNeeded(database: string, filter: SchemaFilter): ThunkResult<void> {
+export function fetchTablesIfNeeded(database: string, filter?: SchemaFilter): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchTables(getState(), database)) {
       dispatch(fetchTables(database, filter));
@@ -28,7 +28,7 @@ function shouldFetchTables(state: ApplicationState, database: string): boolean {
   return tables.didInvalidate;
 }
 
-function fetchTables(database: string, filter: SchemaFilter): ThunkResult<void> {
+function fetchTables(database: string, filter?: SchemaFilter): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_TABLES_REQUEST, database });
     try {

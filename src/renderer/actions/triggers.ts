@@ -8,7 +8,7 @@ export const FETCH_TRIGGERS_FAILURE = 'FETCH_TRIGGERS_FAILURE';
 export function fetchTableTriggersIfNeeded(
   database: string,
   table: string,
-  schema: string,
+  schema?: string,
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchTableTriggers(getState(), database, table)) {
@@ -30,7 +30,7 @@ function shouldFetchTableTriggers(
   return triggers.didInvalidate;
 }
 
-function fetchTableTriggers(database: string, table: string, schema: string): ThunkResult<void> {
+function fetchTableTriggers(database: string, table: string, schema?: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_TRIGGERS_REQUEST, database, table });
     try {

@@ -49,11 +49,11 @@ const sqlectronAPI: SqlectronAPI = {
       ipcRenderer.invoke(eventKeys.DB_GET_TABLE_REFERENCES, database, table, schema),
     getTableKeys: (database: string, table: string, schema?: string) =>
       ipcRenderer.invoke(eventKeys.DB_GET_TABLE_KEYS, database, table, schema),
-    createCancellableQuery: async (database: string, queryId: string, queryText: string) =>
+    createCancellableQuery: async (database: string, queryId: number, queryText: string) =>
       ipcRenderer.invoke(eventKeys.DB_CREATE_CANCELLABLE_QUERY, database, queryId, queryText),
-    cancelCancellableQuery: async (queryId: string) =>
+    cancelCancellableQuery: async (queryId: number) =>
       ipcRenderer.invoke(eventKeys.DB_CANCEL_CANCELLABLE_QUERY, queryId),
-    executeCancellableQuery: (queryId: string) =>
+    executeCancellableQuery: (queryId: number) =>
       ipcRenderer.invoke(eventKeys.DB_EXECUTE_CANCELLABLE_QUERY, queryId),
     executeQuery: (database: string, queryText: string) =>
       ipcRenderer.invoke(eventKeys.DB_EXECUTE_QUERY, database, queryText),
@@ -78,9 +78,9 @@ const sqlectronAPI: SqlectronAPI = {
     getTableColumnNames: (database: string, table: string, schema?: string) =>
       ipcRenderer.invoke(eventKeys.DB_GET_TABLE_COLUMN_NAMES, database, table, schema),
     setSelectLimit: (limit: number) => ipcRenderer.invoke(eventKeys.DB_SET_SELECT_LIMIT, limit),
-    exportQueryResultToFile: (rows: [], exportType: string, delimiter: string) =>
+    exportQueryResultToFile: (rows: any[], exportType: string, delimiter: string) =>
       ipcRenderer.invoke(eventKeys.DB_EXPORT_QUERY_RESULT_TO_FILE, rows, exportType, delimiter),
-    exportQueryResultToClipboard: (rows: [], exportType: string, delimiter: string) =>
+    exportQueryResultToClipboard: (rows: any[], exportType: string, delimiter: string) =>
       ipcRenderer.invoke(
         eventKeys.DB_EXPORT_QUERY_RESULT_TO_CLIPBOARD,
         rows,

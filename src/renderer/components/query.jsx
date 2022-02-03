@@ -14,6 +14,7 @@ import QueryResult from './query-result';
 import ServerDBClientInfoModal from './server-db-client-info-modal';
 import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
 import MenuHandler from '../utils/menu';
+import { createRef } from 'react';
 
 require('./react-resizable.css');
 require('./override-ace.css');
@@ -45,6 +46,7 @@ export default class Query extends Component {
     allowCancel: PropTypes.bool.isRequired,
     config: PropTypes.object.isRequired,
     query: PropTypes.object.isRequired,
+    queryRef: PropTypes.object,
     isCurrentQuery: PropTypes.bool.isRequired,
     enabledAutoComplete: PropTypes.bool.isRequired,
     enabledLiveAutoComplete: PropTypes.bool.isRequired,
@@ -71,6 +73,8 @@ export default class Query extends Component {
       wrapEnabled: false,
     };
 
+    this.editorRef = createRef();
+
     this.onSelectionChange = this.onSelectionChange.bind(this);
     this.onQueryBoxResize = this.onQueryBoxResize.bind(this);
     this.onWrapContentsChecked = this.onWrapContentsChecked.bind(this);
@@ -79,25 +83,26 @@ export default class Query extends Component {
     this.onExecQueryClick = this.onExecQueryClick.bind(this);
     this.onCancelQueryClick = this.onCancelQueryClick.bind(this);
     this.onDiscQueryClick = this.onDiscQueryClick.bind(this);
+    this.onFocus = this.onFocus.bind(this);
 
     this.menuHandler = new MenuHandler();
   }
 
   componentDidMount() {
-    this.refs.queryBoxTextarea.editor.on(
+    this.editorRef.current.editor.on(
       EVENT_KEYS.onSelectionChange,
       debounce(this.onSelectionChange, 100),
     );
 
     // init with the auto complete disabled
-    this.refs.queryBoxTextarea.editor.completers = [];
-    this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', false);
+    this.editorRef.current.editor.completers = [];
+    this.editorRef.current.editor.setOption('enableBasicAutocompletion', false);
+
+    this.editorRef.current.editor.focus();
 
     this.menuHandler.setMenus({
-      [BROWSER_MENU_EDITOR_FORMAT]: () => this.refs.queryBoxTextarea.editor.execCommand('format'),
+      [BROWSER_MENU_EDITOR_FORMAT]: () => this.editorRef.current.editor.execCommand('format'),
     });
-
-    this.refs.queryBoxTextarea.editor.focus();
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -131,16 +136,16 @@ export default class Query extends Component {
 
     // force load only the current available completers
     // discarding any previous existing completers
-    this.refs.queryBoxTextarea.editor.completers = [
+    this.editorRef.current.editor.completers = [
       langTools.snippetCompleter,
       langTools.textCompleter,
       langTools.keyWordCompleter,
       customCompleter,
     ];
 
-    this.refs.queryBoxTextarea.editor.setOption('enableBasicAutocompletion', true);
+    this.editorRef.current.editor.setOption('enableBasicAutocompletion', true);
 
-    this.refs.queryBoxTextarea.editor.setOption(
+    this.editorRef.current.editor.setOption(
       'enableLiveAutocompletion',
       nextProps.enabledLiveAutoComplete,
     );
@@ -148,7 +153,7 @@ export default class Query extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.isCurrentQuery !== this.props.isCurrentQuery && this.props.isCurrentQuery) {
-      this.refs.queryBoxTextarea.editor.focus();
+      this.editorRef.current.editor.focus();
     }
 
     if (this.props.query.isExecuting && this.props.query.isDefaultSelect) {
@@ -157,7 +162,7 @@ export default class Query extends Component {
   }
 
   componentWillUnmount() {
-    this.refs.queryBoxTextarea.editor.removeListener(
+    this.editorRef.current.editor.removeListener(
       EVENT_KEYS.onSelectionChange,
       this.onSelectionChange,
     );
@@ -170,12 +175,12 @@ export default class Query extends Component {
   onSelectionChange() {
     this.props.onSelectionChange(
       this.props.query.query,
-      this.refs.queryBoxTextarea.editor.getCopyText(),
+      this.editorRef.current.editor.getCopyText(),
     );
   }
 
   onExecQueryClick() {
-    const query = this.refs.queryBoxTextarea.editor.getCopyText() || this.props.query.query;
+    const query = this.editorRef.current.editor.getCopyText() || this.props.query.query;
     this.props.onExecQueryClick(query);
   }
 
@@ -192,7 +197,7 @@ export default class Query extends Component {
   }
 
   onQueryBoxResize() {
-    this.refs.queryBoxTextarea.editor.resize();
+    this.editorRef.current.editor.resize();
   }
 
   onWrapContentsChecked() {
@@ -201,6 +206,10 @@ export default class Query extends Component {
 
   onWrapContentsUnchecked() {
     this.setState({ wrapEnabled: false });
+  }
+
+  onFocus() {
+    this.editorRef.current.editor.focus();
   }
 
   getQueryCompletions(props) {
@@ -300,16 +309,13 @@ export default class Query extends Component {
     ];
   }
 
-  focus() {
-    this.refs.queryBoxTextarea.editor.focus();
-  }
-
   render() {
     const {
       config,
       widthOffset,
       client,
       query,
+      queryRef,
       onSaveToFileClick,
       onCopyToClipboardClick,
       onSQLChange,
@@ -327,13 +333,14 @@ export default class Query extends Component {
             width={500}
             onResizeStop={this.onQueryBoxResize}>
             <>
+              <div ref={queryRef} tabIndex={-1} onFocus={this.onFocus}></div>
               <AceEditor
                 mode="sql"
                 theme="github"
                 name={this.props.editorName}
                 height="calc(100% - 15px)"
                 width="100%"
-                ref="queryBoxTextarea"
+                ref={this.editorRef}
                 value={query.query}
                 wrapEnabled={this.state.wrapEnabled}
                 showPrintMargin={false}

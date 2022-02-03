@@ -2,7 +2,7 @@ import type { IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 import type { QueryRowResult, SchemaFilter, DatabaseFilter } from 'sqlectron-db-core';
 
 import type { Config } from './config';
-import type { Adapter } from './database';
+import type { Adapter, DbTable, DbView } from './database';
 import type { Server, ServerResult } from './server';
 
 export interface MenuOptions {
@@ -36,12 +36,12 @@ export interface SqlectronDB {
   disconnectDatabse(database?: string): Promise<void>;
   disconnectServer(database?: string): Promise<void>;
   listDatabases(database: string, filter?: DatabaseFilter): Promise<string[]>;
-  listSchemas(database: string, filter: SchemaFilter): Promise<string[]>;
-  listTables(database: string, filter: SchemaFilter): Promise<{ name: string }[]>;
-  listViews(database: string, filter: SchemaFilter): Promise<{ name: string }[]>;
+  listSchemas(database: string, filter?: SchemaFilter): Promise<string[]>;
+  listTables(database: string, filter?: SchemaFilter): Promise<DbTable[]>;
+  listViews(database: string, filter?: SchemaFilter): Promise<DbView[]>;
   listRoutines(
     database: string,
-    filter: SchemaFilter,
+    filter?: SchemaFilter,
   ): Promise<
     {
       schema?: string;
@@ -74,9 +74,9 @@ export interface SqlectronDB {
       referencedTable: string | null;
     }[]
   >;
-  createCancellableQuery(database: string, queryId: string, queryText: string): Promise<void>;
-  cancelCancellableQuery(queryId: string): Promise<void>;
-  executeCancellableQuery(queryId: string): Promise<QueryRowResult[]>;
+  createCancellableQuery(database: string, queryId: number, queryText: string): Promise<void>;
+  cancelCancellableQuery(queryId: number): Promise<void>;
+  executeCancellableQuery(queryId: number): Promise<QueryRowResult[]>;
   executeQuery(database: string, queryText: string): Promise<QueryRowResult[]>;
   getQuerySelectTop(
     database: string,
@@ -100,8 +100,8 @@ export interface SqlectronDB {
   getTableColumnNames(database: string, table: string, schema?: string): Promise<string[]>;
   setSelectLimit(limit: number): void;
 
-  exportQueryResultToFile(rows: [], exportType: string, delimiter: string): Promise<void>;
-  exportQueryResultToClipboard(rows: [], exportType: string, delimiter: string): Promise<void>;
+  exportQueryResultToFile(rows: any[], exportType: string, delimiter: string): Promise<void>;
+  exportQueryResultToClipboard(rows: any[], exportType: string, delimiter: string): Promise<void>;
 
   saveQuery(
     isSaveAs: boolean,

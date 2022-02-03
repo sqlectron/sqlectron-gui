@@ -11,7 +11,7 @@ export function getSQLScriptIfNeeded(
   item: string,
   actionType: string,
   objectType: string,
-  schema: string,
+  schema?: string,
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     const state = getState();
@@ -69,7 +69,7 @@ function getSQLScript(
   item: string,
   actionType: string,
   objectType: string,
-  schema: string,
+  schema?: string,
 ): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({
