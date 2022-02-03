@@ -30,10 +30,6 @@ export default class DatabaseList extends Component {
     this.state = {};
   }
 
-  focus(database) {
-    this.props.databaseRefs[database].current?.focus();
-  }
-
   render() {
     const {
       client,
