@@ -4,6 +4,7 @@ import DatabaseListItemMetatada from './database-list-item-metadata';
 import DatabaseFilter from './database-filter';
 import * as eventKeys from '../../common/event';
 import ContextMenu from '../utils/context-menu';
+import { createRef } from 'react';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST_ITEM';
 
@@ -31,6 +32,7 @@ const STYLE = {
 
 export default class DatabaseListItem extends Component {
   static propTypes = {
+    databaseRef: PropTypes.object,
     client: PropTypes.string.isRequired,
     tables: PropTypes.array,
     columnsByTable: PropTypes.object,
@@ -55,6 +57,10 @@ export default class DatabaseListItem extends Component {
     this.state = {};
     this.contextMenu = null;
 
+    this.filterRef = createRef();
+
+    this.onFocus = this.onFocus.bind(this);
+    this.toggleCollapse = this.toggleCollapse.bind(this);
     this.onFilterChange = this.onFilterChange.bind(this);
     this.onContextMenu = this.onContextMenu.bind(this);
   }
@@ -108,7 +114,7 @@ export default class DatabaseListItem extends Component {
     this.setState({ filter: value });
   }
 
-  onHeaderDoubleClick(database) {
+  onHeaderClick(database) {
     if (!this.isMetadataLoaded()) {
       this.props.onSelectDatabase(database);
       return;
@@ -122,13 +128,11 @@ export default class DatabaseListItem extends Component {
     return items.filter((item) => regex.test(`${item.schema}.${item.name}`));
   }
 
-  focus() {
+  onFocus() {
     // If search is toggled for certain database that is collapsed then toggle collapse.
-    if (this.state.collapsed) {
-      this.toggleCollapse();
-    }
-
-    this.refs.filter.focus();
+    this.setState(this.state.collapsed ? { collapsed: !this.state.collapsed } : {}, () => {
+      this.filterRef.current?.focus();
+    });
   }
 
   isMetadataLoaded(props) {
@@ -184,7 +188,7 @@ export default class DatabaseListItem extends Component {
       <div className="ui list" style={cssStyleItems}>
         <div className="item" style={cssStyleItems}>
           <DatabaseFilter
-            ref="filter"
+            ref={this.filterRef}
             value={filter}
             isFetching={!isMetadataLoaded}
             onFilterChange={this.onFilterChange}
@@ -241,7 +245,7 @@ export default class DatabaseListItem extends Component {
     return (
       <span
         className="header"
-        onClick={() => this.onHeaderDoubleClick(database)}
+        onClick={() => this.onHeaderClick(database)}
         onContextMenu={this.onContextMenu}
         style={STYLE.database}>
         <i className={`${collapseCssClass} triangle icon`} />
@@ -252,7 +256,7 @@ export default class DatabaseListItem extends Component {
   }
 
   render() {
-    const { database, currentDB } = this.props;
+    const { database, databaseRef, currentDB } = this.props;
 
     const isMetadataLoaded = this.isMetadataLoaded();
     const isCurrentDB = currentDB === database.name;
@@ -268,6 +272,8 @@ export default class DatabaseListItem extends Component {
       <div className={`item ${isCurrentDB ? 'active' : ''}`} style={styleComponent}>
         {this.renderHeader(isMetadataLoaded)}
         {this.renderBody(isMetadataLoaded, isCurrentDB)}
+        {/* create a blank empty div the user cannot click on, so cannot accidently trigger onFocus */}
+        <div ref={databaseRef} tabIndex={-1} onFocus={this.onFocus}></div>
       </div>
     );
   }

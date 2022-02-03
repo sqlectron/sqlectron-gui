@@ -5,10 +5,11 @@ interface Props {
   placeholder?: string;
   isFetching: boolean;
   onFilterChange: (value: string) => void;
+  onFocus?: () => void;
 }
 
 const DatabaseFilter = forwardRef<HTMLInputElement, Props>(
-  ({ value, placeholder, isFetching, onFilterChange }, ref) => {
+  ({ value, placeholder, isFetching, onFilterChange, onFocus }, ref) => {
     const handleFilterChange = useCallback(
       (event: ChangeEvent<HTMLInputElement>): void => {
         onFilterChange(event.target.value);
@@ -24,6 +25,7 @@ const DatabaseFilter = forwardRef<HTMLInputElement, Props>(
           value={value || ''}
           disabled={isFetching}
           onChange={handleFilterChange}
+          onFocus={onFocus}
           ref={ref}
         />
         <i className="search icon" />

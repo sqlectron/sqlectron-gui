@@ -5,10 +5,14 @@ export const FETCH_INDEXES_REQUEST = 'FETCH_INDEXES_REQUEST';
 export const FETCH_INDEXES_SUCCESS = 'FETCH_INDEXES_SUCCESS';
 export const FETCH_INDEXES_FAILURE = 'FETCH_INDEXES_FAILURE';
 
-export function fetchTableIndexesIfNeeded(database: string, table: string): ThunkResult<void> {
+export function fetchTableIndexesIfNeeded(
+  database: string,
+  table: string,
+  schema?: string,
+): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchTableIndexes(getState(), database, table)) {
-      dispatch(fetchTableIndexes(database, table));
+      dispatch(fetchTableIndexes(database, table, schema));
     }
   };
 }
@@ -26,11 +30,11 @@ function shouldFetchTableIndexes(
   return indexes.didInvalidate;
 }
 
-function fetchTableIndexes(database: string, table: string): ThunkResult<void> {
+function fetchTableIndexes(database: string, table: string, schema?: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_INDEXES_REQUEST, database, table });
     try {
-      const indexes = await sqlectron.db.listTableIndexes(database, table);
+      const indexes = await sqlectron.db.listTableIndexes(database, table, schema);
       dispatch({
         type: FETCH_INDEXES_SUCCESS,
         database,

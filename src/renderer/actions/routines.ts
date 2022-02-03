@@ -6,7 +6,7 @@ export const FETCH_ROUTINES_REQUEST = 'FETCH_ROUTINES_REQUEST';
 export const FETCH_ROUTINES_SUCCESS = 'FETCH_ROUTINES_SUCCESS';
 export const FETCH_ROUTINES_FAILURE = 'FETCH_ROUTINES_FAILURE';
 
-export function fetchRoutinesIfNeeded(database: string, filter: SchemaFilter): ThunkResult<void> {
+export function fetchRoutinesIfNeeded(database: string, filter?: SchemaFilter): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchRoutines(getState(), database)) {
       dispatch(fetchRoutines(database, filter));
@@ -23,7 +23,7 @@ function shouldFetchRoutines(state: ApplicationState, database: string): boolean
   return routines.didInvalidate;
 }
 
-function fetchRoutines(database: string, filter: SchemaFilter): ThunkResult<void> {
+function fetchRoutines(database: string, filter?: SchemaFilter): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_ROUTINES_REQUEST, database });
     try {

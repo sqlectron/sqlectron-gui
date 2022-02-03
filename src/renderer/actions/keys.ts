@@ -8,7 +8,7 @@ export const FETCH_KEYS_FAILURE = 'FETCH_KEYS_FAILURE';
 export function fetchTableKeysIfNeeded(
   database: string,
   table: string,
-  schema: string,
+  schema?: string,
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchTableKeys(getState(), database, table)) {
@@ -26,7 +26,7 @@ function shouldFetchTableKeys(state: ApplicationState, database: string, table: 
   return keys.didInvalidate;
 }
 
-function fetchTableKeys(database: string, table: string, schema: string): ThunkResult<void> {
+function fetchTableKeys(database: string, table: string, schema?: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_KEYS_REQUEST, database, table });
     try {
