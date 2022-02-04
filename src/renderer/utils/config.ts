@@ -1,5 +1,7 @@
-export function mapObjectToConfig(obj) {
-  const config = {
+import type { BaseConfig } from '../../common/types/config';
+
+export function mapObjectToConfig(obj): BaseConfig {
+  const config: BaseConfig = {
     zoomFactor: parseFloat(obj.zoomFactor) || 1,
     limitQueryDefaultSelectTop: parseInt(obj.limitQueryDefaultSelectTop, 10) || 100,
     enabledAutoComplete: obj.enabledAutoComplete || false,

@@ -62,6 +62,6 @@ export function getConfig(cleanCache = false): Config {
   return config;
 }
 
-function readJSON(filePath) {
+function readJSON(filePath: string) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }

@@ -8,12 +8,10 @@ interface LogOptions {
 }
 
 /**
- * This interface documents the sqlectron.json file. The only thing guaranteed to
- * exist is the `servers` key/value pair (instantiated to empty array). The rest
- * will only exist if the user goes into the Settings modal and hits save.
+ * BaseConfig object, which represents what we can save from the settings menu,
+ * as well as what might (mostly) be in the config file.
  */
-export interface ConfigFile {
-  servers: Array<Server>;
+export interface BaseConfig {
   log?: LogOptions;
   zoomFactor?: number;
   limitQueryDefaultSelectTop?: number;
@@ -25,6 +23,15 @@ export interface ConfigFile {
   csvDelimiter?: string;
   connectionsAsList?: boolean;
   customFont?: string;
+}
+
+/**
+ * This interface documents the sqlectron.json file. The only thing guaranteed to
+ * exist is the `servers` key/value pair (instantiated to empty array). The rest
+ * will only exist if the user goes into the Settings modal and hits save.
+ */
+export interface ConfigFile extends BaseConfig {
+  servers: Array<Server>;
 }
 
 /**

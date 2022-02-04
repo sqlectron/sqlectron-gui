@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import * as utils from './utils';
 import * as crypto from './crypto';
-import { Config, ConfigFile } from '../../common/types/config';
+import { BaseConfig, Config, ConfigFile } from '../../common/types/config';
 
 const EMPTY_CONFIG = <ConfigFile>{
   servers: [],
@@ -111,7 +111,7 @@ export function save(data: Config): Promise<void> {
   return utils.writeJSONFile(filename, data);
 }
 
-export async function saveSettings(data: Config): Promise<void> {
+export async function saveSettings(data: BaseConfig): Promise<void> {
   const fullData = await get();
   const filename = utils.getConfigPath();
   const newData = { ...fullData, ...data };

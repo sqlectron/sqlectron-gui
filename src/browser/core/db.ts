@@ -243,7 +243,7 @@ export default class DatabaseFacade implements SqlectronDB {
     return this.getDB(database).getTableColumnNames(table, schema);
   }
 
-  setSelectLimit(limit: number): void {
+  setSelectLimit(limit?: number): void {
     return setSelectLimit(limit);
   }
 
