@@ -20,7 +20,9 @@ export interface IndexState {
   isFetching: boolean;
   didInvalidate: boolean;
   indexesByTable: {
-    [table: string]: Index;
+    [database: string]: {
+      [table: string]: Index[];
+    };
   };
   error: null | Error;
 }

@@ -27,7 +27,7 @@ export interface ColumnState {
   };
   columnsByTable: {
     [database: string]: {
-      [table: string]: Column;
+      [table: string]: Column[];
     };
   };
 }

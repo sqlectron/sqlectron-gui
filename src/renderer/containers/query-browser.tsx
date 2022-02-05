@@ -181,8 +181,8 @@ const QueryBrowserContainer: FC = () => {
   }, [dispatch, match, currentQuery]);
 
   const onRefreshDatabase = useCallback(
-    (database: string) => {
-      dispatch(DbAction.refreshDatabase(database));
+    (database: Database) => {
+      dispatch(DbAction.refreshDatabase(database.name));
     },
     [dispatch],
   );
@@ -468,14 +468,6 @@ const QueryBrowserContainer: FC = () => {
                 databaseRefs={databaseListRefs}
                 currentDB={currentQuery?.database || null}
                 isFetching={databases.isFetching}
-                schemasByDatabase={schemas.itemsByDatabase}
-                tablesByDatabase={tables.itemsByDatabase}
-                columnsByTable={columns.columnsByTable}
-                triggersByTable={triggers.triggersByTable}
-                indexesByTable={indexes.indexesByTable}
-                viewsByDatabase={views.viewsByDatabase}
-                functionsByDatabase={routines.functionsByDatabase}
-                proceduresByDatabase={routines.proceduresByDatabase}
                 onSelectDatabase={onSelectDatabase}
                 onExecuteDefaultQuery={onExecuteDefaultQuery}
                 onSelectTable={onSelectTable}
