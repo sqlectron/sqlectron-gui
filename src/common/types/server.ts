@@ -26,9 +26,9 @@ export interface Server {
   domain?: string;
   ssh?: {
     user: string;
-    password: EncryptedPassword | string;
+    password: EncryptedPassword | string | null;
     passphrase?: string;
-    privateKey?: string;
+    privateKey?: string | null;
     host: string;
     port: number;
     privateKeyWithPassphrase?: boolean;
@@ -40,7 +40,7 @@ export interface Server {
         ca?: string;
         cert?: string;
       }
-    | false;
+    | boolean;
   encrypted?: boolean;
   database: string;
   schema?: string;

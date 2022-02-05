@@ -48,7 +48,7 @@ const ServerManagement = () => {
   );
 
   const onTestConnectionClick = useCallback(
-    (server) => {
+    (server: Server) => {
       dispatch(ConnActions.test(server));
     },
     [dispatch],
@@ -63,16 +63,14 @@ const ServerManagement = () => {
   ]);
 
   const onDuplicateClick = useCallback(
-    (server) => dispatch(ServersActions.duplicateServer({ server })),
+    (server: Server) => dispatch(ServersActions.duplicateServer({ server })),
     [dispatch],
   );
 
   const onSaveClick = useCallback(
-    (server) => {
+    (server: Server) => {
       const id = servers.editingServer?.id;
-      if (!id) {
-        dispatch(ServersActions.saveServer({ id, server }));
-      }
+      dispatch(ServersActions.saveServer({ id, server }));
     },
     [dispatch, servers],
   );
@@ -97,12 +95,6 @@ const ServerManagement = () => {
 
   const selected = servers.editingServer || {};
   const filteredServers = filterServers(filter, servers.items);
-
-  const testConnection = {
-    connected: connections.testConnected,
-    connecting: connections.testConnecting,
-    error: connections.testError,
-  };
 
   return (
     <div style={{ paddingTop: '50px' }}>
@@ -136,7 +128,6 @@ const ServerManagement = () => {
           <ServerModalForm
             server={selected}
             error={servers.error}
-            testConnection={testConnection}
             onTestConnectionClick={onTestConnectionClick}
             onDuplicateClick={onDuplicateClick}
             onSaveClick={onSaveClick}
