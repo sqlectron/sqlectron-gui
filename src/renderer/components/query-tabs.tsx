@@ -1,4 +1,4 @@
-import React, { FC, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import { TabPanel, Tabs } from 'react-tabs';
 
 import Query from './query';

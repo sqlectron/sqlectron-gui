@@ -15,7 +15,7 @@ const STYLE: Record<string, CSSProperties> = {
   item: { wordBreak: 'break-all', cursor: 'default' },
 };
 
-interface Props<T extends { schema?: string; name: string }> {
+interface Props<T> {
   title: string;
   objectType: ObjectType;
   client: string;
@@ -48,7 +48,7 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
   onExecuteDefaultQuery,
   onGetSQLScript,
   onSelectItem,
-}: PropsWithChildren<Props<T>>) => {
+}: Props<T>) => {
   const [tableUncollapsed, setTableUncollapsed] = useState<Record<string, boolean>>({});
 
   const [isCollapsed, setIsCollapsed] = useState(!!collapsed);

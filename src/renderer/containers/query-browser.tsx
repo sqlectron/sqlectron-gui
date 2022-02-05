@@ -81,20 +81,9 @@ const CLIENTS = DB_CLIENTS.reduce((clients, dbClient) => {
 }, {});
 
 const QueryBrowserContainer: FC = () => {
-  const {
-    columns,
-    connections,
-    databases,
-    indexes,
-    keys,
-    queries,
-    routines,
-    schemas,
-    status,
-    tables,
-    triggers,
-    views,
-  } = useAppSelector((state) => state);
+  const { columns, connections, databases, keys, queries, status, tables, views } = useAppSelector(
+    (state) => state,
+  );
   const dispatch = useAppDispatch();
   const history = useHistory();
   const match = useRouteMatch<{ id: string }>();

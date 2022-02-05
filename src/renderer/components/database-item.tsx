@@ -187,29 +187,14 @@ const DatabaseItem: FC<Props> = ({
       </span>
       {columnsByTable?.[name] ? (
         <div style={{ ...(tableCollapsed && { display: 'none' }) }}>
+          <TableSubmenu title="Columns" table={name} itemsByTable={columnsByTable} />
           <TableSubmenu
-            title="Columns"
-            schema={schema}
-            table={name}
-            itemsByTable={columnsByTable}
-            database={database}
-          />
-          <TableSubmenu
-            collapsed
+            startCollapsed
             title="Triggers"
-            schema={schema}
             table={name}
             itemsByTable={triggersByTable}
-            database={database}
           />
-          <TableSubmenu
-            collapsed
-            title="Indexes"
-            schema={schema}
-            table={name}
-            itemsByTable={indexesByTable}
-            database={database}
-          />
+          <TableSubmenu startCollapsed title="Indexes" table={name} itemsByTable={indexesByTable} />
         </div>
       ) : null}
     </div>
