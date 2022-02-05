@@ -2,6 +2,7 @@ import React, { FC, RefObject } from 'react';
 import DatabaseListItem from './database-list-item';
 import { Database } from '../reducers/databases';
 import { DbTable } from '../../common/types/database';
+import type { ActionType, ObjectType } from '../reducers/sqlscripts';
 
 interface Props {
   client: string;
@@ -15,8 +16,8 @@ interface Props {
   onGetSQLScript: (
     database: Database,
     item: { name: string; schema?: string },
-    actionType,
-    objectType,
+    actionType: ActionType,
+    objectType: ObjectType,
   ) => void;
   onRefreshDatabase: (database: Database) => void;
   onOpenTab: (database: Database) => void;

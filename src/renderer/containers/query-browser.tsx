@@ -39,6 +39,7 @@ import { useAppDispatch, useAppSelector } from '../hooks/redux';
 import { Database } from '../reducers/databases';
 import { DbTable } from '../../common/types/database';
 import QueryTabs from '../components/query-tabs';
+import type { ActionType, ObjectType } from '../reducers/sqlscripts';
 
 require('./query-browser.css');
 require('../components/react-resizable.css');
@@ -235,7 +236,12 @@ const QueryBrowserContainer: FC = () => {
   );
 
   const onGetSQLScript = useCallback(
-    (database: Database, item: { name: string; schema?: string }, actionType, objectType) => {
+    (
+      database: Database,
+      item: { name: string; schema?: string },
+      actionType: ActionType,
+      objectType: ObjectType,
+    ) => {
       const schema = item.schema || connections.server?.schema;
       dispatch(getSQLScriptIfNeeded(database.name, item.name, actionType, objectType, schema));
     },

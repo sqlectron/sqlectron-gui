@@ -15,6 +15,7 @@ import ContextMenu from '../utils/context-menu';
 import { useAppSelector } from '../hooks/redux';
 import { Database } from '../reducers/databases';
 import { DbTable } from '../../common/types/database';
+import type { ActionType, ObjectType } from '../reducers/sqlscripts';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_DATABASE_LIST_ITEM';
 
@@ -59,8 +60,8 @@ interface Props {
   onGetSQLScript: (
     database: Database,
     item: { name: string; schema?: string },
-    actionType,
-    objectType,
+    actionType: ActionType,
+    objectType: ObjectType,
   ) => void;
   onRefreshDatabase: (database: Database) => void;
   onOpenTab: (database: Database) => void;
