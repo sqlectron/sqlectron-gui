@@ -243,6 +243,7 @@ const DatabaseListItem: FC<Props> = ({
           </div>
           <DatabaseListItemMetatada
             title="Tables"
+            objectType="Table"
             client={client}
             items={filteredTables}
             columnsByTable={columnsByTable}
@@ -256,6 +257,7 @@ const DatabaseListItem: FC<Props> = ({
           <DatabaseListItemMetatada
             collapsed
             title="Views"
+            objectType="View"
             client={client}
             items={filteredViews}
             database={database}
@@ -265,6 +267,7 @@ const DatabaseListItem: FC<Props> = ({
           <DatabaseListItemMetatada
             collapsed
             title="Functions"
+            objectType="Function"
             client={client}
             items={filteredFunctions}
             database={database}
@@ -273,6 +276,7 @@ const DatabaseListItem: FC<Props> = ({
           <DatabaseListItemMetatada
             collapsed
             title="Procedures"
+            objectType="Procedure"
             client={client}
             items={filteredProcedures}
             database={database}

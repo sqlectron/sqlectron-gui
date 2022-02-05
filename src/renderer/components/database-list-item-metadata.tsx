@@ -17,6 +17,7 @@ const STYLE: Record<string, CSSProperties> = {
 
 interface Props<T extends { schema?: string; name: string }> {
   title: string;
+  objectType: ObjectType;
   client: string;
   items: undefined | null | T[];
   columnsByTable?: ColumnsByTable;
@@ -36,6 +37,7 @@ interface Props<T extends { schema?: string; name: string }> {
 
 const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
   title,
+  objectType,
   client,
   items,
   columnsByTable,
@@ -115,7 +117,7 @@ const DatabaseListItemMetatada = <T extends { schema?: string; name: string }>({
                           client={client}
                           database={database}
                           item={item}
-                          dbObjectType={title.slice(0, -1)}
+                          dbObjectType={objectType}
                           style={cssStyle}
                           columnsByTable={columnsByTable}
                           triggersByTable={triggersByTable}

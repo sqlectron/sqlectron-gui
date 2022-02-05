@@ -1,31 +1,47 @@
 import { sqlectron } from '../api';
 import { MenuItem } from '../../common/types/api';
 
+export interface MenuItemSeparator {
+  type: 'separator';
+}
+
 export interface MenuItemOption {
-  type?: string;
+  label: string;
+  event: string;
+  click?: () => void;
+}
+export interface MenuItemOption {
   label: string;
   event: string;
   click?: () => void;
 }
 
+function isMenuItemOption(item: MenuItemOption | MenuItemSeparator): item is MenuItemOption {
+  return 'label' in item;
+}
+
+function isMenuItemSeparator(item: MenuItemOption | MenuItemSeparator): item is MenuItemSeparator {
+  return 'type' in item;
+}
+
 export default class ContextMenu {
   menuId: string;
   isMenuBuilt = false;
-  items: MenuItemOption[] = [];
+  items: (MenuItemOption | MenuItemSeparator)[] = [];
   unsubs: Array<() => void> = [];
 
   constructor(menuId: string) {
     this.menuId = menuId;
   }
 
-  append(item: MenuItemOption): void {
+  append(item: MenuItemOption | MenuItemSeparator): void {
     if (this.isMenuBuilt) {
       throw new Error(`Cannot append to context menu ${this.menuId}, it is already built`);
     }
 
     this.items.push(item);
 
-    if (item.click) {
+    if (isMenuItemOption(item) && item.click) {
       // Scope channel by menuID to avoid conflicts for multiple context menus registered at same time
       const eventKey = `${item.event}@${this.menuId}`;
       const unsub = sqlectron.browser.menu.onMenuClick(eventKey, () => {
@@ -46,18 +62,16 @@ export default class ContextMenu {
     this.isMenuBuilt = true;
 
     sqlectron.browser.menu.buildContextMenu(this.menuId, {
-      menuItems: this.items.map((item: MenuItemOption) => {
+      menuItems: this.items.map<MenuItem>((item) => {
         // Omits the click function because it is passed by IPC to the browser process
         // and it cannot serialize a function. The click function is setup by the append
         // fucntion binding it to a event listener which then triggers the click function
         // when the browser process detects a click in the context menu.
-        const menuItem: MenuItem = {
-          type: item.type,
-          label: item.label,
-          event: item.event,
+        return {
+          type: isMenuItemSeparator(item) ? item.type : undefined,
+          label: isMenuItemOption(item) ? item.label : undefined,
+          event: isMenuItemOption(item) ? item.event : undefined,
         };
-
-        return menuItem;
       }),
     });
   }

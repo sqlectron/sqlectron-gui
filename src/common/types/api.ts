@@ -11,8 +11,8 @@ export interface MenuOptions {
 
 export interface MenuItem {
   type?: string;
-  label: string;
-  event: string;
+  label?: string;
+  event?: string;
 }
 
 export interface SqlectronConfig {
