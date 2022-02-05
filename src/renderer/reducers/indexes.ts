@@ -7,6 +7,10 @@ export interface Index {
   name: string;
 }
 
+export interface IndexesByTable {
+  [table: string]: Index[];
+}
+
 export interface IndexAction extends Action {
   type: string;
   error: Error;
@@ -20,9 +24,7 @@ export interface IndexState {
   isFetching: boolean;
   didInvalidate: boolean;
   indexesByTable: {
-    [database: string]: {
-      [table: string]: Index[];
-    };
+    [database: string]: IndexesByTable;
   };
   error: null | Error;
 }

@@ -7,6 +7,10 @@ export interface Trigger {
   name: string;
 }
 
+export interface TriggersByTable {
+  [table: string]: Trigger[];
+}
+
 export interface TriggerAction extends Action {
   type: string;
   error: Error;
@@ -21,9 +25,7 @@ export interface TriggerState {
   isFetching: boolean;
   didInvalidate: boolean;
   triggersByTable: {
-    [database: string]: {
-      [table: string]: Trigger[];
-    };
+    [database: string]: TriggersByTable;
   };
 }
 

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 
 interface CollapseIconProps {
   arrowDirection: 'down' | 'right';
-  expandAction: () => void;
+  expandAction?: () => void;
 }
 
 const CollapseIcon: FC<CollapseIconProps> = ({ arrowDirection, expandAction }) => (
