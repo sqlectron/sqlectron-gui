@@ -10,7 +10,7 @@ export interface MenuOptions {
 }
 
 export interface MenuItem {
-  type: string;
+  type?: string;
   label: string;
   event: string;
 }

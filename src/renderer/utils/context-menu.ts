@@ -2,7 +2,7 @@ import { sqlectron } from '../api';
 import { MenuItem } from '../../common/types/api';
 
 export interface MenuItemOption {
-  type: string;
+  type?: string;
   label: string;
   event: string;
   click?: () => void;
@@ -75,5 +75,6 @@ export default class ContextMenu {
 
   dispose() {
     this.unsubs.forEach((unsub) => unsub());
+    this.isMenuBuilt = false;
   }
 }

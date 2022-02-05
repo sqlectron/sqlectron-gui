@@ -21,7 +21,9 @@ export interface TriggerState {
   isFetching: boolean;
   didInvalidate: boolean;
   triggersByTable: {
-    [table: string]: Trigger;
+    [database: string]: {
+      [table: string]: Trigger[];
+    };
   };
 }
 

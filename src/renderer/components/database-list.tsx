@@ -2,7 +2,6 @@ import React, { FC, RefObject } from 'react';
 import DatabaseListItem from './database-list-item';
 import { Database } from '../reducers/databases';
 import { DbTable } from '../../common/types/database';
-import { useAppSelector } from '../hooks/redux';
 
 interface Props {
   client: string;
@@ -38,24 +37,6 @@ const DatabaseList: FC<Props> = ({
   onOpenTab,
   onShowDiagramModal,
 }) => {
-  const {
-    tablesByDatabase,
-    columnsByTable,
-    triggersByTable,
-    indexesByTable,
-    viewsByDatabase,
-    functionsByDatabase,
-    proceduresByDatabase,
-  } = useAppSelector((state) => ({
-    tablesByDatabase: state.tables.itemsByDatabase,
-    columnsByTable: state.columns.columnsByTable,
-    triggersByTable: state.triggers.triggersByTable,
-    indexesByTable: state.indexes.indexesByTable,
-    viewsByDatabase: state.views.viewsByDatabase,
-    functionsByDatabase: state.routines.functionsByDatabase,
-    proceduresByDatabase: state.routines.proceduresByDatabase,
-  }));
-
   if (isFetching) {
     return <div className="ui grey item">Loading...</div>;
   }
@@ -73,13 +54,6 @@ const DatabaseList: FC<Props> = ({
           currentDB={currentDB}
           client={client}
           database={database}
-          tables={tablesByDatabase[database.name]}
-          columnsByTable={columnsByTable[database.name]}
-          triggersByTable={triggersByTable[database.name]}
-          indexesByTable={indexesByTable[database.name]}
-          views={viewsByDatabase[database.name]}
-          functions={functionsByDatabase[database.name]}
-          procedures={proceduresByDatabase[database.name]}
           onExecuteDefaultQuery={onExecuteDefaultQuery}
           onSelectTable={onSelectTable}
           onSelectDatabase={onSelectDatabase}
