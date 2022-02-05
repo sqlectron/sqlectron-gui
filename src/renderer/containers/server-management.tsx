@@ -40,9 +40,9 @@ const ServerManagement = () => {
   );
 
   const onConnectClick = useCallback(
-    ({ id }) => {
+    (server: Server) => {
       dispatch(ConnActions.setConnecting());
-      history.push(`/server/${id}`);
+      history.push(`/server/${server.id}`);
     },
     [dispatch, history],
   );

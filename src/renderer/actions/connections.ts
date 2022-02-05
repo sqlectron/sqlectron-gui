@@ -2,6 +2,7 @@ import { AnyAction } from 'redux';
 import { sqlectron, DB_CLIENTS } from '../api';
 import { Server } from '../../common/types/server';
 import { ApplicationState, ThunkResult } from '../reducers';
+import { cloneDeep } from 'lodash';
 
 export const CLOSE_CONNECTION = 'CLOSE_CONNECTION';
 export const CONNECTION_REQUEST = 'CONNECTION_REQUEST';
@@ -71,25 +72,27 @@ export function connect(
         isServerConnection: !databaseName,
       });
 
+      const clonedServer = cloneDeep(server);
+
       if (!isConnected) {
-        if (server.ssh) {
-          if (server.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
+        if (clonedServer.ssh) {
+          if (clonedServer.ssh.privateKeyWithPassphrase && typeof sshPassphrase === 'undefined') {
             dispatch({ type: CONNECTION_REQUIRE_SSH_PASSPHRASE });
             return;
           }
 
-          if (server.ssh.privateKeyWithPassphrase) {
-            server.ssh.passphrase = sshPassphrase;
+          if (clonedServer.ssh.privateKeyWithPassphrase) {
+            clonedServer.ssh.passphrase = sshPassphrase;
           }
         }
       }
 
-      await sqlectron.db.connect(server, database);
+      await sqlectron.db.connect(clonedServer, database);
       isConnected = true;
 
       dispatch({
         type: CONNECTION_SUCCESS,
-        server,
+        clonedServer,
         database,
         config,
         reconnecting,
