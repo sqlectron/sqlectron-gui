@@ -171,15 +171,15 @@ const DatabaseListItem: FC<Props> = ({
         return;
       }
 
-      setCollapsed(!collapsed);
+      setCollapsed((prev) => !prev);
     },
-    [tables, views, functions, procedures, collapsed, onSelectDatabase],
+    [tables, views, functions, procedures, onSelectDatabase],
   );
 
   const onFocus = useCallback(() => {
-    setCollapsed(!collapsed);
+    setCollapsed(false);
     setFocused(true);
-  }, [collapsed]);
+  }, []);
 
   useEffect(() => {
     if (!collapsed && focused) {

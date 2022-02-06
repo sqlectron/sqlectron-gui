@@ -11,31 +11,18 @@ import { DB_CLIENTS } from '../api';
 
 interface Props {
   sideBarWidth: number;
-  queryRefs: Record<number, RefObject<HTMLElement>>;
+  queryRefs: Record<number, RefObject<HTMLDivElement>>;
 }
 
 const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
   const dispatch = useAppDispatch();
-  const {
-    connections,
-    config,
-    queries,
-    databases,
-    schemas,
-    tables,
-    columns,
-    triggers,
-    indexes,
-    views,
-    routines,
-  } = useAppSelector((state) => state);
+  const { connections, queries } = useAppSelector((state) => state);
 
   const [tabNavPosition, setTabNavPosition] = useState(0);
 
   const tabListRef = useRef<HTMLUListElement | null>(null);
 
   const currentQuery = queries.currentQueryId ? queries.queriesById[queries.currentQueryId] : null;
-  const currentDB = currentQuery?.database;
 
   const handleExecuteQuery = useCallback(
     (sqlQuery: string) => {
@@ -155,24 +142,10 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
       <TabPanel key={queryId} className={['react-tabs__tab-panel']}>
         <Query
           editorName={`querybox${queryId}`}
-          config={config}
           client={server.client}
           allowCancel={allowCancel}
           query={query}
           queryRef={queryRefs[queryId]}
-          isCurrentQuery={query.id === queries.currentQueryId}
-          enabledAutoComplete={queries.enabledAutoComplete}
-          enabledLiveAutoComplete={queries.enabledLiveAutoComplete}
-          database={currentDB}
-          databases={databases.items}
-          schemas={schemas.itemsByDatabase[query.database]}
-          tables={tables.itemsByDatabase[query.database]}
-          columnsByTable={columns.columnsByTable[query.database]}
-          triggersByTable={triggers.triggersByTable[query.database]}
-          indexesByTable={indexes.indexesByTable[query.database]}
-          views={views.viewsByDatabase[query.database]}
-          functions={routines.functionsByDatabase[query.database]}
-          procedures={routines.proceduresByDatabase[query.database]}
           widthOffset={sideBarWidth}
           onExecQueryClick={handleExecuteQuery}
           onCancelQueryClick={handleCancelQuery}

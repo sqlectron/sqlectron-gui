@@ -32,6 +32,7 @@ export interface Query {
   results: null | [];
   error: null | Error;
   copied: null | boolean;
+  saved: null | boolean;
   isCanceling: boolean;
   resultItemsPerPage: number;
 }
@@ -267,6 +268,7 @@ function addNewQuery(
     results: null,
     error: null,
     copied: null,
+    saved: null,
     isCanceling: false,
     resultItemsPerPage,
   };

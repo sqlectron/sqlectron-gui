@@ -105,8 +105,8 @@ const QueryBrowserContainer: FC = () => {
 
   const queryRefs = useMemo(
     () =>
-      queries.queryIds.reduce<Record<number, RefObject<HTMLElement>>>((acc, queryId) => {
-        acc[queryId] = createRef<HTMLElement>();
+      queries.queryIds.reduce<Record<number, RefObject<HTMLDivElement>>>((acc, queryId) => {
+        acc[queryId] = createRef<HTMLDivElement>();
         return acc;
       }, {}),
     [queries.queryIds],
