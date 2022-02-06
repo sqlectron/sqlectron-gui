@@ -9,7 +9,7 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import { ResizableBox } from 'react-resizable';
 import CheckBox from './checkbox';
-import QueryResult from './query-result';
+import QueryResults from './query-results';
 import ServerDBClientInfoModal from './server-db-client-info-modal';
 import { BROWSER_MENU_EDITOR_FORMAT } from '../../common/event';
 import MenuHandler from '../utils/menu';
@@ -399,10 +399,9 @@ const Query: FC<Props> = ({
           </div>
         </div>
       </div>
-      <QueryResult
-        config={config}
+      <QueryResults
         widthOffset={widthOffset}
-        heigthOffset={QUERY_EDITOR_HEIGTH}
+        heightOffset={QUERY_EDITOR_HEIGTH}
         onSaveToFileClick={onSaveToFileClick}
         onCopyToClipboardClick={onCopyToClipboardClick}
         resultItemsPerPage={query.resultItemsPerPage}
