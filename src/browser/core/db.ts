@@ -2,8 +2,8 @@ import { WebContents, BrowserWindow, IpcMainInvokeEvent, IpcMainEvent } from 'el
 import path from 'path';
 import { cloneDeep, omit } from 'lodash';
 import csvStringify from 'csv-stringify';
-import { rowsValuesToString } from './utils/convert';
 import browserFacade from '../browser';
+import { rowsValuesToString } from '../../common/utils/convert';
 
 import * as db from 'sqlectron-db-core';
 import { ADAPTERS, setSelectLimit } from 'sqlectron-db-core';

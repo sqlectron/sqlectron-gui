@@ -2,9 +2,9 @@ import isPlainObject from 'lodash/isPlainObject';
 import classNames from 'classnames';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { valueToString } from '../utils/convert';
-import * as eventKeys from '../../common/event';
 import ContextMenu from '../utils/context-menu';
+import * as eventKeys from '../../common/event';
+import { valueToString } from '../../common/utils/convert';
 
 const MENU_CTX_ID = 'CONTEXT_MENU_TABLE_CELL';
 

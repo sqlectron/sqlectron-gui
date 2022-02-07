@@ -6,7 +6,7 @@ import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import scrollbarSize from 'dom-helpers/scrollbarSize';
 import TableCell from './query-result-table-cell';
 import PreviewModal from './preview-modal';
-import { valueToString } from '../utils/convert';
+import { valueToString } from '../../common/utils/convert';
 
 import './query-result-table.scss';
 import { useAppSelector } from '../hooks/redux';

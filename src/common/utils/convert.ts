@@ -1,8 +1,9 @@
-export function rowsValuesToString(rows) {
-  return rows.map(rowValuesToString);
+export function rowsValuesToString(rows: any[]): any[] {
+  return rows.map((row) => rowValuesToString(row));
 }
 
-export function rowValuesToString(row) {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export function rowValuesToString(row: object | any[]): unknown {
   if (Array.isArray(row)) {
     return rowsValuesToString(row);
   }
@@ -16,7 +17,7 @@ export function rowValuesToString(row) {
   return parsedRow;
 }
 
-export function valueToString(value) {
+export function valueToString(value: unknown): string {
   if (value === null) {
     return 'NULL';
   }
@@ -29,7 +30,7 @@ export function valueToString(value) {
     return String(value);
   }
 
-  if (value.toISOString) {
+  if (value instanceof Date && value.toISOString) {
     return value.toISOString();
   }
 
@@ -44,16 +45,18 @@ export function valueToString(value) {
   return String(value);
 }
 
-function arrayBufferToString(buf) {
+function arrayBufferToString(buf: ArrayBuffer): string {
+  // @ts-ignore
   if (buf.length === 1) {
     // Probably is a bit column
     return String(buf[0]);
   }
+  // @ts-ignore
   return buf.toString('utf-8');
 }
 
 // reference:
 // http://stackoverflow.com/a/21799845/1050818
-function isArrayBuffer(value) {
+function isArrayBuffer(value: any): value is ArrayBuffer {
   return value && value.buffer instanceof ArrayBuffer && value.byteLength !== undefined;
 }
