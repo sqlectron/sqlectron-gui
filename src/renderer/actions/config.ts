@@ -32,7 +32,12 @@ export function saveConfig(configData: BaseConfig): ThunkResult<void> {
     dispatch({ type: SAVE_CONFIG_REQUEST });
     try {
       await sqlectron.config.saveSettings(configData);
-      sqlectron.db.setSelectLimit(configData.limitQueryDefaultSelectTop);
+      if (
+        configData.limitQueryDefaultSelectTop !== null &&
+        configData.limitQueryDefaultSelectTop !== undefined
+      ) {
+        sqlectron.db.setSelectLimit(configData.limitQueryDefaultSelectTop);
+      }
       dispatch({ type: SAVE_CONFIG_SUCCESS, config: configData });
     } catch (error) {
       dispatch({ type: SAVE_CONFIG_FAILURE, error });
