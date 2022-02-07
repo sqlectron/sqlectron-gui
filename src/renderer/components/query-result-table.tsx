@@ -4,7 +4,7 @@ import { Grid, ScrollSync } from 'react-virtualized';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
 import scrollbarSize from 'dom-helpers/scrollbarSize';
-import TableCell from './query-result-table-cell';
+import QueryResultTableCell from './query-result-table-cell';
 import PreviewModal from './preview-modal';
 import { valueToString } from '../../common/utils/convert';
 
@@ -346,7 +346,7 @@ const QueryResultTable: FC<Props> = ({
     (params) => {
       const field = fields[params.columnIndex];
       return (
-        <TableCell
+        <QueryResultTableCell
           rowIndex={params.rowIndex}
           data={rows}
           col={field.name}
