@@ -1,4 +1,4 @@
-import React, { CSSProperties, PropsWithChildren, useCallback, useMemo, useState } from 'react';
+import React, { CSSProperties, useCallback, useMemo, useState } from 'react';
 import groupBy from 'lodash/groupBy';
 import CollapseIcon from './collapse-icon';
 import DatabaseItem from './database-item';

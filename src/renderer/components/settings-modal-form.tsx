@@ -29,6 +29,7 @@ interface Props {
   onSaveClick: (config: BaseConfig) => void;
   onCancelClick: () => void;
   config: ConfigState;
+  // TODO: hook up to render
   error: Error | null;
 }
 
@@ -40,7 +41,7 @@ const renderLogLevelItem = ({ label, icon }) => {
   );
 };
 
-const SettingsModalForm: FC<Props> = ({ onSaveClick, onCancelClick, config, error }) => {
+const SettingsModalForm: FC<Props> = ({ onSaveClick, onCancelClick, config }) => {
   const [configState, setConfigState] = useState(cloneDeep(config.data as Config));
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -130,6 +131,7 @@ const SettingsModalForm: FC<Props> = ({ onSaveClick, onCancelClick, config, erro
     [configState],
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const highlightError = useCallback((name: string): string => {
     // TODO: figure what to do with this
     // I'm not really certain what the original intention is here, as `error` is always just a regular
