@@ -48,5 +48,13 @@ export const store = configureStore({
   reducer: rootReducer,
 });
 
+if (module.hot) {
+  module.hot.accept(
+    '../reducers',
+    // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+    () => store.replaceReducer(require('../reducers')),
+  );
+}
+
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

@@ -163,7 +163,7 @@ if (isProd) {
     'dtrace-provider': path.join(__dirname, 'empty-shim.js'),
   };
 
-  webpackConfig.entry = ['webpack/hot/dev-server', './src/renderer/entry.tsx'];
+  webpackConfig.entry = ['./src/renderer/entry.tsx'];
 
   webpackConfig.output = {
     path: path.join(__dirname, 'dist'),
@@ -171,9 +171,8 @@ if (isProd) {
     publicPath: '/static/',
   };
 
-  webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
-
   webpackConfig.devServer = {
+    hot: true,
     port: 9000,
   };
 }
