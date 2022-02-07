@@ -172,6 +172,10 @@ if (isProd) {
   };
 
   webpackConfig.plugins.push(new webpack.HotModuleReplacementPlugin());
+
+  webpackConfig.devServer = {
+    port: 9000,
+  };
 }
 
 module.exports = webpackConfig;

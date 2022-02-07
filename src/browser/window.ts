@@ -38,7 +38,7 @@ export function buildNewWindow(app: App): void {
   // and load the index.html of the app.
   let entryBasePath = 'file://' + resolve(__dirname, '..');
   if (devMode) {
-    entryBasePath = 'http://localhost:8080';
+    entryBasePath = 'http://localhost:9000';
   }
 
   const appUrl = entryBasePath + '/static/index.html';
