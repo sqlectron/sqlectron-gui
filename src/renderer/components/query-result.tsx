@@ -1,6 +1,5 @@
 import { groupBy } from 'lodash';
 import React, { FC, ReactElement } from 'react';
-import { useAppSelector } from '../hooks/redux';
 import Message from './message';
 import QueryResultTable from './query-result-table';
 
@@ -15,11 +14,10 @@ interface Props {
   isMultipleResults: boolean;
   widthOffset: number;
   heightOffset: number;
-  onCopyToClipboardClick: (rows, type: string, delimiter: string) => void;
-  onSaveToFileClick: (rows, type: string, delimiter: string) => void;
+  onCopyToClipboardClick: (rows, type: string, delimiter?: string) => void;
+  onSaveToFileClick: (rows, type: string, delimiter?: string) => void;
   copied: boolean | null;
   saved: boolean | null;
-  resultItemsPerPage: number;
 }
 
 const QueryResult: FC<Props> = ({
@@ -37,10 +35,7 @@ const QueryResult: FC<Props> = ({
   onSaveToFileClick,
   copied,
   saved,
-  resultItemsPerPage,
 }) => {
-  const config = useAppSelector((state) => state.config);
-
   const isSelect = command === 'SELECT';
   const isExplain = command === 'EXPLAIN';
   const isUnknown = command === 'UNKNOWN';
@@ -105,11 +100,9 @@ const QueryResult: FC<Props> = ({
 
   const tableResult = (
     <QueryResultTable
-      config={config}
       key={queryIndex}
       widthOffset={adjustedWidthOffset}
-      heigthOffset={heightOffset}
-      resultItemsPerPage={resultItemsPerPage}
+      heightOffset={heightOffset}
       copied={copied}
       saved={saved}
       fields={fields}

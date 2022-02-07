@@ -247,12 +247,16 @@ export default class DatabaseFacade implements SqlectronDB {
     return setSelectLimit(limit);
   }
 
-  async exportQueryResultToFile(rows: any[], exportType: string, delimiter: string): Promise<void> {
+  async exportQueryResultToFile(
+    rows: any[],
+    exportType: string,
+    delimiter?: string,
+  ): Promise<void> {
     let value;
     const filters = [{ name: 'All Files', extensions: ['*'] }];
 
     if (exportType === 'CSV') {
-      value = await stringifyResultToCSV(rows, delimiter);
+      value = await stringifyResultToCSV(rows, delimiter || ',');
       filters.push({ name: 'CSV', extensions: ['csv'] });
     } else {
       value = JSON.stringify(rows, null, 2);
@@ -270,12 +274,12 @@ export default class DatabaseFacade implements SqlectronDB {
   async exportQueryResultToClipboard(
     rows: any[],
     exportType: string,
-    delimiter: string,
+    delimiter?: string,
   ): Promise<void> {
     let value;
 
     if (exportType === 'CSV') {
-      value = await stringifyResultToCSV(rows, delimiter);
+      value = await stringifyResultToCSV(rows, delimiter || ',');
     } else {
       value = JSON.stringify(rows, null, 2);
     }

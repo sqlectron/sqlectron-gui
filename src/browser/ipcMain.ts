@@ -200,12 +200,12 @@ function registerDBIPCMainHandlers() {
   );
   ipcMain.handle(
     event.DB_EXPORT_QUERY_RESULT_TO_FILE,
-    (e: IpcMainInvokeEvent, rows: any[], exportType: string, delimiter: string) =>
+    (e: IpcMainInvokeEvent, rows: any[], exportType: string, delimiter?: string) =>
       getConn(e).exportQueryResultToFile(rows, exportType, delimiter),
   );
   ipcMain.handle(
     event.DB_EXPORT_QUERY_RESULT_TO_CLIPBOARD,
-    (e: IpcMainInvokeEvent, rows: any[], exportType: string, delimiter: string) =>
+    (e: IpcMainInvokeEvent, rows: any[], exportType: string, delimiter?: string) =>
       getConn(e).exportQueryResultToClipboard(rows, exportType, delimiter),
   );
 

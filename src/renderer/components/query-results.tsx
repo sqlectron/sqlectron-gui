@@ -6,9 +6,8 @@ import QueryResult from './query-result';
 interface Props {
   widthOffset: number;
   heightOffset: number;
-  onCopyToClipboardClick: (rows, type: string, delimiter: string) => void;
-  onSaveToFileClick: (rows, type: string, delimiter: string) => void;
-  resultItemsPerPage: number;
+  onCopyToClipboardClick: (rows, type: string, delimiter?: string) => void;
+  onSaveToFileClick: (rows, type: string, delimiter?: string) => void;
   copied: boolean | null;
   saved: boolean | null;
   query: string | undefined;
@@ -30,7 +29,6 @@ const QueryResults: FC<Props> = ({
   heightOffset,
   onCopyToClipboardClick,
   onSaveToFileClick,
-  resultItemsPerPage,
   copied,
   saved,
   results,
@@ -73,7 +71,6 @@ const QueryResults: FC<Props> = ({
           key={idx}
           widthOffset={widthOffset}
           heightOffset={heightOffset}
-          resultItemsPerPage={resultItemsPerPage}
           copied={copied}
           saved={saved}
           onSaveToFileClick={onSaveToFileClick}

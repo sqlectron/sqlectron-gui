@@ -48,8 +48,8 @@ interface Props {
   queryRef: RefObject<HTMLDivElement> | null;
   onExecQueryClick: (sqlQuery: string) => void;
   onCancelQueryClick: () => void;
-  onCopyToClipboardClick: (rows, type: string, delimiter: string) => void;
-  onSaveToFileClick: (rows, type: string, delimiter: string) => void;
+  onCopyToClipboardClick: (rows, type: string, delimiter?: string) => void;
+  onSaveToFileClick: (rows, type: string, delimiter?: string) => void;
   onSQLChange: (sqlQuery: string) => void;
   onSelectionChange: (sqlQuery: string, selectedQuery: string) => void;
 }
@@ -69,7 +69,6 @@ const Query: FC<Props> = ({
   onSelectionChange,
 }) => {
   const {
-    config,
     isCurrentQuery,
     enabledAutoComplete,
     enabledLiveAutoComplete,
@@ -83,7 +82,6 @@ const Query: FC<Props> = ({
     functions,
     procedures,
   } = useAppSelector((state) => ({
-    config: state.config,
     isCurrentQuery: query.id === state.queries.currentQueryId,
     enabledAutoComplete: state.config.data?.enabledAutoComplete || false,
     enabledLiveAutoComplete: state.config.data?.enabledLiveAutoComplete || false,
@@ -404,7 +402,6 @@ const Query: FC<Props> = ({
         heightOffset={QUERY_EDITOR_HEIGTH}
         onSaveToFileClick={onSaveToFileClick}
         onCopyToClipboardClick={onCopyToClipboardClick}
-        resultItemsPerPage={query.resultItemsPerPage}
         copied={query.copied}
         saved={query.saved}
         query={query.queryHistory[query.queryHistory.length - 1]}

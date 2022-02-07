@@ -44,14 +44,14 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
   }, [currentQuery, dispatch]);
 
   const copyToClipboard = useCallback(
-    (rows, type: string, delimiter: string) => {
+    (rows, type: string, delimiter?: string) => {
       dispatch(QueryActions.copyToClipboard(rows, type, delimiter));
     },
     [dispatch],
   );
 
   const saveToFile = useCallback(
-    (rows, type: string, delimiter: string) => {
+    (rows, type: string, delimiter?: string) => {
       dispatch(QueryActions.saveToFile(rows, type, delimiter));
     },
     [dispatch],

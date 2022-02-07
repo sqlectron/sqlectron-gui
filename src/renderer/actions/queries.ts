@@ -121,7 +121,7 @@ export function appendQuery(query: string): ThunkResult<void> {
 export function copyToClipboard(
   rows: any[],
   exportType: string,
-  delimiter: string,
+  delimiter?: string,
 ): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: COPY_QUERY_RESULT_TO_CLIPBOARD_REQUEST });
@@ -134,7 +134,7 @@ export function copyToClipboard(
   };
 }
 
-export function saveToFile(rows: any[], exportType: string, delimiter: string): ThunkResult<void> {
+export function saveToFile(rows: any[], exportType: string, delimiter?: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: SAVE_QUERY_RESULT_TO_FILE_REQUEST });
     try {
