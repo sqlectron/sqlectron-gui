@@ -150,7 +150,6 @@
     "cross-env": "^7.0.2",
     "csp-html-webpack-plugin": "^5.1.0",
     "css-loader": "^5.2.5",
-    "csv-stringify": "^5.5.1",
     "dom-helpers": "^5.1.4",
     "dotenv": "^10.0.0",
     "dotenv-webpack": "^7.0.2",
