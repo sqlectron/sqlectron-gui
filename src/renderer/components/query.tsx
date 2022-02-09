@@ -100,6 +100,9 @@ const Query: FC<Props> = ({
 
   const [infoModalVisible, setInfoModalVisible] = useState(false);
   const [wrapEnabled, setWrapEnabled] = useState(false);
+
+  const [isCallingNL2SQL, setIsCallingNL2SQL] = useState(false);
+
   const editorRef = useRef<AceEditor>(null);
 
   const handleSelectionChange = useCallback(() => {
@@ -223,6 +226,18 @@ const Query: FC<Props> = ({
       editorRef.current?.editor.focus();
     }
   }, [isCurrentQuery]);
+
+  const handleNL2SQLQueryClick = useCallback(() => {
+    const sqlQuery = editorRef.current?.editor.getCopyText() || query.query;
+    // onNL2SQLQueryClick(sqlQuery);
+    setIsCallingNL2SQL(true);
+    setTimeout(() => {
+      const copyText =
+        editorRef.current?.editor.getCopyText() || editorRef.current?.editor.getValue();
+      editorRef.current?.editor.replace("I'm the generated SQL", { needle: copyText });
+      setIsCallingNL2SQL(false);
+    }, 300);
+  }, [query.query, editorRef]);
 
   const handleExecQueryClick = useCallback(() => {
     const sqlQuery = editorRef.current?.editor.getCopyText() || query.query;
@@ -375,6 +390,12 @@ const Query: FC<Props> = ({
           <div className="right menu">
             <div className="item">
               <div className="ui buttons">
+                <button
+                  className={`ui primary button ${isCallingNL2SQL ? 'loading' : ''}`}
+                  onClick={handleNL2SQLQueryClick}>
+                  NL2SQL
+                </button>
+
                 <button
                   className={`ui positive button ${query.isExecuting ? 'loading' : ''}`}
                   onClick={handleExecQueryClick}>
