@@ -29,9 +29,18 @@ export interface Query {
   query: string;
   selectedQuery: string;
   queryHistory: Array<string>;
-  results: null | [];
+  results:
+    | null
+    | {
+        command: string;
+        fields: any[];
+        rows: any[];
+        rowCount: number | undefined;
+        affectedRows: number | undefined;
+      }[];
   error: null | Error;
   copied: null | boolean;
+  saved: null | boolean;
   isCanceling: boolean;
   resultItemsPerPage: number;
 }
@@ -267,6 +276,7 @@ function addNewQuery(
     results: null,
     error: null,
     copied: null,
+    saved: null,
     isCanceling: false,
     resultItemsPerPage,
   };

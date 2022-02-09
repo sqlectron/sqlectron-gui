@@ -17,7 +17,7 @@ module.exports = {
   overrides: [
     {
       files: ['src/renderer/**/*.js', 'src/renderer/**/*.jsx'],
-      plugins: ['import', 'react', 'prettier'],
+      plugins: ['import', 'react', 'react-hooks', 'prettier'],
       extends: [
         'eslint:recommended',
         'plugin:react/recommended',
@@ -44,7 +44,6 @@ module.exports = {
         $: true,
       },
       rules: {
-        'no-unused-vars': 'off',
         camelcase: [
           'error',
           {
@@ -60,6 +59,8 @@ module.exports = {
         'react/jsx-uses-vars': 2,
         'react/react-in-jsx-scope': 2,
         'react/forbid-prop-types': 0,
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
         'space-before-function-paren': 0,
         'func-names': 0,
         'class-methods-use-this': 0,
@@ -105,10 +106,11 @@ module.exports = {
         sourceType: 'module',
         project: './tsconfig.json',
       },
-      plugins: ['prettier', '@typescript-eslint'],
+      plugins: ['import', 'react', 'react-hooks', 'prettier'],
       rules: {
-        'no-unused-vars': 'off',
         'react/prop-types': 'off',
+        'react-hooks/rules-of-hooks': 'error',
+        'react-hooks/exhaustive-deps': 'warn',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/explicit-module-boundary-types': 'off', // temporary disable for tests
@@ -140,7 +142,6 @@ module.exports = {
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
-        'no-unused-vars': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
       },
@@ -149,7 +150,7 @@ module.exports = {
       },
     },
     {
-      files: ['src/browser/**/*.ts', 'src/common/**/*.ts'],
+      files: ['src/*.ts', 'src/browser/**/*.ts', 'src/common/**/*.ts'],
       env: { browser: true, es6: true, node: true },
       extends: [
         'eslint:recommended',
@@ -166,7 +167,6 @@ module.exports = {
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
-        'no-unused-vars': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
       },
@@ -190,7 +190,6 @@ module.exports = {
       },
       plugins: ['prettier', '@typescript-eslint'],
       rules: {
-        'no-unused-vars': 'off',
         '@typescript-eslint/ban-ts-comment': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-non-null-assertion': 'off',

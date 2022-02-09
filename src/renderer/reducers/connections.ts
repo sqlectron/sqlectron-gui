@@ -63,6 +63,8 @@ const connectionReducer: Reducer<ConnectionState> = function (
         ...state,
         server: action.server,
         disabledFeatures: dbClient?.disabledFeatures || [],
+        connected: false,
+        connecting: true,
       };
     }
     case types.CONNECTION_REQUIRE_SSH_PASSPHRASE: {

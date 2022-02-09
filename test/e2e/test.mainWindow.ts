@@ -3,10 +3,11 @@ import path from 'path';
 import { expect } from 'chai';
 
 import helper from './helper';
+import type { ElectronApplication, Page } from 'playwright';
 
 describe('MainWindow', function () {
-  let app;
-  let mainWindow;
+  let app: ElectronApplication;
+  let mainWindow: Page;
 
   before(async () => {
     // Makes a copy of the file, because the app writes to it during the startup

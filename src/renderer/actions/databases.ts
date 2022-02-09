@@ -105,7 +105,7 @@ export function openDatabaseDiagram(): ThunkResult<void> {
   };
 }
 
-export function fetchDatabasesIfNeeded(filter: DatabaseFilter): ThunkResult<void> {
+export function fetchDatabasesIfNeeded(filter?: DatabaseFilter): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchDatabases(getState())) {
       dispatch(fetchDatabases(filter));
@@ -120,7 +120,7 @@ function shouldFetchDatabases(state: ApplicationState): boolean {
   return databases.didInvalidate;
 }
 
-function fetchDatabases(filter: DatabaseFilter): ThunkResult<void> {
+function fetchDatabases(filter?: DatabaseFilter): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: FETCH_DATABASES_REQUEST });
     try {

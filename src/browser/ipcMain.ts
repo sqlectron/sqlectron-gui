@@ -131,13 +131,13 @@ function registerDBIPCMainHandlers() {
   );
   ipcMain.handle(
     event.DB_CREATE_CANCELLABLE_QUERY,
-    (e: IpcMainInvokeEvent, database: string, queryId: string, queryText: string) =>
+    (e: IpcMainInvokeEvent, database: string, queryId: number, queryText: string) =>
       getConn(e).createCancellableQuery(database, queryId, queryText),
   );
-  ipcMain.handle(event.DB_CANCEL_CANCELLABLE_QUERY, (e: IpcMainInvokeEvent, queryId: string) =>
+  ipcMain.handle(event.DB_CANCEL_CANCELLABLE_QUERY, (e: IpcMainInvokeEvent, queryId: number) =>
     getConn(e).cancelCancellableQuery(queryId),
   );
-  ipcMain.handle(event.DB_EXECUTE_CANCELLABLE_QUERY, (e: IpcMainInvokeEvent, queryId: string) =>
+  ipcMain.handle(event.DB_EXECUTE_CANCELLABLE_QUERY, (e: IpcMainInvokeEvent, queryId: number) =>
     getConn(e).executeCancellableQuery(queryId),
   );
   ipcMain.handle(
@@ -200,12 +200,12 @@ function registerDBIPCMainHandlers() {
   );
   ipcMain.handle(
     event.DB_EXPORT_QUERY_RESULT_TO_FILE,
-    (e: IpcMainInvokeEvent, rows: [], exportType: string, delimiter: string) =>
+    (e: IpcMainInvokeEvent, rows: any[], exportType: string, delimiter?: string) =>
       getConn(e).exportQueryResultToFile(rows, exportType, delimiter),
   );
   ipcMain.handle(
     event.DB_EXPORT_QUERY_RESULT_TO_CLIPBOARD,
-    (e: IpcMainInvokeEvent, rows: [], exportType: string, delimiter: string) =>
+    (e: IpcMainInvokeEvent, rows: any[], exportType: string, delimiter?: string) =>
       getConn(e).exportQueryResultToClipboard(rows, exportType, delimiter),
   );
 

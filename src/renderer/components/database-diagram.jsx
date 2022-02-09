@@ -164,7 +164,7 @@ export default class DatabaseDiagram extends Component {
     return isSaving ? { pointerEvents: 'none' } : { pointerEvents: 'auto' };
   }
 
-  putEverythingOnGraph(tableShapes, tableCells, tableLinks) {
+  putEverythingOnGraph(/*tableShapes, tableCells, tableLinks*/) {
     // this.graph.addCells(tableShapes.concat(tableCells, tableLinks));
     // this.resizeTableElements(tableShapes, tableCells);
     var el1 = new HTMLShapes.Element({

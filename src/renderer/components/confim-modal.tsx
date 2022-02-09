@@ -21,7 +21,8 @@ const ConfirmModal = ({
     if (!ref.current) {
       return;
     }
-    $(ref.current)
+    const elem = ref.current;
+    $(elem)
       .modal({
         closable: false,
         detachable: false,
@@ -36,12 +37,9 @@ const ConfirmModal = ({
       })
       .modal('show');
     return () => {
-      if (!ref.current) {
-        return;
-      }
-      $(ref.current).modal('hide');
+      $(elem).modal('hide');
     };
-  }, [ref.current]);
+  }, [ref, context, onCancelClick, onRemoveClick]);
 
   return (
     <div className="ui modal" ref={ref} style={{ position: 'absolute' }}>

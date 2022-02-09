@@ -8,6 +8,10 @@ export interface Column {
   dataType: string;
 }
 
+export interface ColumnsByTable {
+  [table: string]: Column[];
+}
+
 export interface ColumnAction extends Action {
   type: string;
   error: Error;
@@ -26,9 +30,7 @@ export interface ColumnState {
     };
   };
   columnsByTable: {
-    [database: string]: {
-      [table: string]: Column;
-    };
+    [database: string]: ColumnsByTable;
   };
 }
 

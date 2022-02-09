@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { ThunkResult } from '../reducers';
 import { sqlectron } from '../api';
-import { Config } from '../../common/types/config';
+import { BaseConfig } from '../../common/types/config';
 
 export const LOAD_CONFIG_REQUEST = 'LOAD_CONFIG_REQUEST';
 export const LOAD_CONFIG_SUCCESS = 'LOAD_CONFIG_SUCCESS';
@@ -27,12 +27,17 @@ export function loadConfig(): ThunkResult<void> {
   };
 }
 
-export function saveConfig(configData: Config): ThunkResult<void> {
+export function saveConfig(configData: BaseConfig): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: SAVE_CONFIG_REQUEST });
     try {
       await sqlectron.config.saveSettings(configData);
-      sqlectron.db.setSelectLimit(configData.limitQueryDefaultSelectTop);
+      if (
+        configData.limitQueryDefaultSelectTop !== null &&
+        configData.limitQueryDefaultSelectTop !== undefined
+      ) {
+        sqlectron.db.setSelectLimit(configData.limitQueryDefaultSelectTop);
+      }
       dispatch({ type: SAVE_CONFIG_SUCCESS, config: configData });
     } catch (error) {
       dispatch({ type: SAVE_CONFIG_FAILURE, error });
@@ -40,8 +45,8 @@ export function saveConfig(configData: Config): ThunkResult<void> {
   };
 }
 
-export function startEditing(id: string): AnyAction {
-  return { type: START_EDITING_CONFIG, id };
+export function startEditing(): AnyAction {
+  return { type: START_EDITING_CONFIG };
 }
 
 export function finishEditing(): AnyAction {

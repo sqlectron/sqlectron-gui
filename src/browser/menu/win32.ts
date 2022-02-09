@@ -3,6 +3,7 @@ import { BrowserWindow, App, MenuItem, MenuItemConstructorOptions } from 'electr
 import { Config } from '../../common/types/config';
 import { BuildWindow } from '../../common/types/menu';
 import * as eventKeys from '../../common/event';
+import { titlize } from '../../common/utils/string';
 
 function sendMessage(win: BrowserWindow, message: string) {
   if (win) {
@@ -126,6 +127,15 @@ export function buildTemplate(
           accelerator: 'Ctrl+A',
           role: 'selectAll',
         },
+        {
+          type: 'separator',
+        },
+        {
+          label: 'Beautify Query',
+          accelerator: 'Ctrl+I',
+          click: (_, win) =>
+            sendMessage(win as BrowserWindow, eventKeys.BROWSER_MENU_EDITOR_FORMAT),
+        },
       ],
     },
     {
@@ -187,7 +197,7 @@ export function buildTemplate(
           click: () => shell.openExternal(appConfig.bugs as string),
         },
         {
-          label: `About ${appConfig.name}`,
+          label: `About ${titlize(appConfig.name)}`,
           click: () => shell.openExternal(appConfig.homepage as string),
         },
       ],

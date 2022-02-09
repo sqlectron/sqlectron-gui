@@ -16,7 +16,7 @@ export const DUPLICATE_SERVER_FAILURE = 'DUPLICATE_SERVER_FAILURE';
 export const START_EDITING_SERVER = 'START_EDITING_SERVER';
 export const FINISH_EDITING_SERVER = 'FINISH_EDITING_SERVER';
 
-export function startEditing(id: string): ThunkResult<void> {
+export function startEditing(id?: string): ThunkResult<void> {
   return async (dispatch, getState) => {
     if (!id) {
       dispatch({ type: START_EDITING_SERVER });
@@ -41,7 +41,7 @@ export function finishEditing(): AnyAction {
   return { type: FINISH_EDITING_SERVER };
 }
 
-export function saveServer({ server, id }: { server: Server; id: string }): ThunkResult<void> {
+export function saveServer({ server, id }: { server: Server; id?: string }): ThunkResult<void> {
   return async (dispatch, getState) => {
     dispatch({ type: SAVE_SERVER_REQUEST, server });
     try {

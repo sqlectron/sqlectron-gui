@@ -144,7 +144,9 @@ async function getValidationErrors(server: Server): Promise<unknown> {
   try {
     await validate(server);
   } catch (err) {
+    // @ts-ignore
     if (err.validationErrors) {
+      // @ts-ignore
       return err.validationErrors;
     }
 

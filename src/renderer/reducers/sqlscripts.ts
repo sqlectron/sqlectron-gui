@@ -2,6 +2,9 @@ import { Action, Reducer } from 'redux';
 import * as connTypes from '../actions/connections';
 import * as types from '../actions/sqlscripts';
 
+export type ActionType = 'CREATE' | 'SELECT' | 'INSERT' | 'UPDATE' | 'DELETE';
+export type ObjectType = 'Table' | 'View' | 'Function' | 'Procedure';
+
 export interface ScriptAction extends Action {
   type: string;
   error: Error;
@@ -9,9 +12,8 @@ export interface ScriptAction extends Action {
   database: string;
   item: string;
   script: string;
-  scriptType: string;
-  objectType: string;
-  actionType: string;
+  objectType: ObjectType;
+  actionType: ActionType;
 }
 
 export interface ScriptState {
@@ -20,10 +22,16 @@ export interface ScriptState {
   didInvalidate: boolean;
   scriptsByObject: {
     [db: string]: {
-      [item: string]: string;
+      [item: string]: {
+        CREATE?: string;
+        SELECT?: string;
+        INSERT?: string;
+        UPDATE?: string;
+        DELETE?: string;
+        objectType: ObjectType;
+      };
     };
   };
-  scriptType: string;
 }
 
 const INITIAL_STATE: ScriptState = {
@@ -31,7 +39,6 @@ const INITIAL_STATE: ScriptState = {
   isFetching: false,
   didInvalidate: false,
   scriptsByObject: {},
-  scriptType: '',
 };
 
 const scriptReducer: Reducer<ScriptState> = function (
@@ -45,7 +52,6 @@ const scriptReducer: Reducer<ScriptState> = function (
     case types.GET_SCRIPT_REQUEST: {
       return {
         ...state,
-        scriptType: action.scriptType,
         isFetching: true,
         didInvalidate: false,
         error: null,

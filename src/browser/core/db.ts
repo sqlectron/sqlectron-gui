@@ -1,24 +1,23 @@
 import { WebContents, BrowserWindow, IpcMainInvokeEvent, IpcMainEvent } from 'electron';
 import path from 'path';
-import cloneDeep from 'lodash.clonedeep';
+import { cloneDeep, omit } from 'lodash';
 import csvStringify from 'csv-stringify';
-import { rowsValuesToString } from './utils/convert';
 import browserFacade from '../browser';
+import { rowsValuesToString } from '../../common/utils/convert';
 
 import * as db from 'sqlectron-db-core';
 import { ADAPTERS, setSelectLimit } from 'sqlectron-db-core';
 import type {
   Database,
-  Adapter,
   QueryRowResult,
   DatabaseFilter,
   SchemaFilter,
   Server as DBServer,
   LegacyServerConfig,
 } from 'sqlectron-db-core';
-import omit from 'lodash.omit';
 import { Server } from '../../common/types/server';
-import { SqlectronDB } from '../../common/types/api';
+import type { SqlectronDB } from '../../common/types/api';
+import type { Adapter, DbTable, DbView } from '../../common/types/database';
 import { writeFile, readFile } from './utils';
 
 interface CancellableQuery {
@@ -104,11 +103,11 @@ export default class DatabaseFacade implements SqlectronDB {
     return this.getDB(database).listSchemas(filter);
   }
 
-  listTables(database: string, filter: SchemaFilter): Promise<{ name: string }[]> {
+  listTables(database: string, filter: SchemaFilter): Promise<DbTable[]> {
     return this.getDB(database).listTables(filter);
   }
 
-  listViews(database: string, filter: SchemaFilter): Promise<{ name: string }[]> {
+  listViews(database: string, filter: SchemaFilter): Promise<DbView[]> {
     return this.getDB(database).listViews(filter);
   }
 
@@ -165,12 +164,12 @@ export default class DatabaseFacade implements SqlectronDB {
     return this.getDB(database).getTableKeys(table, schema);
   }
 
-  createCancellableQuery(database: string, queryId: string, queryText: string): Promise<void> {
+  createCancellableQuery(database: string, queryId: number, queryText: string): Promise<void> {
     this.cancellableQueries[queryId] = this.getDB(database).query(queryText);
     return Promise.resolve();
   }
 
-  async cancelCancellableQuery(queryId: string): Promise<void> {
+  async cancelCancellableQuery(queryId: number): Promise<void> {
     const query = this.cancellableQueries[queryId];
     try {
       if (query) {
@@ -181,7 +180,7 @@ export default class DatabaseFacade implements SqlectronDB {
     }
   }
 
-  async executeCancellableQuery(queryId: string): Promise<QueryRowResult[]> {
+  async executeCancellableQuery(queryId: number): Promise<QueryRowResult[]> {
     try {
       const query = this.cancellableQueries[queryId];
       if (query) {
@@ -248,12 +247,16 @@ export default class DatabaseFacade implements SqlectronDB {
     return setSelectLimit(limit);
   }
 
-  async exportQueryResultToFile(rows: [], exportType: string, delimiter: string): Promise<void> {
+  async exportQueryResultToFile(
+    rows: any[],
+    exportType: string,
+    delimiter?: string,
+  ): Promise<void> {
     let value;
     const filters = [{ name: 'All Files', extensions: ['*'] }];
 
     if (exportType === 'CSV') {
-      value = await stringifyResultToCSV(rows, delimiter);
+      value = await stringifyResultToCSV(rows, delimiter || ',');
       filters.push({ name: 'CSV', extensions: ['csv'] });
     } else {
       value = JSON.stringify(rows, null, 2);
@@ -269,14 +272,14 @@ export default class DatabaseFacade implements SqlectronDB {
   }
 
   async exportQueryResultToClipboard(
-    rows: [],
+    rows: any[],
     exportType: string,
-    delimiter: string,
+    delimiter?: string,
   ): Promise<void> {
     let value;
 
     if (exportType === 'CSV') {
-      value = await stringifyResultToCSV(rows, delimiter);
+      value = await stringifyResultToCSV(rows, delimiter || ',');
     } else {
       value = JSON.stringify(rows, null, 2);
     }
@@ -371,7 +374,7 @@ export const getConn = (e: IpcMainEvent | IpcMainInvokeEvent): SqlectronDB => {
   return conn;
 };
 
-function stringifyResultToCSV(origRows: [], delimiter: string): Promise<string> {
+function stringifyResultToCSV(origRows: any[], delimiter: string): Promise<string> {
   if (!origRows.length) {
     return Promise.resolve('');
   }

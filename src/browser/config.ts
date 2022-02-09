@@ -7,7 +7,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import defaultsDeep from 'lodash.defaultsdeep';
+import defaultsDeep from 'lodash/defaultsDeep';
 import * as sqlectron from './core';
 import { Config } from '../common/types/config';
 
@@ -62,6 +62,6 @@ export function getConfig(cleanCache = false): Config {
   return config;
 }
 
-function readJSON(filePath) {
+function readJSON(filePath: string) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }

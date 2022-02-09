@@ -24,7 +24,7 @@ export interface DatabaseState {
   didInvalidate: boolean;
   items: Array<Database>;
   showingDiagram: boolean;
-  diagramDatabase: null;
+  diagramDatabase: string | null;
   fileName: null;
   diagramJSON: null;
   isSaving: boolean;

@@ -8,7 +8,7 @@ export const FETCH_COLUMNS_FAILURE = 'FETCH_COLUMNS_FAILURE';
 export function fetchTableColumnsIfNeeded(
   database: string,
   table: string,
-  schema: string,
+  schema?: string,
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     if (shouldFetchTableColumns(getState(), database, table)) {
@@ -30,7 +30,7 @@ function shouldFetchTableColumns(
   return columns.didInvalidate;
 }
 
-function fetchTableColumns(database: string, table: string, schema: string): ThunkResult<void> {
+function fetchTableColumns(database: string, table: string, schema?: string): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({ type: FETCH_COLUMNS_REQUEST, database, table });
     try {

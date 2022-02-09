@@ -1,6 +1,7 @@
 import { sqlectron } from '../api';
 import { appendQuery } from './queries';
 import { ApplicationState, ThunkResult } from '../reducers';
+import type { ActionType, ObjectType } from '../reducers/sqlscripts';
 
 export const GET_SCRIPT_REQUEST = 'GET_SCRIPT_REQUEST';
 export const GET_SCRIPT_SUCCESS = 'GET_SCRIPT_SUCCESS';
@@ -9,9 +10,9 @@ export const GET_SCRIPT_FAILURE = 'GET_SCRIPT_FAILURE';
 export function getSQLScriptIfNeeded(
   database: string,
   item: string,
-  actionType: string,
-  objectType: string,
-  schema: string,
+  actionType: ActionType,
+  objectType: ObjectType,
+  schema?: string,
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     const state = getState();
@@ -31,7 +32,7 @@ function shouldFetchScript(
   state: ApplicationState,
   database: string,
   item: string,
-  actionType: string,
+  actionType: ActionType,
 ): boolean {
   const scripts = state.sqlscripts;
   if (!scripts) return true;
@@ -67,9 +68,9 @@ function getAlreadyFetchedScript(
 function getSQLScript(
   database: string,
   item: string,
-  actionType: string,
-  objectType: string,
-  schema: string,
+  actionType: ActionType,
+  objectType: ObjectType,
+  schema?: string,
 ): ThunkResult<void> {
   return async (dispatch) => {
     dispatch({

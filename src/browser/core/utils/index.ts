@@ -1,7 +1,6 @@
 import fs from 'fs';
 import { homedir } from 'os';
 import path from 'path';
-import mkdirp from 'mkdirp';
 import envPaths from 'env-paths';
 
 let configPath = '';
@@ -81,12 +80,19 @@ export function readJSONFileSync<T>(filename: string): T {
   return JSON.parse(data);
 }
 
-export function createParentDirectory(filename: string): void {
-  return mkdirp(path.dirname(filename));
+export function createParentDirectory(filename: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    fs.mkdir(filename, { recursive: true }, (err) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve();
+    });
+  });
 }
 
 export function createParentDirectorySync(filename: string): void {
-  mkdirp.sync(path.dirname(filename));
+  fs.mkdirSync(path.dirname(filename), { recursive: true });
 }
 
 export function resolveHomePathToAbsolute(filename: string): string {

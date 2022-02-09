@@ -10,3 +10,6 @@
 *.otf binary
 *.ttf binary
 *.icns binary
+
+# Mark vendor to ignore by GH linguist
+vendor linguist-vendored

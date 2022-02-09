@@ -1,3 +1,5 @@
+import { DatabaseFilter, SchemaFilter } from 'sqlectron-db-core';
+
 export interface EncryptedPassword {
   ivText: string;
   encryptedText: string;
@@ -11,7 +13,7 @@ export interface ServerResult {
 export interface Server {
   id: string;
   name: string;
-  client?: string;
+  client: string;
   adapter?: string;
   host?: string;
   socketPath?: string;
@@ -24,9 +26,9 @@ export interface Server {
   domain?: string;
   ssh?: {
     user: string;
-    password: EncryptedPassword | string;
+    password: EncryptedPassword | string | null;
     passphrase?: string;
-    privateKey?: string;
+    privateKey?: string | null;
     host: string;
     port: number;
     privateKeyWithPassphrase?: boolean;
@@ -38,7 +40,9 @@ export interface Server {
         ca?: string;
         cert?: string;
       }
-    | false;
+    | boolean;
   encrypted?: boolean;
   database: string;
+  schema?: string;
+  filter?: DatabaseFilter & SchemaFilter;
 }

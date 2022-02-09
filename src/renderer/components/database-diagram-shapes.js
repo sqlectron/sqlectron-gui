@@ -1,6 +1,5 @@
 import * as joint from 'jointjs';
-import bindAll from 'lodash.bindall';
-import template from 'lodash.template';
+import { bindAll, template } from 'lodash';
 
 // Custom joint shape representing table/view object
 const SqlectronShapes = {};
@@ -108,8 +107,8 @@ SqlectronShapes.TableCellView = joint.dia.ElementView.extend({
   },
 });
 
-var Element = joint.dia.Element;
-var ElementView = joint.dia.ElementView;
+const Element = joint.dia.Element;
+const ElementView = joint.dia.ElementView;
 
 const HTMLShapes = {};
 

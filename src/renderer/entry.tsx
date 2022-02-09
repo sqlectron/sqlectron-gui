@@ -1,24 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { HashRouter as Router, Switch, Route } from 'react-router-dom';
-import App from './containers/app';
-import configureStore from './store/configure';
-import ServerManagementContainer from './containers/server-management';
-import QueryBrowserContainer from './containers/query-browser';
+import { store } from './store/configure';
+import Root from './containers/root';
 
-const store = configureStore();
+const doRender = (NextRoot) => {
+  ReactDOM.render(<NextRoot store={store} />, document.getElementById('content'));
+};
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <App>
-        <Switch>
-          <Route exact path="/" component={ServerManagementContainer} />
-          <Route path="/server/:id" component={QueryBrowserContainer} />
-        </Switch>
-      </App>
-    </Router>
-  </Provider>,
-  document.getElementById('content'),
-);
+doRender(Root);
+
+if (module.hot) {
+  module.hot.accept('./containers/root.tsx', () => {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const NextRoot = require('./containers/root.tsx').default;
+    doRender(NextRoot);
+  });
+}
