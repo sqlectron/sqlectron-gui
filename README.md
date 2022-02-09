@@ -9,7 +9,9 @@
 
 ### To Build
 
-```npm install
+Run
+```
+npm install
 npm run dev
 ```
 
