@@ -3,6 +3,7 @@ import { BrowserWindow, App, MenuItem, MenuItemConstructorOptions } from 'electr
 import { Config } from '../../common/types/config';
 import { BuildWindow } from '../../common/types/menu';
 import * as eventKeys from '../../common/event';
+import { titlize } from '../../common/utils/string';
 
 function sendMessage(win: BrowserWindow, message: string) {
   if (win) {
@@ -196,7 +197,7 @@ export function buildTemplate(
           click: () => shell.openExternal(appConfig.bugs as string),
         },
         {
-          label: `About ${appConfig.name}`,
+          label: `About ${titlize(appConfig.name)}`,
           click: () => shell.openExternal(appConfig.homepage as string),
         },
       ],

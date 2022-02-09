@@ -3,6 +3,7 @@ import { BrowserWindow, App, MenuItem, MenuItemConstructorOptions } from 'electr
 import { Config } from '../../common/types/config';
 import { BuildWindow } from '../../common/types/menu';
 import * as eventKeys from '../../common/event';
+import { titlize } from '../../common/utils/string';
 
 function sendMessage(win: BrowserWindow, message: string) {
   if (win) {
@@ -20,7 +21,7 @@ export function buildTemplate(
       label: appConfig.name,
       submenu: [
         {
-          label: `About ${appConfig.name}`,
+          label: `About ${titlize(appConfig.name)}`,
           // TODO: selector property isn't a field in the menu constructor.
           // It is specific for macOS https://github.com/electron/electron/issues/2268
           // Find out if it still works and check if there is another way to achieve this
@@ -39,7 +40,7 @@ export function buildTemplate(
           type: 'separator',
         },
         {
-          label: `Hide ${appConfig.name}`,
+          label: `Hide ${titlize(appConfig.name)}`,
           accelerator: 'Cmd+H',
           role: 'hide',
         },

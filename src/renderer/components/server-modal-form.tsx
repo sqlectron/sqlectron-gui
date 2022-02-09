@@ -18,7 +18,7 @@ import { ConnectionString } from 'connection-string';
 import { Server } from '../../common/types/server';
 import { ValidationError } from '../reducers/servers';
 import { useAppSelector } from '../hooks/redux';
-import { titlize } from '../utils/string';
+import { titlize } from '../../common/utils/string';
 
 const CLIENTS = DB_CLIENTS.map((dbClient) => ({
   value: dbClient.key,

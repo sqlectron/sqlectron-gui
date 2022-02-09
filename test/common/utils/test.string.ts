@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { titlize } from '../../../src/renderer/utils/string';
+import { titlize } from '../../../src/common/utils/string';
 
 describe('titlize', () => {
   [
