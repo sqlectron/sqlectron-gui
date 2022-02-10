@@ -100,6 +100,9 @@ const Query: FC<Props> = ({
 
   const [infoModalVisible, setInfoModalVisible] = useState(false);
   const [wrapEnabled, setWrapEnabled] = useState(false);
+
+  const [isCallingNL2SQL, setIsCallingNL2SQL] = useState(false);
+
   const editorRef = useRef<AceEditor>(null);
 
   const handleSelectionChange = useCallback(() => {
@@ -223,6 +226,37 @@ const Query: FC<Props> = ({
       editorRef.current?.editor.focus();
     }
   }, [isCurrentQuery]);
+
+  const handleNL2SQLQueryClick = useCallback(() => {
+    setIsCallingNL2SQL(true);
+    const copyText =
+      editorRef.current?.editor.getCopyText() || editorRef.current?.editor.getValue();
+
+    fetch('http://127.0.0.1:8080/', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: copyText,
+        schema: [],
+        // pass in schema ^
+        // for some reason 'columnsToTable' is undefined
+      }),
+      mode: 'cors',
+      cache: 'no-cache',
+      method: 'POST',
+    })
+      .then((resp) => {
+        return resp.text();
+      })
+      .then((generatedSQL) => {
+        onSQLChange(generatedSQL);
+        setIsCallingNL2SQL(false);
+      })
+      .catch((err) => {
+        setIsCallingNL2SQL(false);
+      });
+  }, [onSQLChange, editorRef]);
 
   const handleExecQueryClick = useCallback(() => {
     const sqlQuery = editorRef.current?.editor.getCopyText() || query.query;
@@ -375,6 +409,12 @@ const Query: FC<Props> = ({
           <div className="right menu">
             <div className="item">
               <div className="ui buttons">
+                <button
+                  className={`ui primary button ${isCallingNL2SQL ? 'loading' : ''}`}
+                  onClick={handleNL2SQLQueryClick}>
+                  NL2SQL
+                </button>
+
                 <button
                   className={`ui positive button ${query.isExecuting ? 'loading' : ''}`}
                   onClick={handleExecQueryClick}>
