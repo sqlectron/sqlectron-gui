@@ -228,16 +228,35 @@ const Query: FC<Props> = ({
   }, [isCurrentQuery]);
 
   const handleNL2SQLQueryClick = useCallback(() => {
-    const sqlQuery = editorRef.current?.editor.getCopyText() || query.query;
-    // onNL2SQLQueryClick(sqlQuery);
     setIsCallingNL2SQL(true);
-    setTimeout(() => {
-      const copyText =
-        editorRef.current?.editor.getCopyText() || editorRef.current?.editor.getValue();
-      editorRef.current?.editor.replace("I'm the generated SQL", { needle: copyText });
-      setIsCallingNL2SQL(false);
-    }, 300);
-  }, [query.query, editorRef]);
+    const copyText =
+      editorRef.current?.editor.getCopyText() || editorRef.current?.editor.getValue();
+
+    fetch('http://127.0.0.1:8080/', {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        query: copyText,
+        schema: [],
+        // pass in schema ^
+        // for some reason 'columnsToTable' is undefined
+      }),
+      mode: 'cors',
+      cache: 'no-cache',
+      method: 'POST',
+    })
+      .then((resp) => {
+        return resp.text();
+      })
+      .then((generatedSQL) => {
+        onSQLChange(generatedSQL);
+        setIsCallingNL2SQL(false);
+      })
+      .catch((err) => {
+        setIsCallingNL2SQL(false);
+      });
+  }, [onSQLChange, editorRef]);
 
   const handleExecQueryClick = useCallback(() => {
     const sqlQuery = editorRef.current?.editor.getCopyText() || query.query;
