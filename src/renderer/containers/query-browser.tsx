@@ -18,7 +18,7 @@ import * as QueryActions from '../actions/queries';
 import * as DbAction from '../actions/databases';
 import { fetchTablesIfNeeded, selectTablesForDiagram } from '../actions/tables';
 import { fetchSchemasIfNeeded } from '../actions/schemas';
-import { fetchTableColumnsIfNeeded } from '../actions/columns';
+import { fetchAllTableColumns, fetchTableColumnsIfNeeded } from '../actions/columns';
 import { fetchTableTriggersIfNeeded } from '../actions/triggers';
 import { fetchTableIndexesIfNeeded } from '../actions/indexes';
 import { fetchViewsIfNeeded } from '../actions/views';
@@ -220,6 +220,13 @@ const QueryBrowserContainer: FC = () => {
       dispatch(fetchTableColumnsIfNeeded(database.name, table.name, schema));
       dispatch(fetchTableTriggersIfNeeded(database.name, table.name, schema));
       dispatch(fetchTableIndexesIfNeeded(database.name, table.name, schema));
+    },
+    [dispatch, connections],
+  );
+
+  const onSelectToggle = useCallback(
+    (database: string) => {
+      dispatch(fetchAllTableColumns(database));
     },
     [dispatch, connections],
   );
@@ -475,7 +482,11 @@ const QueryBrowserContainer: FC = () => {
           </ResizableBox>
         </div>
         <div style={STYLES.content}>
-          <QueryTabs sideBarWidth={sideBarWidth} queryRefs={queryRefs} />
+          <QueryTabs
+            sideBarWidth={sideBarWidth}
+            queryRefs={queryRefs}
+            onSelectToggle={onSelectToggle}
+          />
         </div>
         {databases.showingDiagram && selectedDb && (
           <DatabaseDiagramModal

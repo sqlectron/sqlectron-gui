@@ -12,9 +12,10 @@ import { DB_CLIENTS } from '../api';
 interface Props {
   sideBarWidth: number;
   queryRefs: Record<number, RefObject<HTMLDivElement>>;
+  onSelectToggle: (database: string) => void;
 }
 
-const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
+const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs, onSelectToggle }) => {
   const dispatch = useAppDispatch();
   const { connections, queries } = useAppSelector((state) => state);
 
@@ -153,6 +154,7 @@ const QueryTabs: FC<Props> = ({ sideBarWidth, queryRefs }) => {
           onSaveToFileClick={saveToFile}
           onSQLChange={onSQLChange}
           onSelectionChange={onQuerySelectionChange}
+          onSelectToggle={onSelectToggle}
         />
       </TabPanel>
     );

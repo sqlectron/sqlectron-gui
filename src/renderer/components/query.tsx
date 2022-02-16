@@ -52,6 +52,7 @@ interface Props {
   onSaveToFileClick: (rows, type: string, delimiter?: string) => void;
   onSQLChange: (sqlQuery: string) => void;
   onSelectionChange: (sqlQuery: string, selectedQuery: string) => void;
+  onSelectToggle: (database: string) => void;
 }
 
 const Query: FC<Props> = ({
@@ -67,6 +68,7 @@ const Query: FC<Props> = ({
   onSaveToFileClick,
   onSQLChange,
   onSelectionChange,
+  onSelectToggle,
 }) => {
   const {
     isCurrentQuery,
@@ -81,6 +83,7 @@ const Query: FC<Props> = ({
     indexesByTable,
     functions,
     procedures,
+    tablecolumns,
   } = useAppSelector((state) => ({
     isCurrentQuery: query.id === state.queries.currentQueryId,
     enabledAutoComplete: state.config.data?.enabledAutoComplete || false,
@@ -94,6 +97,7 @@ const Query: FC<Props> = ({
     indexesByTable: state.indexes.indexesByTable[query.database],
     functions: state.routines.functionsByDatabase[query.database],
     procedures: state.routines.proceduresByDatabase[query.database],
+    tablecolumns: state.tablecolumns,
   }));
 
   const menuHandler = useMemo(() => new MenuHandler(), []);
@@ -227,100 +231,38 @@ const Query: FC<Props> = ({
     }
   }, [isCurrentQuery]);
 
-  const handleNL2SQLQueryClick = useCallback(() => {
-    setIsCallingNL2SQL(true);
-    const copyText =
-      editorRef.current?.editor.getCopyText() || editorRef.current?.editor.getValue();
+  const handleNL2SQLQueryClick = useCallback(
+    (tablecolumns) => {
+      setIsCallingNL2SQL(true);
+      const copyText =
+        editorRef.current?.editor.getCopyText() || editorRef.current?.editor.getValue();
 
-    fetch('http://127.0.0.1:8080/', {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        query: copyText,
-        schema: {
-          albums: ['AlbumId', 'Title', 'ArtistId'],
-          artists: ['ArtistId', 'Name'],
-          customers: [
-            'CustomerId',
-            'FirstName',
-            'LastName',
-            'Company',
-            'Address',
-            'City',
-            'State',
-            'Country',
-            'PostalCode',
-            'Phone',
-            'Fax',
-            'Email',
-            'SupportRepId',
-          ],
-          employees: [
-            'EmployeeId',
-            'FirstName',
-            'LastName',
-            'Title',
-            'ReportsTo',
-            'BirthDate',
-            'HireDate',
-            'Address',
-            'City',
-            'State',
-            'Country',
-            'PostalCode',
-            'Phone',
-            'Fax',
-            'Email',
-          ],
-          genres: ['GenreId', 'Name'],
-          invoice_items: ['InvoiceLineId', 'InvoiceId', 'TrackId', 'UnitPrice', 'Quantity'],
-          invoices: [
-            'InvoiceId',
-            'CustomerId',
-            'InvoiceDate',
-            'BillingAddress',
-            'BillingCity',
-            'BillingState',
-            'BillingCountry',
-            'BillingPostalCode',
-            'Total',
-          ],
-          media_types: ['MediaTypeId', 'Name'],
-          playlist_track: ['PlaylistId', 'TrackId'],
-          playlists: ['PlaylistId', 'Name'],
-          sqlite_sequence: ['name', 'seq'],
-          sqlite_stat1: ['tbl', 'idx', 'stat'],
-          tracks: [
-            'TrackId',
-            'Name',
-            'AlbumId',
-            'MediaTypeId',
-            'GenreId',
-            'Composer',
-            'Milliseconds',
-            'Bytes',
-            'UnitPrice',
-          ],
+      // refracter this part
+      fetch('http://127.0.0.1:8080/', {
+        headers: {
+          'Content-Type': 'application/json',
         },
-        // pass in schema ^
-        // for some reason 'columnsToTable' is undefined
-      }),
-      mode: 'cors',
-      cache: 'no-cache',
-      method: 'POST',
-    })
-      .then((resp) => {
-        return resp.text();
+        body: JSON.stringify({
+          query: copyText,
+          schema: tablecolumns,
+        }),
+        mode: 'cors',
+        cache: 'no-cache',
+        method: 'POST',
       })
-      .then((generatedSQL) => {
-        onSQLChange(generatedSQL);
-        setIsCallingNL2SQL(false);
-      })
-      .catch((err) => {
-        setIsCallingNL2SQL(false);
-      });
-  }, [onSQLChange, editorRef]);
+        .then((resp) => {
+          return resp.text();
+        })
+        .then((generatedSQL) => {
+          onSQLChange(generatedSQL);
+          setIsCallingNL2SQL(false);
+        })
+        .catch((err) => {
+          setIsCallingNL2SQL(false);
+        });
+    },
+    [onSQLChange, editorRef],
+  );
 
   const handleExecQueryClick = useCallback(() => {
     const sqlQuery = editorRef.current?.editor.getCopyText() || query.query;
@@ -344,6 +286,7 @@ const Query: FC<Props> = ({
   }, [editorRef]);
 
   const onWrapContentsChecked = useCallback(() => {
+    onSelectToggle(query.database);
     setWrapEnabled(true);
   }, []);
 
@@ -448,7 +391,7 @@ const Query: FC<Props> = ({
               <div className="right menu">
                 <CheckBox
                   name="wrapQueryContents"
-                  label="Wrap Contents"
+                  label="NL2SQL"
                   checked={wrapEnabled}
                   onChecked={onWrapContentsChecked}
                   onUnchecked={onWrapContentsUnchecked}
@@ -475,7 +418,7 @@ const Query: FC<Props> = ({
               <div className="ui buttons">
                 <button
                   className={`ui primary button ${isCallingNL2SQL ? 'loading' : ''}`}
-                  onClick={handleNL2SQLQueryClick}>
+                  onClick={() => handleNL2SQLQueryClick(tablecolumns)}>
                   NL2SQL
                 </button>
 
