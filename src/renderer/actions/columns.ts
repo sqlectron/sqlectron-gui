@@ -5,6 +5,9 @@ export const FETCH_COLUMNS_REQUEST = 'FETCH_COLUMNS_REQUEST';
 export const FETCH_COLUMNS_SUCCESS = 'FETCH_COLUMNS_SUCCESS';
 export const FETCH_COLUMNS_FAILURE = 'FETCH_COLUMNS_FAILURE';
 
+export const FETCH_ALL_COLUMNS_SUCCESS = 'FETCH_ALL_COLUMNS_SUCCESS';
+export const FETCH_ALL_COLUMNS_FAILURE = 'FETCH_ALL_COLUMNS_FAILURE';
+
 export function fetchTableColumnsIfNeeded(
   database: string,
   table: string,
@@ -43,6 +46,27 @@ function fetchTableColumns(database: string, table: string, schema?: string): Th
       });
     } catch (error) {
       dispatch({ type: FETCH_COLUMNS_FAILURE, error });
+    }
+  };
+}
+
+export function fetchAllTableColumns(database: string, schema?: string): ThunkResult<void> {
+  return async (dispatch, getState) => {
+    const tablecolumns = getState().tablecolumns;
+    try {
+      for (const table in tablecolumns) {
+        // TODO: optimize efficiency
+        const columns = await sqlectron.db.listTableColumns(database, table, schema);
+        // for only getting columnName
+        // const columns = column_infos.map(data => data.columnName);
+        dispatch({
+          type: FETCH_ALL_COLUMNS_SUCCESS,
+          table,
+          columns,
+        });
+      }
+    } catch (error) {
+      dispatch({ type: FETCH_ALL_COLUMNS_FAILURE, error });
     }
   };
 }
