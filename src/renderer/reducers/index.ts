@@ -15,6 +15,7 @@ import triggers, { TriggerState } from './triggers';
 import indexes, { IndexState } from './indexes';
 import sqlscripts, { ScriptState } from './sqlscripts';
 import keys, { KeyState } from './keys';
+import tablecolumns, { TableColumnState } from './table_columns';
 
 export type ThunkResult<R> = ThunkAction<R, ApplicationState, undefined, AnyAction>;
 
@@ -25,6 +26,7 @@ export interface ApplicationState {
   servers: ServerState;
   queries: QueryState;
   connections: ConnectionState;
+  tablecolumns: TableColumnState;
   schemas: SchemaState;
   tables: TableState;
   status: string;
@@ -43,6 +45,7 @@ const rootReducer: Reducer<ApplicationState> = combineReducers<ApplicationState>
   servers,
   queries,
   connections,
+  tablecolumns,
   schemas,
   tables,
   status,
