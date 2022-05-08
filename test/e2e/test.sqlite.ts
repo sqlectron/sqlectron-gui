@@ -4,6 +4,7 @@ import path from 'path';
 import sqlite3 from 'sqlite3';
 
 import helper from './helper';
+import { ElectronApplication, Page } from 'playwright';
 
 const BASE_PATH = path.join(__dirname, '../fixtures/sqlite');
 const DB_PATH = path.join(BASE_PATH, 'test.db');
@@ -40,8 +41,8 @@ function setupDB() {
 
 describe('Sqlite', function () {
   let db;
-  let app;
-  let mainWindow;
+  let app: ElectronApplication;
+  let mainWindow: Page;
 
   before(async () => {
     db = setupDB();
@@ -69,6 +70,9 @@ describe('Sqlite', function () {
     await helper.expectToEqualText(mainWindow, '#server-list .attached.button', 'Connect');
 
     const btnConnect = await mainWindow.$('#server-list .attached.button');
+    if (!btnConnect) {
+      expect.fail('Could not find connect button');
+    }
     // TODO: replace dispatchEvent('click') with the click method when we upgrade the electron app.
     // https://github.com/microsoft/playwright/issues/1042
     await btnConnect.dispatchEvent('click');
@@ -80,7 +84,12 @@ describe('Sqlite', function () {
 
     // Clicks in the table to run default select query
     const btnTable = await mainWindow.$('#sidebar .item-Table span');
+    if (!btnTable) {
+      expect.fail('Could not find table button');
+    }
     await btnTable.dispatchEvent('click');
+
+    await mainWindow.waitForSelector('.react-tabs__tab-panel #query-result');
 
     // Set default query and automatically executes it
     await helper.expectToEqualText(
