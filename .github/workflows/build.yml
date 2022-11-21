@@ -20,7 +20,7 @@ jobs:
       if: runner.os == 'Linux'
       run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Use Node.js ${{ env.node-version }}
       uses: actions/setup-node@v2
