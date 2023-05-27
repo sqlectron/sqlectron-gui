@@ -40,6 +40,7 @@ import { Database } from '../reducers/databases';
 import { DbTable } from '../../common/types/database';
 import QueryTabs from '../components/query-tabs';
 import type { ActionType, ObjectType } from '../reducers/sqlscripts';
+import { RegexString } from '../utils/search';
 
 require('./query-browser.css');
 require('../components/react-resizable.css');
@@ -404,7 +405,7 @@ const QueryBrowserContainer: FC = () => {
       ]
     : [];
 
-  const regex = RegExp(filter, 'i');
+  const regex = RegexString(filter);
   const filteredDatabases = databases.items.filter((db) => regex.test(db.name));
 
   const selectedDb = databases.diagramDatabase;
