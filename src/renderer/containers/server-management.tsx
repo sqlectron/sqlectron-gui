@@ -12,11 +12,12 @@ import SettingsModalForm from '../components/settings-modal-form';
 import ServerFilter from '../components/server-filter';
 import Message from '../components/message';
 import { Server } from '../../common/types/server';
+import { RegexString } from '../utils/search';
 
 const BREADCRUMB = [{ icon: 'server', label: 'servers' }];
 
 function filterServers(name: string, servers: Server[]): Server[] {
-  const regex = RegExp(name, 'i');
+  const regex = RegexString(name);
   return servers.filter((srv) => regex.test(srv.name));
 }
 
