@@ -20,10 +20,10 @@ jobs:
       if: runner.os == 'Linux'
       run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Use Node.js ${{ env.node-version }}
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ env.node-version }}
         cache: npm
@@ -54,7 +54,7 @@ jobs:
     - run: npm run dist -- --publish never
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v3
       with:
         name: ${{ matrix.os }}
         path: dist
