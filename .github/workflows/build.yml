@@ -13,7 +13,8 @@ jobs:
     strategy:
       matrix:
         # TODO: upgrade to latest Ubuntu
-        os: [ubuntu-18.04, macos-latest, windows-latest]
+        # TODO: upgrade to latest macOS
+        os: [ubuntu-18.04, macos-12, windows-latest]
 
     steps:
     - name: Install Linux Dependencies
