@@ -12,22 +12,23 @@ jobs:
 
     strategy:
       matrix:
-        # TODO: upgrade to latest Ubuntu
-        os: [ubuntu-18.04, macos-latest, windows-latest]
+        # TODO: re-enable ubuntu
+        # TODO: re-enable macos
+        os: [windows-latest]
 
     steps:
     - name: Install Linux Dependencies
       if: runner.os == 'Linux'
       run: sudo apt-get install libgnome-keyring-dev icnsutils graphicsmagick rpm bsdtar
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Use Node.js ${{ env.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: ${{ env.node-version }}
         cache: npm
-    
+
     # Version of npm that comes in 14.x is npm@6
     - run: npm i -g npm@7
 
@@ -54,7 +55,7 @@ jobs:
     - run: npm run dist -- --publish never
 
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ${{ matrix.os }}
         path: dist
