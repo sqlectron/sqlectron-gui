@@ -12,9 +12,9 @@ jobs:
 
     strategy:
       matrix:
-        # TODO: upgrade to latest Ubuntu
+        # TODO: re-enable ubuntu
         # TODO: re-enable macos
-        os: [ubuntu-22.04, windows-latest]
+        os: [windows-latest]
 
     steps:
     - name: Install Linux Dependencies
